@@ -11,7 +11,7 @@ function tirer(){
   let r = Math.random() * TIRAGE.reduce((s, t) => s + t[1], 0);
   for (const [nom, poids] of TIRAGE) { if ((r -= poids) < 0) return nom; } return 'classique';
 }
-const VARIANTE = tirer();
+const VARIANTE = (document.getElementById('lamantin') && document.getElementById('lamantin').dataset.variante) || tirer();
 if (hote) try { lancer(); } catch (e) { hote.remove(); }
 
 function lancer(){
@@ -267,6 +267,9 @@ function lancer(){
       galon.position.set(0, .03, .21); galon.rotation.z = Math.PI; galon.scale.set(1, .25, 1); k.add(galon);
       k.add(boule(.022, mat(0xD9B24C, { metalness:1, roughness:.25 }), [1, 1, .5], [0, .07, .2], 14));        // écusson doré
     }
+    if (v === 'deux') casquette('#F0766F', '#A8322A', (x, l, h) => {           // « deux temps » : un grand 2 blanc, contour corail foncé
+      x.save(); x.translate(l * .25, h * .58); x.scale(.8, 1); x.font = '800 150px Geist, Helvetica, Arial, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.lineJoin = 'round'; x.lineWidth = 14; x.strokeStyle = '#A8322A'; x.strokeText('2', 0, 0); x.fillStyle = '#fff'; x.fillText('2', 0, 0); x.restore(); });
     if (v === 'uk') casquette('#012169', '#C8102E', (x, l, h) => {                 // Union Jack sur toute la calotte
       x.strokeStyle = '#fff'; x.lineWidth = 34; x.beginPath(); x.moveTo(0, 0); x.lineTo(l, h); x.moveTo(l, 0); x.lineTo(0, h); x.stroke();
       x.strokeStyle = '#C8102E'; x.lineWidth = 12; x.stroke();
@@ -409,12 +412,18 @@ function lancer(){
   // tous les 10 codes touchés : la Courbe des Temps à la place du drapeau
   DRAPEAUX.courbe = '<svg viewBox="0 0 38 20"><path d="M2 12 C9 10.5 14 13 20 11.6 S30 10.6 35 11.6" fill="none" stroke="#1C49A5" stroke-width="1.8" stroke-linecap="round"/><path d="M32.6 8.8 L35.6 11.6 L32.6 14.4" fill="none" stroke="#1C49A5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8.4 V14.6" stroke="#F0766F" stroke-width="2" stroke-linecap="round"/><path d="M23 8.2 V14.4" stroke="#1C49A5" stroke-width="2" stroke-linecap="round"/></svg>';
   let codesTouches = 0;
-  function bulle(){
+  function bulle(force){
     codesTouches++;
-    const r = Math.random(), quel = codesTouches % 10 === 0 ? 'courbe' : r < .6 ? 'us' : r < .8 ? 'uk' : 'au';   // surtout les États-Unis
+    const r = Math.random(), quel = force ? force : codesTouches % 10 === 0 ? 'courbe' : r < .6 ? 'us' : r < .8 ? 'uk' : 'au';   // surtout les États-Unis
     const b = document.createElement('div'); b.className = 'bulle-drapeau'; b.innerHTML = DRAPEAUX[quel];
     hote.appendChild(b); setTimeout(() => b.remove(), 1700);
   }
+
+  // bulle d'arrivée : seulement une fois le lamantin réellement affiché
+  if (hote.dataset.bulle === 'arrivee') { const essai = () => { if (!hote.offsetParent) return setTimeout(essai, 300); setTimeout(() => { emote = 0; actif = performance.now(); bulle(); }, 1200); }; setTimeout(essai, 300); }
+
+  // une page peut demander une émote précise (ex. la Courbe des Temps)
+  document.addEventListener('lamantin:emote', e => { if (!hote.offsetParent) return; emote = 0; actif = performance.now(); bulle(e.detail || null); });
 
   /* regard : la tête suit le pointeur, le corps suit un peu */
   let cibleLacet = 0, cibleTangage = 0, lacet = 0, tangage = 0, emote = -1;

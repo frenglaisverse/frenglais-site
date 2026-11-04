@@ -271,3 +271,19 @@ footer{position:relative;z-index:2}
 .bulle-drapeau svg{display:block;width:100%;height:100%;border-radius:2px}
 @keyframes bulle-vole{0%{opacity:0;transform:translateY(8px) scale(.7)}18%{opacity:1;transform:translateY(0) scale(1)}75%{opacity:1;transform:translateY(-8px)}100%{opacity:0;transform:translateY(-18px)}}
 @media (prefers-reduced-motion:reduce){.bulle-drapeau{animation:none}}
+
+/* menu du haut : texte simple, aligné avec le logo, deux couleurs pour les actions */
+.bandeau{position:relative}
+.bandeau .nav{flex-wrap:nowrap}
+.bandeau .nav-liens{flex-wrap:nowrap;gap:clamp(22px,4vw,56px);font-size:16px;font-weight:500}
+.bandeau .nav-liens a{text-decoration:none;color:#fff;padding-block:6px;border-bottom:2px solid transparent;transition:border-color .2s,color .2s}
+.bandeau .nav-liens a:hover{text-decoration:none;border-bottom-color:currentColor}
+.bandeau .nav-eleve{color:#B9CCFF!important}
+.bandeau .nav-devis{color:#F0766F!important;font-weight:600}
+@media (max-width:640px){.bandeau .nav-liens{gap:18px;font-size:15px}}
+@media (max-width:380px){.bandeau .nav-liens{gap:12px;font-size:14px}}
+/* mousse espagnole, coin haut gauche */
+.in-mousse{position:relative}
+.mousse{position:absolute;left:-28px;top:0;width:300px;height:170px;pointer-events:none;z-index:2}
+.bandeau .nav-liens a{white-space:nowrap}
+@media (max-width:640px){.mousse{left:-8px;width:220px;height:130px}.bandeau .nav img{height:44px}.bandeau .nav-liens{gap:14px;font-size:14px}}

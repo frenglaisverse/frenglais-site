@@ -498,3 +498,115 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 @media (max-width:360px){.nav-liens{gap:4px}.nav-liens .nav-eleve span,.nav-liens .nav-devis span{font-size:11.5px;padding-inline:9px}.badge-tp.haut .tp-etoiles{width:48px}}
 @media (max-width:760px){.bandeau .nav-liens .lien-sec,.bandeau .nav-liens .sep{display:none}}
 @media (max-width:360px){.bandeau .nav-liens a{padding:0 7px;font-size:11.5px}.bandeau .nav img{height:30px}}
+/* polaroid du formateur, suspendu à la mousse, en haut à droite du hero */
+.hero{position:relative}
+.polaroid{position:absolute;right:clamp(0px,3vw,40px);top:-96px;width:170px;margin:0;z-index:3;transform-origin:50% 0;animation:polBalance 6s ease-in-out infinite}
+.pol-mousse{position:absolute!important;left:50%!important;top:-6px!important;width:90px!important;height:118px!important;transform:translateX(-50%);z-index:0}
+.pol-carte{all:unset;position:relative;display:block;margin-top:104px;width:170px;aspect-ratio:170/226;cursor:pointer;perspective:900px}
+.pol-carte::before{content:"";position:absolute;left:50%;top:-9px;width:14px;height:14px;border-radius:50%;transform:translateX(-50%);z-index:3;
+  background:radial-gradient(circle at 35% 35%,#F5A39E,#C9746E 60%,#A8322A);box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.pol-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:6px;transition:transform .7s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 18px 30px -14px rgba(3,10,35,.7),0 2px 4px rgba(3,10,35,.25)}
+.pol-recto{background:#FBF8F2;padding:10px 10px 0;box-sizing:border-box;display:flex;flex-direction:column}
+.pol-recto img{width:100%;aspect-ratio:4/5;height:auto;object-fit:cover;display:block;border-radius:2px}
+.pol-nom{flex:1;display:grid;place-items:center;font:600 17px var(--f-txt);color:#A8322A;letter-spacing:.01em}
+.pol-verso{transform:rotateY(180deg);background:linear-gradient(160deg,#F0806E,#E2685F);border:2.5px solid #A8322A;box-sizing:border-box;padding:16px 14px;display:flex;flex-direction:column;gap:10px;color:#fff;text-align:left}
+.pol-verso b{font-size:17px;text-shadow:0 1px 0 #A8322A}
+.pol-verso span{font-size:13px;line-height:1.45;text-shadow:0 1px 0 rgba(168,50,42,.6)}
+.pol-verso i{margin-top:auto;font-style:normal;font-size:11px;opacity:.85}
+.pol-carte[aria-pressed="true"] .pol-recto{transform:rotateY(-180deg)}
+.pol-carte[aria-pressed="true"] .pol-verso{transform:rotateY(0)}
+.pol-carte:focus-visible{outline:2px solid #F0766F;outline-offset:4px;border-radius:6px}
+@keyframes polBalance{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
+@media (prefers-reduced-motion:reduce){.polaroid{animation:none}}
+@media (max-width:1100px){.polaroid{position:static;align-self:flex-end;animation:none;margin-top:-12px;transform:rotate(2deg)}.pol-mousse{display:none!important}.pol-carte{margin-top:0;width:136px}}
+@media (max-width:640px){.pol-carte{width:118px}.pol-nom{font-size:15px}.pol-verso{padding:12px 10px}.pol-verso span{font-size:11.5px}}
+/* la mousse du polaroid descend derrière la barre de menu */
+.bandeau .nav{position:relative;z-index:5}
+.polaroid{z-index:2}
+/* écrans moyens et téléphones : le polaroid se pose à droite des boutons, sans creuser de trou */
+@media (max-width:1100px){.polaroid{position:absolute;right:0;top:auto;bottom:40px;margin:0}}
+@media (max-width:640px){.polaroid{bottom:30px}.pol-carte{width:112px}}
+/* sous 1100 px : boutons et polaroid côte à côte, le polaroid dans le flux (jamais sur le texte) */
+.hero-bas{display:contents}
+@media (max-width:1100px){
+  .hero-bas{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .hero-bas .polaroid{position:static;flex:none;margin:0;transform:rotate(2.5deg)}
+  .hero-bas .pol-carte{width:104px}
+  .hero-bas .pol-recto{padding:7px 7px 0}.hero-bas .pol-nom{font-size:13px}
+  .hero-bas .pol-verso{padding:9px 8px;gap:6px}.hero-bas .pol-verso b{font-size:13px}.hero-bas .pol-verso span{font-size:9.5px;line-height:1.35}.hero-bas .pol-verso i{font-size:9px}
+}
+@media (max-width:640px){.hero-bas .pol-carte{width:100px}}
+@media (max-width:640px){.hero-bas .ctas .btn{white-space:nowrap;padding-inline:22px}.hero-bas{gap:10px}}
+@media (max-width:370px){.hero-bas .ctas .btn{padding-inline:16px;font-size:15px}.hero-bas .pol-carte{width:84px}}
+@media (max-width:1100px){.hero-bas .polaroid{width:auto}}
+/* polaroid simplement épinglé : sans mousse au-dessus, posé un peu de travers */
+.polaroid{top:6px;animation:none;transform:rotate(1.5deg)}
+.pol-carte{margin-top:0}
+/* polaroid agrandi au centre, fond assombri */
+.pol-voile{position:fixed;inset:0;z-index:90;background:rgba(4,10,30,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .45s ease}
+.pol-voile.on{opacity:1;pointer-events:auto;cursor:zoom-out}
+.pol-grand{position:fixed;inset:0;margin:auto;z-index:91;width:min(340px,78vw);height:calc(min(340px,78vw) * 226 / 170);max-height:88vh;max-width:calc(88vh * 170 / 226);visibility:hidden;perspective:1400px;cursor:zoom-out;outline:none}
+.pol-grand.on{visibility:visible}
+.pol-grand-in{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+.pol-grand .pol-face{box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 4px 10px rgba(0,0,0,.3);border-radius:10px}
+.pol-grand .pol-recto{padding:18px 18px 0}.pol-grand .pol-nom{font-size:26px}
+.pol-grand .pol-verso{padding:30px 26px;gap:16px;border-width:3px}
+.pol-grand .pol-verso b{font-size:28px}.pol-grand .pol-verso span{font-size:17px;line-height:1.5}.pol-grand .pol-verso i{font-size:13px}
+@media (max-width:420px){.pol-grand .pol-verso{padding:22px 18px}.pol-grand .pol-verso b{font-size:22px}.pol-grand .pol-verso span{font-size:15px}}
+.pol-carte{cursor:zoom-in}
+.pol-grand .pol-verso b{margin-top:auto}.pol-grand .pol-verso i{margin-top:auto;opacity:.75}
+/* dos de carte mis en page (vue agrandie) */
+.pol-grand{container-type:inline-size;width:min(360px,84vw);height:calc(min(360px,84vw) * 226 / 170)}
+.pol-grand .pol-verso{padding:8cqi 8cqi 6cqi;gap:3.4cqi;justify-content:flex-start;
+  background:radial-gradient(120% 80% at 100% 0%,rgba(255,255,255,.16),transparent 55%),linear-gradient(165deg,#F2826F,#E2685F 60%,#D85A55)}
+.pol-grand .v-eti{font:600 3.2cqi var(--f-txt);letter-spacing:.16em;text-transform:uppercase;opacity:.85;text-shadow:none}
+.pol-grand .v-nom{margin:0!important;font-size:11cqi;line-height:1;letter-spacing:-.01em;text-shadow:0 2px 0 #A8322A}
+.pol-grand .v-courbe{width:100%;height:auto;filter:drop-shadow(0 1px 0 rgba(168,50,42,.55))}
+.pol-grand .v-liste{display:flex;flex-direction:column;gap:2.4cqi;font-size:4.4cqi;line-height:1.35;text-shadow:0 1px 0 rgba(168,50,42,.5)}
+.pol-grand .v-liste span{position:relative;padding-left:5cqi;font-size:inherit;line-height:inherit}
+.pol-grand .v-liste span::before{content:"";position:absolute;left:.5cqi;top:.55em;width:1.8cqi;height:1.8cqi;background:#fff;opacity:.9;transform:rotate(45deg);border-radius:.3cqi}
+.pol-grand .v-liste em{font-style:normal;font-weight:700}
+.pol-grand .v-cit{margin-top:1cqi;padding-left:3.4cqi;border-left:2px solid rgba(255,255,255,.7);font-size:4.6cqi;line-height:1.4;font-style:italic;font-weight:500}
+.pol-grand .v-pied{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:3cqi}
+.pol-grand .v-logo{width:30cqi;height:auto;filter:brightness(0) invert(1) drop-shadow(0 1px 0 rgba(168,50,42,.6));opacity:.95}
+.pol-grand .v-pied i{margin:0!important;font-style:normal;font-size:3cqi;opacity:.75;white-space:nowrap}
+.polaroid .pol-verso{display:none}.pol-grand .pol-verso{display:flex}
+/* dos de carte : la photo, petite, dans le coin haut droit, cachée sous la mousse qu'on écarte */
+.pol-grand .pol-verso{position:absolute;overflow:hidden}
+.pol-grand .v-photo{position:absolute;top:6cqi;right:7cqi;width:24cqi;aspect-ratio:4/5;height:auto;object-fit:cover;border:1.6cqi solid #FBF8F2;border-bottom-width:4cqi;border-radius:1cqi;transform:rotate(4deg);box-shadow:0 2cqi 4cqi -1cqi rgba(80,10,10,.5)}
+.pol-grand .v-mousse{position:absolute!important;top:0!important;right:0!important;left:auto!important;width:48cqi!important;height:62cqi!important;z-index:2;pointer-events:none}
+.pol-grand .v-eti,.pol-grand .v-nom{max-width:56%}
+.pol-grand .v-courbe{width:58%}
+.polaroid .v-photo,.polaroid .v-mousse{display:none}
+/* vitre embuée sur la photo */
+.pol-cadre{position:relative;display:block;width:100%;aspect-ratio:4/5;border-radius:2px;overflow:hidden}
+.pol-cadre img{width:100%;height:100%;object-fit:cover;display:block}
+.pol-buee{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.polaroid .pol-carte{touch-action:none}
+/* dos : parcours sur la Courbe */
+.pol-grand .v-titre{font-size:4cqi;opacity:.9;margin-top:1cqi}
+.pol-grand .v-courbe{width:100%}
+.pol-grand .v-courbe text{font:600 7px var(--f-mono,monospace);fill:#fff}
+.pol-grand .v-etapes{display:flex;flex-direction:column;gap:3.4cqi;font-size:4.5cqi;line-height:1.35;text-shadow:0 1px 0 rgba(168,50,42,.45)}
+.pol-grand .v-etapes>span{display:block;font-size:inherit;line-height:inherit;padding-left:11cqi;position:relative}
+.pol-grand .v-etapes .t{position:absolute;left:0;top:.2em;font:600 2.8cqi/1.6 var(--f-mono,monospace);font-style:normal;padding:0 1.2cqi;border-radius:1cqi;color:#fff;text-shadow:none}
+.pol-grand .v-etapes .t.ed{background:#A8322A}.pol-grand .v-etapes .t.s{background:#1C49A5}
+.pol-grand .v-etapes .c{font-style:normal;font-weight:700;padding:0 .6cqi;border-radius:.8cqi;text-shadow:none}
+.pol-grand .v-etapes .c.ed{background:#A8322A;color:#fff}.pol-grand .v-etapes .c.s{background:#1C49A5;color:#fff}
+.pol-buee{-webkit-backdrop-filter:none;backdrop-filter:none}
+.pol-grand .v-etapes .c{padding:0 .3cqi;margin-left:.15cqi}
+/* dos : retour à la liste, avec la courbe courte ; quelques étoiles discrètes de la nuit étoilée */
+.pol-grand .v-courbe-simple{width:58%}
+.pol-grand .pol-verso::before{content:"";position:absolute;inset:0;background:url("etoiles.svg") center/170% auto repeat;opacity:.38;pointer-events:none;z-index:0}
+.pol-grand .pol-verso>:not(.v-photo):not(.v-mousse){position:relative;z-index:1}
+.pol-grand .v-photo{z-index:1}
+.pol-grand .pol-verso::before{filter:brightness(0) invert(1);opacity:.55;background-size:150% auto}
+/* polaroid enraciné : droit, sans punaise, quelques racines discrètes sortent des côtés */
+.polaroid{transform:none!important}
+.pol-carte::before{display:none}
+.pol-racines{position:absolute;left:-27.059%;top:-2.655%;width:154.118%;height:123.009%;z-index:0;pointer-events:none;opacity:.62;filter:drop-shadow(0 1px 0 rgba(0,0,0,.25))}
+.polaroid .pol-carte{position:relative;z-index:1}
+@media (max-width:1100px){.hero-bas .polaroid{position:relative}}
+.hero{overflow-x:clip}
+.pol-racines{opacity:.55;filter:drop-shadow(0 1px 1px rgba(10,20,50,.35))}

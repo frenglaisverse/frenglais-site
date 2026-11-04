@@ -22,10 +22,12 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="ouverture" aria-hidden="true">
-  <canvas class="mousse ouv-mousse fond" data-relatif="1" data-pash=".03" data-vent=".14" data-modele='[[0.53,23],[0.6,22],[0.66,24],[0.03,6],[0.09,10],[0.15,5],[0.21,12],[0.27,7],[0.33,15],[0.38,9],[0.44,16],[0.5,11],[0.56,17],[0.61,8],[0.67,15],[0.73,6],[0.79,12],[0.85,7],[0.91,10],[0.97,5],[0.06,4],[0.95,4]]' aria-hidden="true"></canvas>
-  <canvas class="mousse ouv-mousse devant" data-relatif="1" data-pash=".03" data-vent=".14" data-modele='[[0.53,23],[0.6,22],[0.66,24]]' aria-hidden="true"></canvas>
+<div id="ouverture" aria-hidden="true" data-branche="-0.03,0.2,0.3,0.22,0.62,0.08,0.92,-0.03">
+  <canvas class="ouv-branche" aria-hidden="true"></canvas>
+  <canvas class="mousse ouv-mousse fond" data-relatif="1" data-pash=".03" data-vent=".07" data-modele='[[0.53,19],[0.6,19],[0.66,22],[0.03,3],[0.09,3],[0.15,3],[0.21,6],[0.27,3],[0.33,9],[0.38,4],[0.44,11],[0.5,7],[0.56,14],[0.61,5],[0.67,13],[0.73,5],[0.79,11],[0.85,7],[0.91,10],[0.97,5],[0.06,3],[0.95,4]]' aria-hidden="true"></canvas>
+  <canvas class="mousse ouv-mousse devant" data-relatif="1" data-pash=".03" data-vent=".07" data-modele='[[0.53,19],[0.6,19],[0.66,22]]' aria-hidden="true"></canvas>
   <div class="ouv-scene">
+    <div class="ouv-verre"></div><div class="ouv-bord"></div>
     <img src="logo-ouverture.png" class="ouv-logo" alt="" width="360" height="128">
   </div>
   <div class="ouv-drapeaux"><svg class="drapeau" viewBox="0 0 57 30" aria-hidden="true"><rect width="57" height="30" fill="#fff"/><rect y="0.000" width="57" height="2.308" fill="#B22234"/><rect y="4.615" width="57" height="2.308" fill="#B22234"/><rect y="9.231" width="57" height="2.308" fill="#B22234"/><rect y="13.846" width="57" height="2.308" fill="#B22234"/><rect y="18.462" width="57" height="2.308" fill="#B22234"/><rect y="23.077" width="57" height="2.308" fill="#B22234"/><rect y="27.692" width="57" height="2.308" fill="#B22234"/><rect width="22.8" height="16.15" fill="#3C3B6E"/><circle cx="2.0" cy="1.60" r=".55" fill="#fff"/><circle cx="6.2" cy="1.60" r=".55" fill="#fff"/><circle cx="10.4" cy="1.60" r=".55" fill="#fff"/><circle cx="14.6" cy="1.60" r=".55" fill="#fff"/><circle cx="18.8" cy="1.60" r=".55" fill="#fff"/><circle cx="23.0" cy="1.60" r=".55" fill="#fff"/><circle cx="4.1" cy="3.55" r=".55" fill="#fff"/><circle cx="8.3" cy="3.55" r=".55" fill="#fff"/><circle cx="12.5" cy="3.55" r=".55" fill="#fff"/><circle cx="16.7" cy="3.55" r=".55" fill="#fff"/><circle cx="20.9" cy="3.55" r=".55" fill="#fff"/><circle cx="2.0" cy="5.50" r=".55" fill="#fff"/><circle cx="6.2" cy="5.50" r=".55" fill="#fff"/><circle cx="10.4" cy="5.50" r=".55" fill="#fff"/><circle cx="14.6" cy="5.50" r=".55" fill="#fff"/><circle cx="18.8" cy="5.50" r=".55" fill="#fff"/><circle cx="23.0" cy="5.50" r=".55" fill="#fff"/><circle cx="4.1" cy="7.45" r=".55" fill="#fff"/><circle cx="8.3" cy="7.45" r=".55" fill="#fff"/><circle cx="12.5" cy="7.45" r=".55" fill="#fff"/><circle cx="16.7" cy="7.45" r=".55" fill="#fff"/><circle cx="20.9" cy="7.45" r=".55" fill="#fff"/><circle cx="2.0" cy="9.40" r=".55" fill="#fff"/><circle cx="6.2" cy="9.40" r=".55" fill="#fff"/><circle cx="10.4" cy="9.40" r=".55" fill="#fff"/><circle cx="14.6" cy="9.40" r=".55" fill="#fff"/><circle cx="18.8" cy="9.40" r=".55" fill="#fff"/><circle cx="23.0" cy="9.40" r=".55" fill="#fff"/><circle cx="4.1" cy="11.35" r=".55" fill="#fff"/><circle cx="8.3" cy="11.35" r=".55" fill="#fff"/><circle cx="12.5" cy="11.35" r=".55" fill="#fff"/><circle cx="16.7" cy="11.35" r=".55" fill="#fff"/><circle cx="20.9" cy="11.35" r=".55" fill="#fff"/><circle cx="2.0" cy="13.30" r=".55" fill="#fff"/><circle cx="6.2" cy="13.30" r=".55" fill="#fff"/><circle cx="10.4" cy="13.30" r=".55" fill="#fff"/><circle cx="14.6" cy="13.30" r=".55" fill="#fff"/><circle cx="18.8" cy="13.30" r=".55" fill="#fff"/><circle cx="23.0" cy="13.30" r=".55" fill="#fff"/><circle cx="4.1" cy="15.25" r=".55" fill="#fff"/><circle cx="8.3" cy="15.25" r=".55" fill="#fff"/><circle cx="12.5" cy="15.25" r=".55" fill="#fff"/><circle cx="16.7" cy="15.25" r=".55" fill="#fff"/><circle cx="20.9" cy="15.25" r=".55" fill="#fff"/></svg><svg class="drapeau" viewBox="0 0 60 30" aria-hidden="true"><clipPath id="ouv-uk"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#ouv-uk)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg><svg class="drapeau" viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#012169"/><clipPath id="ouv-au"><rect width="30" height="15"/></clipPath><g clip-path="url(#ouv-au)"><g transform="scale(.5)"><clipPath id="ouv-au2"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#ouv-au2)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></g></g><polygon points="15.00,18.90 15.70,21.04 17.81,20.26 16.58,22.14 18.51,23.30 16.27,23.51 16.56,25.74 15.00,24.12 13.44,25.74 13.73,23.51 11.49,23.30 13.42,22.14 12.19,20.26 14.30,21.04" fill="#fff"/><polygon points="45.00,22.30 45.33,23.31 46.33,22.94 45.75,23.83 46.66,24.38 45.60,24.48 45.74,25.53 45.00,24.77 44.26,25.53 44.40,24.48 43.34,24.38 44.25,23.83 43.67,22.94 44.67,23.31" fill="#fff"/><polygon points="37.50,11.80 37.83,12.81 38.83,12.44 38.25,13.33 39.16,13.88 38.10,13.98 38.24,15.03 37.50,14.27 36.76,15.03 36.90,13.98 35.84,13.88 36.75,13.33 36.17,12.44 37.17,12.81" fill="#fff"/><polygon points="45.00,3.80 45.33,4.81 46.33,4.44 45.75,5.33 46.66,5.88 45.60,5.98 45.74,7.03 45.00,6.26 44.26,7.03 44.40,5.98 43.34,5.88 44.25,5.33 43.67,4.44 44.67,4.81" fill="#fff"/><polygon points="51.50,9.80 51.83,10.81 52.83,10.44 52.25,11.33 53.16,11.88 52.10,11.98 52.24,13.03 51.50,12.27 50.76,13.03 50.90,11.98 49.84,11.88 50.75,11.33 50.17,10.44 51.17,10.81" fill="#fff"/><polygon points="48.00,15.30 48.21,15.91 48.86,15.92 48.34,16.31 48.53,16.93 48.00,16.56 47.47,16.93 47.66,16.31 47.14,15.92 47.79,15.91" fill="#fff"/></svg></div>
@@ -263,6 +265,32 @@
 </footer>
 
 <script src="script.js"></script>
+<script>
+/* ouverture : branche de jacaranda, à peine visible, qui remonte et sort avant le coin droit */
+(function(){var o=document.getElementById('ouverture');if(!o)return;var c=o.querySelector('.ouv-branche');if(!c||!c.getContext)return;
+var B=o.dataset.branche.split(',').map(Number);
+function bz(t,i){var u=1-t;return u*u*u*B[i]+3*u*u*t*B[i+2]+3*u*t*t*B[i+4]+t*t*t*B[i+6];}
+function al(i,j,k){var v=Math.sin(i*12.9898+j*78.233+k*37.719)*43758.5453;return v-Math.floor(v);}
+function dessiner(){var r=o.getBoundingClientRect(),W=r.width,H=r.height,d=Math.min(devicePixelRatio||1,2);c.width=W*d;c.height=H*d;
+  var g=c.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,W,H);var s=Math.max(.6,Math.min(1.25,Math.min(W,H)/850));
+  var N=120,P=[];for(var i=0;i<=N;i++){var t=i/N;P.push({x:bz(t,0)*W,y:bz(t,1)*H,w:(26-17*t)*s});}
+  var gauche=[],droite=[];for(i=0;i<=N;i++){var a=P[Math.max(0,i-1)],b=P[Math.min(N,i+1)],dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,w=P[i].w/2*(1+.08*Math.sin(i*.9));
+    gauche.push([P[i].x+nx*w,P[i].y+ny*w]);droite.push([P[i].x-nx*w,P[i].y-ny*w]);P[i].nx=nx;P[i].ny=ny;}
+  g.beginPath();gauche.forEach(function(p,k){k?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);});droite.reverse().forEach(function(p){g.lineTo(p[0],p[1]);});g.closePath();
+  var gr=g.createLinearGradient(0,0,0,H*.25);gr.addColorStop(0,'#4A3A31');gr.addColorStop(1,'#2B211C');g.fillStyle=gr;g.fill();
+  g.save();g.clip();g.lineCap='round';
+  for(var f=0;f<9;f++){var off=(f/8-.5)*.9;g.beginPath();for(i=0;i<=N;i++){var p=P[i],o2=off*p.w+Math.sin(i*.35+f*1.7)*1.2*s;var x=p.x+p.nx*o2,y=p.y+p.ny*o2;i?g.lineTo(x,y):g.moveTo(x,y);}
+    g.strokeStyle=f%3?'rgba(20,14,11,.55)':'rgba(140,118,100,.35)';g.lineWidth=(f%3?1.1:.7)*s;g.stroke();}
+  for(i=8;i<N;i+=9){var p=P[i];g.beginPath();g.ellipse(p.x+p.nx*p.w*(al(i,1,2)-.5)*.5,p.y+p.ny*p.w*(al(i,2,3)-.5)*.5,2.6*s,1.5*s,Math.atan2(p.ny,p.nx)+1.57,0,6.3);g.strokeStyle='rgba(15,10,8,.6)';g.lineWidth=.9*s;g.stroke();}
+  g.restore();
+  [[.22,-1],[.41,1],[.58,-1],[.76,1]].forEach(function(q,k){var i=Math.round(q[0]*N),p=P[i],dir=q[1],len=(60+30*al(k,3,1))*s;
+    var x0=p.x-p.nx*p.w*.3,y0=p.y-p.ny*p.w*.3,x1=x0+len*.75,y1=y0-len*.55*(dir>0?1:.6),cx=x0+len*.2,cy=y0-len*.5;
+    g.beginPath();g.moveTo(x0,y0);g.quadraticCurveTo(cx,cy,x1,y1);g.strokeStyle='#33271F';g.lineWidth=4*s;g.lineCap='round';g.stroke();
+    for(var b=0;b<7;b++){var u=.55+.45*al(k,b,4),bx=(1-u)*(1-u)*x0+2*(1-u)*u*cx+u*u*x1+(al(k,b,5)-.5)*14*s,by=(1-u)*(1-u)*y0+2*(1-u)*u*cy+u*u*y1+(al(k,b,6)-.5)*12*s;
+      g.beginPath();g.arc(bx,by,(2.2+1.6*al(k,b,7))*s,0,6.3);g.fillStyle=b%2?'rgba(155,135,214,.75)':'rgba(124,104,196,.7)';g.fill();}});
+}
+dessiner();addEventListener('resize',dessiner);})();
+</script>
 <script src="mousse.js"></script>
 <script type="module" src="lamantin3d.js"></script>
 <script>

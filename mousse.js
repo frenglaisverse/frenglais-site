@@ -14,8 +14,12 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
     // sur petit écran, une touffe sur deux (les trois premières, les plus longues, sont toujours gardées)
     const liste=(rel&&W<640)?modele.filter((_,i)=>i<3||i%2===0):modele;
     ventEff=vent*(rel?Math.max(.4,Math.min(1,W/1280)):1);
-    brins=liste.map(([x,n],i)=>{ const pas=12*k, x0=rel?x*W:x*k, pts=[];
-      for(let j=0;j<n;j++){ pts.push({x:x0,y:j*pas,ox:x0,oy:j*pas}); }
+    // data-branche (sur un parent) : la touffe pend de la branche, à la hauteur de la courbe en x
+    const hb=cv.closest('[data-branche]'), B=hb?hb.dataset.branche.split(',').map(Number):null;
+    const bz=(t,i)=>{ const u=1-t; return u*u*u*B[i]+3*u*u*t*B[i+2]+3*u*t*t*B[i+4]+t*t*t*B[i+6]; };
+    const yBranche=x=>{ if(!B) return 0; let m=1e9,tb=0; for(let s=0;s<=200;s++){ const e=Math.abs(bz(s/200,0)-x); if(e<m){m=e;tb=s/200;} } return Math.max(0,bz(tb,1))*H; };
+    brins=liste.map(([x,n],i)=>{ const pas=12*k, x0=rel?x*W:x*k, y0=rel?yBranche(x):0, pts=[];
+      for(let j=0;j<n;j++){ pts.push({x:x0,y:y0+j*pas,ox:x0,oy:y0+j*pas}); }
       // vrilles : beaucoup de petits filaments frisés, comme la vraie mousse espagnole
       const vrilles=[]; for(let j=1;j<n;j++) for(let m=0;m<5;m++) vrilles.push({j,t:alea(i,j,m),cote:alea(i,j,m+9)>.5?1:-1,l:(5+alea(i,j,m+3)*9)*k,c:(alea(i,j,m+5)-.5)*8*k});
       return {pts,pas,vrilles}; });
@@ -24,7 +28,7 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
     for(const b of brins){ const p=b.pts;
       for(let j=1;j<p.length;j++){ const q=p[j], vx=(q.x-q.ox)*.965, vy=(q.y-q.oy)*.965; q.ox=q.x; q.oy=q.y;
         q.x+=vx+Math.sin(t/1900+j*.6+b.pas)*.018; q.y+=vy+.3;
-        if(ventEff){ const f=j/p.length; q.x-=ventEff*f*(.55+.45*Math.sin(t/650+j*.35+b.pts[0].x*.05)); }   // vent de droite à gauche, par rafales
+        if(ventEff){ const f=j/p.length; q.x-=ventEff*f*(.3+.7*Math.sin(t/900+j*.3+b.pts[0].x*.04)); }   // vent de droite à gauche, par rafales
         const dx=q.x-souris.x, dy=q.y-souris.y, d=Math.hypot(dx,dy);
         if(d<44&&d>0){ const f=(44-d)/44*.8; q.x+=dx/d*f; q.y+=dy/d*f*.35; } }
       for(let it=0;it<5;it++) for(let j=1;j<p.length;j++){ const a=p[j-1], q=p[j], dx=q.x-a.x, dy=q.y-a.y, d=Math.hypot(dx,dy)||1, e=(d-b.pas)/d;

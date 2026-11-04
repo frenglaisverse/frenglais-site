@@ -427,3 +427,7 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .badge-tp:hover{opacity:.6}.badge-tp:hover span{text-decoration:none}
 .badge-tp .tp-etoiles{width:62px;height:14px}
 @media (max-width:640px){.badge-tp .tp-etoiles{width:50px;height:11px}.badge-tp{font-size:10.5px}}
+/* étoiles façon Trustpilot, vert fumé */
+.badge-tp{opacity:.82}.badge-tp:hover{opacity:.82}
+.badge-tp .tp-etoiles{width:76px;height:14px}
+@media (max-width:640px){.badge-tp .tp-etoiles{width:60px;height:11px}}

@@ -14,7 +14,7 @@
   const calme=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(!o||vu||calme){ if(o) o.remove(); dessiner(); return; }
   document.body.style.overflow='hidden';
-  setTimeout(()=>{ o.classList.add('fin'); document.body.style.overflow=''; setTimeout(()=>{ o.remove(); },450); dessiner(); },1700);
+  setTimeout(()=>{ o.classList.add('fin'); document.body.style.overflow=''; setTimeout(()=>{ o.remove(); },450); dessiner(); },2400);
 })();
 
 /* ---------- démo : toucher une vitre ---------- */

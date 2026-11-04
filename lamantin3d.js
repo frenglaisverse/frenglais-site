@@ -391,10 +391,12 @@ function lancer(){
 
 
 
+  let solGator = null; const piedsGator = [];
   /* ---------- l'alligator (ultra rare) : on masque le lamantin et on construit un alligator ---------- */
   if (VARIANTE === 'gator') {
     const sol = new THREE.Box3().setFromObject(corps).min.y;
     corps.children.forEach(c => { if (c !== cou) c.visible = false; });
+    solGator = sol;
     tete.children.slice().forEach(c => c.visible = false);
     // peau : écailles rectangulaires en rangées, teinte vert-olive avec variations
     const ec = document.createElement('canvas'); ec.width = 256; ec.height = 256; const x2 = ec.getContext('2d');
@@ -415,7 +417,8 @@ function lancer(){
     const noirG = new THREE.MeshStandardMaterial({ color:0x0A0A0A, roughness:.2 });
     const y0 = sol + .15;
     // colonne en S : le corps file vers la droite, la queue se recourbe vers l'arrière
-    const axe = [[-.36, y0 + .03, 0], [-.05, y0 + .05, .02], [.3, y0 + .05, 0], [.62, y0 + .03, -.06], [.95, y0, -.2], [1.25, y0 - .03, -.42], [1.5, y0 - .06, -.7]].map(p => new THREE.Vector3(...p));
+    // queue en S, la pointe retombe par-dessus le bord
+    const axe = [[-.36, y0 + .03, 0], [-.05, y0 + .05, .02], [.3, y0 + .05, 0], [.62, y0 + .03, -.06], [.95, y0, -.18], [1.22, y0 - .03, -.24], [1.42, y0 - .08, -.08], [1.56, y0 - .24, .08], [1.62, y0 - .44, .2]].map(p => new THREE.Vector3(...p));
     const dosG = new THREE.CatmullRomCurve3(axe);
     const prof = [[0, .17], [.12, .23], [.3, .245], [.45, .2], [.6, .13], [.8, .065], [1, .012]];
     const rayonG = t => { for (let k = 1; k < prof.length; k++) if (t <= prof[k][0]) { const u = (t - prof[k - 1][0]) / (prof[k][0] - prof[k - 1][0]); return prof[k - 1][1] + (prof[k][1] - prof[k - 1][1]) * u; } return .01; };
@@ -441,7 +444,7 @@ function lancer(){
       const base = P.clone().addScaledVector(lat, rayonG(t) * .85).setY(y0 - .02);
       const cuisse = boule(.06, vert, [1.3, 1, 1], [0, 0, 0], 18); cuisse.position.copy(base); corps.add(cuisse);
       const tibia = boule(.04, vert, [1, 1.8, 1], [0, 0, 0], 14); tibia.position.copy(base).addScaledVector(lat, .07).setY(sol + .06); tibia.rotation.z = z * .3; corps.add(tibia);
-      const pied = boule(.05, vert, [1.6, .35, 1.3], [0, 0, 0], 14); pied.position.copy(base).addScaledVector(lat, .1).setY(sol + .012); corps.add(pied);
+      const pied = boule(.05, vert, [1.6, .35, 1.3], [0, 0, 0], 14); pied.position.copy(base).addScaledVector(lat, .1).setY(sol + .012); corps.add(pied); piedsGator.push(pied);
       for (let d = -2; d <= 2; d++) { const dg = boule(.012, vert, [2.6, .5, .8], [0, 0, 0], 8); dg.position.copy(pied.position).add(new THREE.Vector3(-.07, -.004, d * .022)).addScaledVector(lat, .02); corps.add(dg);
         const gr = new THREE.Mesh(new THREE.ConeGeometry(.005, .02, 4), blanc); gr.position.copy(dg.position).add(new THREE.Vector3(-.035, 0, 0)); gr.rotation.z = Math.PI / 2; corps.add(gr); }
     }
@@ -479,10 +482,13 @@ function lancer(){
     const ombre = new THREE.Mesh(new THREE.PlaneGeometry(2.1, .7), new THREE.MeshBasicMaterial({ map:new THREE.CanvasTexture(oc), transparent:true, depthWrite:false }));
     ombre.rotation.x = -Math.PI / 2; ombre.position.set(.45 * Math.cos(ORIENT), .002, -.45 * Math.sin(ORIENT)); ombre.rotation.z = ORIENT; scene.add(ombre); }
   const bb = new THREE.Box3().setFromObject(corps); lamantin.position.y = -bb.min.y;
+  if (piedsGator.length) {   // l'alligator pose ses pattes au sol, la queue peut pendre
+    lamantin.updateMatrixWorld(true); const bp = new THREE.Box3(); piedsGator.forEach(p => bp.expandByObject(p));
+    lamantin.position.y -= bp.min.y; lamantin.updateMatrixWorld(true); }
 
   // la ligne du sol (y = 0) tombe pile sur le bord de la case
   camera.updateMatrixWorld();
-  const sol = new THREE.Vector3(.45 * Math.cos(ORIENT), 0, -.45 * Math.sin(ORIENT)).project(camera);
+  const sol = new THREE.Vector3(.45 * Math.cos(ORIENT), 0, piedsGator.length ? .32 : -.45 * Math.sin(ORIENT)).project(camera);   // l'alligator : on cale sur ses pattes avant
   hote.style.setProperty('--sol', ((1 - sol.y) / 2 * H2).toFixed(1) + 'px');
 
 

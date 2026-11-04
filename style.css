@@ -272,65 +272,28 @@ footer{position:relative;z-index:2}
 @keyframes bulle-vole{0%{opacity:0;transform:translateY(8px) scale(.7)}18%{opacity:1;transform:translateY(0) scale(1)}75%{opacity:1;transform:translateY(-8px)}100%{opacity:0;transform:translateY(-18px)}}
 @media (prefers-reduced-motion:reduce){.bulle-drapeau{animation:none}}
 
-/* menu du haut : texte simple, aligné avec le logo, deux couleurs pour les actions */
-.bandeau{position:relative}
-.bandeau .nav{flex-wrap:nowrap}
-.bandeau .nav-liens{flex-wrap:nowrap;gap:clamp(22px,4vw,56px);font-size:16px;font-weight:500}
-.bandeau .nav-liens a{text-decoration:none;color:#fff;padding-block:6px;border-bottom:2px solid transparent;transition:border-color .2s,color .2s}
-.bandeau .nav-liens a:hover{text-decoration:none;border-bottom-color:currentColor}
-.bandeau .nav-eleve{color:#B9CCFF!important}
-.bandeau .nav-devis{color:#F0766F!important;font-weight:600}
-@media (max-width:640px){.bandeau .nav-liens{gap:18px;font-size:15px}}
-@media (max-width:380px){.bandeau .nav-liens{gap:12px;font-size:14px}}
 /* mousse espagnole, coin haut gauche */
 .in-mousse{position:relative}
 .mousse{position:absolute;left:-28px;top:0;width:300px;height:170px;pointer-events:none;z-index:2}
-.bandeau .nav-liens a{white-space:nowrap}
-@media (max-width:640px){.mousse{left:-8px;width:220px;height:130px}.bandeau .nav img{height:44px}.bandeau .nav-liens{gap:14px;font-size:14px}}
-
-/* menu en cases accrochées au bord haut, séparées par des traits fins */
-.bandeau .nav{padding-top:0;align-items:flex-start}
-.bandeau .nav > a:first-child{margin-top:18px}
-.bandeau .nav-liens{gap:0;align-self:flex-start;border-left:1px solid rgba(255,255,255,.28);border-bottom:1px solid rgba(255,255,255,.28)}
-.bandeau .nav-liens a{display:flex;align-items:flex-end;min-height:76px;padding:0 clamp(16px,2.4vw,34px) 18px;border-right:1px solid rgba(255,255,255,.28);border-bottom:0!important;transition:background .2s}
-.bandeau .nav-liens a:hover{background:rgba(255,255,255,.07)}
-.bandeau .nav-liens a:last-child{border-right:0}
-@media (max-width:640px){.bandeau .nav-liens a.lien-sec{display:none}.bandeau .nav-liens a{min-height:62px;padding:0 12px 14px}.bandeau .nav > a:first-child{margin-top:12px}}
-@media (max-width:640px){.bandeau .nav{gap:10px}.bandeau .nav img{height:38px}.bandeau .nav-liens{font-size:13px}.bandeau .nav-liens a{padding:0 8px 14px}}
-/* cases du haut : grain léger + reflet ; les deux actions ont une surbrillance verre, comme les icônes rondes */
-.bandeau .nav-liens a{position:relative;overflow:hidden;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23g)'/%3E%3C/svg%3E"),
-    linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0) 70%);
-  box-shadow:inset 0 -1px 0 rgba(255,255,255,.08)}
-.bandeau .nav-liens a:hover{background-color:rgba(255,255,255,.06)}
-.bandeau .nav-liens .nav-eleve,.bandeau .nav-liens .nav-devis{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -12px 22px -14px rgba(255,255,255,.22)}
-.bandeau .nav-liens .nav-eleve{background-color:rgba(110,149,240,.22)}
-.bandeau .nav-liens .nav-devis{background-color:rgba(240,118,111,.20)}
-.bandeau .nav-liens .nav-eleve::before,.bandeau .nav-liens .nav-devis::before{content:"";position:absolute;inset:0 0 50% 0;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));pointer-events:none}
-.bandeau .nav-liens .nav-eleve::after,.bandeau .nav-liens .nav-devis::after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:2px;border-radius:2px;background:currentColor;opacity:.75;box-shadow:0 0 12px 1px currentColor}
-.bandeau .nav-liens .nav-eleve:hover{background-color:rgba(110,149,240,.32)}
-.bandeau .nav-liens .nav-devis:hover{background-color:rgba(240,118,111,.30)}
-.bandeau .nav-liens .nav-eleve{color:#E6EDFF!important}
-.bandeau .nav-liens .nav-devis{color:#FFE3E0!important;background-color:rgba(240,118,111,.32)}
-.bandeau .nav-liens .nav-eleve::after{background:#9DB8FF;box-shadow:0 0 12px 1px #9DB8FF}
-.bandeau .nav-liens .nav-devis::after{background:#F0766F;box-shadow:0 0 12px 1px #F0766F}
-.bandeau .nav-liens .nav-devis:hover{background-color:rgba(240,118,111,.42)}
-/* Espace élève : bouton blanc arrondi, comme « Demander un devis » de l'accueil */
-.bandeau .nav-liens .nav-eleve{background:none!important;box-shadow:none!important;align-items:flex-end;padding-bottom:12px}
-.bandeau .nav-liens .nav-eleve::before,.bandeau .nav-liens .nav-eleve::after{display:none}
-.bandeau .nav-liens .nav-eleve span{display:inline-flex;align-items:center;min-height:40px;padding:0 20px;border-radius:999px;background:linear-gradient(180deg,#fff,#EDF1FB);color:#1C49A5;font-weight:600;box-shadow:inset 0 1px 0 #fff,0 6px 16px -8px rgba(5,14,42,.55);transition:transform .15s,box-shadow .2s}
-.bandeau .nav-liens .nav-eleve:hover span{box-shadow:inset 0 1px 0 #fff,0 10px 22px -8px rgba(5,14,42,.6);transform:translateY(-1px)}
-@media (max-width:640px){.bandeau .nav-liens .nav-eleve{padding-bottom:9px}.bandeau .nav-liens .nav-eleve span{min-height:34px;padding:0 12px}}
-@media (max-width:640px){.bandeau .nav img{height:34px}.bandeau .nav-liens{font-size:12.5px}.bandeau .nav-liens a{padding-left:6px;padding-right:6px}.bandeau .nav-liens .nav-eleve span{padding:0 10px;min-height:32px}}
-/* mélange : cases texturées (version actuelle) + boutons d'origine dans les cases
-   Espace élève = bouton verre contouré ; Demander un devis = bouton blanc */
-.bandeau .nav-liens .nav-eleve,.bandeau .nav-liens .nav-devis{background-color:transparent!important;box-shadow:none!important;align-items:flex-end;padding-bottom:12px}
-.bandeau .nav-liens .nav-eleve::before,.bandeau .nav-liens .nav-eleve::after,.bandeau .nav-liens .nav-devis::before,.bandeau .nav-liens .nav-devis::after{display:none}
-.bandeau .nav-liens .nav-eleve span,.bandeau .nav-liens .nav-devis span{display:inline-flex;align-items:center;min-height:40px;padding:0 20px;border-radius:999px;font-weight:600;transition:transform .15s,box-shadow .2s,background .2s}
-.bandeau .nav-liens .nav-eleve span{color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 22px -12px rgba(5,14,42,.6)}
-.bandeau .nav-liens .nav-eleve:hover span{background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,.1))}
-.bandeau .nav-liens .nav-devis{color:#1C49A5!important}
-.bandeau .nav-liens .nav-devis span{color:#1C49A5;background:linear-gradient(180deg,#fff,#EDF1FB);box-shadow:inset 0 1px 0 #fff,0 6px 16px -8px rgba(5,14,42,.55)}
-.bandeau .nav-liens .nav-eleve:hover span,.bandeau .nav-liens .nav-devis:hover span{transform:translateY(-1px)}
-@media (max-width:640px){.bandeau .nav-liens .nav-eleve,.bandeau .nav-liens .nav-devis{padding-bottom:9px}.bandeau .nav-liens .nav-eleve span,.bandeau .nav-liens .nav-devis span{min-height:32px;padding:0 10px}}
+@media (max-width:640px){.mousse{left:-8px;width:220px;height:130px}}
+/* ---------- menu du haut : barre verre discrète, façon Apple ---------- */
+.bandeau .nav{flex-wrap:nowrap;align-items:center;padding-block:16px}
+.bandeau .nav img{height:52px}
+.bandeau .nav-liens{display:flex;align-items:center;gap:2px;flex-wrap:nowrap;padding:4px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 10px 30px -18px rgba(5,14,42,.7);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%)}
+.bandeau .nav-liens a{display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:10px;font-size:14px;font-weight:500;letter-spacing:-.005em;
+  color:rgba(255,255,255,.88);text-decoration:none;white-space:nowrap;transition:background .2s,color .2s}
+.bandeau .nav-liens a:hover{background:rgba(255,255,255,.1);color:#fff;text-decoration:none}
+.bandeau .nav-liens .nav-eleve{color:#fff;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+.bandeau .nav-liens .nav-eleve:hover{background:rgba(255,255,255,.18)}
+.bandeau .nav-liens .nav-devis{margin-left:4px;color:#1C49A5;font-weight:600;background:linear-gradient(180deg,#fff,#EEF2FB);box-shadow:inset 0 1px 0 #fff,0 4px 12px -6px rgba(5,14,42,.6)}
+.bandeau .nav-liens .nav-devis:hover{background:#fff;color:#163C8A}
+.bandeau .nav-liens a span{display:contents}
+.bandeau .nav-liens .sep{width:1px;height:18px;background:rgba(255,255,255,.18);margin:0 4px}
+@media (max-width:640px){.bandeau .nav{gap:10px}.bandeau .nav img{height:36px}.bandeau .nav-liens .lien-sec,.bandeau .nav-liens .sep{display:none}.bandeau .nav-liens a{height:32px;padding:0 10px;font-size:12.5px}}
+/* boutons de la page Espace élève : même famille que le reste */
+.espace .actions-espace .btn{border-radius:999px;min-height:44px;padding:0 22px;font-size:15px}
+.espace .actions-espace .btn-bleu{background:linear-gradient(180deg,#fff,#EEF2FB);color:#1C49A5;font-weight:600;box-shadow:0 0 0 1px rgba(28,73,165,.18),inset 0 1px 0 #fff,0 6px 16px -8px rgba(16,36,92,.45)}
+.espace .actions-espace .btn-bleu:hover{background:#fff}

@@ -287,3 +287,13 @@ footer{position:relative;z-index:2}
 .mousse{position:absolute;left:-28px;top:0;width:300px;height:170px;pointer-events:none;z-index:2}
 .bandeau .nav-liens a{white-space:nowrap}
 @media (max-width:640px){.mousse{left:-8px;width:220px;height:130px}.bandeau .nav img{height:44px}.bandeau .nav-liens{gap:14px;font-size:14px}}
+
+/* menu en cases accrochées au bord haut, séparées par des traits fins */
+.bandeau .nav{padding-top:0;align-items:flex-start}
+.bandeau .nav > a:first-child{margin-top:18px}
+.bandeau .nav-liens{gap:0;align-self:flex-start;border-left:1px solid rgba(255,255,255,.28);border-bottom:1px solid rgba(255,255,255,.28)}
+.bandeau .nav-liens a{display:flex;align-items:flex-end;min-height:76px;padding:0 clamp(16px,2.4vw,34px) 18px;border-right:1px solid rgba(255,255,255,.28);border-bottom:0!important;transition:background .2s}
+.bandeau .nav-liens a:hover{background:rgba(255,255,255,.07)}
+.bandeau .nav-liens a:last-child{border-right:0}
+@media (max-width:640px){.bandeau .nav-liens a.lien-sec{display:none}.bandeau .nav-liens a{min-height:62px;padding:0 12px 14px}.bandeau .nav > a:first-child{margin-top:12px}}
+@media (max-width:640px){.bandeau .nav{gap:10px}.bandeau .nav img{height:38px}.bandeau .nav-liens{font-size:13px}.bandeau .nav-liens a{padding:0 8px 14px}}

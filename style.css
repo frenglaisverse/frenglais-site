@@ -384,3 +384,8 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .tb-progression{position:relative;overflow:visible}
 .mousse-pct{position:absolute;right:8px;top:-14px;left:auto;width:300px;height:110px;z-index:2}
 @media (max-width:640px){.mousse-pct{width:220px;height:90px;right:0}}
+/* réseaux sociaux, bas de page */
+.reseaux{display:flex;gap:10px;margin-top:14px}
+.reseaux a{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#DCE4F7;text-decoration:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.25);transition:background .2s,color .2s,transform .15s}
+.reseaux a:hover{color:#fff;transform:translateY(-1px);background:linear-gradient(180deg,rgba(240,118,111,.45),rgba(168,50,42,.35));border-color:rgba(255,190,186,.6)}

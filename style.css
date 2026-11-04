@@ -413,3 +413,11 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .marque{display:flex;flex-direction:column;align-items:flex-start;gap:4px;position:relative;z-index:3}
 .avis-haut{width:250px;margin:0}
 @media (max-width:640px){.marque{min-width:0;flex-shrink:1}.avis-haut{width:min(150px,38vw)}.avis-haut a{font-size:11.5px;white-space:nowrap}}
+/* note Trustpilot, version statique */
+.badge-tp{display:inline-flex;align-items:center;gap:8px;color:#DCE4F7;text-decoration:none;font-size:13px;line-height:1;opacity:.92;transition:opacity .2s}
+.badge-tp b{color:#fff;font-weight:600}
+.badge-tp:hover{opacity:1}.badge-tp:hover span{text-decoration:underline}
+.badge-tp.bas{margin:12px 0 2px}
+.badge-tp span{white-space:nowrap}
+@media (max-width:640px){.badge-tp{font-size:11px;gap:5px}.badge-tp .tp-etoiles{width:58px;height:13px}.marque{flex-shrink:0}.badge-tp.haut .tp-suite{display:none}}
+.tp-suite{font-style:normal}

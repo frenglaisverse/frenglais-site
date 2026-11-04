@@ -1,10 +1,10 @@
 /* ---------- mousse espagnole : quelques touffes soumises à la gravité ---------- */
-(function mousse(){
-  const cv=document.getElementById('mousse'); if(!cv||!cv.getContext) return;
+document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
+  if(!cv.getContext) return;
   const ctx=cv.getContext('2d'), calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let W=0,H=0,brins=[],souris={x:-999,y:-999};
   // [x d'ancrage, nombre de segments] : peu de touffes, longueurs variées, la plus longue tombe sur le logo
-  const modele=[[8,8],[34,10],[70,3],[110,2],[150,3]];
+  const modele=cv.dataset.modele?JSON.parse(cv.dataset.modele):[[8,8],[34,10],[70,3],[110,2],[150,3]];
   const alea=(i,j,k)=>{ const v=Math.sin(i*12.9898+j*78.233+k*37.719)*43758.5453; return v-Math.floor(v); };
   function creer(){
     const r=cv.getBoundingClientRect(); W=r.width; H=r.height; const dpr=Math.min(devicePixelRatio||1,2);
@@ -52,4 +52,4 @@
   let visible=true; new IntersectionObserver(es=>{ visible=es[0].isIntersecting; if(visible) requestAnimationFrame(boucle); }).observe(cv);
   function boucle(t){ if(!visible) return; pas(t); dessiner(); requestAnimationFrame(boucle); }
   requestAnimationFrame(boucle);
-})();
+});

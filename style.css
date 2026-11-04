@@ -380,3 +380,7 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .tb-acces-etat{margin:0;font-size:14px;min-height:1em}
 .tb-acces-etat.ko{color:var(--ko)} .tb-acces-etat.ok{color:var(--ok)}
 @media (max-width:640px){.tb-acces-champs{grid-template-columns:1fr}}
+/* mousse qui pend sur la carte du parcours */
+.tb-progression{position:relative;overflow:visible}
+.mousse-pct{position:absolute;right:8px;top:-14px;left:auto;width:300px;height:110px;z-index:2}
+@media (max-width:640px){.mousse-pct{width:220px;height:90px;right:0}}

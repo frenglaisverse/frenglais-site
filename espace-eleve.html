@@ -19,6 +19,7 @@
   <p class="tb-sur">Votre espace</p>
   <h1>Espace élève</h1>
   <div class="tb-progression" aria-live="polite">
+    <canvas class="mousse mousse-pct" data-modele="[[214,5],[244,3],[268,6]]" aria-hidden="true"></canvas>
     <div class="tb-chiffres"><span>Votre parcours</span><b id="pct-global">0 %</b></div>
     <div class="tb-barre"><i id="barre-global"></i></div>
   </div>
@@ -41,13 +42,13 @@
 <form class="tb-acces" id="acces" novalidate>
   <div class="tb-acces-tete">
     <span class="tb-acces-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/></svg></span>
-    <div><strong>Déjà inscrit ?</strong><span>Entrez le code d'accès reçu par e-mail.</span></div>
+    <div><strong>Déjà inscrit ?</strong><span>Entrez l'identifiant et le code reçus à l'inscription, par exemple <b>Manatee3</b>.</span></div>
   </div>
   <div class="tb-acces-champs">
-    <label class="sr" for="acces-mail">E-mail</label>
-    <input id="acces-mail" type="email" autocomplete="email" placeholder="Votre e-mail">
+    <label class="sr" for="acces-id">Identifiant</label>
+    <input id="acces-id" type="text" autocomplete="username" placeholder="Identifiant (ex. Mangrove2)" spellcheck="false" autocapitalize="off">
     <label class="sr" for="acces-code">Code d'accès</label>
-    <input id="acces-code" type="text" inputmode="text" autocomplete="one-time-code" placeholder="FRG-XXXX-XXXX" maxlength="13" spellcheck="false">
+    <input id="acces-code" type="text" autocomplete="one-time-code" placeholder="FRG-XXXX-XXXX" maxlength="13" spellcheck="false">
     <button type="submit">Accéder</button>
   </div>
   <p class="tb-acces-etat" id="acces-etat" role="status" aria-live="polite"></p>
@@ -66,18 +67,21 @@
   else if(pct>0){ act.textContent='Reprendre · '+pct+' %'; }
 })();
 
-/* accès par code : pour l'instant un emplacement prêt ; la vraie vérification se fera sur la plateforme de formation */
+/* accès : identifiant floridien généré à l'inscription (nom + chiffre de 1 à 6 selon la taille de l'équipe) + code.
+   La vraie vérification se fera sur la plateforme de formation ; ici on vérifie seulement la forme. */
 const PLATEFORME_URL = '';   // à renseigner à l'ouverture (adresse de connexion de la plateforme)
+const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades','Gator','Heron','Pelican','Flamingo','Egret','Ibis','Osprey','Dolphin','Tarpon','Snook','Turtle','Seagrass','Cypress','Sawgrass','Palmetto','Saltmarsh','Oyster','Conch','Coral','Keys','KeyWest','Sanibel','Captiva','Biscayne','Crystal','Homosassa','Wakulla','Ichetucknee','Itchetucknee','Suwannee','Okeechobee','Kissimmee','Withlacoochee','Silver','Rainbow','Weeki','Gulf','Atlantic','Tampa','Miami','Naples','Orlando','Gainesville','Sarasota','Destin','Pensacola','Tallahassee','Orange','Citrus','KeyLime','Hibiscus','Jacaranda','SpanishMoss','LiveOak','Bayou','Lagoon','Tide','Breeze','Sunset','Sandbar','Driftwood','Seashell','Starfish','Hurricane','Thunder','Storm','Airboat','Lighthouse','Marina','Boardwalk','Canopy','Orchid','Panther','Bobcat','Armadillo','Otter','Spoonbill','Anhinga','Kingfisher','Seabreeze','Coquina','Caladesi','Amelia','Matanzas','Ocala','Apalachicola','Myakka','Peace','Loxahatchee','Juniper','Fanning'];
 (function(){
   const f=document.getElementById('acces'); if(!f) return;
-  const code=document.getElementById('acces-code'), mail=document.getElementById('acces-mail'), etat=document.getElementById('acces-etat');
+  const ident=document.getElementById('acces-id'), code=document.getElementById('acces-code'), etat=document.getElementById('acces-etat');
+  const valide=v=>{ const m=/^([A-Za-z]+)([1-6])$/.exec(v.trim()); return m && NOMS_FLORIDE.some(n=>n.toLowerCase()===m[1].toLowerCase()); };
   code.addEventListener('input',()=>{ let v=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); if(v.startsWith('FRG')) v=v.slice(3);
-    v=v.slice(0,8); code.value='FRG-'+v.slice(0,4)+(v.length>4?'-'+v.slice(4):''); if(!v) code.value=''; });
+    v=v.slice(0,8); code.value=v?'FRG-'+v.slice(0,4)+(v.length>4?'-'+v.slice(4):''):''; });
   f.addEventListener('submit',e=>{ e.preventDefault(); etat.className='tb-acces-etat';
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail.value.trim())){ etat.classList.add('ko'); etat.textContent='Indiquez l\'e-mail utilisé pour votre inscription.'; mail.focus(); return; }
+    if(!valide(ident.value)){ etat.classList.add('ko'); etat.textContent='Identifiant introuvable : un nom de Floride suivi d\'un chiffre, par exemple Manatee3.'; ident.focus(); return; }
     if(!/^FRG-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.value)){ etat.classList.add('ko'); etat.textContent='Le code a la forme FRG-XXXX-XXXX.'; code.focus(); return; }
     if(PLATEFORME_URL){ location.href=PLATEFORME_URL; return; }
-    etat.classList.add('ok'); etat.textContent='Merci. Votre espace ouvre avec les premières sessions : le lien de connexion vous sera adressé par e-mail.'; });
+    etat.classList.add('ok'); const m=/^([A-Za-z]+)([1-6])$/.exec(ident.value.trim()); ident.value=NOMS_FLORIDE.find(n=>n.toLowerCase()===m[1].toLowerCase())+m[2]; etat.textContent='Merci '+ident.value+'. Votre espace ouvre avec les premières sessions : le lien de connexion vous sera communiqué.'; });
 })();
 </script>
 <footer><div class="in pied"><div><img src="logo.png" class="logo-pied" alt="Frenglais" width="197" height="70"><small>© 2026 Frenglais · Paul Moreaux</small></div>

@@ -493,41 +493,6 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 /* lamantin agrandi de 20 %, toujours posé sur la case */
 .lamantin{transform:scale(1.2);transform-origin:100% var(--sol,120px)}
 @media (max-width:640px){.lamantin{transform:scale(.9);transform-origin:right var(--sol,140px)}}
-/* onglet « formateur » : petite vitre blanche, coin droit du haut de page */
-.hero{position:relative}
-.carte-paul{position:absolute;right:0;bottom:56px;display:flex;align-items:center;gap:12px;padding:8px 16px 8px 8px;border-radius:999px;color:#fff;
-  background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.38);
-  -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 10px 26px -14px rgba(5,15,45,.55)}
-.carte-photo{width:46px;height:46px;border-radius:50%;flex:none;overflow:hidden;display:grid;place-items:center;
-  background:linear-gradient(150deg,rgba(255,255,255,.55),rgba(255,255,255,.18));box-shadow:0 0 0 2px rgba(255,255,255,.55)}
-.carte-photo span{font:600 15px var(--f-txt);color:#1C49A5;letter-spacing:.02em}
-.carte-photo img{width:100%;height:100%;object-fit:cover;display:block}
-.carte-txt{display:flex;flex-direction:column;line-height:1.25}
-.carte-txt b{font-size:14px;font-weight:600}
-.carte-txt span{font-size:12px;opacity:.8}
-@media (max-width:860px){.carte-paul{position:static;align-self:flex-start;margin-top:-8px}}
-/* onglet formateur : format carré, angles arrondis, à droite */
-.carte-paul{flex-direction:column;align-items:center;text-align:center;gap:10px;padding:12px 12px 14px;border-radius:20px;width:150px;bottom:40px}
-.carte-photo{width:96px;height:96px;border-radius:14px}
-.carte-photo span{font-size:22px}
-.carte-txt b{font-size:14px}
-.carte-txt span{font-size:11.5px;margin-top:2px}
-@media (max-width:860px){.carte-paul{position:static;align-self:flex-end;margin-top:-4px;width:140px}}
-@media (max-width:860px){.carte-paul{position:absolute;right:0;bottom:52px;margin:0;width:118px;padding:10px 8px 12px;gap:8px;border-radius:18px}
-  .carte-photo{width:72px;height:72px;border-radius:12px}.carte-photo span{font-size:18px}
-  .carte-txt b{font-size:13px}.carte-txt span{font-size:10.5px}}
-/* onglet formateur agrandi de 20 %, nom seul */
-.carte-paul{width:180px;padding:14px 14px 15px;gap:11px;border-radius:24px}
-.carte-photo{width:115px;height:115px;border-radius:17px}
-.carte-photo span{font-size:26px}
-.carte-txt b{font-size:16px;letter-spacing:.01em}
-@media (max-width:860px){.carte-paul{width:142px;padding:11px 10px 12px;gap:9px;border-radius:21px}
-  .carte-photo{width:86px;height:86px;border-radius:14px}.carte-photo span{font-size:21px}.carte-txt b{font-size:15px}}
-/* onglet formateur dans le flux : jamais par-dessus le texte, quelle que soit la largeur */
-.hero-bas{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
-.hero-bas .carte-paul,.hero-bas .carte-paul{position:static;margin:0;flex:none}
-@media (max-width:860px){.hero-bas{gap:12px}.hero-bas .ctas{min-width:0}}
 /* en-tête : rien ne déborde entre 641 et 820 px ni sous 360 px */
 @media (max-width:820px){.badge-tp.haut .tp-suite{display:none}}
 @media (max-width:360px){.nav-liens{gap:4px}.nav-liens .nav-eleve span,.nav-liens .nav-devis span{font-size:11.5px;padding-inline:9px}.badge-tp.haut .tp-etoiles{width:48px}}

@@ -405,3 +405,7 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .mc .etiq.s{background:#fff;color:#1C49A5}.mc .etiq.ed{background:var(--corail);color:#fff}
 .mc .etiq.fant{background:transparent;border:2px dashed currentColor;padding:.02em .5em}.mc .etiq.fant.ed{color:#FFB3AE}
 @keyframes etiq{from{opacity:0;transform:translate(-50%,.3em)}}
+/* note Trustpilot sous le logo du bas */
+.avis-tp{width:220px;min-height:24px;margin:10px 0 2px}
+.avis-tp a{font-size:13px;color:#DCE4F7;text-decoration:none;opacity:.85}
+.avis-tp a:hover{opacity:1;text-decoration:underline}

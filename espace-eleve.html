@@ -42,7 +42,7 @@
 (function(){
   let fini=false,pct=0; try{ fini=localStorage.getItem('frg-intro')==='fini'; pct=+(localStorage.getItem('frg-intro-pct')||0); }catch(e){}
   if(fini) pct=100;
-  const global=Math.round(pct/100*4);   // l'introduction pèse 4 % du parcours (1 module sur 25)
+  const global=pct>=100?1:0;   // introduction terminée = 1 % du parcours
   document.getElementById('pct-global').textContent=global+' %';
   document.getElementById('barre-global').style.width=Math.max(global,1)+'%';
   document.getElementById('barre-intro').style.width=pct+'%';

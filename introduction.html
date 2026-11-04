@@ -87,9 +87,12 @@ body.premier-ecran .rail{margin-bottom:96px}
 .vd-ligne{display:flex;align-items:center;gap:18px;flex-wrap:wrap;min-height:46px;width:100%;padding:0;border:0;background:none;font:inherit;color:inherit;text-align:left}
 .vd-fixe{padding-bottom:10px;margin-bottom:4px;border-bottom:1px solid var(--trait)}
 .vd-verbe{font-size:24px;font-weight:500;letter-spacing:-.01em;color:var(--encre);min-width:150px}
-.vd-s,.vd-fant{display:inline-block;margin-left:2px;padding:0 4px;border-radius:6px}
-.vd-s{color:#fff;background:var(--bleu)}
-.vd-fant{color:var(--bleu);border:1.5px dashed var(--bleu);opacity:0;transition:opacity .6s}
+.vd-verbe{position:relative;padding-top:16px}
+.vd-s{position:relative;text-decoration:underline;text-decoration-color:var(--bleu);text-decoration-thickness:2px;text-underline-offset:4px}
+.vd-et,.vd-fant{position:absolute;font:600 12px/1.25 var(--f-txt);padding:1px 7px;border-radius:8px;white-space:nowrap;letter-spacing:0}
+.vd-et{left:50%;top:-21px;transform:translateX(-50%);color:#fff;background:var(--bleu)}
+.vd-mot{position:relative}
+.vd-fant{right:-14px;top:-20px;color:var(--bleu);border:1.5px dashed var(--bleu);opacity:0;transition:opacity .6s}
 .vd-legende{font-size:14px;color:var(--doux)}
 .vd-cache .vd-legende{opacity:0;transition:opacity .6s}
 .vd-cache{cursor:pointer;border-radius:10px}
@@ -139,6 +142,14 @@ button{font-family:var(--f-txt);font-size:16px;cursor:pointer}
 .resultat{font-size:clamp(30px,6vw,46px);font-weight:400;letter-spacing:-.02em;display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-height:60px}
 .code{padding:0 12px;border-radius:12px;background:#F0766F;color:#fff} .code.s{background:#1C49A5}
 .fantome{padding:0 12px;border-radius:12px;border:2px dashed var(--verre-bord);color:var(--doux)}
+.mc{position:relative;display:inline-block}
+.mc .fin{position:relative;text-decoration:underline;text-decoration-thickness:.08em;text-underline-offset:.14em}
+.mc .fin.s{text-decoration-color:#1C49A5}.mc .fin.ed{text-decoration-color:#F0766F}
+.mc .etiq{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-.12em);font-size:max(.36em,11px);font-weight:600;line-height:1.25;padding:.1em .55em;border-radius:.7em;white-space:nowrap;letter-spacing:0;text-decoration:none;animation:etiq .35s ease-out both}
+.mc .etiq.s{background:#1C49A5;color:#fff}.mc .etiq.ed{background:#F0766F;color:#fff}
+.mc .etiq.fant{background:transparent;border:1.5px dashed currentColor;padding:.04em .5em}.mc .etiq.fant.s{color:var(--bleu)}.mc .etiq.fant.ed{color:#E0625B}
+@keyframes etiq{from{opacity:0;transform:translate(-50%,.3em)}}
+.resultat{padding-top:.5em}
 .note{font-size:15px;color:var(--doux);min-height:24px}
 /* tableaux */
 .tab-wrap{overflow-x:auto}
@@ -573,7 +584,7 @@ function renduDemo(){
   const base=v.b.split(' '), part=base.slice(1).join(' ');
   if(t==='s'){
     if(troisieme){
-      if(v.s[1]){ forme=v.s[0].replace(/s$/,''); code='s'; note='Même have garde son code : ha + s.'; }
+      if(v.s[1]){ forme=v.s[0].replace(/s$/,''); code='s'; note='Même have garde son code : has = ha + -s.'; }
       else { const m=v.s[0].split(' '); forme=m[0].replace(/s$/,''); code='s'; if(m[1]) fant=' '+m.slice(1).join(' '); note='T0. Avec he, she, it, le code -s apparaît.'; }
     } else { forme=v.b; note='T0. Le code -s est là, mais invisible : il ne se voit qu\'avec he, she, it. « '+s+' '+v.b+' ».'; }
   } else if(t==='ed'){
@@ -582,10 +593,13 @@ function renduDemo(){
   }
   const phrase=(t==='none')?`${s} ${v.b} ${v.n}`:'';
   const res=document.getElementById('res');
-  let html=`<span>${s}&nbsp;${forme}</span>`;
-  if(code) html+=`<span class="code ${code}">${code}</span>`;
-  if(fant==='ed') html+=`<span class="fantome">ed</span>`;
-  else if(fant) html+=`<span>${fant}</span>`;
+  // le mot entier, et son code (-s / -ed) affiché au-dessus, dans sa couleur
+  const etiq=(c,fin,g)=>`<span class="fin ${c}">${fin}<span class="etiq ${c}${g?' fant':''}">-${c}</span></span>`;
+  let mot=forme, suite='';
+  if(code){ mot=forme+etiq(code,code,false); if(fant) suite=fant; }
+  else if(fant==='ed'){ mot=forme+etiq('ed','',true); }
+  else if(t==='s'){ const m=v.b.split(' '); mot=m[0]+etiq('s','',true); suite=m[1]?' '+m.slice(1).join(' '):''; }
+  let html=`<span>${s}&nbsp;<span class="mc">${mot}</span>${suite}</span>`;
   html+=`<span style="color:var(--doux)">&nbsp;${v.n}</span>`;
   res.innerHTML=html;
   document.getElementById('res-note').textContent=note;
@@ -654,11 +668,11 @@ const etapes=[
    ${courbe()}
    <p>À T-1, le verbe porte le code <b class="c-ed">-ed</b>. À T0, le code <b class="c-s">-s</b>. </p>
    <div class="vitre-demo">
-     <div class="vd-ligne vd-fixe"><span class="vd-verbe">she leave<span class="vd-s">s</span></span><span class="vd-legende">3<sup>e</sup> personne : le code se voit, sans vitre.</span></div>
+     <div class="vd-ligne vd-fixe"><span class="vd-verbe">she leave<span class="vd-s">s<span class="vd-et">-s</span></span></span><span class="vd-legende">3<sup>e</sup> personne : le code se voit, sans vitre.</span></div>
      <div class="vd-zone">
-       <button type="button" class="vd-ligne vd-cache"><span class="vd-verbe">I leave<span class="vd-fant">s</span></span><span class="vd-legende">le -s est là, invisible</span></button>
-       <button type="button" class="vd-ligne vd-cache"><span class="vd-verbe">you leave<span class="vd-fant">s</span></span><span class="vd-legende">le -s est là, invisible</span></button>
-       <button type="button" class="vd-ligne vd-cache"><span class="vd-verbe">they leave<span class="vd-fant">s</span></span><span class="vd-legende">le -s est là, invisible</span></button>
+       <button type="button" class="vd-ligne vd-cache"><span class="vd-verbe"><span class="vd-mot">I leave<span class="vd-fant">-s</span></span></span><span class="vd-legende">le -s est là, invisible</span></button>
+       <button type="button" class="vd-ligne vd-cache"><span class="vd-verbe"><span class="vd-mot">you leave<span class="vd-fant">-s</span></span></span><span class="vd-legende">le -s est là, invisible</span></button>
+       <button type="button" class="vd-ligne vd-cache"><span class="vd-verbe"><span class="vd-mot">they leave<span class="vd-fant">-s</span></span></span><span class="vd-legende">le -s est là, invisible</span></button>
        <div class="vd-vitre" aria-hidden="true"><span>vitre</span></div>
      </div>
      <p class="vd-aide">Touchez un verbe, ou faites glisser la vitre dessus.</p>

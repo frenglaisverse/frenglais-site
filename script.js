@@ -33,10 +33,13 @@
   function rendu(){
     const r = verbes[v];
     let sujet = 'I', forme = r.base, code = '', fantome = false, n = '';
-    if (vitre === 's'){ sujet = 'She'; forme = r.s[0]; code = r.s[1]; if (r.base==='have') n = 'Même have garde son code : ha + s.'; }
+    if (vitre === 's'){ sujet = 'She'; forme = r.s[0]; code = r.s[1]; if (r.base==='have') n = 'Même have garde son code : has = ha + -s.'; }
     if (vitre === 'ed'){ forme = r.ed[0]; code = r.ed[1]; if (!code){ fantome = true; n = 'Irrégulier : le code -ed est bien là, mais invisible. ' + r.why + '.'; } }
     lab.textContent = vitre==='s' ? 'T0 · présent · code -s' : vitre==='ed' ? 'T-1 · passé · code -ed' : 'Base verbale · aucune vitre touchée';
-    phrase.innerHTML = `<span>${sujet} ${forme}</span>` + (code ? `<span class="code ${vitre==='s'?'s':'ed'}">${code}</span>` : '') + (fantome ? '<span class="fantome">ed</span>' : '');
+    // le mot entier ; son code (-s / -ed) apparaît au-dessus, dans sa couleur
+    const c = vitre==='s' ? 's' : 'ed';
+    const mot = vitre==='none' ? forme : forme + `<span class="fin ${c}">${code}<span class="etiq ${c}${fantome?' fant':''}">-${c}</span></span>`;
+    phrase.innerHTML = `<span>${sujet} <span class="mc">${mot}</span></span>`;
     note.textContent = n;
     document.querySelectorAll('[data-vitre]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.vitre===vitre));
     zone.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', +b.dataset.v===v));

@@ -48,7 +48,18 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
   let dernierY=scrollY;
   addEventListener('scroll',()=>{ const dy=scrollY-dernierY; dernierY=scrollY; const k=Math.max(-14,Math.min(14,dy));
     for(const b of brins) b.pts.forEach((q,j)=>{ if(!j) return; const f=j/b.pts.length; q.oy+=k*.35*f; q.ox+=k*.12*f*(j%2?1:-1); }); },{passive:true});
-  addEventListener('pointermove',e=>{ const r=cv.getBoundingClientRect(); souris.x=e.clientX-r.left; souris.y=e.clientY-r.top; },{passive:true});
+  // souris et doigt : la mousse s'écarte, et le geste lui donne de l'élan
+  let prec=null;
+  const pousser=(cx,cy)=>{ const r=cv.getBoundingClientRect(), x=cx-r.left, y=cy-r.top;
+    if(prec){ const vx=Math.max(-30,Math.min(30,x-prec.x)), vy=Math.max(-30,Math.min(30,y-prec.y));
+      for(const b of brins) b.pts.forEach((q,j)=>{ if(!j) return; const d=Math.hypot(q.x-x,q.y-y); if(d<58){ const f=(58-d)/58*.55; q.ox-=vx*f; q.oy-=vy*f*.4; } }); }
+    prec={x,y}; souris.x=x; souris.y=y; };
+  const lacher=()=>{ prec=null; souris.x=souris.y=-999; };
+  addEventListener('pointermove',e=>{ if(e.pointerType!=='touch') pousser(e.clientX,e.clientY); },{passive:true});
+  addEventListener('touchstart',e=>{ prec=null; const t=e.touches[0]; pousser(t.clientX,t.clientY); },{passive:true});
+  addEventListener('touchmove',e=>{ const t=e.touches[0]; pousser(t.clientX,t.clientY); },{passive:true});
+  addEventListener('touchend',lacher,{passive:true}); addEventListener('touchcancel',lacher,{passive:true});
+  document.addEventListener('mouseleave',lacher);
   let visible=true; new IntersectionObserver(es=>{ visible=es[0].isIntersecting; if(visible) requestAnimationFrame(boucle); }).observe(cv);
   function boucle(t){ if(!visible) return; pas(t); dessiner(); requestAnimationFrame(boucle); }
   requestAnimationFrame(boucle);

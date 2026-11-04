@@ -396,3 +396,12 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .reseaux .livre{width:auto;gap:9px;padding:0 12px 0 5px;display:inline-flex;align-items:center;font:600 13px/1 inherit;font-family:inherit;letter-spacing:.01em;overflow:visible}
 .reseaux .livre img{width:24px;height:36px;border-radius:2px 3px 3px 2px;margin-top:-10px;box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.1);transform:rotate(-4deg);transition:transform .2s}
 .reseaux .livre:hover img{transform:rotate(0) translateY(-2px)}
+/* code -s / -ed affiché au-dessus du mot (démo) */
+.phrase{padding-top:.55em}
+.mc{position:relative;display:inline-block}
+.mc .fin{position:relative;text-decoration:underline;text-decoration-thickness:.07em;text-underline-offset:.14em}
+.mc .fin.s{text-decoration-color:#fff}.mc .fin.ed{text-decoration-color:var(--corail)}
+.mc .etiq{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-.1em);font-size:max(.36em,13px);font-weight:600;line-height:1.25;padding:.08em .55em;border-radius:.7em;white-space:nowrap;letter-spacing:0;text-decoration:none;animation:etiq .35s ease-out both}
+.mc .etiq.s{background:#fff;color:#1C49A5}.mc .etiq.ed{background:var(--corail);color:#fff}
+.mc .etiq.fant{background:transparent;border:2px dashed currentColor;padding:.02em .5em}.mc .etiq.fant.ed{color:#FFB3AE}
+@keyframes etiq{from{opacity:0;transform:translate(-50%,.3em)}}

@@ -459,3 +459,5 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .ouv-scene::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
   background:linear-gradient(115deg,transparent 18%,rgba(255,255,255,.14) 30%,transparent 42%)}
 .ouv-logo{border-radius:14px;box-shadow:0 10px 24px -14px rgba(0,0,0,.6);animation-delay:.15s}
+/* ouverture : lettres seules, directement sur le verre */
+.ouv-logo{border-radius:0;box-shadow:none;filter:drop-shadow(0 6px 14px rgba(3,10,35,.45))}

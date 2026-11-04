@@ -467,6 +467,7 @@ function lancer(){
         const d = new THREE.Mesh(new THREE.ConeGeometry(.0065, .022 + (k % 3 === 1 ? .01 : 0), 5), blanc); d.position.set(x, -.03, z * (w + .012)); d.scale.setScalar(1.5); d.rotation.x = Math.PI; tg.add(d); }
     }
     tg.add(boule(.02, vert, [1.3, .6, 1.4], [-.47, .045, 0], 10));               // bosse du nez
+    lamantin.scale.setScalar(1.22); lamantin.position.x = -.12; lamantin.updateMatrixWorld(true);   // un peu plus grand que les lamantins
     for (let k = 0; k < 6; k++) { const p = new THREE.Mesh(new THREE.ConeGeometry(.012, .025, 4), plaque); p.position.set(.04 + k * .03, .1 - k * .004, (k % 2 ? 1 : -1) * .04); tg.add(p); }   // écussons de la nuque
   }
 

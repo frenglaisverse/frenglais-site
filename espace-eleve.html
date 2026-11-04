@@ -21,7 +21,6 @@
   <div class="tb-progression" aria-live="polite">
     <div class="tb-chiffres"><span>Votre parcours</span><b id="pct-global">0 %</b></div>
     <div class="tb-barre"><i id="barre-global"></i></div>
-    <p class="tb-note" id="note-global">L'introduction est offerte. Le parcours complet compte 25 modules.</p>
   </div>
 </div>
 
@@ -35,17 +34,9 @@
   </a>
   <div class="tb-module verrou"><div class="tb-num">01</div><div class="tb-corps"><strong>Repères et codes</strong><span>Module 1</span></div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></div>
   <div class="tb-module verrou"><div class="tb-num">02</div><div class="tb-corps"><strong>Crochets et base verbale</strong><span>Module 2</span></div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></div>
-  <div class="tb-module verrou"><div class="tb-num">03</div><div class="tb-corps"><strong>BE + -ING</strong><span>Module 3</span></div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></div>
-  <div class="tb-module verrou tb-plus"><div class="tb-num">+21</div><div class="tb-corps"><strong>Et 21 autres modules</strong><span>HAVE + -EN, T+1, la Courbe complète, votre métier…</span></div></div>
 </div>
 
-<div class="tb-suite" id="suite">
-  <div><strong id="suite-titre">Prêt pour la suite ?</strong><span>Débloquez les 24 modules, votre suivi et l'évaluation orale finale.</span></div>
-  <div class="actions-espace">
-    <a class="btn btn-bleu" href="index.html#devis">Demander un devis</a>
-    <a class="btn btn-contour-bleu" href="index.html#formations">Voir les formations</a>
-  </div>
-</div>
+<a class="tb-debloquer" href="index.html#devis">Débloquer la formation</a>
 </main>
 <script>
 (function(){
@@ -56,10 +47,7 @@
   document.getElementById('barre-global').style.width=Math.max(global,1)+'%';
   document.getElementById('barre-intro').style.width=pct+'%';
   const act=document.getElementById('action-intro');
-  if(fini){ act.textContent='Terminée ✓'; document.getElementById('carte-intro').classList.add('fini');
-    document.getElementById('note-global').innerHTML='Introduction terminée. <b>Il vous reste 96 % du parcours</b> : 24 modules pour parler sans hésiter.';
-    document.getElementById('suite-titre').textContent='Vous avez fait 4 %. La suite vous attend.';
-    document.getElementById('suite').classList.add('chaud'); }
+  if(fini){ act.textContent='Terminée ✓'; document.getElementById('carte-intro').classList.add('fini'); }
   else if(pct>0){ act.textContent='Reprendre · '+pct+' %'; }
 })();
 </script>

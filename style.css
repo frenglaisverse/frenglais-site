@@ -297,3 +297,22 @@ footer{position:relative;z-index:2}
 .bandeau .nav-liens a:last-child{border-right:0}
 @media (max-width:640px){.bandeau .nav-liens a.lien-sec{display:none}.bandeau .nav-liens a{min-height:62px;padding:0 12px 14px}.bandeau .nav > a:first-child{margin-top:12px}}
 @media (max-width:640px){.bandeau .nav{gap:10px}.bandeau .nav img{height:38px}.bandeau .nav-liens{font-size:13px}.bandeau .nav-liens a{padding:0 8px 14px}}
+/* cases du haut : grain léger + reflet ; les deux actions ont une surbrillance verre, comme les icônes rondes */
+.bandeau .nav-liens a{position:relative;overflow:hidden;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23g)'/%3E%3C/svg%3E"),
+    linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0) 70%);
+  box-shadow:inset 0 -1px 0 rgba(255,255,255,.08)}
+.bandeau .nav-liens a:hover{background-color:rgba(255,255,255,.06)}
+.bandeau .nav-liens .nav-eleve,.bandeau .nav-liens .nav-devis{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -12px 22px -14px rgba(255,255,255,.22)}
+.bandeau .nav-liens .nav-eleve{background-color:rgba(110,149,240,.22)}
+.bandeau .nav-liens .nav-devis{background-color:rgba(240,118,111,.20)}
+.bandeau .nav-liens .nav-eleve::before,.bandeau .nav-liens .nav-devis::before{content:"";position:absolute;inset:0 0 50% 0;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));pointer-events:none}
+.bandeau .nav-liens .nav-eleve::after,.bandeau .nav-liens .nav-devis::after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:2px;border-radius:2px;background:currentColor;opacity:.75;box-shadow:0 0 12px 1px currentColor}
+.bandeau .nav-liens .nav-eleve:hover{background-color:rgba(110,149,240,.32)}
+.bandeau .nav-liens .nav-devis:hover{background-color:rgba(240,118,111,.30)}
+.bandeau .nav-liens .nav-eleve{color:#E6EDFF!important}
+.bandeau .nav-liens .nav-devis{color:#FFE3E0!important;background-color:rgba(240,118,111,.32)}
+.bandeau .nav-liens .nav-eleve::after{background:#9DB8FF;box-shadow:0 0 12px 1px #9DB8FF}
+.bandeau .nav-liens .nav-devis::after{background:#F0766F;box-shadow:0 0 12px 1px #F0766F}
+.bandeau .nav-liens .nav-devis:hover{background-color:rgba(240,118,111,.42)}

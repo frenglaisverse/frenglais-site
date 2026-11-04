@@ -349,3 +349,8 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .espace-tb .actions-espace .btn{border-radius:999px;min-height:44px;padding:0 22px;font-size:15px}
 .espace-tb .actions-espace .btn-bleu{background:linear-gradient(180deg,#2557BE,#1C49A5);color:#fff;font-weight:600}
 @media (max-width:560px){.tb-module{flex-wrap:wrap}.tb-action{margin-left:50px}}
+/* quelques étoiles discrètes, en haut de la section Formations uniquement */
+#formations{position:relative}
+#formations::before{content:"";position:absolute;left:0;right:0;top:20px;height:220px;background:url("etoiles.svg") center top/1200px 220px no-repeat;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(180deg,#000 40%,transparent);mask-image:linear-gradient(180deg,#000 40%,transparent)}
+#formations>*{position:relative;z-index:1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #formations::before{filter:brightness(2.4)}}

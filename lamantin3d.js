@@ -395,41 +395,79 @@ function lancer(){
     const sol = new THREE.Box3().setFromObject(corps).min.y;
     corps.children.forEach(c => { if (c !== cou) c.visible = false; });
     tete.children.slice().forEach(c => c.visible = false);
-    cou.position.set(-.34, sol + .2, 0);
-    const vert = new THREE.MeshStandardMaterial({ color:0x3E4A2C, roughness:.75, bumpMap:relief, bumpScale:.9 });
-    const ventre = new THREE.MeshStandardMaterial({ color:0x9C9A72, roughness:.8 });
-    const ecaille = new THREE.MeshStandardMaterial({ color:0x2C351F, roughness:.7 });
-    const blanc = new THREE.MeshStandardMaterial({ color:0xF2EEDD, roughness:.4 });
-    const or = new THREE.MeshStandardMaterial({ color:0xD9B33F, roughness:.25, emissive:0x3A2A00 });
-    const y0 = sol + .16;
-    // corps : tronc aplati + queue qui s'effile, en fuseau
-    const axe = [[-.34, y0 + .02], [-.05, y0 + .04], [.3, y0 + .04], [.65, y0 + .02], [1.0, y0 - .01], [1.4, y0 - .04], [1.75, y0 - .07]].map(([x, y]) => new THREE.Vector3(x, y, 0));
-    const corpsG = new THREE.Mesh(fuseau(axe, [[0, .15], [.18, .2], [.38, .19], [.55, .13], [.75, .08], [1, .015]], 40, 90), vert);
-    corpsG.scale.set(1, .78, 1.3); corpsG.position.y = y0 * .38; corps.add(corpsG);
-    // deux rangées d'écailles dorsales
-    const dos = new THREE.CatmullRomCurve3(axe);
-    for (let i = 0; i < 26; i++) { const t = .05 + i * .036, P = dos.getPointAt(t), h = .035 * (1 - t * .7);
-      for (const z of [-1, 1]) { const e = new THREE.Mesh(new THREE.ConeGeometry(.022 * (1 - t * .5), h, 4), ecaille); e.position.set(P.x, P.y * .62 + y0 * .38 + .1 * (1 - t * .85), z * .045 * (1 - t * .6)); corps.add(e); } }
-    // pattes
-    for (const [x, z] of [[-.12, 1], [-.12, -1], [.5, 1], [.5, -1]]) {
-      const p = new THREE.Group(); p.position.set(x, sol + .06, z * .2); corps.add(p);
-      p.add(boule(.055, vert, [1, 1.7, 1.3], [0, .07, z * .015], 16));
-      const pied = boule(.045, vert, [1.5, .4, 1.1], [-.03, -.03, z * .05], 14); p.add(pied);
-      for (const k of [-1, 0, 1]) p.add(boule(.01, blanc, [1.4, .6, 1], [-.09, -.04, z * .05 + k * .02], 8)); }
-    // tête : long museau, yeux dorés en relief, dents, sourire
-    const tg = new THREE.Group(); tg.rotation.y = .72; tg.rotation.z = -.12; tete.add(tg);
-    tg.add(boule(.15, vert, [1.1, .7, 1.05], [0, 0, 0], 28));                                   // crâne
-    tg.add(boule(.105, vert, [2.5, .5, .95], [-.24, -.02, 0], 28));                              // museau supérieur
-    tg.add(boule(.1, ventre, [2.4, .32, .9], [-.22, -.07, 0], 24));                         // mâchoire
-    for (const z of [-1, 1]) {
-      tg.add(boule(.045, vert, [1, .8, 1], [-.02, .07, z * .06], 16));                        // bosse d'œil
-      tg.add(boule(.026, or, [1, .9, 1], [-.035, .085, z * .075], 14));                       // œil doré
-      tg.add(boule(.011, new THREE.MeshStandardMaterial({ color:0x111111 }), [.4, 1.2, .5], [-.05, .088, z * .093], 8));   // pupille fendue
-      tg.add(boule(.012, ecaille, [1, .6, 1], [-.46, .03, z * .03], 8));                     // narines
-      for (let k = 0; k < 7; k++) { const d = new THREE.Mesh(new THREE.ConeGeometry(.008, .026, 5), blanc); d.position.set(-.08 - k * .048, -.058, z * .085 * (1 - k * .05)); d.rotation.x = Math.PI; tg.add(d); }
+    // peau : écailles rectangulaires en rangées, teinte vert-olive avec variations
+    const ec = document.createElement('canvas'); ec.width = 256; ec.height = 256; const x2 = ec.getContext('2d');
+    const eb = document.createElement('canvas'); eb.width = 256; eb.height = 256; const b2 = eb.getContext('2d');
+    x2.fillStyle = '#3F5A2E'; x2.fillRect(0, 0, 256, 256); b2.fillStyle = '#000'; b2.fillRect(0, 0, 256, 256);
+    for (let r = 0; r < 16; r++) for (let c = 0; c < 12; c++) {
+      const w = 21, h = 16, x = c * w + (r % 2) * w / 2, y = r * h, v = Math.random();
+      x2.fillStyle = `rgb(${58 + v * 26 | 0},${84 + v * 30 | 0},${42 + v * 14 | 0})`; x2.beginPath(); x2.roundRect(x + 1.5, y + 1.5, w - 3, h - 3, 4); x2.fill();
+      const gr = b2.createRadialGradient(x + w / 2, y + h / 2, 1, x + w / 2, y + h / 2, w / 1.6); gr.addColorStop(0, '#fff'); gr.addColorStop(1, '#222');
+      b2.fillStyle = gr; b2.beginPath(); b2.roundRect(x + 1.5, y + 1.5, w - 3, h - 3, 4); b2.fill(); }
+    const tPeau = new THREE.CanvasTexture(ec); tPeau.colorSpace = THREE.SRGBColorSpace; tPeau.wrapS = tPeau.wrapT = THREE.RepeatWrapping; tPeau.repeat.set(6, 3);
+    const tRel = new THREE.CanvasTexture(eb); tRel.wrapS = tRel.wrapT = THREE.RepeatWrapping; tRel.repeat.set(6, 3);
+    const vert = new THREE.MeshStandardMaterial({ map:tPeau, bumpMap:tRel, bumpScale:2.2, roughness:.62 });
+    const ventre = new THREE.MeshStandardMaterial({ color:0x8E8F62, roughness:.75, bumpMap:tRel, bumpScale:1 });
+    const plaque = new THREE.MeshStandardMaterial({ color:0x2D4220, roughness:.55, flatShading:true });
+    const blanc = new THREE.MeshStandardMaterial({ color:0xF4F0DF, roughness:.35 });
+    const or = new THREE.MeshStandardMaterial({ color:0xC9A53A, roughness:.15, emissive:0x2A1E00 });
+    const noirG = new THREE.MeshStandardMaterial({ color:0x0A0A0A, roughness:.2 });
+    const y0 = sol + .15;
+    // colonne en S : le corps file vers la droite, la queue se recourbe vers l'arrière
+    const axe = [[-.36, y0 + .03, 0], [-.05, y0 + .05, .02], [.3, y0 + .05, 0], [.62, y0 + .03, -.06], [.95, y0, -.2], [1.25, y0 - .03, -.42], [1.5, y0 - .06, -.7]].map(p => new THREE.Vector3(...p));
+    const dosG = new THREE.CatmullRomCurve3(axe);
+    const prof = [[0, .15], [.12, .2], [.3, .21], [.45, .17], [.6, .11], [.8, .06], [1, .012]];
+    const rayonG = t => { for (let k = 1; k < prof.length; k++) if (t <= prof[k][0]) { const u = (t - prof[k - 1][0]) / (prof[k][0] - prof[k - 1][0]); return prof[k - 1][1] + (prof[k][1] - prof[k - 1][1]) * u; } return .01; };
+    const corpsG = new THREE.Mesh(fuseau(axe, prof, 48, 120), vert); corps.add(corpsG);
+    corpsG.geometry.scale(1, .72, 1);
+    // dessous clair
+    const vtr = new THREE.Mesh(fuseau(axe.map(p => p.clone().add(new THREE.Vector3(0, -.05, 0))), prof.map(([t, r]) => [t, r * .82]), 32, 80), ventre); vtr.geometry.scale(1, .55, 1); corps.add(vtr);
+    // ostéodermes : rangées de bosses pointues sur le dos, une double crête sur la queue
+    for (let i = 0; i < 46; i++) {
+      const t = .04 + i * .021, P = dosG.getPointAt(Math.min(t, .99)), T = dosG.getTangentAt(Math.min(t, .99)), r = rayonG(t);
+      const lat = new THREE.Vector3(-T.z, 0, T.x).normalize(), haut = P.y * .72 + r * .72;
+      const rangs = t < .55 ? [-.62, -.25, .25, .62] : [-.18, .18];
+      for (const k of rangs) {
+        const h = ((t < .55 ? .03 : .055 * (1 - (t - .55) / .5)) * (1 - Math.abs(k) * .35) + .01) * (.7 + Math.random() * .6);
+        const pic = new THREE.Mesh(new THREE.ConeGeometry(.026 * (1 - t * .5), h, 4), plaque); pic.scale.z = 1.6;
+        pic.position.copy(P).addScaledVector(lat, k * r).setY(haut - Math.abs(k) * r * .35 + h * .35);
+        pic.rotation.y = Math.atan2(T.x, T.z) + (Math.random() - .5) * .4; corps.add(pic);
+      }
     }
-    const pts = []; for (let k = 0; k <= 12; k++) { const u = k / 12; pts.push(new THREE.Vector3(-.44 + u * .46, -.052 + Math.sin(u * Math.PI) * -.006 + u * u * .02, .082)); }
-    tg.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 20, .005, 6, false), ecaille));        // ligne du sourire
+    // pattes, pliées, avec doigts griffus
+    for (const [t, z] of [[.1, 1], [.1, -1], [.48, 1], [.48, -1]]) {
+      const P = dosG.getPointAt(t), T = dosG.getTangentAt(t), lat = new THREE.Vector3(-T.z, 0, T.x).normalize().multiplyScalar(z);
+      const base = P.clone().addScaledVector(lat, rayonG(t) * .85).setY(y0 - .02);
+      const cuisse = boule(.06, vert, [1.3, 1, 1], [0, 0, 0], 18); cuisse.position.copy(base); corps.add(cuisse);
+      const tibia = boule(.04, vert, [1, 1.8, 1], [0, 0, 0], 14); tibia.position.copy(base).addScaledVector(lat, .07).setY(sol + .06); tibia.rotation.z = z * .3; corps.add(tibia);
+      const pied = boule(.05, vert, [1.6, .35, 1.3], [0, 0, 0], 14); pied.position.copy(base).addScaledVector(lat, .1).setY(sol + .012); corps.add(pied);
+      for (let d = -2; d <= 2; d++) { const dg = boule(.012, vert, [2.6, .5, .8], [0, 0, 0], 8); dg.position.copy(pied.position).add(new THREE.Vector3(-.07, -.004, d * .022)).addScaledVector(lat, .02); corps.add(dg);
+        const gr = new THREE.Mesh(new THREE.ConeGeometry(.005, .02, 4), blanc); gr.position.copy(dg.position).add(new THREE.Vector3(-.035, 0, 0)); gr.rotation.z = Math.PI / 2; corps.add(gr); }
+    }
+    // tête : un vrai museau plat en U (vue de dessus extrudée), arcades, yeux en tourelles
+    cou.position.set(-.34, y0 + .02, 0);
+    const tg = new THREE.Group(); tg.rotation.y = .62; tete.add(tg);
+    const forme = (larg, long, k) => { const s = new THREE.Shape(); s.moveTo(0, -larg);
+      s.bezierCurveTo(-long * .45, -larg * .95, -long * .8, -larg * .62, -long * .98, -larg * .5 * k);
+      s.quadraticCurveTo(-long * 1.06, 0, -long * .98, larg * .5 * k);
+      s.bezierCurveTo(-long * .8, larg * .62, -long * .45, larg * .95, 0, larg); s.lineTo(.06, larg); s.lineTo(.06, -larg); return s; };
+    const ext = (shape, ep, mat, y) => { const g = new THREE.ExtrudeGeometry(shape, { depth:ep, bevelEnabled:true, bevelThickness:.018, bevelSize:.016, bevelSegments:3, curveSegments:24 });
+      g.rotateX(-Math.PI / 2); const m = new THREE.Mesh(g, mat); m.position.y = y; tg.add(m); return m; };
+    ext(forme(.115, .5, .7), .045, vert, -.01);                     // mâchoire supérieure
+    ext(forme(.1, .46, .7), .022, ventre, -.06);                    // mâchoire inférieure
+    tg.add(boule(.14, vert, [1.05, .62, 1.05], [.04, .02, 0], 28)); // crâne
+    for (const z of [-1, 1]) {
+      tg.add(boule(.035, vert, [1.5, .9, 1], [-.05, .085, z * .06], 18));        // tourelle de l'œil
+      tg.add(boule(.023, or, [1, .85, 1], [-.068, .1, z * .07], 16));            // œil doré
+      tg.add(boule(.009, noirG, [.35, 1.3, .5], [-.088, .1, z * .073], 8));      // pupille fendue
+      const arc = boule(.03, plaque, [1.8, .45, .8], [-.04, .118, z * .062], 10); arc.rotation.y = z * .3; tg.add(arc);   // arcade
+      tg.add(boule(.012, plaque, [1, .7, 1], [-.47, .05, z * .022], 8));          // narines au bout du museau
+      // rangée de dents, un peu irrégulière, qui dépasse sur le côté comme chez l'alligator
+      for (let k = 0; k < 11; k++) { const u = k / 10, x = -.42 + u * .38, w = .1 * Math.sqrt(1 - Math.pow((x + .46) / .5 - 1, 2) * .55);
+        const d = new THREE.Mesh(new THREE.ConeGeometry(.0065, .022 + (k % 3 === 1 ? .01 : 0), 5), blanc); d.position.set(x, -.03, z * (w + .012)); d.scale.setScalar(1.5); d.rotation.x = Math.PI; tg.add(d); }
+    }
+    tg.add(boule(.02, vert, [1.3, .6, 1.4], [-.47, .045, 0], 10));               // bosse du nez
+    for (let k = 0; k < 6; k++) { const p = new THREE.Mesh(new THREE.ConeGeometry(.012, .025, 4), plaque); p.position.set(.04 + k * .03, .1 - k * .004, (k % 2 ? 1 : -1) * .04); tg.add(p); }   // écussons de la nuque
   }
 
   // ombre de contact, puis on pose le lamantin exactement au sol

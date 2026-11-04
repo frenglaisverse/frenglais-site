@@ -22,10 +22,10 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="ouverture" aria-hidden="true" data-branche="-0.06,0.27,0.28,0.25,0.6,0.1,0.88,-0.1">
+<div id="ouverture" aria-hidden="true" data-branche="-0.08,0.34;0.1,0.285;0.27,0.255;0.41,0.195;0.55,0.165;0.66,0.095;0.77,0.035;0.86,-0.09">
   <canvas class="ouv-branche" aria-hidden="true"></canvas>
-  <canvas class="mousse ouv-mousse fond" data-relatif="1" data-pash=".022" data-vent=".07" data-modele='[[0.5,19],[0.545,18],[0.585,19],[0.005,6],[0.025,6],[0.042,4],[0.06,4],[0.075,3],[0.095,5],[0.107,6],[0.122,5],[0.135,6],[0.147,9],[0.16,5],[0.177,9],[0.197,9],[0.214,3],[0.234,3],[0.25,4],[0.264,4],[0.281,9],[0.295,4],[0.308,9],[0.325,6],[0.338,4],[0.354,9],[0.368,6],[0.384,4],[0.4,4],[0.415,3],[0.433,6],[0.451,3],[0.468,5],[0.484,4],[0.502,4],[0.519,3],[0.532,4],[0.545,4],[0.558,4],[0.574,6],[0.586,5],[0.603,4],[0.617,4],[0.634,5],[0.653,3],[0.671,5],[0.687,4],[0.7,5],[0.717,7],[0.731,6],[0.75,6],[0.762,7],[0.777,9],[0.79,3],[0.804,5],[0.817,5],[0.832,7],[0.845,7],[0.86,5],[0.879,6],[0.898,5],[0.916,6],[0.933,6],[0.953,4],[0.965,4],[0.979,5],[0.991,9]]' aria-hidden="true"></canvas>
-  <canvas class="mousse ouv-mousse devant" data-relatif="1" data-pash=".022" data-vent=".07" data-modele='[[0.5,19],[0.545,18],[0.585,19]]' aria-hidden="true"></canvas>
+  <canvas class="mousse ouv-mousse fond" data-relatif="1" data-pash=".022" data-vent=".07" data-modele='[[0.505,17],[0.512,15],[0.55,16],[0.0,10],[0.0056,5],[0.0126,7],[0.0171,10],[0.0166,7],[0.0228,4],[0.0323,9],[0.04,8],[0.1794,9],[0.1832,5],[0.1878,6],[0.1962,11],[0.1999,8],[0.2606,8],[0.2644,8],[0.2695,7],[0.2815,9],[0.2757,5],[0.3307,7],[0.3346,2],[0.3436,4],[0.3419,2],[0.3566,2],[0.3519,2],[0.4684,4],[0.4731,4],[0.4777,5],[0.4868,2],[0.4877,2],[0.4992,5],[0.4972,6],[0.5017,6],[0.5555,3],[0.5839,4],[0.5951,4],[0.6118,8],[0.6126,4],[0.6058,5],[0.6609,6],[0.6647,3],[0.6694,8],[0.674,7],[0.6801,7],[0.6864,7],[0.6921,7],[0.6888,6],[0.7422,6],[0.7463,10],[0.7558,6],[0.76,8],[0.7686,9],[0.8029,3],[0.8072,6],[0.8126,4],[0.822,5],[0.8745,4],[0.88,7],[0.8858,2],[0.888,2],[0.899,2],[0.8967,4],[0.9008,2],[0.9033,3],[0.9174,2],[0.9577,8],[0.963,4],[0.9688,3],[0.9732,5],[0.9815,3],[0.9756,8],[0.9803,3]]' aria-hidden="true"></canvas>
+  <canvas class="mousse ouv-mousse devant" data-relatif="1" data-pash=".022" data-vent=".07" data-modele='[[0.505,17],[0.512,15],[0.55,16]]' aria-hidden="true"></canvas>
   <div class="ouv-scene">
     <div class="ouv-verre"></div><div class="ouv-bord"></div>
     <img src="logo-ouverture.png" class="ouv-logo" alt="" width="360" height="128">
@@ -266,28 +266,40 @@
 
 <script src="script.js"></script>
 <script>
-/* ouverture : branche de jacaranda, à peine visible, qui remonte et sort avant le coin droit */
+/* ouverture : branche de jacaranda robuste, raide et noueuse, écorce visible ; elle entre et sort du champ */
 (function(){var o=document.getElementById('ouverture');if(!o)return;var c=o.querySelector('.ouv-branche');if(!c||!c.getContext)return;
-var B=o.dataset.branche.split(',').map(Number);
-function bz(t,i){var u=1-t;return u*u*u*B[i]+3*u*u*t*B[i+2]+3*u*t*t*B[i+4]+t*t*t*B[i+6];}
+var Q=o.dataset.branche.split(';').map(function(p){return p.split(',').map(Number);});
 function al(i,j,k){var v=Math.sin(i*12.9898+j*78.233+k*37.719)*43758.5453;return v-Math.floor(v);}
 function dessiner(){var r=o.getBoundingClientRect(),W=r.width,H=r.height,d=Math.min(devicePixelRatio||1,2);c.width=W*d;c.height=H*d;
   var g=c.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,W,H);var s=Math.max(.5,Math.min(1.3,Math.min(W,H)/850));
-  var N=160,P=[];for(var i=0;i<=N;i++){var t=i/N;P.push({x:bz(t,0)*W,y:bz(t,1)*H,w:(74-30*t)*s});}
-  var gauche=[],droite=[];for(i=0;i<=N;i++){var a=P[Math.max(0,i-1)],b=P[Math.min(N,i+1)],dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,w=P[i].w/2*(1+.08*Math.sin(i*.9));
-    gauche.push([P[i].x+nx*w,P[i].y+ny*w]);droite.push([P[i].x-nx*w,P[i].y-ny*w]);P[i].nx=nx;P[i].ny=ny;}
-  g.beginPath();gauche.forEach(function(p,k){k?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);});droite.reverse().forEach(function(p){g.lineTo(p[0],p[1]);});g.closePath();
-  var gr=g.createLinearGradient(0,0,0,H*.25);gr.addColorStop(0,'#4A3A31');gr.addColorStop(1,'#2B211C');g.fillStyle=gr;g.fill();
-  g.save();g.clip();g.lineCap='round';
-  for(var f=0;f<16;f++){var off=(f/15-.5)*.92;g.beginPath();for(i=0;i<=N;i++){var p=P[i],o2=off*p.w+Math.sin(i*.35+f*1.7)*1.2*s;var x=p.x+p.nx*o2,y=p.y+p.ny*o2;i?g.lineTo(x,y):g.moveTo(x,y);}
-    g.strokeStyle=f%3?'rgba(20,14,11,.55)':'rgba(140,118,100,.35)';g.lineWidth=(f%3?1.1:.7)*s;g.stroke();}
-  for(i=8;i<N;i+=9){var p=P[i];g.beginPath();g.ellipse(p.x+p.nx*p.w*(al(i,1,2)-.5)*.5,p.y+p.ny*p.w*(al(i,2,3)-.5)*.5,2.6*s,1.5*s,Math.atan2(p.ny,p.nx)+1.57,0,6.3);g.strokeStyle='rgba(15,10,8,.6)';g.lineWidth=.9*s;g.stroke();}
+  // échantillonnage le long de la ligne brisée (raide, avec de légers coudes), épaisseur noueuse
+  var P=[],tot=0,seg=[];for(var i=1;i<Q.length;i++){var l=Math.hypot((Q[i][0]-Q[i-1][0])*W,(Q[i][1]-Q[i-1][1])*H);seg.push(l);tot+=l;}
+  var N=220;for(var k=0;k<=N;k++){var dd=tot*k/N,j=0;while(j<seg.length-1&&dd>seg[j]){dd-=seg[j];j++;}var u=Math.min(1,dd/seg[j]);
+    var x=(Q[j][0]+(Q[j+1][0]-Q[j][0])*u)*W,y=(Q[j][1]+(Q[j+1][1]-Q[j][1])*u)*H,t=k/N;
+    var noeud=Math.exp(-Math.pow((t-.18)/.03,2))*.22+Math.exp(-Math.pow((t-.47)/.025,2))*.16+Math.exp(-Math.pow((t-.7)/.02,2))*.12;
+    P.push({x:x,y:y,w:(118-62*t)*s*(1+noeud+.03*Math.sin(k*1.3))});}
+  for(k=0;k<=N;k++){var a=P[Math.max(0,k-3)],b=P[Math.min(N,k+3)],dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy)||1;P[k].nx=-dy/l;P[k].ny=dx/l;}
+  function bord(sg){return P.map(function(p,k){var irr=1+.05*(al(k,sg,3)-.5);return [p.x+sg*p.nx*p.w/2*irr,p.y+sg*p.ny*p.w/2*irr];});}
+  var A=bord(1),Bd=bord(-1).reverse();
+  g.beginPath();A.forEach(function(p,k){k?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);});Bd.forEach(function(p){g.lineTo(p[0],p[1]);});g.closePath();
+  g.fillStyle='#3E3129';g.fill();g.save();g.clip();
+  // modelé : dessus éclairé, dessous dans l'ombre
+  for(var f=0;f<26;f++){var off=(f/25-.5);g.beginPath();for(k=0;k<=N;k++){var p=P[k],o2=off*p.w*.96+Math.sin(k*.21+f*2.1)*1.6*s;var x2=p.x+p.nx*o2,y2=p.y+p.ny*o2;k?g.lineTo(x2,y2):g.moveTo(x2,y2);}
+    var lum=off<0?.55+off*.4:.35-off*.5;
+    g.strokeStyle=f%2?'rgba(18,12,9,.75)':'rgba('+Math.round(150*lum+70)+','+Math.round(128*lum+55)+','+Math.round(108*lum+45)+',.55)';g.lineWidth=(f%2?1.4:2.4)*s;g.stroke();}
+  // fissures transversales de l'écorce
+  for(k=2;k<N;k+=2){var p=P[k];for(var m=0;m<3;m++){var o3=(al(k,m,1)-.5)*p.w*.9,len=(3+5*al(k,m,2))*s;var x3=p.x+p.nx*o3,y3=p.y+p.ny*o3;
+    g.beginPath();g.moveTo(x3,y3);g.lineTo(x3+p.nx*len,y3+p.ny*len);g.strokeStyle='rgba(12,8,6,.6)';g.lineWidth=1.1*s;g.stroke();}}
+  // nœuds
+  [.18,.47,.7].forEach(function(t,q){var p=P[Math.round(t*N)];g.beginPath();g.ellipse(p.x-p.nx*p.w*.12,p.y-p.ny*p.w*.12,9*s,5.5*s,Math.atan2(p.ny,p.nx)+1.57,0,6.3);
+    g.fillStyle='rgba(20,14,10,.75)';g.fill();g.strokeStyle='rgba(150,128,105,.45)';g.lineWidth=1.5*s;g.stroke();});
   g.restore();
-  [[.22,-1],[.41,1],[.58,-1],[.76,1]].forEach(function(q,k){var i=Math.round(q[0]*N),p=P[i],dir=q[1],len=(60+30*al(k,3,1))*s;
-    var x0=p.x-p.nx*p.w*.3,y0=p.y-p.ny*p.w*.3,x1=x0+len*.75,y1=y0-len*.55*(dir>0?1:.6),cx=x0+len*.2,cy=y0-len*.5;
-    g.beginPath();g.moveTo(x0,y0);g.quadraticCurveTo(cx,cy,x1,y1);g.strokeStyle='#33271F';g.lineWidth=4*s;g.lineCap='round';g.stroke();
-    for(var b=0;b<7;b++){var u=.55+.45*al(k,b,4),bx=(1-u)*(1-u)*x0+2*(1-u)*u*cx+u*u*x1+(al(k,b,5)-.5)*14*s,by=(1-u)*(1-u)*y0+2*(1-u)*u*cy+u*u*y1+(al(k,b,6)-.5)*12*s;
-      g.beginPath();g.arc(bx,by,(2.2+1.6*al(k,b,7))*s,0,6.3);g.fillStyle=b%2?'rgba(155,135,214,.75)':'rgba(124,104,196,.7)';g.fill();}});
+  // liseré de lumière sur le dessus
+  g.beginPath();Bd.slice().reverse().forEach(function(p,k){k?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);});g.strokeStyle='rgba(170,150,128,.35)';g.lineWidth=1.5*s;g.stroke();
+  // quelques rameaux courts et fleurs de jacaranda
+  [[.3,0],[.52,1],[.74,2]].forEach(function(q){var k=Math.round(q[0]*N),p=P[k],x0=p.x+p.nx*p.w*.45,y0=p.y+p.ny*p.w*.45,len=(50+25*al(q[1],3,1))*s,x1=x0+len*.6,y1=y0-len*.8;
+    g.beginPath();g.moveTo(x0,y0);g.lineTo((x0+x1)/2+4*s,(y0+y1)/2);g.lineTo(x1,y1);g.strokeStyle='#3A2D25';g.lineWidth=6*s;g.lineCap='round';g.lineJoin='round';g.stroke();
+    for(var e=0;e<9;e++){g.beginPath();g.arc(x1+(al(q[1],e,5)-.5)*22*s,y1+(al(q[1],e,6)-.5)*16*s,(2.4+1.8*al(q[1],e,7))*s,0,6.3);g.fillStyle=e%2?'rgba(160,140,220,.8)':'rgba(124,104,196,.75)';g.fill();}});
 }
 dessiner();addEventListener('resize',dessiner);})();
 </script>

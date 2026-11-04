@@ -15,9 +15,10 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
     const liste=(rel&&W<640)?modele.filter((_,i)=>i<3||i%2===0):modele;
     ventEff=vent*(rel?Math.max(.4,Math.min(1,W/1280)):1);
     // data-branche (sur un parent) : la touffe pend de la branche, à la hauteur de la courbe en x
-    const hb=cv.closest('[data-branche]'), B=hb?hb.dataset.branche.split(',').map(Number):null;
-    const bz=(t,i)=>{ const u=1-t; return u*u*u*B[i]+3*u*u*t*B[i+2]+3*u*t*t*B[i+4]+t*t*t*B[i+6]; };
-    const yBranche=x=>{ if(!B) return 0; let m=1e9,tb=0; for(let s=0;s<=200;s++){ const e=Math.abs(bz(s/200,0)-x); if(e<m){m=e;tb=s/200;} } return Math.max(0,bz(tb,1)*H+Math.max(.5,Math.min(1.3,Math.min(W,H)/850))*20); };   // sous la branche, pas en son milieu
+    const hb=cv.closest('[data-branche]'), Q=hb?hb.dataset.branche.split(';').map(p=>p.split(',').map(Number)):null;
+    const sb=Math.max(.5,Math.min(1.3,Math.min(W,H)/850));
+    const yBranche=x=>{ if(!Q) return 0; for(let i=1;i<Q.length;i++){ const [x0,y0]=Q[i-1],[x1,y1]=Q[i]; if(x>=x0&&x<=x1){ const u=(x-x0)/(x1-x0), t=(x-Q[0][0])/(Q[Q.length-1][0]-Q[0][0]);
+        return Math.max(0,(y0+(y1-y0)*u)*H+(118-62*t)*sb*.42); } } return 0; };   // sous la branche, selon son épaisseur
     brins=liste.map(([x,n],i)=>{ const pas=12*k, x0=rel?x*W:x*k, y0=rel?yBranche(x):0, pts=[];
       for(let j=0;j<n;j++){ pts.push({x:x0,y:y0+j*pas,ox:x0,oy:y0+j*pas}); }
       // vrilles : beaucoup de petits filaments frisés, comme la vraie mousse espagnole

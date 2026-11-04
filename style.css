@@ -483,6 +483,6 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 #ouverture .ouv-drapeaux{animation:ouvIn .5s cubic-bezier(.22,1,.36,1) 1.05s forwards}
 #ouverture .ouv-drapeaux .drapeau{height:18px}
 #ouverture .ouv-scene{margin-bottom:20px}
-#ouverture .ouv-branche{opacity:.55;animation:ouvFondu .5s ease-out both}
+#ouverture .ouv-branche{opacity:.85;animation:ouvFondu .5s ease-out both}
 #ouverture .ouv-mousse.fond{animation:ouvFondu .6s ease-out .1s both}
 @keyframes ouvFondu{from{opacity:0}}

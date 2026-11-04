@@ -18,7 +18,7 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
     const hb=cv.closest('[data-branche]'), Q=hb?hb.dataset.branche.split(';').map(p=>p.split(',').map(Number)):null;
     const sb=Math.max(.5,Math.min(1.3,Math.min(W,H)/850));
     const yBranche=x=>{ if(!Q) return 0; for(let i=1;i<Q.length;i++){ const [x0,y0]=Q[i-1],[x1,y1]=Q[i]; if(x>=x0&&x<=x1){ const u=(x-x0)/(x1-x0), t=(x-Q[0][0])/(Q[Q.length-1][0]-Q[0][0]);
-        return Math.max(0,(y0+(y1-y0)*u)*H+(118-62*t)*sb*.42); } } return 0; };   // sous la branche, selon son épaisseur
+        return Math.max(0,(y0+(y1-y0)*u)*H+(175-82*t)*sb*.42); } } return 0; };   // sous la branche, selon son épaisseur
     brins=liste.map(([x,n],i)=>{ const pas=12*k, x0=rel?x*W:x*k, y0=rel?yBranche(x):0, pts=[];
       for(let j=0;j<n;j++){ pts.push({x:x0,y:y0+j*pas,ox:x0,oy:y0+j*pas}); }
       // vrilles : beaucoup de petits filaments frisés, comme la vraie mousse espagnole

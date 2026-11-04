@@ -5,7 +5,7 @@ import * as THREE from './vendor/three.module.min.js';   // three.js r160, hébe
 const hote = document.getElementById('lamantin');
 
 /* chaque visite tire un lamantin différent ; ?lamantin=nom pour en forcer un */
-const TIRAGE = [['classique',12],['helice',3.5],['florida',3.5],['usa',3.5],['courbe',3.5],['tshirt',3.5],['uk',3.5],['australie',3.5],['canada',3.5],['france',3.5],['parasol',3.5],['golf',3.5],['vice',3.5],['bob',3.5],['paille',3.5],['bonnet',3.5],['lei',3.5],['tuba',3.5],['canard',3.5],['monaco',3.5],['casque',3.5],['rose',1]];   // rose : le très rare
+const TIRAGE = [['classique',12],['helice',3.5],['florida',3.5],['usa',3.5],['courbe',3.5],['tshirt',3.5],['uk',3.5],['australie',3.5],['canada',3.5],['france',3.5],['parasol',3.5],['golf',3.5],['vice',3.5],['bob',3.5],['paille',3.5],['bonnet',3.5],['lei',3.5],['tuba',3.5],['canard',3.5],['monaco',3.5],['casque',3.5],['rose',1],['gator',0.67]];   // rose : le très rare
 function tirer(){
   try { const v = new URLSearchParams(location.search).get('lamantin'); if (v && TIRAGE.some(t => t[0] === v)) return v; } catch (e) {}
   let r = Math.random() * TIRAGE.reduce((s, t) => s + t[1], 0);
@@ -389,6 +389,49 @@ function lancer(){
   }
 
 
+
+  /* ---------- l'alligator (ultra rare) : on masque le lamantin et on construit un alligator ---------- */
+  if (VARIANTE === 'gator') {
+    const sol = new THREE.Box3().setFromObject(corps).min.y;
+    corps.children.forEach(c => { if (c !== cou) c.visible = false; });
+    tete.children.slice().forEach(c => c.visible = false);
+    cou.position.set(-.34, sol + .2, 0);
+    const vert = new THREE.MeshStandardMaterial({ color:0x3E4A2C, roughness:.75, bumpMap:relief, bumpScale:.9 });
+    const ventre = new THREE.MeshStandardMaterial({ color:0x9C9A72, roughness:.8 });
+    const ecaille = new THREE.MeshStandardMaterial({ color:0x2C351F, roughness:.7 });
+    const blanc = new THREE.MeshStandardMaterial({ color:0xF2EEDD, roughness:.4 });
+    const or = new THREE.MeshStandardMaterial({ color:0xD9B33F, roughness:.25, emissive:0x3A2A00 });
+    const y0 = sol + .16;
+    // corps : tronc aplati + queue qui s'effile, en fuseau
+    const axe = [[-.34, y0 + .02], [-.05, y0 + .04], [.3, y0 + .04], [.65, y0 + .02], [1.0, y0 - .01], [1.4, y0 - .04], [1.75, y0 - .07]].map(([x, y]) => new THREE.Vector3(x, y, 0));
+    const corpsG = new THREE.Mesh(fuseau(axe, [[0, .15], [.18, .2], [.38, .19], [.55, .13], [.75, .08], [1, .015]], 40, 90), vert);
+    corpsG.scale.set(1, .78, 1.3); corpsG.position.y = y0 * .38; corps.add(corpsG);
+    // deux rangées d'écailles dorsales
+    const dos = new THREE.CatmullRomCurve3(axe);
+    for (let i = 0; i < 26; i++) { const t = .05 + i * .036, P = dos.getPointAt(t), h = .035 * (1 - t * .7);
+      for (const z of [-1, 1]) { const e = new THREE.Mesh(new THREE.ConeGeometry(.022 * (1 - t * .5), h, 4), ecaille); e.position.set(P.x, P.y * .62 + y0 * .38 + .1 * (1 - t * .85), z * .045 * (1 - t * .6)); corps.add(e); } }
+    // pattes
+    for (const [x, z] of [[-.12, 1], [-.12, -1], [.5, 1], [.5, -1]]) {
+      const p = new THREE.Group(); p.position.set(x, sol + .06, z * .2); corps.add(p);
+      p.add(boule(.055, vert, [1, 1.7, 1.3], [0, .07, z * .015], 16));
+      const pied = boule(.045, vert, [1.5, .4, 1.1], [-.03, -.03, z * .05], 14); p.add(pied);
+      for (const k of [-1, 0, 1]) p.add(boule(.01, blanc, [1.4, .6, 1], [-.09, -.04, z * .05 + k * .02], 8)); }
+    // tête : long museau, yeux dorés en relief, dents, sourire
+    const tg = new THREE.Group(); tg.rotation.y = .72; tg.rotation.z = -.12; tete.add(tg);
+    tg.add(boule(.15, vert, [1.1, .7, 1.05], [0, 0, 0], 28));                                   // crâne
+    tg.add(boule(.105, vert, [2.5, .5, .95], [-.24, -.02, 0], 28));                              // museau supérieur
+    tg.add(boule(.1, ventre, [2.4, .32, .9], [-.22, -.07, 0], 24));                         // mâchoire
+    for (const z of [-1, 1]) {
+      tg.add(boule(.045, vert, [1, .8, 1], [-.02, .07, z * .06], 16));                        // bosse d'œil
+      tg.add(boule(.026, or, [1, .9, 1], [-.035, .085, z * .075], 14));                       // œil doré
+      tg.add(boule(.011, new THREE.MeshStandardMaterial({ color:0x111111 }), [.4, 1.2, .5], [-.05, .088, z * .093], 8));   // pupille fendue
+      tg.add(boule(.012, ecaille, [1, .6, 1], [-.46, .03, z * .03], 8));                     // narines
+      for (let k = 0; k < 7; k++) { const d = new THREE.Mesh(new THREE.ConeGeometry(.008, .026, 5), blanc); d.position.set(-.08 - k * .048, -.058, z * .085 * (1 - k * .05)); d.rotation.x = Math.PI; tg.add(d); }
+    }
+    const pts = []; for (let k = 0; k <= 12; k++) { const u = k / 12; pts.push(new THREE.Vector3(-.44 + u * .46, -.052 + Math.sin(u * Math.PI) * -.006 + u * u * .02, .082)); }
+    tg.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 20, .005, 6, false), ecaille));        // ligne du sourire
+  }
+
   // ombre de contact, puis on pose le lamantin exactement au sol
   { const oc = document.createElement('canvas'); oc.width = oc.height = 128; const o = oc.getContext('2d');
     const gr = o.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(5,15,45,.55)'); gr.addColorStop(1, 'rgba(5,15,45,0)');
@@ -412,8 +455,20 @@ function lancer(){
   // tous les 10 codes touchés : la Courbe des Temps à la place du drapeau
   DRAPEAUX.courbe = '<svg viewBox="0 0 38 20"><path d="M2 12 C9 10.5 14 13 20 11.6 S30 10.6 35 11.6" fill="none" stroke="#1C49A5" stroke-width="1.8" stroke-linecap="round"/><path d="M32.6 8.8 L35.6 11.6 L32.6 14.4" fill="none" stroke="#1C49A5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8.4 V14.6" stroke="#F0766F" stroke-width="2" stroke-linecap="round"/><path d="M23 8.2 V14.4" stroke="#1C49A5" stroke-width="2" stroke-linecap="round"/></svg>';
   let codesTouches = 0;
+  // émotes de l'alligator : les pièces difficiles de la Courbe, et un jacaranda très rare
+  const ic = (txt, fond, coul, bord) => `<svg viewBox="0 0 38 20"><rect x="1" y="1" width="36" height="18" rx="5" fill="${fond}"${bord ? ` stroke="${bord}" stroke-width="1.6"` : ''}/><text x="19" y="14.5" text-anchor="middle" font-family="Geist,Helvetica,Arial,sans-serif" font-weight="800" font-size="12" fill="${coul}">${txt}</text></svg>`;
+  Object.assign(DRAPEAUX, {
+    crochets: ic('[ &#160; ]', '#EAF0FF', '#1C49A5'),
+    en: ic('-en', '#FFD27A', '#6B4E00'),
+    ing: '<svg viewBox="0 0 38 20"><rect x="1" y="1" width="36" height="18" rx="5" fill="#E2F5EA"/><path d="M8 5 h-3 v10 h3 M5 10 H30 M25 6 L30 10 L25 14" fill="none" stroke="#2F8A64" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    t2: ic('T-2', '#F0766F', '#fff', '#8E2A23'),
+    t1: ic('T+1', '#F0766F', '#fff', '#8E2A23'),
+    jacaranda: '<svg viewBox="0 0 38 20"><path d="M19 19 V12 M19 13 L14 9 M19 13 L24 9" stroke="#4B3A66" stroke-width="1.6" stroke-linecap="round"/>' + [[13,7],[17,5],[21,5],[25,7],[15,10],[23,10],[19,8],[11,10],[27,10],[19,3]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="2.6" fill="${['#8E7CF0','#A48BFF','#B9A4FF','#7B68D9'][i%4]}"/>`).join('') + '</svg>'
+  });
+  const EMOTES_GATOR = ['crochets', 'en', 'ing', 't2', 't1'];
   function bulle(force){
     codesTouches++;
+    if (!force && VARIANTE === 'gator') force = Math.random() < .06 ? 'jacaranda' : EMOTES_GATOR[Math.random() * EMOTES_GATOR.length | 0];
     const r = Math.random(), quel = force ? force : codesTouches % 10 === 0 ? 'courbe' : r < .6 ? 'us' : r < .8 ? 'uk' : 'au';   // surtout les États-Unis
     const b = document.createElement('div'); b.className = 'bulle-drapeau'; b.innerHTML = DRAPEAUX[quel];
     hote.appendChild(b); setTimeout(() => b.remove(), 1700);

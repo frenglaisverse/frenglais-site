@@ -2,7 +2,7 @@
 document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
   if(!cv.getContext) return;
   const ctx=cv.getContext('2d'), calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W=0,H=0,brins=[],souris={x:-999,y:-999}; const vent=+(cv.dataset.vent||0);
+  let W=0,H=0,brins=[],souris={x:-999,y:-999}; const vent=+(cv.dataset.vent||0); let ventEff=vent;
   // [x d'ancrage, nombre de segments] : peu de touffes, longueurs variées, la plus longue tombe sur le logo
   const modele=cv.dataset.modele?JSON.parse(cv.dataset.modele):[[8,8],[34,10],[70,3],[110,2],[150,3]];
   const alea=(i,j,k)=>{ const v=Math.sin(i*12.9898+j*78.233+k*37.719)*43758.5453; return v-Math.floor(v); };
@@ -11,7 +11,10 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
     cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
     // data-relatif : x en fraction de la largeur ; data-pash : longueur d'un segment en fraction de la hauteur
     const rel=!!cv.dataset.relatif, k=cv.dataset.pash?(H*+cv.dataset.pash)/12:W/300;
-    brins=modele.map(([x,n],i)=>{ const pas=12*k, x0=rel?x*W:x*k, pts=[];
+    // sur petit écran, une touffe sur deux (les trois premières, les plus longues, sont toujours gardées)
+    const liste=(rel&&W<640)?modele.filter((_,i)=>i<3||i%2===0):modele;
+    ventEff=vent*(rel?Math.max(.4,Math.min(1,W/1280)):1);
+    brins=liste.map(([x,n],i)=>{ const pas=12*k, x0=rel?x*W:x*k, pts=[];
       for(let j=0;j<n;j++){ pts.push({x:x0,y:j*pas,ox:x0,oy:j*pas}); }
       // vrilles : beaucoup de petits filaments frisés, comme la vraie mousse espagnole
       const vrilles=[]; for(let j=1;j<n;j++) for(let m=0;m<5;m++) vrilles.push({j,t:alea(i,j,m),cote:alea(i,j,m+9)>.5?1:-1,l:(5+alea(i,j,m+3)*9)*k,c:(alea(i,j,m+5)-.5)*8*k});
@@ -21,7 +24,7 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
     for(const b of brins){ const p=b.pts;
       for(let j=1;j<p.length;j++){ const q=p[j], vx=(q.x-q.ox)*.965, vy=(q.y-q.oy)*.965; q.ox=q.x; q.oy=q.y;
         q.x+=vx+Math.sin(t/1900+j*.6+b.pas)*.018; q.y+=vy+.3;
-        if(vent){ const f=j/p.length; q.x-=vent*f*(.55+.45*Math.sin(t/650+j*.35+b.pts[0].x*.05)); }   // vent de droite à gauche, par rafales
+        if(ventEff){ const f=j/p.length; q.x-=ventEff*f*(.55+.45*Math.sin(t/650+j*.35+b.pts[0].x*.05)); }   // vent de droite à gauche, par rafales
         const dx=q.x-souris.x, dy=q.y-souris.y, d=Math.hypot(dx,dy);
         if(d<44&&d>0){ const f=(44-d)/44*.8; q.x+=dx/d*f; q.y+=dy/d*f*.35; } }
       for(let it=0;it<5;it++) for(let j=1;j<p.length;j++){ const a=p[j-1], q=p[j], dx=q.x-a.x, dy=q.y-a.y, d=Math.hypot(dx,dy)||1, e=(d-b.pas)/d;

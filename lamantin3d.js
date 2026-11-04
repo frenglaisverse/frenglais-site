@@ -411,7 +411,7 @@ function lancer(){
     const ventre = new THREE.MeshStandardMaterial({ color:0x8E8F62, roughness:.75, bumpMap:tRel, bumpScale:1 });
     const plaque = new THREE.MeshStandardMaterial({ color:0x2D4220, roughness:.55, flatShading:true });
     const blanc = new THREE.MeshStandardMaterial({ color:0xF4F0DF, roughness:.35 });
-    const or = new THREE.MeshStandardMaterial({ color:0xC9A53A, roughness:.15, emissive:0x2A1E00 });
+    const or = new THREE.MeshStandardMaterial({ color:0xD69A1E, roughness:.12, emissive:0x3A2200 });
     const noirG = new THREE.MeshStandardMaterial({ color:0x0A0A0A, roughness:.2 });
     const y0 = sol + .15;
     // colonne en S : le corps file vers la droite, la queue se recourbe vers l'arrière
@@ -455,13 +455,13 @@ function lancer(){
     const ext = (shape, ep, mat, y) => { const g = new THREE.ExtrudeGeometry(shape, { depth:ep, bevelEnabled:true, bevelThickness:.018, bevelSize:.016, bevelSegments:3, curveSegments:24 });
       g.rotateX(-Math.PI / 2); const m = new THREE.Mesh(g, mat); m.position.y = y; tg.add(m); return m; };
     ext(forme(.115, .5, .7), .045, vert, -.01);                     // mâchoire supérieure
-    ext(forme(.1, .46, .7), .022, ventre, -.06);                    // mâchoire inférieure
+    ext(forme(.1, .46, .7), .022, ventre, -.06).rotation.z = .06;   // mâchoire inférieure, à peine entrouverte
     tg.add(boule(.14, vert, [1.05, .62, 1.05], [.04, .02, 0], 28)); // crâne
     for (const z of [-1, 1]) {
       tg.add(boule(.035, vert, [1.5, .9, 1], [-.05, .085, z * .06], 18));        // tourelle de l'œil
       tg.add(boule(.023, or, [1, .85, 1], [-.068, .1, z * .07], 16));            // œil doré
-      tg.add(boule(.009, noirG, [.35, 1.3, .5], [-.088, .1, z * .073], 8));      // pupille fendue
-      const arc = boule(.03, plaque, [1.8, .45, .8], [-.04, .118, z * .062], 10); arc.rotation.y = z * .3; tg.add(arc);   // arcade
+      tg.add(boule(.009, noirG, [.22, 1.4, .5], [-.088, .1, z * .073], 8));      // pupille fendue
+      const arc = boule(.032, plaque, [1.9, .5, .85], [-.05, .112, z * .066], 10); arc.rotation.set(z * .25, z * .3, .32); tg.add(arc);   // arcade froncée, plus basse sur l'œil
       tg.add(boule(.012, plaque, [1, .7, 1], [-.47, .05, z * .022], 8));          // narines au bout du museau
       // rangée de dents, un peu irrégulière, qui dépasse sur le côté comme chez l'alligator
       for (let k = 0; k < 11; k++) { const u = k / 10, x = -.42 + u * .38, w = .1 * Math.sqrt(1 - Math.pow((x + .46) / .5 - 1, 2) * .55);

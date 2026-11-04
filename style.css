@@ -361,3 +361,4 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .tb-debloquer:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 14px 28px -10px rgba(28,73,165,.75)}
 /* onglet Espace élève : contour corail foncé, comme le logo */
 .bandeau .nav-liens .nav-eleve{box-shadow:inset 0 0 0 1.5px #A8322A,inset 0 1px 0 rgba(255,255,255,.45),0 4px 14px -6px rgba(120,40,34,.55)!important}
+.lamantin canvas{width:100%!important;height:140px}

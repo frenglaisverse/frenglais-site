@@ -15,7 +15,8 @@ const VARIANTE = (document.getElementById('lamantin') && document.getElementById
 if (hote) try { lancer(); } catch (e) { hote.remove(); }
 
 function lancer(){
-  const L = 200, H = 140, H2 = 140;
+  const L = VARIANTE === 'gator' ? 360 : 200, H = 140, H2 = 140;   // l'alligator, bien plus long, a un cadre plus large
+  if (L !== 200) { hote.style.width = L + 'px'; }
   const rendu = new THREE.WebGLRenderer({ antialias:true, alpha:true });
   rendu.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
   rendu.setSize(L, H2);
@@ -416,7 +417,7 @@ function lancer(){
     // colonne en S : le corps file vers la droite, la queue se recourbe vers l'arrière
     const axe = [[-.36, y0 + .03, 0], [-.05, y0 + .05, .02], [.3, y0 + .05, 0], [.62, y0 + .03, -.06], [.95, y0, -.2], [1.25, y0 - .03, -.42], [1.5, y0 - .06, -.7]].map(p => new THREE.Vector3(...p));
     const dosG = new THREE.CatmullRomCurve3(axe);
-    const prof = [[0, .15], [.12, .2], [.3, .21], [.45, .17], [.6, .11], [.8, .06], [1, .012]];
+    const prof = [[0, .17], [.12, .23], [.3, .245], [.45, .2], [.6, .13], [.8, .065], [1, .012]];
     const rayonG = t => { for (let k = 1; k < prof.length; k++) if (t <= prof[k][0]) { const u = (t - prof[k - 1][0]) / (prof[k][0] - prof[k - 1][0]); return prof[k - 1][1] + (prof[k][1] - prof[k - 1][1]) * u; } return .01; };
     const corpsG = new THREE.Mesh(fuseau(axe, prof, 48, 120), vert); corps.add(corpsG);
     corpsG.geometry.scale(1, .72, 1);
@@ -467,7 +468,7 @@ function lancer(){
         const d = new THREE.Mesh(new THREE.ConeGeometry(.0065, .022 + (k % 3 === 1 ? .01 : 0), 5), blanc); d.position.set(x, -.03, z * (w + .012)); d.scale.setScalar(1.5); d.rotation.x = Math.PI; tg.add(d); }
     }
     tg.add(boule(.02, vert, [1.3, .6, 1.4], [-.47, .045, 0], 10));               // bosse du nez
-    lamantin.scale.setScalar(1.22); lamantin.position.x = -.12; lamantin.updateMatrixWorld(true);   // un peu plus grand que les lamantins
+    lamantin.scale.set(1.95, 1.8, 1.8); lamantin.position.x = -.62; lamantin.updateMatrixWorld(true);   // plus gros et bien plus long qu'un lamantin
     for (let k = 0; k < 6; k++) { const p = new THREE.Mesh(new THREE.ConeGeometry(.012, .025, 4), plaque); p.position.set(.04 + k * .03, .1 - k * .004, (k % 2 ? 1 : -1) * .04); tg.add(p); }   // écussons de la nuque
   }
 

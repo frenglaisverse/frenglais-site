@@ -191,8 +191,8 @@ function lancer(){
     v.scale.set(1, 1, .95); v.position.set(0, .004, .1); v.rotation.x = .12; cap.add(v);
     // la face avant de la calotte (u = 0,25 → +z) regarde dans la direction du museau
     const vers = face.clone().setY(0).normalize().add(new THREE.Vector3(.15, 0, 1)).normalize();   // logo tourné vers le visiteur
-    cap.rotation.y = Math.atan2(vers.x, vers.z); cap.scale.setScalar(1.25);
-    cap.position.copy(centre).add(new THREE.Vector3(0, .115, 0)).addScaledVector(face, -.02);
+    cap.rotation.y = Math.atan2(vers.x, vers.z); cap.scale.setScalar(1.5);
+    cap.position.copy(centre).add(new THREE.Vector3(0, .13, 0)).addScaledVector(face, -.02);
     cap.rotateX(-.12); tete.add(cap);
   }
   const ecrire = (x, txt, couleur, taille, cx, cy, police = '800') => {
@@ -201,7 +201,7 @@ function lancer(){
 
   function habiller(v){
     if (v === 'helice') {             // cicatrices d'hélice, cicatrisées, en biais sur le flanc visible
-      const cic = new THREE.MeshStandardMaterial({ color:0xD8CFC4, roughness:.9 });
+      const cic = new THREE.MeshStandardMaterial({ color:0xEDE4D8, roughness:.9, emissive:0x2A241E });
       for (const t0 of [.4, .47, .54]) {
         const pts = [];
         for (let k = 0; k <= 12; k++) {
@@ -209,7 +209,7 @@ function lancer(){
           const B = new THREE.Vector3().crossVectors(T, new THREE.Vector3(0, 0, 1)).normalize(), r = rayonCorps(t) + .003;
           pts.push(P.clone().addScaledVector(B, Math.cos(a) * r).add(new THREE.Vector3(0, 0, Math.sin(a) * r * 1.1)));
         }
-        corps.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, .011, 6, false), cic));
+        corps.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, .02, 6, false), cic));
       }
     }
     if (v === 'florida') casquette('#F4F1EA', '#E0662B', (x, l, h) => {
@@ -255,7 +255,7 @@ function lancer(){
     }
 
     if (v === 'monaco') {                                                      // le monégasque : casquette de capitaine de yacht, bandeau rouge et blanc
-      const k = new THREE.Group(); k.position.copy(centre).add(new THREE.Vector3(0, .17, 0)); k.rotation.set(-.12, 0, .12); k.scale.setScalar(1.1); tete.add(k);
+      const k = new THREE.Group(); k.position.copy(centre).add(new THREE.Vector3(0, .17, 0)); k.rotation.set(-.12, 0, .12); k.scale.setScalar(1.35); tete.add(k);
       const vers = face.clone().setY(0).normalize().add(new THREE.Vector3(.15, 0, 1)).normalize(); k.rotation.y = Math.atan2(vers.x, vers.z);
       const blanc = mat(0xFFFFFF, { roughness:.5, emissive:0x2A2A2A });
       ajoute(k, new THREE.Mesh(new THREE.CylinderGeometry(.25, .21, .04, 40), blanc)).position.y = .075;               // plateau
@@ -293,7 +293,7 @@ function lancer(){
       const base = dessus(.22), haut = dessus(.7);
       const axe = haut.clone().sub(base), L = axe.length();
       const g = new THREE.Group(); g.position.copy(base); g.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axe.normalize()); corps.add(g);
-      ajoute(g, new THREE.Mesh(new THREE.CylinderGeometry(.014, .011, L, 10), mat(0xE3E7EC, { metalness:.6, roughness:.25 }))).position.y = L / 2;
+      ajoute(g, new THREE.Mesh(new THREE.CylinderGeometry(.022, .018, L, 10), mat(0xF0F2F5, { metalness:.4, roughness:.3 }))).position.y = L / 2;
       ajoute(g, new THREE.Mesh(new THREE.CylinderGeometry(.022, .022, .18, 10), mat(0x111111))).position.y = L - .07;
       const t = new THREE.Mesh(new THREE.BoxGeometry(.05, .07, .15), mat(0xD6DBE1, { metalness:.8, roughness:.2 })); t.position.set(0, -.015, .04); g.add(t);
       corps.add(boule(.03, mat(0xFFFFFF, { roughness:.4 }), [1, 1, 1], [-.72, solLocal + .03, .04], 20));
@@ -316,14 +316,14 @@ function lancer(){
       b.add(new THREE.Mesh(new THREE.CylinderGeometry(.218, .218, .05, 32, 1, true), mat(0xD9554E, { roughness:1, side:THREE.DoubleSide })));
       b.add(boule(.055, mat(0xF4F1EA, { roughness:1 }), [1, 1, 1], [0, .22, 0], 16));
     }
-    if (v === 'lei') collier(.86, 22, i => boule(.034, mat([0xF0766F, 0xFFD27A, 0xFFFFFF, 0xE85A9B][i % 4], { roughness:.8 }), [1, .7, 1], [0, 0, 0], 12), .06);
+    if (v === 'lei') collier(.86, 18, i => boule(.052, mat([0xF0766F, 0xFFD27A, 0xFFFFFF, 0xE85A9B][i % 4], { roughness:.8 }), [1, .7, 1], [0, 0, 0], 12), .06);
     if (v === 'tuba') {                                                        // masque relevé sur le front, tuba sur le côté
       const m = new THREE.Group(); m.position.copy(centre).addScaledVector(face, .12).add(new THREE.Vector3(0, .17, 0)); m.lookAt(m.position.clone().add(face).add(new THREE.Vector3(0, .6, 0))); tete.add(m);
-      ajoute(m, new THREE.Mesh(new THREE.TorusGeometry(.075, .016, 8, 28), mat(0x1C1C1C, { roughness:.5 }))).scale.set(1.3, 1, 1);
-      const verre = new THREE.Mesh(new THREE.CircleGeometry(.075, 28), new THREE.MeshPhysicalMaterial({ color:0x9FD8FF, roughness:.05, transparent:true, opacity:.45 })); verre.scale.set(1.3, 1, 1); verre.position.z = .004; m.add(verre);
+      ajoute(m, new THREE.Mesh(new THREE.TorusGeometry(.1, .024, 8, 28), mat(0x1C49A5, { roughness:.45 }))).scale.set(1.3, 1, 1);
+      const verre = new THREE.Mesh(new THREE.CircleGeometry(.1, 28), new THREE.MeshPhysicalMaterial({ color:0xBFE6FF, roughness:.05, transparent:true, opacity:.7 })); verre.scale.set(1.3, 1, 1); verre.position.z = .004; m.add(verre);
       const sangle = new THREE.Mesh(new THREE.TorusGeometry(.255, .012, 6, 40), mat(0x1C1C1C)); sangle.position.copy(centre).add(new THREE.Vector3(0, .08, 0)); sangle.rotation.x = Math.PI / 2; sangle.rotation.y = .2; tete.add(sangle);
       const tc = new THREE.CatmullRomCurve3([centre.clone().addScaledVector(cote, .25).add(new THREE.Vector3(0, .02, 0)), centre.clone().addScaledVector(cote, .26).add(new THREE.Vector3(0, .2, 0)), centre.clone().addScaledVector(cote, .2).add(new THREE.Vector3(0, .36, 0)).addScaledVector(face, -.1)]);
-      tete.add(new THREE.Mesh(new THREE.TubeGeometry(tc, 20, .016, 8, false), mat(0xF2D23C, { roughness:.5 })));
+      tete.add(new THREE.Mesh(new THREE.TubeGeometry(tc, 20, .028, 8, false), mat(0xFFD23F, { roughness:.4 })));
     }
     if (v === 'canard') {                                                      // un petit canard en caoutchouc posé sur le dos
       const c = new THREE.Group(); c.position.copy(surCorps(.55, .25, .0)); c.scale.setScalar(1.25); c.rotation.y = -.9; corps.add(c);
@@ -334,12 +334,12 @@ function lancer(){
     }
     if (v === 'casque') {                                                      // casque audio
       const noirM = mat(0x16181D, { roughness:.4 }), corail = mat(0xF0766F, { roughness:.5 });
-      const arceau = new THREE.Mesh(new THREE.TorusGeometry(.3, .016, 8, 32, Math.PI), noirM);
+      const arceau = new THREE.Mesh(new THREE.TorusGeometry(.3, .026, 8, 32, Math.PI), noirM);
       arceau.position.copy(centre).add(new THREE.Vector3(0, .02, 0)); arceau.lookAt(arceau.position.clone().add(face)); tete.add(arceau);
       for (const s of [-1, 1]) {
-        const oreille = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .04, 24), noirM);
+        const oreille = new THREE.Mesh(new THREE.CylinderGeometry(.095, .095, .06, 24), corail);
         oreille.position.copy(centre).addScaledVector(cote, s * .3).add(new THREE.Vector3(0, .02, 0)); oreille.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), cote); tete.add(oreille);
-        const disque = new THREE.Mesh(new THREE.CircleGeometry(.04, 20), corail); disque.position.copy(oreille.position).addScaledVector(cote, s * .021); disque.lookAt(disque.position.clone().addScaledVector(cote, s)); tete.add(disque);
+        const disque = new THREE.Mesh(new THREE.CircleGeometry(.055, 20), noirM); disque.position.copy(oreille.position).addScaledVector(cote, s * .031); disque.lookAt(disque.position.clone().addScaledVector(cote, s)); tete.add(disque);
       }
     }
   }

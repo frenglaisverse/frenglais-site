@@ -37,6 +37,21 @@
 </div>
 
 <a class="tb-debloquer" href="index.html#devis">Débloquer la formation</a>
+
+<form class="tb-acces" id="acces" novalidate>
+  <div class="tb-acces-tete">
+    <span class="tb-acces-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/></svg></span>
+    <div><strong>Déjà inscrit ?</strong><span>Entrez le code d'accès reçu par e-mail.</span></div>
+  </div>
+  <div class="tb-acces-champs">
+    <label class="sr" for="acces-mail">E-mail</label>
+    <input id="acces-mail" type="email" autocomplete="email" placeholder="Votre e-mail">
+    <label class="sr" for="acces-code">Code d'accès</label>
+    <input id="acces-code" type="text" inputmode="text" autocomplete="one-time-code" placeholder="FRG-XXXX-XXXX" maxlength="13" spellcheck="false">
+    <button type="submit">Accéder</button>
+  </div>
+  <p class="tb-acces-etat" id="acces-etat" role="status" aria-live="polite"></p>
+</form>
 </main>
 <script>
 (function(){
@@ -49,6 +64,20 @@
   const act=document.getElementById('action-intro');
   if(fini){ act.textContent='Terminée ✓'; document.getElementById('carte-intro').classList.add('fini'); }
   else if(pct>0){ act.textContent='Reprendre · '+pct+' %'; }
+})();
+
+/* accès par code : pour l'instant un emplacement prêt ; la vraie vérification se fera sur la plateforme de formation */
+const PLATEFORME_URL = '';   // à renseigner à l'ouverture (adresse de connexion de la plateforme)
+(function(){
+  const f=document.getElementById('acces'); if(!f) return;
+  const code=document.getElementById('acces-code'), mail=document.getElementById('acces-mail'), etat=document.getElementById('acces-etat');
+  code.addEventListener('input',()=>{ let v=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); if(v.startsWith('FRG')) v=v.slice(3);
+    v=v.slice(0,8); code.value='FRG-'+v.slice(0,4)+(v.length>4?'-'+v.slice(4):''); if(!v) code.value=''; });
+  f.addEventListener('submit',e=>{ e.preventDefault(); etat.className='tb-acces-etat';
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail.value.trim())){ etat.classList.add('ko'); etat.textContent='Indiquez l\'e-mail utilisé pour votre inscription.'; mail.focus(); return; }
+    if(!/^FRG-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.value)){ etat.classList.add('ko'); etat.textContent='Le code a la forme FRG-XXXX-XXXX.'; code.focus(); return; }
+    if(PLATEFORME_URL){ location.href=PLATEFORME_URL; return; }
+    etat.classList.add('ok'); etat.textContent='Merci. Votre espace ouvre avec les premières sessions : le lien de connexion vous sera adressé par e-mail.'; });
 })();
 </script>
 <footer><div class="in pied"><div><img src="logo.png" class="logo-pied" alt="Frenglais" width="197" height="70"><small>© 2026 Frenglais · Paul Moreaux</small></div>

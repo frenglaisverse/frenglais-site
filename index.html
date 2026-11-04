@@ -282,7 +282,7 @@ function membre(g,pts,w0,w1,s){
   function pt(u,v){var k=Math.max(0,Math.min(P.length-1,Math.round(u/2))),p=P[k];return [p.x+p.nx*v*p.w/2,p.y+p.ny*v*p.w/2,p];}
   // silhouette + ombre portée douce
   function contour(){g.beginPath();for(var k=0;k<P.length;k++){var q=pt(P[k].u,1);k?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);}for(k=P.length-1;k>=0;k--){var q2=pt(P[k].u,-1);g.lineTo(q2[0],q2[1]);}g.closePath();}
-  g.save();g.shadowColor='rgba(2,6,25,.55)';g.shadowBlur=22*s;g.shadowOffsetY=10*s;contour();g.fillStyle='#17110D';g.fill();g.restore();
+  g.save();g.shadowColor='rgba(2,6,25,.55)';g.shadowBlur=22*s;g.shadowOffsetY=10*s;contour();g.fillStyle='#1E140E';g.fill();g.restore();
   g.save();contour();g.clip();
   // plaques d'écorce allongées, fissures qui serpentent et ne s'alignent jamais
   var ncol=Math.max(6,Math.round(w0*s/13));
@@ -293,7 +293,7 @@ function membre(g,pts,w0,w1,s){
       var A=[],B=[];for(var uu=ua;uu<=ub;uu+=5*s){var tt=(uu-ua)/Math.max(1,ub-ua),bout=Math.pow(1-Math.sin(Math.PI*tt),2)*(.5/ncol*2),dv=(bordV(cI+1,uu)-bordV(cI,uu));A.push(pt(uu,bordV(cI,uu)+fis*(1+.5*Math.sin(uu*.2))+bout*(.35+.3*Math.sin(cI+uu*.01))*dv));B.push(pt(uu,bordV(cI+1,uu)-fis*(1+.5*Math.cos(uu*.17))-bout*(.35+.3*Math.cos(cI+uu*.013))*dv));}
       if(A.length<2){u+=len;continue;}
       var vm=(bordV(cI,(ua+ub)/2)+bordV(cI+1,(ua+ub)/2))/2,lum=Math.max(.22,Math.min(1.05,.72-vm*.45-Math.pow(Math.abs(vm),3)*.4));
-      var tons=[[128,118,104],[112,106,96],[138,128,112],[104,99,92],[121,114,101],[116,112,104]],tn=tons[Math.floor(al()*tons.length)];
+      var tons=[[136,114,92],[118,100,84],[146,123,98],[110,94,80],[128,107,87],[122,106,90]],tn=tons[Math.floor(al()*tons.length)];
       g.beginPath();A.forEach(function(q,k){k?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);});for(var k=B.length-1;k>=0;k--)g.lineTo(B[k][0],B[k][1]);g.closePath();
       g.fillStyle='rgb('+Math.round(tn[0]*lum)+','+Math.round(tn[1]*lum)+','+Math.round(tn[2]*lum)+')';g.fill();
       g.beginPath();A.forEach(function(q,k){k?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);});g.strokeStyle='rgba(235,225,210,'+(.14*lum)+')';g.lineWidth=1.1*s;g.stroke();

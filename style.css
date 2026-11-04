@@ -486,3 +486,7 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 #ouverture .ouv-branche{opacity:.9;animation:ouvFondu .5s ease-out both}
 #ouverture .ouv-mousse.fond{animation:ouvFondu .6s ease-out .1s both}
 @keyframes ouvFondu{from{opacity:0}}
+/* coffret Entreprises : mousse espagnole sur le côté droit */
+.coffret[data-public="ent"]{position:relative}
+.coffret .mousse-coffret{position:absolute;left:auto;right:0;top:0;width:150px;height:150px;pointer-events:none;z-index:2}
+@media (max-width:640px){.coffret .mousse-coffret{left:auto;width:120px;height:125px}}

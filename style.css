@@ -409,3 +409,7 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .avis-tp{width:220px;min-height:24px;margin:10px 0 2px}
 .avis-tp a{font-size:13px;color:#DCE4F7;text-decoration:none;opacity:.85}
 .avis-tp a:hover{opacity:1;text-decoration:underline}
+/* note Trustpilot sous le logo du haut */
+.marque{display:flex;flex-direction:column;align-items:flex-start;gap:4px;position:relative;z-index:3}
+.avis-haut{width:250px;margin:0}
+@media (max-width:640px){.marque{min-width:0;flex-shrink:1}.avis-haut{width:min(150px,38vw)}.avis-haut a{font-size:11.5px;white-space:nowrap}}

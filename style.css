@@ -490,3 +490,6 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .coffret[data-public="ent"]{position:relative}
 .coffret .mousse-coffret{position:absolute;left:auto;right:0;top:0;width:150px;height:150px;pointer-events:none;z-index:2}
 @media (max-width:640px){.coffret .mousse-coffret{left:auto;width:120px;height:125px}}
+/* lamantin agrandi de 20 %, toujours posé sur la case */
+.lamantin{transform:scale(1.2);transform-origin:100% var(--sol,120px)}
+@media (max-width:640px){.lamantin{transform:scale(.9);transform-origin:right var(--sol,140px)}}

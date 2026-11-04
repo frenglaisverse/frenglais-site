@@ -10,6 +10,7 @@
   const caler=()=>{ if(scene) scene.style.top=Math.min(0,innerHeight-scene.offsetHeight)+'px'; };
   caler(); addEventListener('resize',caler);
   let vu=false; try{ vu=sessionStorage.getItem('frg-ouverture')==='1'; sessionStorage.setItem('frg-ouverture','1'); }catch(e){}
+  if(/[?&]ouverture\b/.test(location.search)) vu=false;   // frenglais.co/?ouverture : rejouer l'écran d'ouverture
   const calme=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(!o||vu||calme){ if(o) o.remove(); dessiner(); return; }
   document.body.style.overflow='hidden';

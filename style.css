@@ -439,3 +439,8 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 @keyframes ouvLam{to{opacity:1;transform:translate(-50%,0)}}
 .ouv-drapeaux{gap:12px;animation-delay:.6s}
 .ouv-drapeaux .drapeau{height:22px}
+/* étoiles Trustpilot cliquables, toujours discrètes */
+a.badge-tp{cursor:pointer;text-decoration:none}
+a.badge-tp:hover{opacity:1}
+a.badge-tp:hover span{text-decoration:underline;text-underline-offset:2px}
+a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-radius:4px}

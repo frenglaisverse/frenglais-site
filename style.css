@@ -323,3 +323,14 @@ footer{position:relative;z-index:2}
 .bandeau .nav-liens .nav-eleve:hover span{box-shadow:inset 0 1px 0 #fff,0 10px 22px -8px rgba(5,14,42,.6);transform:translateY(-1px)}
 @media (max-width:640px){.bandeau .nav-liens .nav-eleve{padding-bottom:9px}.bandeau .nav-liens .nav-eleve span{min-height:34px;padding:0 12px}}
 @media (max-width:640px){.bandeau .nav img{height:34px}.bandeau .nav-liens{font-size:12.5px}.bandeau .nav-liens a{padding-left:6px;padding-right:6px}.bandeau .nav-liens .nav-eleve span{padding:0 10px;min-height:32px}}
+/* mélange : cases texturées (version actuelle) + boutons d'origine dans les cases
+   Espace élève = bouton verre contouré ; Demander un devis = bouton blanc */
+.bandeau .nav-liens .nav-eleve,.bandeau .nav-liens .nav-devis{background-color:transparent!important;box-shadow:none!important;align-items:flex-end;padding-bottom:12px}
+.bandeau .nav-liens .nav-eleve::before,.bandeau .nav-liens .nav-eleve::after,.bandeau .nav-liens .nav-devis::before,.bandeau .nav-liens .nav-devis::after{display:none}
+.bandeau .nav-liens .nav-eleve span,.bandeau .nav-liens .nav-devis span{display:inline-flex;align-items:center;min-height:40px;padding:0 20px;border-radius:999px;font-weight:600;transition:transform .15s,box-shadow .2s,background .2s}
+.bandeau .nav-liens .nav-eleve span{color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 22px -12px rgba(5,14,42,.6)}
+.bandeau .nav-liens .nav-eleve:hover span{background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,.1))}
+.bandeau .nav-liens .nav-devis{color:#1C49A5!important}
+.bandeau .nav-liens .nav-devis span{color:#1C49A5;background:linear-gradient(180deg,#fff,#EDF1FB);box-shadow:inset 0 1px 0 #fff,0 6px 16px -8px rgba(5,14,42,.55)}
+.bandeau .nav-liens .nav-eleve:hover span,.bandeau .nav-liens .nav-devis:hover span{transform:translateY(-1px)}
+@media (max-width:640px){.bandeau .nav-liens .nav-eleve,.bandeau .nav-liens .nav-devis{padding-bottom:9px}.bandeau .nav-liens .nav-eleve span,.bandeau .nav-liens .nav-devis span{min-height:32px;padding:0 10px}}

@@ -740,3 +740,19 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .coffret .btn-coffret:hover{background:#fff}
 .coffret .plus{border-color:rgba(255,255,255,.35);color:#fff}
 .coffret li::before{background:#fff}
+/* CGV : points à confirmer, visibles seulement tant qu'ils ne sont pas validés */
+.legal mark.a-confirmer{background:rgba(240,118,111,.18);color:inherit;padding:0 3px;border-radius:3px;outline:1px dashed #F0766F}
+.legal ul{padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.formulaire-retractation{padding:14px 16px;border-radius:12px;background:var(--carte);border:1px solid var(--trait);font-size:15px}
+/* avis élèves, juste avant le devis */
+.avis{padding-block:8px 8px}
+.avis-titre{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.avis-titre h2{margin:0}
+.avis-titre a{font-size:14px;color:var(--doux);text-decoration:none}.avis-titre a:hover{text-decoration:underline}
+.avis-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.avis-carte{margin:0;padding:22px 22px 20px;border-radius:20px;background:var(--carte);border:1px solid var(--trait);box-shadow:0 14px 30px -22px rgba(16,36,92,.35);display:flex;flex-direction:column;gap:14px}
+.avis-carte .tp-etoiles{width:96px;height:18px}
+.avis-carte blockquote{margin:0;font-size:17px;line-height:1.5;letter-spacing:-.005em;color:var(--encre)}
+.avis-carte figcaption{margin-top:auto;font-size:14px;color:var(--doux)}
+.avis-carte figcaption b{color:var(--encre);font-weight:600}
+.avis-carte .a-remplir{background:rgba(240,118,111,.15);outline:1px dashed #F0766F;border-radius:4px;padding:0 3px}

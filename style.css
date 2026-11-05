@@ -773,3 +773,7 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .cav.fant i{background:transparent;color:#1C49A5;border:1.5px dashed #1C49A5;transform:translate(-30%,-2px)}
 .cav.fant{width:auto;margin:0 3px 0 1px;display:inline}
 .cav.fant i{position:relative;left:auto;bottom:auto;display:inline-block;transform:translateY(-.55em);padding:0 4px}
+/* respiration + trait fin entre la boîte de vitesses et les avis */
+.avis{position:relative;padding-top:clamp(72px,9vw,112px)}
+.avis::before{content:"";position:absolute;top:clamp(36px,4.5vw,56px);left:max(24px,env(safe-area-inset-left,0px));right:max(24px,env(safe-area-inset-right,0px));height:1px;background:linear-gradient(90deg,transparent,var(--doux) 18%,var(--doux) 82%,transparent);opacity:.28}
+@media (max-width:520px){.avis::before{left:16px;right:16px}}

@@ -792,3 +792,9 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 @media (max-width:520px){.devis::before{left:16px;right:16px}}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .devis::before{opacity:.5}}
 :root[data-theme="dark"] .devis::before{opacity:.5}
+/* Solo : vert canard de la couverture du livre (#0B8D8A) */
+.solo{background:radial-gradient(120% 90% at 100% 0%,rgba(214,190,130,.16),transparent 55%),linear-gradient(160deg,#0E9894 0%,#0B8D8A 30%,#077471 70%,#055E5C 100%);
+  box-shadow:inset 0 0 0 4px rgba(6,88,86,.9),inset 0 0 0 5px rgba(214,190,130,.3),0 18px 36px -16px rgba(4,60,58,.7)}
+.solo-ligne button[aria-checked="true"],.solo-cta{color:#064E4C}
+.solo-sit,.solo-eti,.solo-plus{color:#F6E6B8}
+.solo-sit{text-shadow:0 1px 0 rgba(4,60,58,.35)}

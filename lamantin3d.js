@@ -5,7 +5,7 @@ import * as THREE from './vendor/three.module.min.js';   // three.js r160, hébe
 const hote = document.getElementById('lamantin');
 
 /* chaque visite tire un lamantin différent ; ?lamantin=nom pour en forcer un */
-const TIRAGE = [['classique',12],['helice',3.5],['florida',3.5],['usa',3.5],['courbe',3.5],['tshirt',3.5],['uk',3.5],['australie',3.5],['canada',3.5],['france',3.5],['parasol',3.5],['golf',3.5],['vice',3.5],['bob',3.5],['paille',3.5],['bonnet',3.5],['lei',3.5],['tuba',3.5],['canard',3.5],['monaco',3.5],['casque',3.5],['rose',1],['gator',0.67]];   // rose : le très rare
+const TIRAGE = [['classique',12],['helice',3.5],['florida',3.5],['usa',3.5],['courbe',3.5],['tshirt',3.5],['uk',3.5],['australie',3.5],['canada',3.5],['france',3.5],['parasol',3.5],['vice',3.5],['bob',3.5],['paille',3.5],['bonnet',3.5],['lei',3.5],['tuba',3.5],['monaco',3.5],['casque',3.5],['noel',new Date().getMonth()===11?20:3.5],['drapeau',1],['rose',1],['gator',0.67]];   // rose : le très rare
 function tirer(){
   try { const v = new URLSearchParams(location.search).get('lamantin'); if (v && TIRAGE.some(t => t[0] === v)) return v; } catch (e) {}
   let r = Math.random() * TIRAGE.reduce((s, t) => s + t[1], 0);
@@ -15,7 +15,8 @@ const VARIANTE = (document.getElementById('lamantin') && document.getElementById
 if (hote) try { lancer(); } catch (e) { hote.remove(); }
 
 function lancer(){
-  const L = VARIANTE === 'gator' ? 360 : 200, H = 140, H2 = 140;   // l'alligator, bien plus long, a un cadre plus large
+  const L = VARIANTE === 'gator' ? 360 : 200, H = 140, H2 = VARIANTE === 'drapeau' ? 230 : 140;   // le grand drapeau : cadre plus haut
+  if (H2 !== H) hote.style.height = H2 + 'px';   // l'alligator, bien plus long, a un cadre plus large
   if (L !== 200) { hote.style.width = L + 'px'; }
   const rendu = new THREE.WebGLRenderer({ antialias:true, alpha:true });
   rendu.setPixelRatio(Math.min((devicePixelRatio || 1) * 1.2, 2.4));   // net malgré l'agrandissement de 20 %
@@ -27,7 +28,7 @@ function lancer(){
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(26, L / H, 0.1, 50);
-  camera.setViewOffset(L, H, 0, 0, L, H2);
+  camera.setViewOffset(L, H, 0, H - H2, L, H2);
   camera.position.set(-0.1, 1.15, 5.2);
   camera.lookAt(0.4, 0.32, 0);
 
@@ -287,17 +288,6 @@ function lancer(){
       const c = new THREE.Mesh(new THREE.ConeGeometry(.32, .12, 32, 1, true), new THREE.MeshStandardMaterial({ map:toile, roughness:.8, side:THREE.DoubleSide }));
       c.position.y = .92; p.add(c);
     }
-    if (v === 'golf') {                                                        // un club posé en travers du dos, la balle devant lui
-      const dessus = t => { const P = dos.getPointAt(t), T = dos.getTangentAt(t), B = new THREE.Vector3().crossVectors(T, new THREE.Vector3(0, 0, 1)).normalize();
-        return P.addScaledVector(B, rayonCorps(t) * 1.08 + .05).add(new THREE.Vector3(0, 0, .14)); };
-      const base = dessus(.22), haut = dessus(.7);
-      const axe = haut.clone().sub(base), L = axe.length();
-      const g = new THREE.Group(); g.position.copy(base); g.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axe.normalize()); corps.add(g);
-      ajoute(g, new THREE.Mesh(new THREE.CylinderGeometry(.022, .018, L, 10), mat(0xF0F2F5, { metalness:.4, roughness:.3 }))).position.y = L / 2;
-      ajoute(g, new THREE.Mesh(new THREE.CylinderGeometry(.022, .022, .18, 10), mat(0x111111))).position.y = L - .07;
-      const t = new THREE.Mesh(new THREE.BoxGeometry(.05, .07, .15), mat(0xD6DBE1, { metalness:.8, roughness:.2 })); t.position.set(0, -.015, .04); g.add(t);
-      corps.add(boule(.03, mat(0xFFFFFF, { roughness:.4 }), [1, 1, 1], [-.72, solLocal + .03, .04], 20));
-    }
     if (v === 'vice') {                                                        // ambiance néon façon Vice City : aviateur, chaîne en or
       contre.color.set(0xFF3FA4); contre.intensity = 7; contre.position.set(2.2, 1.6, -1.2);
       const turquoise = new THREE.DirectionalLight(0x3FD8E3, .9); turquoise.position.set(-3, .6, 1.5); scene.add(turquoise);
@@ -325,12 +315,29 @@ function lancer(){
       const tc = new THREE.CatmullRomCurve3([centre.clone().addScaledVector(cote, .25).add(new THREE.Vector3(0, .02, 0)), centre.clone().addScaledVector(cote, .26).add(new THREE.Vector3(0, .2, 0)), centre.clone().addScaledVector(cote, .2).add(new THREE.Vector3(0, .36, 0)).addScaledVector(face, -.1)]);
       tete.add(new THREE.Mesh(new THREE.TubeGeometry(tc, 20, .028, 8, false), mat(0xFFD23F, { roughness:.4 })));
     }
-    if (v === 'canard') {                                                      // un petit canard en caoutchouc posé sur le dos
-      const c = new THREE.Group(); c.position.copy(surCorps(.55, .25, .0)); c.scale.setScalar(1.25); c.rotation.y = -.9; corps.add(c);
-      const jaune = mat(0xFFD23F, { roughness:.35 });
-      c.add(boule(.07, jaune, [1.25, .85, 1], [0, .055, 0], 20)); c.add(boule(.048, jaune, [1, 1, 1], [-.06, .13, 0], 18));
-      const bec = new THREE.Mesh(new THREE.ConeGeometry(.02, .045, 10), mat(0xF27A1A, { roughness:.4 })); bec.rotation.z = Math.PI / 2; bec.position.set(-.115, .125, 0); c.add(bec);
-      for (const s of [-1, 1]) c.add(boule(.007, noir, [1, 1, 1], [-.085, .145, s * .028], 8));
+    if (v === 'noel') {                                                        // bonnet de Père Noël, pompon qui retombe
+      const b = new THREE.Group(); b.position.copy(centre).add(new THREE.Vector3(0, .12, 0)); b.rotation.set(.08, 0, -.18); b.scale.setScalar(1.18); tete.add(b);
+      const rouge = mat(0xC8202C, { roughness:.85 }), blancN = mat(0xF7F4EE, { roughness:1 });
+      const pts = []; for (let i = 0; i <= 10; i++) { const u = i / 10; pts.push(new THREE.Vector2(.2 * (1 - u) + .012, u * .36)); }
+      const cone = new THREE.Mesh(new THREE.LatheGeometry(pts, 32), rouge); b.add(cone);
+      cone.geometry.translate(0, 0, 0); const pos = cone.geometry.attributes.position;
+      for (let i = 0; i < pos.count; i++) { const y = pos.getY(i), f = Math.pow(y / .36, 2); pos.setX(i, pos.getX(i) - f * .2); pos.setY(i, y - f * .08); }
+      cone.geometry.computeVertexNormals();
+      const bord = new THREE.Mesh(new THREE.TorusGeometry(.205, .045, 12, 36), blancN); bord.rotation.x = Math.PI / 2; b.add(bord);
+      b.add(boule(.055, blancN, [1, 1, 1], [-.2, .27, 0], 16));
+    }
+    if (v === 'drapeau') {                                                     // grand drapeau américain qui flotte derrière lui
+      const p = new THREE.Group(); p.position.set(.98, solLocal, -.62); corps.add(p);
+      ajoute(p, new THREE.Mesh(new THREE.CylinderGeometry(.016, .02, 1.75, 10), mat(0xC9CCD1, { metalness:.7, roughness:.3 }))).position.y = .875;
+      p.add(boule(.036, mat(0xD9B24C, { metalness:1, roughness:.25 }), [1, 1, 1], [0, 1.77, 0], 14));
+      const tissu = etiquette(512, 270, (x, l, h) => {
+        for (let i = 0; i < 13; i++) { x.fillStyle = i % 2 ? '#fff' : '#B22234'; x.fillRect(0, i * h / 13, l, h / 13 + 1); }
+        x.fillStyle = '#3C3B6E'; x.fillRect(0, 0, l * .4, h * 7 / 13); x.fillStyle = '#fff';
+        for (let r = 0; r < 9; r++) for (let c = 0; c < (r % 2 ? 5 : 6); c++) { x.beginPath(); x.arc(l * .4 / 12 * (2 * c + 1 + (r % 2)), h * 7 / 13 / 10 * (r + 1), 4.5, 0, 7); x.fill(); } });
+      const geo = new THREE.PlaneGeometry(1.05, .55, 30, 10); geo.translate(.525, 0, 0);
+      const toile = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map:tissu, roughness:.85, side:THREE.DoubleSide }));
+      toile.position.set(-.01, 1.46, 0); toile.rotation.y = Math.PI - .2; p.add(toile);
+      drapeauFlotte = { geo, base:Float32Array.from(geo.attributes.position.array) };
     }
     if (v === 'casque') {                                                      // casque audio
       const noirM = mat(0x16181D, { roughness:.4 }), corail = mat(0xF0766F, { roughness:.5 });
@@ -344,6 +351,7 @@ function lancer(){
     }
   }
 
+  let drapeauFlotte = null;
   habiller(VARIANTE);
 
   /* algues : quelques touffes sur le dos et le haut du flanc, au hasard */
@@ -557,8 +565,15 @@ function lancer(){
       tete.rotateOnWorldAxis(cote.clone().applyQuaternion(corps.quaternion), e < .5 ? Math.sin(e / .5 * Math.PI) * .18 : 0);
       if (e > .6) emote = -1;
     }
+    if (drapeauFlotte && !calme) {                                    // le drapeau ondule au vent
+      const a = drapeauFlotte.geo.attributes.position, b0 = drapeauFlotte.base;
+      for (let i = 0; i < a.count; i++) { const x = b0[i * 3], y = b0[i * 3 + 1];
+        a.setZ(i, Math.sin(x * 7 - now / 260 + y * 2) * .07 * x / 1.05 + Math.sin(x * 5 - now / 410) * .03 * x / 1.05);
+        a.setY(i, y - x * x * .04); }
+      a.needsUpdate = true; drapeauFlotte.geo.computeVertexNormals();
+    }
     rendu.render(scene, camera);
-    if (now - actif > 4000 && emote < 0) setTimeout(() => requestAnimationFrame(boucle), 110);
+    if (now - actif > 4000 && emote < 0 && !drapeauFlotte) setTimeout(() => requestAnimationFrame(boucle), 110);
     else requestAnimationFrame(boucle);
   }
   boucle();

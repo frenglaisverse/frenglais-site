@@ -756,3 +756,20 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .avis-carte figcaption{margin-top:auto;font-size:14px;color:var(--doux)}
 .avis-carte figcaption b{color:var(--encre);font-weight:600}
 .avis-carte .a-remplir{background:rgba(240,118,111,.15);outline:1px dashed #F0766F;border-radius:4px;padding:0 3px}
+/* vitre traductrice sur les avis */
+.avis-carte{position:relative}
+.av-vitre{position:absolute;top:16px;right:16px;min-width:44px;height:30px;padding:0 10px;border-radius:9px;cursor:pointer;font:600 12px var(--f-txt);letter-spacing:.08em;color:#1C49A5;
+  background:linear-gradient(115deg,transparent 10%,rgba(255,255,255,.7) 20%,transparent 32%),rgba(110,149,240,.12);border:1.5px solid rgba(110,149,240,.65);box-shadow:inset 0 1px 0 #fff,0 4px 10px -6px rgba(16,36,92,.45);transition:transform .15s,background .2s}
+.av-vitre:hover{transform:translateY(-1px)}
+.av-vitre[aria-pressed="true"]{color:#fff;background:#F0766F;border-color:#F0766F}
+.av-en{display:inline;line-height:2.1}
+.avis-carte.en blockquote{animation:avTrad .35s ease}
+@keyframes avTrad{from{opacity:0;transform:translateY(4px)}}
+.cav{position:relative;font-weight:700;border-bottom:2px solid}
+.cav.ed{color:#E0625B;border-color:#F0766F}.cav.s{color:#1C49A5;border-color:#1C49A5}
+.cav i{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-2px);font:600 10.5px/1.3 var(--f-txt);font-style:normal;padding:0 5px;border-radius:6px;color:#fff;white-space:nowrap}
+.cav.ed i{background:#F0766F}.cav.s i{background:#1C49A5}
+.cav.fant{border:0;display:inline-block;width:0}
+.cav.fant i{background:transparent;color:#1C49A5;border:1.5px dashed #1C49A5;transform:translate(-30%,-2px)}
+.cav.fant{width:auto;margin:0 3px 0 1px;display:inline}
+.cav.fant i{position:relative;left:auto;bottom:auto;display:inline-block;transform:translateY(-.55em);padding:0 4px}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 70" fill="none" stroke="#fff" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round">
+<path d="M0 69.5 H300"/>
+<path d="M8 69.5 V44 H20 V69.5"/><path d="M11 50h6M11 56h6M11 62h6"/>
+<path d="M24 69.5 V30 L30 24 L36 30 V69.5"/><path d="M27 36h6M27 42h6M27 48h6M27 54h6M27 60h6"/>
+<path d="M40 69.5 V18 H50 V12 H54 V69.5"/><path d="M44 24v40M48 24v40"/>
+<path d="M58 69.5 V8 L64 3 L70 8 V69.5"/><path d="M64 3 V0.5"/><path d="M61 14h6M61 22h6M61 30h6M61 38h6M61 46h6M61 54h6M61 62h6"/>
+<path d="M74 69.5 V26 Q80 20 86 26 V69.5"/><path d="M80 30v36"/>
+<path d="M90 69.5 V14 H96 L102 20 V69.5"/><path d="M93 26h6M93 34h6M93 42h6M93 50h6M93 58h6"/>
+<path d="M106 69.5 V36 L112 32 L118 36 V69.5"/>
+<path d="M122 69.5 V22 L128 22 L134 28 V69.5"/><path d="M128 22 V28 M125 34h6M125 44h6M125 54h6"/>
+<path d="M138 69.5 V40 H150 V69.5"/><path d="M141 46h6M141 54h6M141 62h6"/>
+<path d="M154 69.5 V30 C154 26 158 24 160 24 C162 24 166 26 166 30 V69.5"/>
+<path d="M170 69.5 V48 H182 V69.5"/>
+<path d="M196 69.5 V58 H212 V69.5 M200 58 V52 H208 V58"/>
+<path d="M190 69.5 Q240 64 300 66" stroke-dasharray="2 4" opacity=".7"/>
+</svg>

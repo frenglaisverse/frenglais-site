@@ -91,17 +91,17 @@ const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
 
 /* ---------- coffrets : durée, détail, secteur ---------- */
 (function coffrets(){
-  const noms={8:"L'Intensif",12:"Le Classique",16:"L'Approfondi"};
+  const noms={part:{8:"L'Essentiel",12:"L'Intégral",16:"L'Excellence"},ent:{8:"Impulsion",12:"Performance",16:"Leadership"}};
   const rythme={8:"16 modules · 2 par semaine · 45 min à 1 h",12:"24 modules · 2 par semaine · 45 min à 1 h",16:"32 modules · 2 par semaine · 45 min à 1 h"};
   const objectif={8:"L'essentiel de la méthode, à un rythme soutenu",12:"Le parcours complet, jusqu'au réflexe",16:"Le parcours complet, plus 8 ateliers d'oral et de mise en situation"};
   const inclus={part:["Votre espace et votre suivi","Évaluation orale finale","Tuteurs en option"],
                 ent:["Modules de votre secteur","Suivi pour les RH, évaluation orale finale","Devis et facture entreprise"]};
-  const exemples={"Hôtellerie":"Check-in, réclamations, room service.","Restauration":"Commandes, allergies, service.","Commerce, luxe":"Accueil et conseil client.","Tourisme":"Visites, réservations, imprévus.","Immobilier":"Visites et négociation.","Sur mesure":"Votre métier, décrit dans votre demande."};
+  const exemples={"Reconversion":"Pour changer de métier, avec l'anglais en appui.","Professionnels":"Réunions, e-mails, appels.","Freelance":"Clients, devis, visios en anglais.","Internationaux":"Pour vivre et travailler en anglais.","Hôtellerie":"Check-in, réclamations, room service.","Restauration":"Commandes, allergies, service.","Commerce, luxe":"Accueil et conseil client.","Tourisme":"Visites, réservations, imprévus.","Immobilier":"Visites et négociation.","Sur mesure":"Votre métier, décrit dans votre demande."};
   document.querySelectorAll('.coffret[data-public]').forEach(c=>{
-    const pub=c.dataset.public; let duree=12, secteur='Hôtellerie';
+    const pub=c.dataset.public; let duree=12, secteur=(c.querySelector('[data-secteur]')||{dataset:{}}).dataset.secteur||'Hôtellerie';
     const q=sel=>c.querySelector(sel), det=q('.details'), plus=q('.plus');
     function rendu(){
-      q('.c-nom').textContent=noms[duree]; q('.c-rythme').textContent=rythme[duree];
+      q('.c-nom').textContent=noms[pub][duree]; q('.c-rythme').textContent=rythme[duree];
       q('.c-liste').innerHTML=['<strong>Communiquer dans n\'importe quel contexte, en déduisant</strong>',objectif[duree],...inclus[pub]].map(x=>`<li>${x}</li>`).join('');
       const ex=q('.secteur-ex'); if(ex) ex.textContent=exemples[secteur];
       c.querySelectorAll('[data-duree]').forEach(b=>b.setAttribute('aria-checked',+b.dataset.duree===duree));
@@ -116,8 +116,35 @@ const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
     q('.c-devis').addEventListener('click',()=>{
       if(pub==='ent'){ const r=document.getElementById('p-ent'); if(r){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); }
         const sl=document.getElementById('f-secteur'); if(sl) sl.value=(secteur==='Sur mesure'?'Autre':secteur); }
-      const fd=document.getElementById('f-duree'); if(fd) fd.value=`${duree} semaines (${noms[duree]})`;
+      if(pub==='part'){ const id={Professionnels:'p-pro',Freelance:'p-pro',Internationaux:'p-pro',Reconversion:'p-part'}[secteur]; const r=document.getElementById(id); if(r){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); }
+        const m=document.getElementById('f-msg'); if(m&&!m.value&&secteur!=='Professionnels') m.value=`Profil : ${secteur}. `; }
+      const fd=document.getElementById('f-duree'); if(fd) fd.value=`${duree} semaines`;
     });
     rendu();
   });
+})();
+
+/* ---------- Solo : formule, détail, puis le devis pré-rempli ---------- */
+(function solo(){
+  const c=document.querySelector('[data-solo]'); if(!c) return;
+  let fmt='Complète', dur='0 à 3 mois';
+  const rendu=()=>c.querySelectorAll('[data-fmt]').forEach(b=>b.setAttribute('aria-checked',b.dataset.fmt===fmt));
+  c.addEventListener('click',e=>{ const f=e.target.closest('[data-fmt]'); if(f){ fmt=f.dataset.fmt; dur=f.dataset.dur; rendu(); } });
+  const plus=c.querySelector('.solo-plus'), det=c.querySelector('.solo-det');
+  plus.addEventListener('click',()=>{ const o=det.hidden; det.hidden=!o; plus.setAttribute('aria-expanded',o); plus.setAttribute('aria-label',o?'Masquer le détail':'Voir ce qui est inclus'); c.classList.toggle('ouvert',o); });
+  c.querySelector('.solo-cta').addEventListener('click',()=>{
+    const r=document.getElementById('p-part'); if(r){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); }
+    const fd=document.getElementById('f-duree'); if(fd) fd.value=`Solo ${fmt} (${dur})`;
+    const m=document.getElementById('f-msg'); if(m&&!m.value) m.value='Solo · ma situation : '; });
+  rendu();
+})();
+
+/* ---------- les trois coffrets à la même hauteur (fermés), côte à côte ---------- */
+(function egaliser(){
+  const els=[...document.querySelectorAll('.coffrets > .coffret, .coffrets > .solo')]; if(els.length<2) return;
+  function caler(){ els.forEach(e=>e.style.minHeight='');
+    if(innerWidth<1000) return;
+    const h=Math.max(...els.map(e=>e.offsetHeight)); els.forEach(e=>e.style.minHeight=h+'px'); }
+  caler(); addEventListener('resize',caler); if(document.fonts) document.fonts.ready.then(caler);
+  document.querySelector('.coffrets').addEventListener('click',e=>{ if(e.target.closest('.plus,.solo-plus')) requestAnimationFrame(()=>{ els.forEach(x=>x.style.minHeight=''); }); });
 })();

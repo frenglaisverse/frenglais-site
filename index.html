@@ -121,17 +121,23 @@
   <section class="in bloc" id="formations" aria-labelledby="t-formations">
     <div class="titre-bloc">
       <h2 id="t-formations">Les formations</h2>
-      <p class="chapo">En ligne, à votre rythme, accompagné. Deux coffrets, une méthode. Sur devis.</p>
+      <p class="chapo">En ligne, à votre rythme, accompagné. Trois coffrets, une méthode. Sur devis.</p>
     </div>
     <div class="coffrets">
       <article class="coffret" data-public="part">
-        <div class="couvercle">Particuliers et professionnels</div>
+        <div class="couvercle"><span class="pour-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path d="M9 7.5V5.8c0-.7.6-1.3 1.3-1.3h3.4c.7 0 1.3.6 1.3 1.3v1.7M3.5 12.5h17"/></svg></span><span class="pour"><small>Pour</small>Professionnels et indépendants</span></div>
         <div class="contenu">
-          <h3 class="c-nom">Le Classique</h3>
+          <h3 class="c-nom"></h3>
           <div class="segments" role="radiogroup" aria-label="Durée">
             <button type="button" role="radio" data-duree="8" aria-checked="false">8 sem.</button>
             <button type="button" role="radio" data-duree="12" aria-checked="true">12 sem.</button>
             <button type="button" role="radio" data-duree="16" aria-checked="false">16 sem.</button>
+          </div>
+          <div class="cats" role="radiogroup" aria-label="Profil">
+            <button type="button" role="radio" data-secteur="Professionnels" aria-checked="true" title="Professionnels"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5V5.8c0-.7.6-1.3 1.3-1.3h3.4c.7 0 1.3.6 1.3 1.3v1.7M3.5 12.5h17"/></svg><span>Pros</span></button>
+            <button type="button" role="radio" data-secteur="Freelance" aria-checked="false" title="Freelance"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="10" rx="1.5"/><path d="M3 18.5h18"/></svg><span>Freelance</span></button>
+            <button type="button" role="radio" data-secteur="Internationaux" aria-checked="false" title="Internationaux"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 3.8 5.2 3.8 8.5s-1.2 6.1-3.8 8.5c-2.6-2.4-3.8-5.2-3.8-8.5S9.4 5.9 12 3.5z"/></svg><span>International</span></button>
+            <button type="button" role="radio" data-secteur="Reconversion" aria-checked="false" title="Reconversion"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15"/><path d="M4 20v-5h5"/></svg><span>Reconversion</span></button>
           </div>
           <p class="rythme c-rythme"></p>
           <div class="details" id="det-part" hidden>
@@ -145,29 +151,25 @@
       </article>
       <article class="coffret" data-public="ent">
         <canvas class="mousse mousse-coffret" data-relatif="1" data-pash="0.075" data-modele='[[0.18,4],[0.24,6],[0.29,3],[0.47,7],[0.52,9],[0.56,5],[0.6,8],[0.78,5],[0.83,7],[0.88,4],[0.93,6]]' aria-hidden="true"></canvas>
-        <div class="couvercle">Entreprises et équipes</div>
+        <div class="couvercle"><span class="pour-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5V5.5c0-.6.4-1 1-1h8c.6 0 1 .4 1 1v15M14 9.5h5c.6 0 1 .4 1 1v10M2.5 20.5h19"/><path d="M7.5 8h3M7.5 11.5h3M7.5 15h3M16.5 13h1M16.5 16.5h1"/></svg></span><span class="pour"><small>Pour</small>Entreprises et équipes</span></div>
         <div class="contenu">
-          <h3 class="c-nom">Le Classique</h3>
+          <h3 class="c-nom"></h3>
           <div class="segments" role="radiogroup" aria-label="Durée">
             <button type="button" role="radio" data-duree="8" aria-checked="false">8 sem.</button>
             <button type="button" role="radio" data-duree="12" aria-checked="true">12 sem.</button>
             <button type="button" role="radio" data-duree="16" aria-checked="false">16 sem.</button>
           </div>
+          <div class="cats" role="radiogroup" aria-label="Secteur">
+            <button type="button" role="radio" data-secteur="Hôtellerie" aria-checked="true" title="Hôtellerie"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18V7M3 14h18v4M21 14v-2.5c0-1.4-1.1-2.5-2.5-2.5H11v5"/><circle cx="7" cy="11" r="1.8"/></svg><span>Hôtels</span></button>
+            <button type="button" role="radio" data-secteur="Commerce, luxe" aria-checked="false" title="Commerce, luxe"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>Luxe</span></button>
+            <button type="button" role="radio" data-secteur="Tourisme" aria-checked="false" title="Tourisme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5l6-2 6 2 6-2v13l-6 2-6-2-6 2z"/><path d="M9 4.5v13M15 6.5v13"/></svg><span>Tourisme</span></button>
+            <button type="button" role="radio" data-secteur="Immobilier" aria-checked="false" title="Immobilier"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5"/><path d="M6 9.5V20h12V9.5M10 20v-5h4v5"/></svg><span>Immo</span></button>
+            <button type="button" role="radio" data-secteur="Sur mesure" aria-checked="false" title="Sur mesure"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span>Sur mesure</span></button>
+          </div>
           <p class="rythme c-rythme"></p>
           <div class="details" id="det-ent" hidden>
             <ul class="c-liste"></ul>
-            <div class="reglage">
-              <span class="reglage-lab">Secteur</span>
-              <div class="secteurs" role="radiogroup" aria-label="Secteur">
-                <button type="button" role="radio" data-secteur="Hôtellerie" aria-checked="true">Hôtellerie</button>
-                <button type="button" role="radio" data-secteur="Restauration" aria-checked="false">Restauration</button>
-                <button type="button" role="radio" data-secteur="Commerce, luxe" aria-checked="false">Commerce, luxe</button>
-                <button type="button" role="radio" data-secteur="Tourisme" aria-checked="false">Tourisme</button>
-                <button type="button" role="radio" data-secteur="Immobilier" aria-checked="false">Immobilier</button>
-                <button type="button" role="radio" data-secteur="Sur mesure" aria-checked="false" class="sm">Sur mesure</button>
-              </div>
-              <p class="secteur-ex"></p>
-            </div>
+            <p class="secteur-ex"></p>
           </div>
           <div class="actions">
             <a class="btn btn-coffret c-devis" href="#devis">Demander un devis</a>
@@ -175,6 +177,28 @@
           </div>
         </div>
       </article>
+      <article class="solo" data-solo>
+      <span class="solo-jac" aria-hidden="true"></span><span class="solo-ciel" aria-hidden="true"></span>
+      <div class="solo-tete">
+        <span class="solo-eti">Édition privée</span>
+        <h3 class="solo-nom">Solo</h3>
+        <p class="solo-acc">L'anglais des situations réelles, pour une seule personne.</p>
+      </div>
+      <div class="solo-choix">
+        <p class="solo-sit">Voyages · Expatriation · Études · Préparation aux tests officiels · …</p>
+        <div class="solo-ligne solo-formats" role="radiogroup" aria-label="Formule">
+          <button type="button" role="radio" data-fmt="Complète" data-dur="0 à 3 mois" aria-checked="true"><b>Complète</b><small>0 à 3 mois</small></button>
+          <button type="button" role="radio" data-fmt="Immersion" data-dur="long terme" aria-checked="false"><b>Immersion</b><small>Long terme</small></button>
+        </div>
+        <p class="solo-ex">Places limitées.</p>
+        <ul class="solo-det" id="solo-det" hidden>
+          <li>Point de progression hebdomadaire avec un tuteur</li>
+          <li>Un parcours adapté à votre vie</li>
+          <li>Accès à la communauté VIP Frenglais</li>
+        </ul>
+      </div>
+      <div class="solo-actions"><a class="solo-cta" href="#devis">Demander l'accès</a><button type="button" class="solo-plus" aria-expanded="false" aria-controls="solo-det" aria-label="Voir ce qui est inclus"><span aria-hidden="true">+</span></button></div>
+</article>
     </div>
   </section>
 
@@ -233,7 +257,7 @@
       </fieldset>
       <div class="champ champ-court"><label for="f-duree">Durée choisie</label>
         <select id="f-duree" name="duree">
-          <option value="">Je ne sais pas encore</option><option value="8 semaines (L'Intensif)">8 semaines · L'Intensif</option><option value="12 semaines (Le Classique)">12 semaines · Le Classique</option><option value="16 semaines (L'Approfondi)">16 semaines · L'Approfondi</option>
+          <option value="">Je ne sais pas encore</option><option value="8 semaines">8 semaines</option><option value="12 semaines">12 semaines</option><option value="16 semaines">16 semaines</option><option value="Solo Complète (0 à 3 mois)">Solo · Complète, 0 à 3 mois</option><option value="Solo Immersion (long terme)">Solo · Immersion, long terme</option>
         </select></div>
       <div class="ligne2" id="ligne-secteur" hidden>
         <div class="champ"><label for="f-secteur">Secteur</label>

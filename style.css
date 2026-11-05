@@ -777,3 +777,12 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .avis{position:relative;padding-top:clamp(72px,9vw,112px)}
 .avis::before{content:"";position:absolute;top:clamp(36px,4.5vw,56px);left:max(24px,env(safe-area-inset-left,0px));right:max(24px,env(safe-area-inset-right,0px));height:1px;background:linear-gradient(90deg,transparent,var(--doux) 18%,var(--doux) 82%,transparent);opacity:.28}
 @media (max-width:520px){.avis::before{left:16px;right:16px}}
+/* thème sombre : trait des avis, bouton EN et codes -s plus lisibles */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .avis::before{opacity:.5}
+:root:not([data-theme="light"]) .av-vitre:not([aria-pressed="true"]){color:#A9C1FF}
+:root:not([data-theme="light"]) .cav.s{color:#8FB0FF;border-color:#6E95F0}
+:root:not([data-theme="light"]) .cav.fant i{color:#A9C1FF;border-color:#6E95F0}}
+:root[data-theme="dark"] .avis::before{opacity:.5}
+:root[data-theme="dark"] .av-vitre:not([aria-pressed="true"]){color:#A9C1FF}
+:root[data-theme="dark"] .cav.s{color:#8FB0FF;border-color:#6E95F0}
+:root[data-theme="dark"] .cav.fant i{color:#A9C1FF;border-color:#6E95F0}

@@ -786,3 +786,9 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 :root[data-theme="dark"] .av-vitre:not([aria-pressed="true"]){color:#A9C1FF}
 :root[data-theme="dark"] .cav.s{color:#8FB0FF;border-color:#6E95F0}
 :root[data-theme="dark"] .cav.fant i{color:#A9C1FF;border-color:#6E95F0}
+/* même trait avant « Parlons de votre projet » */
+.devis{position:relative;padding-top:clamp(72px,9vw,112px)}
+.devis::before{content:"";position:absolute;top:clamp(36px,4.5vw,56px);left:max(24px,env(safe-area-inset-left,0px));right:max(24px,env(safe-area-inset-right,0px));height:1px;background:linear-gradient(90deg,transparent,var(--doux) 18%,var(--doux) 82%,transparent);opacity:.28}
+@media (max-width:520px){.devis::before{left:16px;right:16px}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .devis::before{opacity:.5}}
+:root[data-theme="dark"] .devis::before{opacity:.5}

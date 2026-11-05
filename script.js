@@ -91,25 +91,25 @@ const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
 
 /* ---------- coffrets : durée, détail, secteur ---------- */
 (function coffrets(){
-  const noms={part:{8:"L'Essentiel",12:"L'Intégral",16:"L'Excellence"},ent:{8:"Impulsion",12:"Performance",16:"Leadership"}};
-  const rythme={8:"16 modules · 2 par semaine · 45 min à 1 h",12:"24 modules · 2 par semaine · 45 min à 1 h",16:"32 modules · 2 par semaine · 45 min à 1 h"};
-  const objectif={8:"L'essentiel de la méthode, à un rythme soutenu",12:"Le parcours complet, jusqu'au réflexe",16:"Le parcours complet, plus 8 ateliers d'oral et de mise en situation"};
+  const noms={part:{6:"L'Accéléré",16:"L'Intégral",long:"Le Cercle"},ent:{8:"Impulsion",12:"Performance",16:"Leadership"}};
+  const rythme={6:"12 modules · 2 par semaine · 45 min à 1 h",long:"Abonnement mensuel · à votre rythme",8:"16 modules · 2 par semaine · 45 min à 1 h",12:"24 modules · 2 par semaine · 45 min à 1 h",16:"32 modules · 2 par semaine · 45 min à 1 h"};
+  const objectif={6:"L'essentiel de la méthode, en accéléré",long:"Entretenir et faire progresser votre anglais professionnel, mois après mois",8:"L'essentiel de la méthode, à un rythme soutenu",12:"Le parcours complet, jusqu'au réflexe",16:"Le parcours complet, plus 8 ateliers d'oral et de mise en situation"};
   const inclus={part:["Votre espace et votre suivi","Évaluation orale finale","Tuteurs en option"],
                 ent:["Modules de votre secteur","Suivi pour les RH, évaluation orale finale","Devis et facture entreprise"]};
   const exemples={"Reconversion":"Pour changer de métier, avec l'anglais en appui.","Professionnels":"Réunions, e-mails, appels.","Freelance":"Clients, devis, visios en anglais.","Internationaux":"Pour vivre et travailler en anglais.","Hôtellerie":"Check-in, réclamations, room service.","Restauration":"Commandes, allergies, service.","Commerce, luxe":"Accueil et conseil client.","Tourisme":"Visites, réservations, imprévus.","Immobilier":"Visites et négociation.","Sur mesure":"Votre métier, décrit dans votre demande."};
   document.querySelectorAll('.coffret[data-public]').forEach(c=>{
-    const pub=c.dataset.public; let duree=12, secteur=(c.querySelector('[data-secteur]')||{dataset:{}}).dataset.secteur||'Hôtellerie';
+    const pub=c.dataset.public; let duree=pub==='part'?'16':'12', secteur=(c.querySelector('[data-secteur]')||{dataset:{}}).dataset.secteur||'Hôtellerie';
     const q=sel=>c.querySelector(sel), det=q('.details'), plus=q('.plus');
     function rendu(){
       q('.c-nom').textContent=noms[pub][duree]; q('.c-rythme').textContent=rythme[duree];
       q('.c-liste').innerHTML=['<strong>Communiquer dans n\'importe quel contexte, en déduisant</strong>',objectif[duree],...inclus[pub]].map(x=>`<li>${x}</li>`).join('');
       const ex=q('.secteur-ex'); if(ex) ex.textContent=exemples[secteur];
-      c.querySelectorAll('[data-duree]').forEach(b=>b.setAttribute('aria-checked',+b.dataset.duree===duree));
+      c.querySelectorAll('[data-duree]').forEach(b=>b.setAttribute('aria-checked',b.dataset.duree===duree));
       c.querySelectorAll('[data-secteur]').forEach(b=>b.setAttribute('aria-checked',b.dataset.secteur===secteur));
     }
     c.addEventListener('click',e=>{
       const d=e.target.closest('[data-duree]'), s=e.target.closest('[data-secteur]');
-      if(d){ duree=+d.dataset.duree; rendu(); }
+      if(d){ duree=d.dataset.duree; rendu(); }
       if(s){ secteur=s.dataset.secteur; rendu(); }
     });
     plus.addEventListener('click',()=>{ const ouvert=det.hidden; det.hidden=!ouvert; plus.setAttribute('aria-expanded',ouvert); plus.setAttribute('aria-label',ouvert?'Masquer le détail':'Voir le détail'); c.classList.toggle('ouvert',ouvert); });
@@ -118,7 +118,7 @@ const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
         const sl=document.getElementById('f-secteur'); if(sl) sl.value=(secteur==='Sur mesure'?'Autre':secteur); }
       if(pub==='part'){ const id={Professionnels:'p-pro',Freelance:'p-pro',Internationaux:'p-pro',Reconversion:'p-part'}[secteur]; const r=document.getElementById(id); if(r){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); }
         const m=document.getElementById('f-msg'); if(m&&!m.value&&secteur!=='Professionnels') m.value=`Profil : ${secteur}. `; }
-      const fd=document.getElementById('f-duree'); if(fd) fd.value=`${duree} semaines`;
+      const fd=document.getElementById('f-duree'); if(fd) fd.value=duree==='long'?'Long terme (abonnement mensuel)':`${duree} semaines`;
     });
     rendu();
   });

@@ -798,3 +798,16 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .solo-ligne button[aria-checked="true"],.solo-cta{color:#064E4C}
 .solo-sit,.solo-eti,.solo-plus{color:#F6E6B8}
 .solo-sit{text-shadow:0 1px 0 rgba(4,60,58,.35)}
+/* carte de présentation : recto et verso au vert canard du livre */
+.pol-carte::before{background:radial-gradient(circle at 35% 35%,#F6E6B8,#D6BE82 60%,#9C8248)}
+.pol-recto{background:linear-gradient(165deg,#0E9894,#0B8D8A 45%,#077471)}
+.pol-nom,.polaroid .pol-nom{color:#F6E6B8}
+.pol-verso{background:linear-gradient(160deg,#0E9894,#0B8D8A 45%,#077471);border-color:#055E5C}
+.pol-grand .pol-verso{background:radial-gradient(120% 80% at 100% 0%,rgba(255,255,255,.12),transparent 55%),linear-gradient(165deg,#0E9894,#0B8D8A 45%,#076A68 80%,#055E5C)}
+.pol-verso b,.pol-grand .v-nom{text-shadow:0 1px 0 #055E5C}
+.pol-grand .v-nom{text-shadow:0 2px 0 #055E5C}
+.pol-verso span{text-shadow:0 1px 0 rgba(5,94,92,.6)}
+.pol-grand .v-courbe{filter:drop-shadow(0 1px 0 rgba(5,94,92,.55))}
+.pol-grand .v-liste{text-shadow:0 1px 0 rgba(5,94,92,.5)}
+.pol-grand .v-liste span::before{background:#F6E6B8}
+.pol-grand .v-photo{box-shadow:0 2cqi 4cqi -1cqi rgba(3,50,48,.55)}

@@ -612,6 +612,7 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .pol-racines{opacity:.55;filter:drop-shadow(0 1px 1px rgba(10,20,50,.35))}
 /* « Paul.M » en capitales gravées, façon fronton d'université américaine (Cinzel, OFL, hébergée avec le site) */
 @font-face{font-family:"Cinzel";src:url("fonts/cinzel-600.woff2") format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Cinzel";src:url("fonts/cinzel-800.woff2") format("woff2");font-weight:800;font-display:swap}
 .pol-nom{font:600 15px/1 "Cinzel",Georgia,serif;letter-spacing:.14em;color:#A8322A;transform:none}
 .polaroid .pol-nom{font-size:15px}
 @media (max-width:1100px){.hero-bas .pol-nom{font-size:12px;letter-spacing:.1em}}
@@ -811,3 +812,7 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 .pol-grand .v-liste{text-shadow:0 1px 0 rgba(5,94,92,.5)}
 .pol-grand .v-liste span::before{background:#F6E6B8}
 .pol-grand .v-photo{box-shadow:0 2cqi 4cqi -1cqi rgba(3,50,48,.55)}
+/* noms des coffrets et de Solo en gras, plus lisibles */
+.coffret .c-nom,.solo-nom{font-weight:800}
+.coffret .c-nom{letter-spacing:.03em;text-shadow:0 1px 0 rgba(0,0,0,.18)}
+.solo-nom{letter-spacing:.1em;text-shadow:0 1px 0 rgba(5,94,92,.5)}

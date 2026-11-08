@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Tableau de bord · Frenglais</title>
+<link rel="icon" href="/favicon-32.png">
+<style>
+@font-face{font-family:"Geist";src:url("/fonts/geist.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Cinzel";src:url("/fonts/cinzel-800.woff2") format("woff2");font-weight:800;font-display:swap}
+:root{--fond:#0D1B45;--carte:rgba(255,255,255,.07);--bord:rgba(255,255,255,.14);--txt:#F3F6FF;--doux:#A9B6D8;--teal:#0B8D8A;--champ:#F6E6B8;--corail:#E3958F}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(90% 60% at 100% 0%,rgba(11,141,138,.28),transparent 60%),var(--fond);color:var(--txt);font:16px/1.5 "Geist",system-ui,sans-serif;padding:48px 16px}
+main{max-width:760px;margin:0 auto}
+h1{font:800 34px/1.1 "Cinzel",Georgia,serif;letter-spacing:.06em;margin:0 0 6px;color:var(--champ)}
+.sous{color:var(--doux);margin:0 0 32px}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+a.tuile{display:block;text-decoration:none;color:inherit;background:var(--carte);border:1px solid var(--bord);border-radius:18px;padding:22px 20px;transition:translate .25s,background .25s}
+a.tuile:hover{translate:0 -3px;background:rgba(255,255,255,.11)}
+.tuile b{display:block;font-size:18px;margin-bottom:4px}
+.tuile span{color:var(--doux);font-size:14px}
+.tuile i{display:inline-block;font-style:normal;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;padding:3px 9px;border-radius:99px;background:rgba(246,230,184,.14);color:var(--champ)}
+.tuile.main{grid-column:1/-1;background:linear-gradient(160deg,#0E9894,#0B8D8A 45%,#076A68);border-color:rgba(246,230,184,.35)}
+.tuile.main span{color:#DDF3F1}
+.moi{margin-top:28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--doux);font-size:14px}
+.moi button{font:inherit;font-weight:600;color:var(--txt);background:var(--carte);border:1px solid var(--bord);border-radius:99px;padding:7px 14px;cursor:pointer}
+.ok{color:#7FE0C2}.non{color:var(--corail)}
+footer{margin-top:40px;color:var(--doux);font-size:13px}
+footer a{color:var(--doux)}
+</style>
+</head>
+<body>
+<main>
+<h1>Tableau de bord</h1>
+<p class="sous">Page privée, non référencée. Les données restent derrière vos identifiants.</p>
+<div class="grille">
+  <a class="tuile main" href="https://paulow.goatcounter.com/" target="_blank" rel="noopener"><i>En direct</i><b>Visites et clics</b><span>Visiteurs, pages vues, provenance, pays, appareils, et les clics : devis, Solo, livre, Trustpilot, réseaux, carte.</span></a>
+  <a class="tuile" href="https://search.google.com/search-console?resource_id=https%3A%2F%2Ffrenglais.co%2F" target="_blank" rel="noopener"><i>Google</i><b>Search Console</b><span>Recherches tapées, position, apparitions dans Google (environ 2 jours de retard).</span></a>
+  <a class="tuile" href="https://business.trustpilot.com/" target="_blank" rel="noopener"><i>Avis</i><b>Trustpilot</b><span>Note, nouveaux avis, invitations à envoyer.</span></a>
+  <a class="tuile" href="https://pagespeed.web.dev/analysis?url=https%3A%2F%2Ffrenglais.co%2F" target="_blank" rel="noopener"><i>Technique</i><b>Vitesse du site</b><span>Score de rapidité sur téléphone et ordinateur, mesuré par Google.</span></a>
+</div>
+<p class="moi"><span id="etat"></span><button type="button" id="bascule"></button></p>
+<footer><a href="/">← Retour au site</a></footer>
+</main>
+<script>
+/* vos propres visites ne sont pas comptées : GoatCounter lit ce réglage dans le navigateur */
+(function(){var e=document.getElementById('etat'),b=document.getElementById('bascule');
+function lit(){try{return localStorage.getItem('skipgc')==='t'}catch(x){return false}}
+function maj(){var s=lit();e.innerHTML=s?'<b class="ok">●</b> Vos visites sur ce navigateur ne sont pas comptées.':'<b class="non">●</b> Vos visites sur ce navigateur sont comptées.';b.textContent=s?'Compter mes visites':'Ne plus compter mes visites';}
+try{if(localStorage.getItem('skipgc')===null)localStorage.setItem('skipgc','t')}catch(x){}
+b.onclick=function(){try{lit()?localStorage.removeItem('skipgc'):localStorage.setItem('skipgc','t')}catch(x){}maj();};maj();})();
+</script>
+</body>
+</html>

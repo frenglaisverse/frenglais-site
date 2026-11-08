@@ -83,7 +83,7 @@ const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
         body:JSON.stringify({access_key:WEB3FORMS_KEY,subject:`Demande de devis · ${d.profil} · ${d.name}`,from_name:'Site Frenglais',...d})});
       const rep=await r.json().catch(()=>({}));
       if(!r.ok||rep.success===false) throw new Error();
-      f.reset(); maj(); dire('Demande envoyée. Votre devis personnalisé arrive très vite.',true);
+      f.reset(); maj(); window.goatcounter&&goatcounter.count&&goatcounter.count({path:'devis-envoye',title:'devis envoyé',event:true}); dire('Demande envoyée. Votre devis personnalisé arrive très vite.',true);
     }catch(err){ dire('L\'envoi n\'a pas abouti. Réessayez, ou écrivez à frenglaisverse@gmail.com.'); }
     finally{ btn.disabled=false; btn.textContent='Envoyer ma demande'; }
   });

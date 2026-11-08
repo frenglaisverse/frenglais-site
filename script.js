@@ -36,7 +36,7 @@
     let sujet = 'I', forme = r.base, code = '', fantome = false, n = '';
     if (vitre === 's'){ sujet = 'She'; forme = r.s[0]; code = r.s[1]; if (r.base==='have') n = 'Même have garde son code : has = ha + -s.'; }
     if (vitre === 'ed'){ forme = r.ed[0]; code = r.ed[1]; if (!code){ fantome = true; n = 'Irrégulier : le code -ed est bien là, mais invisible. ' + r.why + '.'; } }
-    lab.textContent = vitre==='s' ? 'T0 · présent · code -s' : vitre==='ed' ? 'T-1 · passé · code -ed' : 'Base verbale · aucune vitre touchée';
+    lab.textContent = vitre==='s' ? 'T0 · présent · code -s' : vitre==='ed' ? 'T-1 · passé · code -ed' : 'Base verbale · touchez -ed ou -s';
     // le mot entier ; son code (-s / -ed) apparaît au-dessus, dans sa couleur
     const c = vitre==='s' ? 's' : 'ed';
     const mot = vitre==='none' ? forme : forme + `<span class="fin ${c}">${code}<span class="etiq ${c}${fantome?' fant':''}">-${c}</span></span>`;
@@ -83,7 +83,7 @@ const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
         body:JSON.stringify({access_key:WEB3FORMS_KEY,subject:`Demande de devis · ${d.profil} · ${d.name}`,from_name:'Site Frenglais',...d})});
       const rep=await r.json().catch(()=>({}));
       if(!r.ok||rep.success===false) throw new Error();
-      f.reset(); maj(); dire('Demande envoyée. Un devis adapté vous sera adressé rapidement.',true);
+      f.reset(); maj(); dire('Demande envoyée. Votre devis personnalisé arrive très vite.',true);
     }catch(err){ dire('L\'envoi n\'a pas abouti. Réessayez, ou écrivez à frenglaisverse@gmail.com.'); }
     finally{ btn.disabled=false; btn.textContent='Envoyer ma demande'; }
   });
@@ -102,7 +102,7 @@ const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
     const q=sel=>c.querySelector(sel), det=q('.details'), plus=q('.plus');
     function rendu(){
       q('.c-nom').textContent=noms[pub][duree]; q('.c-rythme').textContent=rythme[duree];
-      q('.c-liste').innerHTML=['<strong>Communiquer dans n\'importe quel contexte, en déduisant</strong>',objectif[duree],...inclus[pub]].map(x=>`<li>${x}</li>`).join('');
+      q('.c-liste').innerHTML=['<strong>Communiquer partout, en déduisant au lieu de réciter</strong>',objectif[duree],...inclus[pub]].map(x=>`<li>${x}</li>`).join('');
       const ex=q('.secteur-ex'); if(ex) ex.textContent=exemples[secteur];
       c.querySelectorAll('[data-duree]').forEach(b=>b.setAttribute('aria-checked',b.dataset.duree===duree));
       c.querySelectorAll('[data-secteur]').forEach(b=>b.setAttribute('aria-checked',b.dataset.secteur===secteur));
@@ -148,3 +148,10 @@ const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
   caler(); addEventListener('resize',caler); if(document.fonts) document.fonts.ready.then(caler);
   document.querySelector('.coffrets').addEventListener('click',e=>{ if(e.target.closest('.plus,.solo-plus')) requestAnimationFrame(()=>{ els.forEach(x=>x.style.minHeight=''); }); });
 })();
+
+/* apparition douce au défilement */
+(()=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+const els=[...document.querySelectorAll('.bloc>h2,.bloc .chapo,.coffrets>*,.courbe-totale,#methode li,.avis-titre,.avis-carte,.devis>*')];
+els.forEach(e=>{const r=e.getBoundingClientRect();if(r.top<innerHeight*.9)return;const sib=[...e.parentElement.children].filter(x=>els.includes(x));e.style.setProperty('--rv',(Math.max(0,sib.indexOf(e))*90)+'ms');e.classList.add('rv')});
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){const t=x.target;t.classList.add('vu');io.unobserve(t);setTimeout(()=>{t.classList.remove('rv','vu');t.style.removeProperty('--rv')},1000+(parseInt(t.style.getPropertyValue('--rv'))||0))}}),{threshold:.15,rootMargin:'0px 0px -6% 0px'});
+document.querySelectorAll('.rv').forEach(e=>io.observe(e));})();

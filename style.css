@@ -854,3 +854,6 @@ footer::after{opacity:.58}
 .pol-grand .pol-verso>*{flex-shrink:0}
 .pol-grand .v-liste{gap:1.7cqi}
 .pol-grand .v-liens~.v-pied{margin-top:2cqi}
+/* liens de la carte : icônes seules */
+.pol-grand .v-liens a{width:9cqi;height:9cqi;padding:0;justify-content:center;gap:0}
+.pol-grand .v-liens svg{width:4.6cqi;height:4.6cqi}

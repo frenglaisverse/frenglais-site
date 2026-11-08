@@ -857,3 +857,4 @@ footer::after{opacity:.58}
 /* liens de la carte : icônes seules */
 .pol-grand .v-liens a{width:9cqi;height:9cqi;padding:0;justify-content:center;gap:0}
 .pol-grand .v-liens svg{width:4.6cqi;height:4.6cqi}
+.contact-direct a{color:inherit;text-decoration:none}.contact-direct a:hover span{text-decoration:underline}

@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611090030">
+<link rel="stylesheet" href="style.css?v=202611090100">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -263,7 +263,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
     <div class="devis-intro">
       <h2 id="t-devis">Parlons de votre projet.</h2>
       <p>Quelques lignes suffisent. Vous recevez ensuite un devis personnalisé, sans engagement.</p>
-      <p class="contact-direct">Ou écrivez directement à <span>frenglaisverse@gmail.com</span></p>
+      <p class="contact-direct">Ou écrivez directement à <a href="mailto:contact@frenglais.co"><span>contact@frenglais.co</span></a></p>
     </div>
 
     <form id="form-devis" novalidate>
@@ -378,7 +378,7 @@ document.querySelectorAll('.av-vitre').forEach(b=>b.addEventListener('click',()=
   b.setAttribute('aria-pressed',on);b.textContent=on?'FR':'EN';b.setAttribute('aria-label',on?'Revenir au français':'Traduire en anglais et montrer les codes');
   f.querySelector('.av-fr').hidden=on;f.querySelector('.av-en').hidden=!on;f.classList.toggle('en',on);}));
 </script>
-<script src="script.js?v=202611090030"></script>
+<script src="script.js?v=202611090100"></script>
 <script>
 /* ouverture : branche de jacaranda — tronc solide hors champ à gauche, écorce en plaques fissurées avec lichen, une fourche qui sort par le haut */
 (function(){var o=document.getElementById('ouverture');if(!o)return;var c=o.querySelector('.ouv-branche');if(!c||!c.getContext)return;
@@ -433,8 +433,8 @@ function dessiner(){var r=o.getBoundingClientRect(),W=r.width,H=r.height,d=Math.
 }
 dessiner();addEventListener('resize',dessiner);})();
 </script>
-<script src="mousse.js?v=202611090030"></script>
-<script type="module" src="lamantin3d.js?v=202611090030"></script>
+<script src="mousse.js?v=202611090100"></script>
+<script type="module" src="lamantin3d.js?v=202611090100"></script>
 <script>
 /* ouverture : la mousse « devant » n'apparaît que sous le logo, pour passer derrière lui puis tomber sur les drapeaux */
 (function(){var c=document.querySelector('#ouverture .ouv-mousse.devant'),sc=document.querySelector('#ouverture .ouv-scene');if(!c||!sc)return;

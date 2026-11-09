@@ -100,10 +100,28 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
   document.querySelectorAll('.coffret[data-public]').forEach(c=>{
     const pub=c.dataset.public; let duree=pub==='part'?'16':'12', secteur=(c.querySelector('[data-secteur]')||{dataset:{}}).dataset.secteur||'Hôtellerie';
     const q=sel=>c.querySelector(sel), det=q('.details'), plus=q('.plus');
+    /* petite carte « en situation » : elle se retourne à chaque changement de profil ou de secteur */
+    const SITU={"Professionnels":["Visio · lundi 9 h","“Any questions?”","Vous en aviez trois. Vous n’en posez aucune."],
+      "Freelance":["Client à Londres","“Could you send me a quote by Friday?”","Le devis part vendredi, ou jamais."],
+      "Internationaux":["Afterwork · 19 h","“So, what do you do?”","Trente secondes pour exister."],
+      "Reconversion":["Entretien · 10 h","“Tell me about yourself.”","Pas de deuxième essai."],
+      "Hôtellerie":["Réception · 23 h 40","“Could I get a late check-out tomorrow?”","Le client attend. Trois secondes."],
+      "Commerce, luxe":["Boutique · 15 h 10","“I’m just looking.”","Elle repart, ou elle reste. Tout se joue sur votre première phrase."],
+      "Tourisme":["Accueil · 9 h 30","“We booked a tour, but nobody came.”","Comprendre avant de s’excuser."],
+      "Immobilier":["Visite · 11 h","“How long has it been on the market?”","Un acheteur à trois millions attend une réponse nette."],
+      "Sur mesure":["Votre métier","“Shall we start?”","Vos situations, vos phrases : on part de votre réalité."]};
+    const sitIn=q('.sit-in'); let sitAvant=null;
+    function situation(k){ if(!sitIn||k===sitAvant) return; const d=SITU[k]; if(!d) return;
+      const faces=sitIn.querySelectorAll('.sit-face'), tourne=sitIn.classList.contains('tourne');
+      const cible=sitAvant===null?faces[0]:faces[tourne?0:1];
+      cible.innerHTML=`<span class="sit-lieu">${d[0]}</span><span class="sit-en" lang="en">${d[1]}</span><span class="sit-choc">${d[2]}</span>`;
+      if(sitAvant!==null){ sitIn.classList.toggle('tourne'); faces.forEach(f=>f.setAttribute('aria-hidden',f!==cible)); }
+      sitAvant=k; }
     function rendu(){
       q('.c-nom').textContent=noms[pub][duree]; q('.c-rythme').textContent=rythme[duree];
       q('.c-liste').innerHTML=['<strong>Communiquer partout, en déduisant au lieu de réciter</strong>',objectif[duree],...inclus[pub]].map(x=>`<li>${x}</li>`).join('');
       const ex=q('.secteur-ex'); if(ex) ex.textContent=exemples[secteur];
+      situation(secteur);
       c.querySelectorAll('[data-duree]').forEach(b=>b.setAttribute('aria-checked',b.dataset.duree===duree));
       c.querySelectorAll('[data-secteur]').forEach(b=>b.setAttribute('aria-checked',b.dataset.secteur===secteur));
     }

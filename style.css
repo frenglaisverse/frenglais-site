@@ -953,3 +953,14 @@ footer::after{opacity:.58}
 .sem-etape p{font-size:14px;line-height:1.45}
 @media (max-width:900px){.semaine{grid-template-columns:1fr;row-gap:10px}}
 
+
+/* coffrets : petite carte « en situation », qui se retourne comme la carte de Paul */
+.sit-carte{perspective:900px;margin-top:2px}
+.sit-in{display:grid;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.sit-in.tourne{transform:rotateY(180deg)}
+.sit-face{grid-area:1/1;display:flex;flex-direction:column;gap:2px;padding:9px 12px 10px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.sit-dos{transform:rotateY(180deg)}
+.sit-lieu{font:500 10.5px var(--f-mono);letter-spacing:.07em;text-transform:uppercase;color:rgba(246,180,175,.85)}
+.sit-en{font-size:14.5px;font-weight:500;line-height:1.35;color:#fff}
+.sit-choc{font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.62)}
+@media (prefers-reduced-motion:reduce){.sit-in{transition:none}}

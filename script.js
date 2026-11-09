@@ -108,7 +108,7 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
       "Hôtellerie":["Réception · 23 h 40","“Could I get a late check-out tomorrow?”","Le client attend. Trois secondes."],
       "Commerce, luxe":["Boutique · 15 h 10","“I’m just looking.”","Elle repart, ou elle reste. Tout se joue sur votre première phrase."],
       "Tourisme":["Accueil · 9 h 30","“We booked a tour, but nobody came.”","Comprendre avant de s’excuser."],
-      "Immobilier":["Visite · 11 h","“How long has it been on the market?”","Un acheteur à trois millions attend une réponse nette."],
+      "Immobilier":["Visite · 11 h","“How long has it been on the market?”","L’acheteur attend une réponse nette."],
       "Sur mesure":["Votre métier","“Shall we start?”","Vos situations, vos phrases : on part de votre réalité."]};
     const sitIn=q('.sit-in'); let sitAvant=null;
     function situation(k){ if(!sitIn||k===sitAvant) return; const d=SITU[k]; if(!d) return;

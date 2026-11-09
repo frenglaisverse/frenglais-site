@@ -1019,6 +1019,7 @@ footer::after{opacity:.58}
 @media (max-width:640px){.lamantin{transform:scale(.9)}}
 /* Une semaine : cartes sans image */
 .sem-etape{display:flex;flex-direction:column;gap:2px}
-/* étiquette d'accroche : capitales gravées Cinzel, comme les noms des formules — plus lisible et plus identitaire */
-.hero .surtitre{font-family:"Cinzel",Georgia,serif;font-weight:800;font-size:16px;letter-spacing:.08em;text-transform:none;padding:9px 20px 9px 15px}
-@media (max-width:640px){.hero .surtitre{font-size:12.5px;letter-spacing:.05em}}
+/* étiquette d'accroche : Geist en minuscules, façon Apple — net, lisible, une partie forte et une partie douce */
+.hero .surtitre{font-family:var(--f-txt);font-weight:600;font-size:16px;letter-spacing:-.005em;text-transform:none;padding:9px 20px 9px 15px}
+.hero .surtitre .st-doux{font-weight:500;color:#4A5C8F}
+@media (max-width:640px){.hero .surtitre{font-size:13.5px}}

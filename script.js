@@ -108,7 +108,7 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
   const noms={part:{6:"L'Accéléré",16:"L'Intégral",long:"Le Cercle"},ent:{8:"Impulsion",12:"Performance",16:"Leadership"}};
   const rythme={6:"12 modules · 2 par semaine · 45 min à 1 h",long:"Abonnement mensuel",8:"16 modules · 2 par semaine · 45 min à 1 h",12:"24 modules · 2 par semaine · 45 min à 1 h",16:"32 modules · 2 par semaine · 45 min à 1 h"};
   const objectif={6:"L'essentiel de la méthode, en accéléré",long:"Entretenir et faire progresser votre anglais professionnel, mois après mois",8:"L'essentiel de la méthode, à un rythme soutenu",12:"Le parcours complet, jusqu'au réflexe",16:"Le parcours complet, plus 8 ateliers d'oral et de mise en situation"};
-  const inclus={part:["Votre espace et votre suivi","Un point régulier avec un tuteur","Évaluation orale finale"],
+  const inclus={part:["Votre espace et votre suivi","Un point progression régulier","Évaluation orale finale"],
                 ent:["Modules de votre secteur","Suivi pour les RH, évaluation orale finale","Devis et facture entreprise"]};
   const exemples={"Reconversion":"Pour changer de métier, avec l'anglais en appui.","Professionnels":"Réunions, e-mails, appels.","Freelance":"Clients, devis, visios en anglais.","Internationaux":"Pour vivre et travailler en anglais.","Hôtellerie":"Check-in, réclamations, room service.","Restauration":"Commandes, allergies, service.","Commerce, luxe":"Accueil et conseil client.","Tourisme":"Visites, réservations, imprévus.","Immobilier":"Visites et négociation.","Sur mesure":"Votre métier, décrit dans votre demande."};
   document.querySelectorAll('.coffret[data-public]').forEach(c=>{

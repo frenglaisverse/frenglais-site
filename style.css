@@ -979,7 +979,7 @@ footer::after{opacity:.58}
 .mc .fin{display:inline-block;animation:colle .55s cubic-bezier(.3,1.7,.5,1)}
 @keyframes colle{0%{transform:translateY(-.9em) scale(1.5);opacity:0}60%{opacity:1}100%{transform:none}}
 /* code invisible : il apparaît comme de l'encre sous une lampe UV */
-.phrase.uv .mc .etiq.fant{color:#D9B8FF;border-color:#C69BFF;box-shadow:0 0 16px 2px rgba(176,124,255,.55),inset 0 0 10px rgba(176,124,255,.35);text-shadow:0 0 8px rgba(198,155,255,.9);animation:uv 1.8s ease-in-out infinite}
-@keyframes uv{50%{box-shadow:0 0 26px 6px rgba(176,124,255,.75),inset 0 0 14px rgba(176,124,255,.5)}}
+.phrase.uv .mc .etiq.fant{color:#FFB3AE;border-color:#F0766F;box-shadow:0 0 16px 2px rgba(240,118,111,.5),inset 0 0 10px rgba(240,118,111,.3);text-shadow:0 0 8px rgba(255,150,143,.9);animation:uv 1.8s ease-in-out infinite}
+@keyframes uv{50%{box-shadow:0 0 26px 6px rgba(240,118,111,.7),inset 0 0 14px rgba(240,118,111,.45)}}
 @media (prefers-reduced-motion:reduce){.curseur,.mc .fin,.phrase .quand{transition:none;animation:none}.curseur::after,.phrase.uv .mc .etiq.fant{animation:none}}
 .mc .fin.vide{display:inline;animation:none}

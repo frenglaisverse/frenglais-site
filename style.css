@@ -894,3 +894,71 @@ footer::after{opacity:.58}
 
 .pol-grand .v-fulbright{color:#fff;font-weight:700;text-decoration:underline;text-decoration-color:rgba(246,230,184,.7);text-decoration-thickness:1.5px;text-underline-offset:.18em;transition:text-decoration-color .2s}
 .pol-grand .v-fulbright:hover,.pol-grand .v-fulbright:focus-visible{text-decoration-color:#F6E6B8}
+
+/* ---------- accroche : essai gratuit ---------- */
+.btn-contour{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.75);transition:background .2s,box-shadow .2s}
+.btn-contour:hover{background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1.5px #fff}
+.btn-sous{opacity:.7;margin-left:5px}
+.ctas{gap:14px}
+
+/* ---------- Trois secondes : scénarios métier ---------- */
+.metiers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+@media (max-width:1100px){.metiers{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.metiers{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-24px;padding:4px 24px 14px;scrollbar-width:none}
+  .metiers::-webkit-scrollbar{display:none}.metier{flex:0 0 78%;scroll-snap-align:start}}
+@media (max-width:520px){.metiers{margin-inline:-16px;padding-inline:16px}}
+.metier{position:relative;display:flex;flex-direction:column;gap:10px;padding:22px 20px 18px;border-radius:22px;color:#fff;overflow:hidden;
+  background:radial-gradient(120% 70% at 100% 0%,rgba(110,149,240,.28),transparent 60%),linear-gradient(165deg,#173A8C,#10245C 60%,#0B1A44);
+  box-shadow:0 18px 34px -22px rgba(11,26,68,.8);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}
+.metier:hover{transform:translateY(-4px);box-shadow:0 24px 40px -22px rgba(11,26,68,.9)}
+.metier::after{content:"3";position:absolute;right:-6px;bottom:-34px;font:600 150px/1 var(--f-txt);letter-spacing:-.06em;color:rgba(255,255,255,.035);pointer-events:none}
+.m-sect{font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:#F6B4AF}
+.m-lieu{font:400 12.5px var(--f-mono);color:rgba(255,255,255,.6)}
+.m-en{margin:6px 0 0;font-size:20px;line-height:1.75;font-weight:500;letter-spacing:-.01em;flex:1;padding-top:14px}
+.m-choc{margin:0;font-size:14.5px;line-height:1.45;color:rgba(255,255,255,.78)}
+.m-lien{margin-top:6px;align-self:flex-start;font-size:14px;font-weight:600;color:#fff;text-decoration:none;border-bottom:1.5px solid rgba(246,180,175,.7);padding-bottom:1px}
+.m-lien:hover{border-color:#fff}
+.m-lien::before{content:"";position:absolute;inset:0}
+.metier .cav{color:#fff}
+.metier .cav.ed{border-color:#F0766F}.metier .cav.ed i{background:#F0766F}
+.metier .cav.inv{border-bottom:2px dashed #F0766F}.metier .cav.inv i{background:transparent;border:1.5px dashed #F0766F;color:#F6B4AF}
+.cav.en{border-color:#E9C46A}.metier .cav.en i{background:#C99A2E;color:#fff}
+
+/* ---------- Une semaine avec Frenglais ---------- */
+.semaine{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;position:relative}
+.semaine::before{content:"";position:absolute;left:28px;right:28px;top:27px;height:2px;background:repeating-linear-gradient(90deg,var(--trait-fort) 0 6px,transparent 6px 12px);opacity:.35}
+.sem-etape{position:relative;display:flex;flex-direction:column;gap:8px}
+.sem-ico{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:var(--carte);border:1px solid var(--trait);box-shadow:0 10px 22px -16px rgba(16,36,92,.5);color:var(--bleu);position:relative;z-index:1}
+.sem-etape:nth-child(2) .sem-ico{color:#0B8D8A}.sem-etape:nth-child(3) .sem-ico{color:#E0625B}.sem-etape:nth-child(4) .sem-ico{color:#B8891F}
+.sem-ico svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sem-freq{margin-top:8px;font:500 12px var(--f-mono);letter-spacing:.04em;color:var(--doux);text-transform:uppercase}
+.sem-etape h3{font-size:21px}
+.sem-etape p{margin:0;color:var(--doux);font-size:15.5px;line-height:1.5}
+@media (max-width:900px){.semaine{grid-template-columns:1fr 1fr;row-gap:30px}.semaine::before{display:none}}
+@media (max-width:520px){.semaine{grid-template-columns:1fr}
+  .sem-etape{display:grid;grid-template-columns:56px 1fr;column-gap:16px;row-gap:4px}.sem-ico{grid-row:1/4}.sem-freq{margin-top:2px}}
+
+/* ---------- FAQ ---------- */
+.faq{position:relative;padding-top:clamp(72px,9vw,112px)}
+.faq::before{content:"";position:absolute;top:clamp(36px,4.5vw,56px);left:max(24px,env(safe-area-inset-left,0px));right:max(24px,env(safe-area-inset-right,0px));height:1px;background:linear-gradient(90deg,transparent,var(--doux) 18%,var(--doux) 82%,transparent);opacity:.7}
+@media (max-width:520px){.faq::before{left:16px;right:16px}}
+.faq-liste{display:flex;flex-direction:column;max-width:860px}
+.faq-q{border-bottom:1px solid var(--trait)}
+.faq-q:first-child{border-top:1px solid var(--trait)}
+.faq-q summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 2px;font-size:19px;font-weight:500;letter-spacing:-.01em}
+.faq-q summary::-webkit-details-marker{display:none}
+.faq-plus{flex:none;position:relative;width:30px;height:30px;border-radius:50%;background:var(--carte);border:1px solid var(--trait);transition:transform .3s,background .2s}
+.faq-plus::before,.faq-plus::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.6px;background:var(--encre);border-radius:2px;transform:translate(-50%,-50%)}
+.faq-plus::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .3s}
+.faq-q[open] .faq-plus{transform:rotate(180deg);background:var(--bleu);border-color:var(--bleu)}
+.faq-q[open] .faq-plus::before,.faq-q[open] .faq-plus::after{background:#fff}
+.faq-q[open] .faq-plus::after{transform:translate(-50%,-50%) rotate(0)}
+.faq-q summary:hover .faq-plus{border-color:var(--doux)}
+.faq-r p{margin:0 0 22px;color:var(--doux);max-width:68ch;line-height:1.6}
+.faq-r a{color:var(--bleu);font-weight:500}
+.faq-q[open] .faq-r{animation:faq-ouvre .35s cubic-bezier(.22,1,.36,1)}
+@keyframes faq-ouvre{from{opacity:0;translate:0 -6px}}
+.faq+.devis::before{display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .faq::before{opacity:.5}:root:not([data-theme="light"]) .faq-r a,:root:not([data-theme="light"]) .sem-ico{color:#8FB0FF}}
+:root[data-theme="dark"] .faq::before{opacity:.5}:root[data-theme="dark"] .faq-r a{color:#8FB0FF}
+@media (prefers-reduced-motion:reduce){.metier,.faq-plus,.faq-plus::after{transition:none}.faq-q[open] .faq-r{animation:none}}

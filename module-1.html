@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Module 1 · Tout l'anglais tient sur une ligne · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="module.css?v=202611091800">
+<script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
+document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
+if(a.matches('.nav-devis'))n='menu-devis';else if(a.matches('.nav-eleve'))n='menu-espace-eleve';else if(a.matches('.btn-coffret')){var c=a.closest('[data-public]');n='coffret-devis-'+(c?c.getAttribute('data-public'):'');}
+else if(a.matches('.solo-cta'))n='solo-acces';else if(h.indexOf('#devis')===0)n='devis-lien';else if(h.indexOf('trustpilot')>-1)n='trustpilot';else if(h.indexOf('amazon')>-1)n='livre-amazon';
+else if(h.indexOf('fulbright')>-1)n='carte-fulbright';else if(h.indexOf('wlu.edu')>-1)n='carte-article';else if(h.indexOf('youtube')>-1)n='youtube';else if(h.indexOf('instagram')>-1)n='instagram';else if(h.indexOf('tiktok')>-1)n='tiktok';
+else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,title:n,event:true});},true);</script>
+</head>
+<body>
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour à l'espace élève"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod">Module 1 · 1/32</span>
+  <a class="retour" href="espace-eleve.html">Quitter</a>
+</div></header>
+<main>
+  <div class="rail" aria-live="polite">
+    <div class="meta"><span id="etape-nom">Choisir son secteur</span><span id="etape-pct">0 %</span></div>
+    <div class="barre" role="progressbar" aria-label="Progression du module" aria-valuemin="0" aria-valuemax="100" id="barre-box"><i id="barre"></i></div>
+  </div>
+  <section class="ecran" id="ecran" tabindex="-1" aria-live="polite"></section>
+  <p class="verrou" id="verrou" hidden></p>
+  <div class="nav">
+    <button class="btn" id="prec" type="button">Précédent</button>
+    <button class="btn plein" id="suiv" type="button">Suivant</button>
+  </div>
+</main>
+<script src="module-1-data.js?v=202611091800"></script>
+<script src="lamantin-correcteur.js?v=202611091800"></script>
+<script src="module-1.js?v=202611091800"></script>
+</body>
+</html>

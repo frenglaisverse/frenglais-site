@@ -1015,8 +1015,8 @@ footer::after{opacity:.58}
 @media (prefers-reduced-motion:reduce){.hero .surtitre{animation:none;transition:none}}
 .solo-cats{flex-wrap:nowrap;gap:5px}.solo-cats button{flex:1 1 0;min-width:0;padding:7px 2px 5px}
 /* lamantin deux fois plus grand */
-.lamantin{transform:scale(2.4)}
-@media (max-width:640px){.lamantin{transform:scale(1.2)}}
+.lamantin{transform:scale(1.8)}
+@media (max-width:640px){.lamantin{transform:scale(.9)}}
 /* Une semaine : le lamantin de face dans chaque carré */
 .sem-etape{grid-template-columns:54px 1fr}
 .sem-ico{width:54px;height:54px;border-radius:14px;overflow:hidden;background:#2E4FC4;border:1px solid rgba(255,255,255,.12)}

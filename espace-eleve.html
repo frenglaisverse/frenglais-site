@@ -40,7 +40,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
       <div class="tb-mini"><i id="barre-intro"></i></div></div>
     <span class="tb-action" id="action-intro">Commencer</span>
   </a>
-  <div class="tb-module verrou" id="carte-m1"><div class="tb-num">01</div><div class="tb-corps"><strong>Tout l'anglais tient sur une ligne</strong><span>1/32 · 45 min à 1 h</span><div class="tb-mini" hidden><i id="barre-m1"></i></div></div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></div>
+  <div class="tb-module verrou"><div class="tb-num">01</div><div class="tb-corps"><strong>Repères et codes</strong><span>1/32 · 45 min à 1 h</span></div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></div>
 </div>
 
 <a class="tb-debloquer" href="index.html#devis">Débloquer la formation<svg class="tb-fleche" viewBox="0 0 64 20" aria-hidden="true"><path d="M2 11 C 14 7, 24 14, 36 10 S 52 8, 60 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M54 5 L61 10 L54 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 6 v9" stroke="#F0766F" stroke-width="2.4" stroke-linecap="round"/><path d="M40 5 v9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
@@ -75,16 +75,6 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 
 /* accès : identifiant floridien généré à l'inscription (nom + chiffre de 1 à 6 selon la taille de l'équipe) + code.
    La vraie vérification se fera sur la plateforme de formation ; ici on vérifie seulement la forme. */
-
-/* module 1 : ouvert après un accès validé sur cet appareil (la vraie vérification viendra avec la plateforme) */
-function ouvrirM1(){
-  let ok=false, p=0; try{ ok=localStorage.getItem('frg-acces')==='ok'; p=+(localStorage.getItem('frg-m1-pct')||0); }catch(e){}
-  const c=document.getElementById('carte-m1'); if(!c||!ok) return;
-  const a=document.createElement('a'); a.className='tb-module ouvert'+(p>=100?' fini':''); a.href='module-1.html'; a.id='carte-m1';
-  a.innerHTML=c.innerHTML.replace(/<span class="tb-cadenas"[\s\S]*?<\/span>/,'')+'<span class="tb-action">'+(p>=100?'Terminé ✓':p>0?'Reprendre · '+p+' %':'Commencer')+'</span>';
-  c.replaceWith(a); const m=a.querySelector('.tb-mini'); if(m){ m.hidden=false; m.querySelector('i').style.width=p+'%'; }
-}
-ouvrirM1();
 const PLATEFORME_URL = '';   // à renseigner à l'ouverture (adresse de connexion de la plateforme)
 const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades','Gator','Heron','Pelican','Flamingo','Egret','Ibis','Osprey','Dolphin','Tarpon','Snook','Turtle','Seagrass','Cypress','Sawgrass','Palmetto','Saltmarsh','Oyster','Conch','Coral','Keys','KeyWest','Sanibel','Captiva','Biscayne','Crystal','Homosassa','Wakulla','Ichetucknee','Itchetucknee','Suwannee','Okeechobee','Kissimmee','Withlacoochee','Silver','Rainbow','Weeki','Gulf','Atlantic','Tampa','Miami','Naples','Orlando','Gainesville','Sarasota','Destin','Pensacola','Tallahassee','Orange','Citrus','KeyLime','Hibiscus','Jacaranda','SpanishMoss','LiveOak','Bayou','Lagoon','Tide','Breeze','Sunset','Sandbar','Driftwood','Seashell','Starfish','Hurricane','Thunder','Storm','Airboat','Lighthouse','Marina','Boardwalk','Canopy','Orchid','Panther','Bobcat','Armadillo','Otter','Spoonbill','Anhinga','Kingfisher','Seabreeze','Coquina','Caladesi','Amelia','Matanzas','Ocala','Apalachicola','Myakka','Peace','Loxahatchee','Juniper','Fanning'];
 (function(){
@@ -97,7 +87,7 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
     if(!valide(ident.value)){ etat.classList.add('ko'); etat.textContent='Identifiant introuvable : un nom de Floride suivi d\'un chiffre, par exemple Manatee3.'; ident.focus(); return; }
     if(!/^FRG-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.value)){ etat.classList.add('ko'); etat.textContent='Le code a la forme FRG-XXXX-XXXX.'; code.focus(); return; }
     if(PLATEFORME_URL){ location.href=PLATEFORME_URL; return; }
-    etat.classList.add('ok'); try{ localStorage.setItem('frg-acces','ok'); }catch(e){} ouvrirM1(); const m=/^([A-Za-z]+)([1-6])$/.exec(ident.value.trim()); ident.value=NOMS_FLORIDE.find(n=>n.toLowerCase()===m[1].toLowerCase())+m[2]; etat.textContent='Merci '+ident.value+'. Votre espace ouvre avec les premières sessions : le lien de connexion vous sera communiqué.'; });
+    etat.classList.add('ok'); const m=/^([A-Za-z]+)([1-6])$/.exec(ident.value.trim()); ident.value=NOMS_FLORIDE.find(n=>n.toLowerCase()===m[1].toLowerCase())+m[2]; etat.textContent='Merci '+ident.value+'. Votre espace ouvre avec les premières sessions : le lien de connexion vous sera communiqué.'; });
 })();
 </script>
 <footer><div class="in pied"><div><img src="logo.webp" class="logo-pied" alt="Frenglais" width="197" height="70"><small>© 2026 Frenglais · Paul Moreaux</small>

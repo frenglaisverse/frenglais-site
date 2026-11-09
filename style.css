@@ -983,9 +983,17 @@ footer::after{opacity:.58}
 @keyframes uv{50%{box-shadow:0 0 26px 6px rgba(240,118,111,.7),inset 0 0 14px rgba(240,118,111,.45)}}
 @media (prefers-reduced-motion:reduce){.curseur,.mc .fin,.phrase .quand{transition:none;animation:none}.curseur::after,.phrase.uv .mc .etiq.fant{animation:none}}
 .mc .fin.vide{display:inline;animation:none}
-/* accroche : l'étiquette « Formations d'anglais » en pastille blanche, bien lisible */
-.hero .surtitre{background:#fff;color:#10245C;border:0;font-size:15px;font-weight:700;letter-spacing:.09em;padding:10px 20px 10px 14px;box-shadow:0 10px 26px -12px rgba(6,20,60,.55),0 0 0 4px rgba(255,255,255,.14);backdrop-filter:none}
-.hero .surtitre::before{width:10px;height:10px;box-shadow:0 0 0 0 rgba(240,118,111,.6);animation:pouls 2.2s ease-out infinite}
-@keyframes pouls{0%{box-shadow:0 0 0 0 rgba(240,118,111,.6)}70%,100%{box-shadow:0 0 0 9px rgba(240,118,111,0)}}
-@media (max-width:640px){.hero .surtitre{font-size:12.5px;padding:8px 14px 8px 12px}}
-@media (prefers-reduced-motion:reduce){.hero .surtitre::before{animation:none}}
+/* accroche : étiquette « Formations d'anglais » façon verre poli, fine et lisible, avec un reflet qui passe */
+.hero .surtitre{position:relative;overflow:hidden;isolation:isolate;
+  background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(240,244,253,.96) 55%,rgba(222,231,250,.95) 100%);
+  color:#10245C;border:1px solid rgba(255,255,255,.9);font-size:13.5px;font-weight:600;letter-spacing:.14em;padding:9px 18px 9px 14px;
+  box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(28,73,165,.12),0 1px 2px rgba(6,20,60,.25),0 12px 30px -14px rgba(6,20,60,.6),0 0 0 5px rgba(255,255,255,.1);
+  backdrop-filter:none}
+.hero .surtitre::before{width:8px;height:8px;box-shadow:0 0 0 0 rgba(240,118,111,.55);animation:pouls 2.4s ease-out infinite}
+.hero .surtitre::after{content:"";position:absolute;inset:-1px;z-index:-1;pointer-events:none;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,0) 38%,rgba(255,255,255,.95) 47%,rgba(190,208,245,.55) 52%,transparent 62%);
+  background-size:260% 100%;background-position:130% 0;animation:reflet 5.5s cubic-bezier(.45,0,.2,1) 1.2s infinite}
+@keyframes reflet{0%{background-position:130% 0}38%,100%{background-position:-40% 0}}
+@keyframes pouls{0%{box-shadow:0 0 0 0 rgba(240,118,111,.55)}70%,100%{box-shadow:0 0 0 8px rgba(240,118,111,0)}}
+@media (max-width:640px){.hero .surtitre{font-size:11.5px;letter-spacing:.1em;padding:8px 14px 8px 12px}}
+@media (prefers-reduced-motion:reduce){.hero .surtitre::before,.hero .surtitre::after{animation:none}}

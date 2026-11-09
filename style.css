@@ -865,3 +865,6 @@ footer::after{opacity:.58}
 .demo .video-plus .lecture{fill:currentColor;stroke:none}
 .demo .video-plus{top:-37px}
 @media (max-width:480px){.demo .video-plus .vp-suite{display:none}}
+/* « Plus dans l'espace élève » : sans contour, grisé, net au survol */
+.demo .video-plus{background:none;box-shadow:none;color:rgba(255,255,255,.45);padding-left:2px}
+.demo .video-plus:hover,.demo .video-plus:focus-visible{background:none;box-shadow:none;color:#fff}

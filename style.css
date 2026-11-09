@@ -471,9 +471,9 @@ a.badge-tp:focus-visible{outline:2px solid #F0766F;outline-offset:3px;border-rad
 #ouverture .ouv-scene::before{display:none}
 .ouv-verre,.ouv-bord{position:absolute;left:-5.556%;top:-15.625%;width:111.112%;height:131.25%;pointer-events:none}
 .ouv-verre{background:linear-gradient(160deg,rgba(130,160,225,.34),rgba(34,58,128,.40) 55%,rgba(14,28,72,.52));
-  -webkit-mask:url("verre-forme.png") center/100% 100% no-repeat;mask:url("verre-forme.png") center/100% 100% no-repeat;
+  -webkit-mask:url("verre-forme.webp") center/100% 100% no-repeat;mask:url("verre-forme.webp") center/100% 100% no-repeat;
   -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%)}
-.ouv-bord{background:url("verre-bord.png") center/100% 100% no-repeat}
+.ouv-bord{background:url("verre-bord.webp") center/100% 100% no-repeat}
 .ouv-scene .ouv-logo{position:relative}
 #ouverture .ouv-branche{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.42}
 #ouverture .ouv-mousse.fond{z-index:0}

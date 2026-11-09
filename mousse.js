@@ -7,7 +7,7 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
   const modele=cv.dataset.modele?JSON.parse(cv.dataset.modele):[[8,8],[34,10],[70,3],[110,2],[150,3]];
   const alea=(i,j,k)=>{ const v=Math.sin(i*12.9898+j*78.233+k*37.719)*43758.5453; return v-Math.floor(v); };
   function creer(){
-    const r=cv.getBoundingClientRect(); W=r.width; H=r.height; const dpr=Math.min(devicePixelRatio||1,2);
+    const r=cv.getBoundingClientRect(); W=r.width; H=r.height; const dpr=Math.min(devicePixelRatio||1,innerWidth<700?1.5:2);
     cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
     // data-relatif : x en fraction de la largeur ; data-pash : longueur d'un segment en fraction de la hauteur
     const rel=!!cv.dataset.relatif, k=cv.dataset.pash?(H*+cv.dataset.pash)/12:W/300;
@@ -70,7 +70,9 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
   addEventListener('touchmove',e=>{ const t=e.touches[0]; pousser(t.clientX,t.clientY); },{passive:true});
   addEventListener('touchend',lacher,{passive:true}); addEventListener('touchcancel',lacher,{passive:true});
   document.addEventListener('mouseleave',lacher);
+  let dern=-1e9; const intervalle=innerWidth<700?1000/24:1000/30; // la mousse bouge lentement : 24 à 30 images/s suffisent
   let visible=true; new IntersectionObserver(es=>{ visible=es[0].isIntersecting; if(visible) requestAnimationFrame(boucle); }).observe(cv);
-  function boucle(t){ if(!visible) return; pas(t); dessiner(); requestAnimationFrame(boucle); }
+  function boucle(t){ if(!cv.isConnected){ visible=false; return; } if(!visible||document.hidden) return; requestAnimationFrame(boucle); if(t-dern<intervalle) return; const n=Math.min(3,Math.max(1,Math.round((t-dern)/16.7))); dern=t; for(let i=0;i<n;i++) pas(t); dessiner(); }
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&visible&&cv.isConnected) requestAnimationFrame(boucle); });
   requestAnimationFrame(boucle);
 });

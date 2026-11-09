@@ -983,3 +983,9 @@ footer::after{opacity:.58}
 @keyframes uv{50%{box-shadow:0 0 26px 6px rgba(240,118,111,.7),inset 0 0 14px rgba(240,118,111,.45)}}
 @media (prefers-reduced-motion:reduce){.curseur,.mc .fin,.phrase .quand{transition:none;animation:none}.curseur::after,.phrase.uv .mc .etiq.fant{animation:none}}
 .mc .fin.vide{display:inline;animation:none}
+/* accroche : l'étiquette « Formations d'anglais » en pastille blanche, bien lisible */
+.hero .surtitre{background:#fff;color:#10245C;border:0;font-size:15px;font-weight:700;letter-spacing:.09em;padding:10px 20px 10px 14px;box-shadow:0 10px 26px -12px rgba(6,20,60,.55),0 0 0 4px rgba(255,255,255,.14);backdrop-filter:none}
+.hero .surtitre::before{width:10px;height:10px;box-shadow:0 0 0 0 rgba(240,118,111,.6);animation:pouls 2.2s ease-out infinite}
+@keyframes pouls{0%{box-shadow:0 0 0 0 rgba(240,118,111,.6)}70%,100%{box-shadow:0 0 0 9px rgba(240,118,111,0)}}
+@media (max-width:640px){.hero .surtitre{font-size:12.5px;padding:8px 14px 8px 12px}}
+@media (prefers-reduced-motion:reduce){.hero .surtitre::before{animation:none}}

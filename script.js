@@ -39,15 +39,29 @@
     lab.textContent = vitre==='s' ? 'T0 · présent · code -s' : vitre==='ed' ? 'T-1 · passé · code -ed' : 'Base verbale · touchez -ed ou -s';
     // le mot entier ; son code (-s / -ed) apparaît au-dessus, dans sa couleur
     const c = vitre==='s' ? 's' : 'ed';
-    const mot = vitre==='none' ? forme : forme + `<span class="fin ${c}">${code}<span class="etiq ${c}${fantome?' fant':''}">-${c}</span></span>`;
-    phrase.innerHTML = `<span>${sujet} <span class="mc">${mot}</span></span>`;
+    const mot = vitre==='none' ? forme : forme + `<span class="fin ${c}${fantome?' vide':''}">${code}<span class="etiq ${c}${fantome?' fant':''}">-${c}</span></span>`;
+    const quand = vitre==='ed' ? 'Yesterday,' : vitre==='s' ? 'Every day,' : '';
+    phrase.innerHTML = (quand?`<span class="quand">${quand}</span> `:'') + `<span>${quand&&sujet!=='I'?sujet.toLowerCase():sujet} <span class="mc">${mot}</span>.</span>`;
+    phrase.classList.toggle('uv', fantome);
+    const cur = document.getElementById('curseur');
+    if (cur){ cur.className = 'curseur' + (vitre==='none' ? '' : ' on ' + vitre); cur.style.left = vitre==='ed' ? '38%' : vitre==='s' ? '62%' : '50%'; }
     note.textContent = n;
     document.querySelectorAll('[data-vitre]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.vitre===vitre));
     zone.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', +b.dataset.v===v));
   }
-  document.querySelectorAll('[data-vitre]').forEach(b=>b.addEventListener('click',()=>{ vitre = vitre===b.dataset.vitre ? 'none' : b.dataset.vitre; rendu(); }));
-  zone.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; v=+b.dataset.v; rendu(); });
+  let auto = null, touche = false;
+  const stop = () => { touche = true; if (auto){ clearTimeout(auto); auto = null; } };
+  document.querySelectorAll('[data-vitre]').forEach(b=>b.addEventListener('click',e=>{ if(e.isTrusted) stop(); vitre = vitre===b.dataset.vitre ? 'none' : b.dataset.vitre; rendu(); }));
+  zone.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; if(e.isTrusted) stop(); v=+b.dataset.v; rendu(); });
   rendu();
+  /* démonstration automatique, une fois : jump → jumped → jumps → went (le code invisible). Elle s'arrête dès qu'on touche. */
+  const calme = matchMedia('(prefers-reduced-motion: reduce)').matches, piste = document.getElementById('piste');
+  if (!calme && piste && 'IntersectionObserver' in window){
+    const pas = [[2600,'ed',0],[1900,'s',0],[1900,'ed',3],[3200,'none',0]];
+    const jouer = i => { if (touche || i >= pas.length) return; auto = setTimeout(()=>{ if (touche) return; vitre = pas[i][1]; v = pas[i][2]; rendu(); jouer(i+1); }, pas[i][0]); };
+    const io = new IntersectionObserver(es=>{ if (es.some(x=>x.isIntersecting)){ io.disconnect(); jouer(0); } }, {threshold:.5});
+    io.observe(piste);
+  }
 })();
 
 /* ---------- formulaire de devis ----------
@@ -92,9 +106,9 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
 /* ---------- coffrets : durée, détail, secteur ---------- */
 (function coffrets(){
   const noms={part:{6:"L'Accéléré",16:"L'Intégral",long:"Le Cercle"},ent:{8:"Impulsion",12:"Performance",16:"Leadership"}};
-  const rythme={6:"12 modules · 2 par semaine · 45 min à 1 h",long:"Abonnement mensuel · à votre rythme",8:"16 modules · 2 par semaine · 45 min à 1 h",12:"24 modules · 2 par semaine · 45 min à 1 h",16:"32 modules · 2 par semaine · 45 min à 1 h"};
+  const rythme={6:"12 modules · 2 par semaine · 45 min à 1 h",long:"Abonnement mensuel",8:"16 modules · 2 par semaine · 45 min à 1 h",12:"24 modules · 2 par semaine · 45 min à 1 h",16:"32 modules · 2 par semaine · 45 min à 1 h"};
   const objectif={6:"L'essentiel de la méthode, en accéléré",long:"Entretenir et faire progresser votre anglais professionnel, mois après mois",8:"L'essentiel de la méthode, à un rythme soutenu",12:"Le parcours complet, jusqu'au réflexe",16:"Le parcours complet, plus 8 ateliers d'oral et de mise en situation"};
-  const inclus={part:["Votre espace et votre suivi","Évaluation orale finale","Tuteurs en option"],
+  const inclus={part:["Votre espace et votre suivi","Un point régulier avec un tuteur","Évaluation orale finale"],
                 ent:["Modules de votre secteur","Suivi pour les RH, évaluation orale finale","Devis et facture entreprise"]};
   const exemples={"Reconversion":"Pour changer de métier, avec l'anglais en appui.","Professionnels":"Réunions, e-mails, appels.","Freelance":"Clients, devis, visios en anglais.","Internationaux":"Pour vivre et travailler en anglais.","Hôtellerie":"Check-in, réclamations, room service.","Restauration":"Commandes, allergies, service.","Commerce, luxe":"Accueil et conseil client.","Tourisme":"Visites, réservations, imprévus.","Immobilier":"Visites et négociation.","Sur mesure":"Votre métier, décrit dans votre demande."};
   document.querySelectorAll('.coffret[data-public]').forEach(c=>{

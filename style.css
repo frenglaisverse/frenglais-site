@@ -965,3 +965,21 @@ footer::after{opacity:.58}
 .sit-en{font-size:14.5px;font-weight:500;line-height:1.35;color:#fff}
 .sit-choc{font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.62)}
 @media (prefers-reduced-motion:reduce){.sit-in{transition:none}}
+
+/* ---------- Courbe : le temps se déplace, le code se colle au verbe ---------- */
+.curseur{position:absolute;top:40.5%;left:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#fff;opacity:0;transform:scale(.4);
+  transition:left .8s cubic-bezier(.65,0,.25,1.15),opacity .3s,transform .4s cubic-bezier(.3,1.6,.5,1),background .3s;pointer-events:none;z-index:1}
+.curseur::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px solid currentColor;opacity:.6;animation:onde 1.6s ease-out infinite}
+.curseur.on{opacity:1;transform:scale(1)}
+.curseur.ed{background:var(--corail);color:var(--corail);box-shadow:0 0 22px 4px rgba(240,118,111,.6)}
+.curseur.s{background:#fff;color:#fff;box-shadow:0 0 22px 4px rgba(255,255,255,.55)}
+@keyframes onde{from{transform:scale(.6);opacity:.7}to{transform:scale(1.8);opacity:0}}
+.phrase .quand{font-size:.5em;font-weight:500;letter-spacing:0;opacity:.7;align-self:flex-end;margin-bottom:.32em;animation:glisse .5s cubic-bezier(.22,1,.36,1)}
+@keyframes glisse{from{opacity:0;transform:translateX(-14px)}}
+.mc .fin{display:inline-block;animation:colle .55s cubic-bezier(.3,1.7,.5,1)}
+@keyframes colle{0%{transform:translateY(-.9em) scale(1.5);opacity:0}60%{opacity:1}100%{transform:none}}
+/* code invisible : il apparaît comme de l'encre sous une lampe UV */
+.phrase.uv .mc .etiq.fant{color:#D9B8FF;border-color:#C69BFF;box-shadow:0 0 16px 2px rgba(176,124,255,.55),inset 0 0 10px rgba(176,124,255,.35);text-shadow:0 0 8px rgba(198,155,255,.9);animation:uv 1.8s ease-in-out infinite}
+@keyframes uv{50%{box-shadow:0 0 26px 6px rgba(176,124,255,.75),inset 0 0 14px rgba(176,124,255,.5)}}
+@media (prefers-reduced-motion:reduce){.curseur,.mc .fin,.phrase .quand{transition:none;animation:none}.curseur::after,.phrase.uv .mc .etiq.fant{animation:none}}
+.mc .fin.vide{display:inline;animation:none}

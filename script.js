@@ -151,13 +151,8 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
 
 /* apparition douce au défilement */
 (()=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-const els=[...document.querySelectorAll('.bloc>h2,.bloc .chapo,.coffrets>*,.courbe-totale,#methode li,.avis-titre,.avis-carte,.devis>*,.metier,.sem-etape,.faq-q')];
+const els=[...document.querySelectorAll('.bloc>h2,.bloc .chapo,.coffrets>*,.courbe-totale,#methode li,.avis-titre,.avis-carte,.devis>*,.sem-etape,.faq-q')];
 els.forEach(e=>{const r=e.getBoundingClientRect();if(r.top<innerHeight*.9)return;const sib=[...e.parentElement.children].filter(x=>els.includes(x));e.style.setProperty('--rv',(Math.max(0,sib.indexOf(e))*90)+'ms');e.classList.add('rv')});
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){const t=x.target;t.classList.add('vu');io.unobserve(t);setTimeout(()=>{t.classList.remove('rv','vu');t.style.removeProperty('--rv')},1000+(parseInt(t.style.getPropertyValue('--rv'))||0))}}),{threshold:.15,rootMargin:'0px 0px -6% 0px'});
 document.querySelectorAll('.rv').forEach(e=>io.observe(e));})();
 
-/* « C'est mon quotidien » : pré-remplit le devis avec le profil et le secteur de la carte */
-document.querySelectorAll('.m-lien').forEach(a=>a.addEventListener('click',()=>{
-  const r=document.getElementById(a.dataset.profil==='pro'?'p-pro':'p-ent'); if(r){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); }
-  const sl=document.getElementById('f-secteur'); if(sl&&a.dataset.secteur) sl.value=a.dataset.secteur;
-}));

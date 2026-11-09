@@ -901,29 +901,6 @@ footer::after{opacity:.58}
 .btn-sous{opacity:.7;margin-left:5px}
 .ctas{gap:14px}
 
-/* ---------- Trois secondes : scénarios métier ---------- */
-.metiers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
-@media (max-width:1100px){.metiers{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:760px){.metiers{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-24px;padding:4px 24px 14px;scrollbar-width:none}
-  .metiers::-webkit-scrollbar{display:none}.metier{flex:0 0 78%;scroll-snap-align:start}}
-@media (max-width:520px){.metiers{margin-inline:-16px;padding-inline:16px}}
-.metier{position:relative;display:flex;flex-direction:column;gap:10px;padding:22px 20px 18px;border-radius:22px;color:#fff;overflow:hidden;
-  background:radial-gradient(120% 70% at 100% 0%,rgba(110,149,240,.28),transparent 60%),linear-gradient(165deg,#173A8C,#10245C 60%,#0B1A44);
-  box-shadow:0 18px 34px -22px rgba(11,26,68,.8);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}
-.metier:hover{transform:translateY(-4px);box-shadow:0 24px 40px -22px rgba(11,26,68,.9)}
-.metier::after{content:"3";position:absolute;right:-6px;bottom:-34px;font:600 150px/1 var(--f-txt);letter-spacing:-.06em;color:rgba(255,255,255,.035);pointer-events:none}
-.m-sect{font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:#F6B4AF}
-.m-lieu{font:400 12.5px var(--f-mono);color:rgba(255,255,255,.6)}
-.m-en{margin:6px 0 0;font-size:20px;line-height:1.75;font-weight:500;letter-spacing:-.01em;flex:1;padding-top:14px}
-.m-choc{margin:0;font-size:14.5px;line-height:1.45;color:rgba(255,255,255,.78)}
-.m-lien{margin-top:6px;align-self:flex-start;font-size:14px;font-weight:600;color:#fff;text-decoration:none;border-bottom:1.5px solid rgba(246,180,175,.7);padding-bottom:1px}
-.m-lien:hover{border-color:#fff}
-.m-lien::before{content:"";position:absolute;inset:0}
-.metier .cav{color:#fff}
-.metier .cav.ed{border-color:#F0766F}.metier .cav.ed i{background:#F0766F}
-.metier .cav.inv{border-bottom:2px dashed #F0766F}.metier .cav.inv i{background:transparent;border:1.5px dashed #F0766F;color:#F6B4AF}
-.cav.en{border-color:#E9C46A}.metier .cav.en i{background:#C99A2E;color:#fff}
-
 /* ---------- Une semaine avec Frenglais ---------- */
 .semaine{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;position:relative}
 .semaine::before{content:"";position:absolute;left:28px;right:28px;top:27px;height:2px;background:repeating-linear-gradient(90deg,var(--trait-fort) 0 6px,transparent 6px 12px);opacity:.35}
@@ -961,7 +938,7 @@ footer::after{opacity:.58}
 .faq+.devis::before{display:block}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .faq::before{opacity:.5}:root:not([data-theme="light"]) .faq-r a,:root:not([data-theme="light"]) .sem-ico{color:#8FB0FF}}
 :root[data-theme="dark"] .faq::before{opacity:.5}:root[data-theme="dark"] .faq-r a{color:#8FB0FF}
-@media (prefers-reduced-motion:reduce){.metier,.faq-plus,.faq-plus::after{transition:none}.faq-q[open] .faq-r{animation:none}}
+@media (prefers-reduced-motion:reduce){.faq-plus,.faq-plus::after{transition:none}.faq-q[open] .faq-r{animation:none}}
 
 /* Une semaine : version compacte, trois étapes */
 #semaine{gap:18px;padding-top:64px}
@@ -975,3 +952,4 @@ footer::after{opacity:.58}
 .sem-etape h3{font-size:17px}
 .sem-etape p{font-size:14px;line-height:1.45}
 @media (max-width:900px){.semaine{grid-template-columns:1fr;row-gap:10px}}
+

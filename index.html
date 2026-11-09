@@ -19,12 +19,12 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611092240">
+<link rel="stylesheet" href="style.css?v=202611092245">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
 if(a.matches('.nav-devis'))n='menu-devis';else if(a.matches('.nav-eleve'))n='menu-espace-eleve';else if(a.matches('.btn-coffret')){var c=a.closest('[data-public]');n='coffret-devis-'+(c?c.getAttribute('data-public'):'');}
-else if(a.matches('.solo-cta'))n='solo-acces';else if(a.matches('.m-lien'))n='metier-'+(a.getAttribute('data-secteur')||'pro').toLowerCase().replace(/[^a-z]+/g,'-');else if(h.indexOf('introduction.html')===0)n='essai-introduction';else if(h.indexOf('#devis')===0)n='devis-lien';else if(h.indexOf('trustpilot')>-1)n='trustpilot';else if(h.indexOf('amazon')>-1)n='livre-amazon';
+else if(a.matches('.solo-cta'))n='solo-acces';else if(h.indexOf('introduction.html')===0)n='essai-introduction';else if(h.indexOf('#devis')===0)n='devis-lien';else if(h.indexOf('trustpilot')>-1)n='trustpilot';else if(h.indexOf('amazon')>-1)n='livre-amazon';
 else if(h.indexOf('fulbright')>-1)n='carte-fulbright';else if(h.indexOf('wlu.edu')>-1)n='carte-article';else if(h.indexOf('youtube')>-1)n='youtube';else if(h.indexOf('instagram')>-1)n='instagram';else if(h.indexOf('tiktok')>-1)n='tiktok';
 else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,title:n,event:true});},true);</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[
@@ -132,29 +132,6 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 
 <main class="recouvre">
 
-  <section class="in bloc" id="metiers" aria-labelledby="t-metiers">
-    <div class="titre-bloc">
-      <h2 id="t-metiers">Trois secondes.</h2>
-      <p class="chapo">Au travail, l'anglais arrive sans prévenir. Vous vous reconnaissez ?</p>
-    </div>
-    <div class="metiers">
-      <article class="metier"><span class="m-sect">Hôtellerie</span><span class="m-lieu">Réception · 23 h 40</span>
-        <p class="m-en" lang="en">“Could I get a late check-out tomorrow?”</p><p class="m-choc">Le client attend. Vous avez trois secondes pour répondre autre chose que « Yes… yes ».</p>
-        <a class="m-lien" href="#devis" data-profil="ent" data-secteur="Hôtellerie">C'est mon quotidien <span aria-hidden="true">→</span></a></article>
-      <article class="metier"><span class="m-sect">Luxe</span><span class="m-lieu">Boutique · 15 h 10</span>
-        <p class="m-en" lang="en">“I’m just looking.”</p><p class="m-choc">Elle repart dans dix secondes, ou elle reste. Tout se joue sur votre première phrase.</p>
-        <a class="m-lien" href="#devis" data-profil="ent" data-secteur="Commerce, luxe">C'est mon quotidien <span aria-hidden="true">→</span></a></article>
-      <article class="metier"><span class="m-sect">Immobilier</span><span class="m-lieu">Visite · 11 h</span>
-        <p class="m-en" lang="en">“How long <span class="cav en">has it been<i>HAVE + -EN</i></span> on the market?”</p><p class="m-choc">Un acheteur à trois millions. Il veut une réponse nette, pas un « euh… since ».</p>
-        <a class="m-lien" href="#devis" data-profil="ent" data-secteur="Immobilier">C'est mon quotidien <span aria-hidden="true">→</span></a></article>
-      <article class="metier"><span class="m-sect">Tourisme</span><span class="m-lieu">Accueil · 9 h 30</span>
-        <p class="m-en" lang="en">“We <span class="cav ed">booked<i>-ed</i></span> a tour, but nobody <span class="cav inv">came<i>-ed</i></span>.”</p><p class="m-choc">Deux passés, dont un qui cache son code. Il faut comprendre avant de s’excuser.</p>
-        <a class="m-lien" href="#devis" data-profil="ent" data-secteur="Tourisme">C'est mon quotidien <span aria-hidden="true">→</span></a></article>
-      <article class="metier"><span class="m-sect">Professionnels</span><span class="m-lieu">Visio · lundi 9 h</span>
-        <p class="m-en" lang="en">“Any questions?”</p><p class="m-choc">Vous en aviez trois. Vous n’en posez aucune.</p>
-        <a class="m-lien" href="#devis" data-profil="pro" data-secteur="">C'est mon quotidien <span aria-hidden="true">→</span></a></article>
-    </div>
-  </section>
   <section class="in bloc" id="formations" aria-labelledby="t-formations">
     <div class="titre-bloc">
       <h2 id="t-formations">Les formations</h2>
@@ -248,7 +225,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
     <ol class="semaine">
       <li class="sem-etape"><span class="sem-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="13" rx="2.5"/><path d="M8 21h8M12 17.5V21"/><path d="M10 8.5v5l4.2-2.5z" fill="currentColor" stroke="none"/></svg></span><span class="sem-freq">45 min à 1 h · à votre rythme</span><h3>Les modules</h3><p>En ligne, quand vous voulez. Un module, une notion.</p></li>
       <li class="sem-etape"><span class="sem-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h0A2.5 2.5 0 0 1 4 13.5z"/><path d="M8.5 10.2l2 2 4-4.2"/></svg></span><span class="sem-freq">à chaque phrase</span><h3>Correction automatique</h3><p>Vos phrases, avec votre vocabulaire, corrigées sur-le-champ.</p></li>
-      <li class="sem-etape"><span class="sem-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5c.8-3.3 3-5 5.5-5s4.7 1.7 5.5 5"/><path d="M16 5.5c1.6.4 2.6 1.6 2.6 3.2S17.6 11.6 16 12"/><path d="M17.5 14.8c1.7.6 2.7 2.2 3 4.7"/></svg></span><span class="sem-freq">20 à 30 min · tous les 15 jours</span><h3>Le point tuteur</h3><p>Un humain corrige votre oral et ajuste la suite. Chaque semaine en Solo.</p></li>
+      <li class="sem-etape"><span class="sem-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19.5c.8-3.3 3-5 5.5-5s4.7 1.7 5.5 5"/><path d="M16 5.5c1.6.4 2.6 1.6 2.6 3.2S17.6 11.6 16 12"/><path d="M17.5 14.8c1.7.6 2.7 2.2 3 4.7"/></svg></span><span class="sem-freq">20 à 30 min · tous les 15 jours</span><h3>Le point tuteur</h3><p>Un humain corrige votre oral et suit votre progression.</p></li>
     </ol>
   </section>
   <section class="in bloc" id="methode" aria-labelledby="t-methode">
@@ -435,7 +412,7 @@ document.querySelectorAll('.av-vitre').forEach(b=>b.addEventListener('click',()=
   b.setAttribute('aria-pressed',on);b.textContent=on?'FR':'EN';b.setAttribute('aria-label',on?'Revenir au français':'Traduire en anglais et montrer les codes');
   f.querySelector('.av-fr').hidden=on;f.querySelector('.av-en').hidden=!on;f.classList.toggle('en',on);}));
 </script>
-<script src="script.js?v=202611092230"></script>
+<script src="script.js?v=202611092245"></script>
 <script>
 /* ouverture : branche de jacaranda — tronc solide hors champ à gauche, écorce en plaques fissurées avec lichen, une fourche qui sort par le haut */
 (function(){var o=document.getElementById('ouverture');if(!o)return;var c=o.querySelector('.ouv-branche');if(!c||!c.getContext)return;

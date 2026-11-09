@@ -19,7 +19,7 @@ function lancer(){
   if (H2 !== H) hote.style.height = H2 + 'px';   // l'alligator, bien plus long, a un cadre plus large
   if (L !== 200) { hote.style.width = L + 'px'; }
   const rendu = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-  rendu.setPixelRatio(Math.min((devicePixelRatio || 1) * 1.2, 2.4));   // net malgré l'agrandissement de 20 %
+  rendu.setPixelRatio(Math.min((devicePixelRatio || 1) * 2.4, 4.8));   // net malgré l’agrandissement (x2,4)
   rendu.setSize(L, H2);
   rendu.outputColorSpace = THREE.SRGBColorSpace;
   rendu.toneMapping = THREE.ACESFilmicToneMapping;

@@ -997,3 +997,28 @@ footer::after{opacity:.58}
 @keyframes pouls{0%{box-shadow:0 0 0 0 rgba(240,118,111,.55)}70%,100%{box-shadow:0 0 0 8px rgba(240,118,111,0)}}
 @media (max-width:640px){.hero .surtitre{font-size:11.5px;letter-spacing:.1em;padding:8px 14px 8px 12px}}
 @media (prefers-reduced-motion:reduce){.hero .surtitre::before,.hero .surtitre::after{animation:none}}
+
+/* Solo : puces de situation au champagne, carte qui se retourne */
+.solo-cats{margin-top:0}
+.solo-cats button{border-color:rgba(214,190,130,.38);background:rgba(255,255,255,.05);color:#F6E6B8;opacity:.85}
+.solo-cats button:hover{border-color:#D6BE82;opacity:1}
+.solo-cats button[aria-checked="true"]{background:rgba(214,190,130,.22);border-color:#D6BE82;opacity:1}
+.solo-cats button[aria-checked="true"] svg{stroke:#F6E6B8}
+.solo-sitc .sit-face{background:rgba(4,60,58,.28);border-color:rgba(214,190,130,.3)}
+.solo-sitc .sit-lieu{color:#D6BE82}
+/* étiquette d'accroche : légère respiration, et elle grossit doucement au survol (le reflet repasse aussitôt) */
+.hero .surtitre{transform-origin:left center;transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .35s;animation:flotte 5s ease-in-out infinite}
+@keyframes flotte{50%{translate:0 -2px}}
+.hero .surtitre:hover{transform:scale(1.045);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(28,73,165,.12),0 2px 4px rgba(6,20,60,.25),0 18px 38px -14px rgba(6,20,60,.7),0 0 0 6px rgba(255,255,255,.16)}
+.hero .surtitre:hover::after{animation:reflet-vite .9s cubic-bezier(.45,0,.2,1)}
+@keyframes reflet-vite{from{background-position:130% 0}to{background-position:-40% 0}}
+@media (prefers-reduced-motion:reduce){.hero .surtitre{animation:none;transition:none}}
+.solo-cats{flex-wrap:nowrap;gap:5px}.solo-cats button{flex:1 1 0;min-width:0;padding:7px 2px 5px}
+/* lamantin deux fois plus grand */
+.lamantin{transform:scale(2.4)}
+@media (max-width:640px){.lamantin{transform:scale(1.2)}}
+/* Une semaine : le lamantin de face dans chaque carré */
+.sem-etape{grid-template-columns:54px 1fr}
+.sem-ico{width:54px;height:54px;border-radius:14px;overflow:hidden;background:#2E4FC4;border:1px solid rgba(255,255,255,.12)}
+.sem-ico img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.04);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.sem-etape:hover .sem-ico img{transform:scale(1.14) translateY(2px)}

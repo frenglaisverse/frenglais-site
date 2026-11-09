@@ -161,13 +161,27 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
   const c=document.querySelector('[data-solo]'); if(!c) return;
   let fmt='Complète', dur='0 à 3 mois';
   const rendu=()=>c.querySelectorAll('[data-fmt]').forEach(b=>b.setAttribute('aria-checked',b.dataset.fmt===fmt));
-  c.addEventListener('click',e=>{ const f=e.target.closest('[data-fmt]'); if(f){ fmt=f.dataset.fmt; dur=f.dataset.dur; rendu(); } });
+  /* situation : puces comme les autres coffrets, et la petite carte qui se retourne */
+  const SIT={"Voyages":["Aéroport · 6 h 10","“Your flight has been cancelled.”","Comprendre la suite, ou dormir sur place."],
+    "Expatriation":["Banque · premier rendez-vous","“Do you have proof of address?”","Le premier rendez-vous de votre nouvelle vie."],
+    "Études":["Amphi · 8 h","“Any volunteers to present first?”","Lever la main, ou se faire tout petit."],
+    "Tests officiels":["TOEIC · TOEFL · IELTS","“You have thirty seconds to prepare.”","Le chrono tourne. Vous savez où vous êtes sur la Courbe."],
+    "Autre":["Votre projet","“So, where do we start?”","Par vous. Le parcours se construit autour de votre situation."]};
+  let sit='Voyages', sitAvant=null; const sitIn=c.querySelector('.sit-in');
+  const carte=k=>{ if(!sitIn||k===sitAvant) return; const d=SIT[k], faces=sitIn.querySelectorAll('.sit-face'), t=sitIn.classList.contains('tourne');
+    const cible=sitAvant===null?faces[0]:faces[t?0:1];
+    cible.innerHTML=`<span class="sit-lieu">${d[0]}</span><span class="sit-en" lang="en">${d[1]}</span><span class="sit-choc">${d[2]}</span>`;
+    if(sitAvant!==null){ sitIn.classList.toggle('tourne'); faces.forEach(f=>f.setAttribute('aria-hidden',f!==cible)); } sitAvant=k;
+    c.querySelectorAll('[data-sit]').forEach(b=>b.setAttribute('aria-checked',b.dataset.sit===k)); };
+  carte(sit);
+  c.addEventListener('click',e=>{ const f=e.target.closest('[data-fmt]'); if(f){ fmt=f.dataset.fmt; dur=f.dataset.dur; rendu(); }
+    const st=e.target.closest('[data-sit]'); if(st){ sit=st.dataset.sit; carte(sit); } });
   const plus=c.querySelector('.solo-plus'), det=c.querySelector('.solo-det');
   plus.addEventListener('click',()=>{ const o=det.hidden; det.hidden=!o; plus.setAttribute('aria-expanded',o); plus.setAttribute('aria-label',o?'Masquer le détail':'Voir ce qui est inclus'); c.classList.toggle('ouvert',o); });
   c.querySelector('.solo-cta').addEventListener('click',()=>{
     const r=document.getElementById('p-part'); if(r){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); }
     const fd=document.getElementById('f-duree'); if(fd) fd.value=`Solo ${fmt} (${dur})`;
-    const m=document.getElementById('f-msg'); if(m&&!m.value) m.value='Solo · ma situation : '; });
+    const m=document.getElementById('f-msg'); if(m&&!m.value) m.value=`Solo · ${sit==='Autre'?'ma situation : ':sit+'. '}`; });
   rendu();
 })();
 

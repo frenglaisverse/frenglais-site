@@ -53,7 +53,7 @@
 /* ---------- formulaire de devis ----------
    Envoi par Web3Forms : la clé est publique par conception, elle ne sert
    qu'à faire arriver le message dans la boîte e-mail liée au compte. */
-const WEB3FORMS_KEY = '896f640c-3730-44ab-806b-14b35271f9a9';
+const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
 (function formulaire(){
   const f=document.getElementById('form-devis'); if(!f) return;
   const $=id=>document.getElementById(id);

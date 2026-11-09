@@ -915,29 +915,30 @@ footer::after{opacity:.58}
 @media (max-width:520px){.semaine{grid-template-columns:1fr}
   .sem-etape{display:grid;grid-template-columns:56px 1fr;column-gap:16px;row-gap:4px}.sem-ico{grid-row:1/4}.sem-freq{margin-top:2px}}
 
-/* ---------- FAQ ---------- */
-.faq{position:relative;padding-top:clamp(72px,9vw,112px)}
-.faq::before{content:"";position:absolute;top:clamp(36px,4.5vw,56px);left:max(24px,env(safe-area-inset-left,0px));right:max(24px,env(safe-area-inset-right,0px));height:1px;background:linear-gradient(90deg,transparent,var(--doux) 18%,var(--doux) 82%,transparent);opacity:.7}
-@media (max-width:520px){.faq::before{left:16px;right:16px}}
-.faq-liste{display:flex;flex-direction:column;max-width:860px}
+/* ---------- FAQ : onglet qui se déroule, à gauche du formulaire de devis ---------- */
+.faq-onglet{margin-top:34px;max-width:520px}
+.faq-tirette{display:flex;align-items:center;gap:12px;width:100%;padding:14px 18px;border-radius:16px;border:1px solid var(--trait);background:var(--carte);color:var(--encre);font:600 15px var(--f-txt);cursor:pointer;text-align:left;transition:border-color .2s}
+.faq-tirette:hover{border-color:var(--doux)}
+.faq-tirette>span:first-child{font:600 12px var(--f-mono);letter-spacing:.1em;padding:3px 8px;border-radius:7px;background:var(--bleu);color:#fff}
+.faq-tirette small{flex:1;font-size:15px;font-weight:500;color:var(--doux)}
+.faq-fleche{width:9px;height:9px;border-right:1.8px solid var(--doux);border-bottom:1.8px solid var(--doux);transform:rotate(45deg) translate(-2px,-2px);transition:transform .3s}
+.faq-tirette[aria-expanded="true"] .faq-fleche{transform:rotate(225deg) translate(-2px,-2px)}
+.faq-liste{display:flex;flex-direction:column;margin-top:8px;animation:faq-ouvre .4s cubic-bezier(.22,1,.36,1)}
 .faq-q{border-bottom:1px solid var(--trait)}
-.faq-q:first-child{border-top:1px solid var(--trait)}
-.faq-q summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 2px;font-size:19px;font-weight:500;letter-spacing:-.01em}
+.faq-q summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 2px;font-size:15.5px;font-weight:500}
 .faq-q summary::-webkit-details-marker{display:none}
-.faq-plus{flex:none;position:relative;width:30px;height:30px;border-radius:50%;background:var(--carte);border:1px solid var(--trait);transition:transform .3s,background .2s}
-.faq-plus::before,.faq-plus::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.6px;background:var(--encre);border-radius:2px;transform:translate(-50%,-50%)}
+.faq-plus{flex:none;position:relative;width:24px;height:24px;border-radius:50%;background:var(--carte);border:1px solid var(--trait);transition:transform .3s,background .2s}
+.faq-plus::before,.faq-plus::after{content:"";position:absolute;left:50%;top:50%;width:9px;height:1.5px;background:var(--encre);border-radius:2px;transform:translate(-50%,-50%)}
 .faq-plus::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .3s}
 .faq-q[open] .faq-plus{transform:rotate(180deg);background:var(--bleu);border-color:var(--bleu)}
 .faq-q[open] .faq-plus::before,.faq-q[open] .faq-plus::after{background:#fff}
 .faq-q[open] .faq-plus::after{transform:translate(-50%,-50%) rotate(0)}
-.faq-q summary:hover .faq-plus{border-color:var(--doux)}
-.faq-r p{margin:0 0 22px;color:var(--doux);max-width:68ch;line-height:1.6}
+.faq-r p{margin:0 0 14px;color:var(--doux);font-size:14.5px;line-height:1.55}
 .faq-r a{color:var(--bleu);font-weight:500}
 .faq-q[open] .faq-r{animation:faq-ouvre .35s cubic-bezier(.22,1,.36,1)}
 @keyframes faq-ouvre{from{opacity:0;translate:0 -6px}}
-.faq+.devis::before{display:block}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .faq::before{opacity:.5}:root:not([data-theme="light"]) .faq-r a,:root:not([data-theme="light"]) .sem-ico{color:#8FB0FF}}
-:root[data-theme="dark"] .faq::before{opacity:.5}:root[data-theme="dark"] .faq-r a{color:#8FB0FF}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .faq-r a{color:#8FB0FF}}
+:root[data-theme="dark"] .faq-r a{color:#8FB0FF}
 @media (prefers-reduced-motion:reduce){.faq-plus,.faq-plus::after{transition:none}.faq-q[open] .faq-r{animation:none}}
 
 /* Une semaine : version compacte, trois étapes */

@@ -1017,8 +1017,5 @@ footer::after{opacity:.58}
 /* lamantin deux fois plus grand */
 .lamantin{transform:scale(1.8)}
 @media (max-width:640px){.lamantin{transform:scale(.9)}}
-/* Une semaine : le lamantin de face dans chaque carré */
-.sem-etape{grid-template-columns:54px 1fr}
-.sem-ico{width:54px;height:54px;border-radius:14px;overflow:hidden;background:#2E4FC4;border:1px solid rgba(255,255,255,.12)}
-.sem-ico img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.04);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
-.sem-etape:hover .sem-ico img{transform:scale(1.14) translateY(2px)}
+/* Une semaine : cartes sans image */
+.sem-etape{display:flex;flex-direction:column;gap:2px}

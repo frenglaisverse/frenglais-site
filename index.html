@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611091830">
+<link rel="stylesheet" href="style.css?v=202611091840">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -343,9 +343,11 @@ var voile=document.createElement('div');voile.className='pol-voile';
 var grand=document.createElement('div');grand.className='pol-grand';grand.tabIndex=-1;grand.setAttribute('role','dialog');grand.setAttribute('aria-modal','true');grand.setAttribute('aria-label','Paul Moreaux, fondateur de Frenglais');
 grand.innerHTML='<div class="pol-grand-in">'+b.innerHTML.replace(/<canvas class="pol-buee"[^>]*><\/canvas>/,'')+'</div>';
 document.body.append(voile,grand);(function(){var p=grand.querySelector('.v-pied');if(!p)return;var l=document.createElement('span');l.className='v-liens';
-l.innerHTML='<a href="https://fulbright-france.org/" target="_blank" rel="noopener" aria-label="Fulbright France (nouvel onglet)" title="Fulbright France"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 2 9l10 5 10-5-10-5Z"/><path d="M6 11.2V15c0 1.4 2.7 2.8 6 2.8s6-1.4 6-2.8v-3.8"/><path d="M22 9v5"/></svg></a>'
-+'<a href="https://columns.wlu.edu/meet-a-colleague-paul-moreaux/" target="_blank" rel="noopener" aria-label="Article de Washington and Lee University sur Paul Moreaux (nouvel onglet)" title="Article : Meet a colleague, Paul Moreaux"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a2 2 0 0 1 2 2v13a1 1 0 0 0 2 0V8"/><path d="M5 4v15a1 1 0 0 0 1 1h13"/><path d="M8 8h6M8 11.5h6M8 15h4"/></svg></a>';
-l.addEventListener('click',function(e){e.stopPropagation();});p.parentNode.insertBefore(l,p);})();
+l.innerHTML=''
++'<a href="https://columns.wlu.edu/meet-a-colleague-paul-moreaux/" target="_blank" rel="noopener" aria-label="Article de Washington and Lee University sur Paul Moreaux (nouvel onglet)" title="Article : Meet a colleague, Paul Moreaux"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a2 2 0 0 1 2 2v13a1 1 0 0 0 2 0V8"/><path d="M5 4v15a1 1 0 0 0 1 1h13"/><path d="M8 8h6M8 11.5h6M8 15h4"/></svg></a>'
++'<a href="https://www.instagram.com/paulowfrenglais/" target="_blank" rel="noopener" aria-label="Mes vidéos éducatives sur Instagram (nouvel onglet)" title="Mes vidéos sur Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 5h3"/><path d="M10.6 9.8v4.4l3.8-2.2z"/></svg></a>';
+l.addEventListener('click',function(e){e.stopPropagation();});p.parentNode.insertBefore(l,p);
+var fb=grand.querySelector('.v-liste em');if(fb&&fb.textContent==='Fulbright'){var a=document.createElement('a');a.className='v-fulbright';a.href='https://fulbright-france.org/';a.target='_blank';a.rel='noopener';a.title='Fulbright France';a.setAttribute('aria-label','Fulbright (nouvel onglet)');a.textContent='Fulbright';a.addEventListener('click',function(e){e.stopPropagation();});fb.replaceWith(a);}})();
 var inn=grand.firstChild,ouvert=false,calme=matchMedia('(prefers-reduced-motion: reduce)').matches,E='cubic-bezier(.22,1,.36,1)';
 function ecart(){var r=b.getBoundingClientRect(),g=grand.getBoundingClientRect();return 'translate('+((r.left+r.width/2)-(g.left+g.width/2))+'px,'+((r.top+r.height/2)-(g.top+g.height/2))+'px) scale('+(r.width/g.width)+') rotate(1.5deg)';}
 function ouvrir(){if(ouvert)return;ouvert=true;grand.classList.add('on');var d=ecart();b.style.visibility='hidden';voile.classList.add('on');

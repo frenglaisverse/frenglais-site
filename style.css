@@ -891,3 +891,6 @@ footer::after{opacity:.58}
 /* « Plus dans l'espace élève » : sans contour, grisé, net au survol */
 .demo .video-plus{background:none;box-shadow:none;color:rgba(255,255,255,.45);padding-left:2px}
 .demo .video-plus:hover,.demo .video-plus:focus-visible{background:none;box-shadow:none;color:#fff}
+
+.pol-grand .v-fulbright{color:#fff;font-weight:700;text-decoration:underline;text-decoration-color:rgba(246,230,184,.7);text-decoration-thickness:1.5px;text-underline-offset:.18em;transition:text-decoration-color .2s}
+.pol-grand .v-fulbright:hover,.pol-grand .v-fulbright:focus-visible{text-decoration-color:#F6E6B8}

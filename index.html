@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611091650">
+<link rel="stylesheet" href="style.css?v=202611091655">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -99,6 +99,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
     </div>
     <div class="demo" aria-label="Essayez la Courbe des Temps">
       <div class="lamantin" id="lamantin" aria-hidden="true"></div>
+      <a class="video-plus" href="espace-eleve.html" aria-label="Vidéo : more dans l'espace élève"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" class="lecture"/></svg><span>More<span class="vp-suite"> dans l'espace élève</span></span></a>
       <div class="demo-consigne">Touchez une vitre, puis essayez un verbe irrégulier.</div>
       <div class="piste" id="piste">
         <svg viewBox="0 0 1000 170" preserveAspectRatio="none" aria-hidden="true">
@@ -219,7 +220,6 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
       <p class="chapo">Au début, on cherche le levier. À la fin, on n'y pense plus.</p>
     </div>
     <div class="boite">
-      <a class="video-plus" href="espace-eleve.html" aria-label="Vidéo : more dans l'espace élève"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" class="lecture"/></svg><span>More dans l'espace élève</span></a>
       <svg class="courbe-totale" viewBox="0 0 760 250" role="img" aria-label="La Courbe des Temps complète, simplifiée : T-2, T-1, T0, T+1, les codes -ed et -s, BE + -ING, HAVE et HAD + -EN, WILL">
         <path class="arc" d="M122 92 Q206 62 288 92"/><path class="arc" d="M302 92 Q386 62 468 92"/>
         <text class="t-arc" x="205" y="56" text-anchor="middle">HAD + -EN</text>
@@ -383,7 +383,7 @@ document.querySelectorAll('.av-vitre').forEach(b=>b.addEventListener('click',()=
   b.setAttribute('aria-pressed',on);b.textContent=on?'FR':'EN';b.setAttribute('aria-label',on?'Revenir au français':'Traduire en anglais et montrer les codes');
   f.querySelector('.av-fr').hidden=on;f.querySelector('.av-en').hidden=!on;f.classList.toggle('en',on);}));
 </script>
-<script src="script.js?v=202611091650"></script>
+<script src="script.js?v=202611091655"></script>
 <script>
 /* ouverture : branche de jacaranda — tronc solide hors champ à gauche, écorce en plaques fissurées avec lichen, une fourche qui sort par le haut */
 (function(){var o=document.getElementById('ouverture');if(!o)return;var c=o.querySelector('.ouv-branche');if(!c||!c.getContext)return;
@@ -438,9 +438,9 @@ function dessiner(){var r=o.getBoundingClientRect(),W=r.width,H=r.height,d=Math.
 }
 dessiner();addEventListener('resize',dessiner);})();
 </script>
-<script src="mousse.js?v=202611091650"></script>
+<script src="mousse.js?v=202611091655"></script>
 <script>/* lamantin 3D chargé après la page, pour un affichage plus rapide */
-addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611091650")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
+addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611091655")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
 <script>
 /* ouverture : la mousse « devant » n'apparaît que sous le logo, pour passer derrière lui puis tomber sur les drapeaux */
 (function(){var c=document.querySelector('#ouverture .ouv-mousse.devant'),sc=document.querySelector('#ouverture .ouv-scene');if(!c||!sc)return;

@@ -323,23 +323,26 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .tb-chiffres b{font-size:28px;font-weight:600;color:var(--encre);letter-spacing:-.02em}
 .tb-barre,.tb-mini{height:8px;border-radius:99px;background:var(--trait);overflow:hidden;margin-top:10px}
 .tb-barre i,.tb-mini i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#F0766F,#E3958F);transition:width .8s}
-.tb-mini{height:5px;margin-top:8px;max-width:220px}
+.tb-mini{height:4px;margin-top:6px;max-width:none}
 .tb-note{margin:10px 0 0;font-size:14px;color:var(--doux)}
-.tb-modules{display:flex;flex-direction:column;gap:10px}
-.tb-module{position:relative;display:flex;align-items:center;gap:16px;padding:16px 18px;border-radius:14px;background:var(--carte);border:1px solid var(--trait);text-decoration:none;color:var(--encre)}
+.tb-modules{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding-top:9px}
+.tb-module{position:relative;aspect-ratio:1;display:flex;flex-direction:column;justify-content:space-between;gap:6px;padding:14px;border-radius:18px;background:var(--carte);border:1px solid var(--trait);text-decoration:none;color:var(--encre);min-width:0}
 .tb-module.ouvert{border-color:rgba(240,118,111,.55);box-shadow:0 10px 26px -18px rgba(168,50,42,.6);transition:transform .15s,box-shadow .2s}
-.tb-module.ouvert:hover{transform:translateY(-1px);box-shadow:0 14px 30px -16px rgba(168,50,42,.6)}
-.tb-num{font-family:var(--f-mono);font-size:14px;color:var(--doux);min-width:34px}
-.tb-corps{flex:1;display:flex;flex-direction:column;gap:2px}
-.tb-corps strong{font-size:17px;font-weight:600}
-.tb-corps span{font-size:14px;color:var(--doux)}
-.tb-action{font-size:14px;font-weight:600;color:#fff;background:linear-gradient(180deg,#E3958F,#C9746E);padding:8px 14px;border-radius:999px;white-space:nowrap}
+.tb-module.ouvert:hover{transform:translateY(-2px);box-shadow:0 14px 30px -16px rgba(168,50,42,.6)}
+.tb-num{font-family:var(--f-mono);font-size:13px;color:var(--doux)}
+.tb-corps{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tb-corps strong{font-size:15px;font-weight:600;line-height:1.2}
+.tb-corps span{font-size:12px;color:var(--doux);line-height:1.3}
+.tb-action{position:absolute;top:10px;right:10px;width:28px;height:28px;display:grid;place-items:center;color:#fff;background:linear-gradient(180deg,#E3958F,#C9746E);border-radius:50%}
 .tb-module.fini .tb-action{background:#1E7A4F}
-.tb-etiq{position:absolute;top:-9px;left:16px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#F0766F;padding:2px 8px;border-radius:6px}
-.tb-module.verrou{opacity:.62}
+.tb-module.ouvert .tb-num{margin-top:6px}
+.tb-etiq{position:absolute;top:-9px;left:12px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#F0766F;padding:2px 7px;border-radius:6px}
+.tb-module.verrou{opacity:.55}
 .tb-module.verrou .tb-corps strong{font-weight:500}
-.tb-cadenas{color:var(--doux)}
+.tb-cadenas{position:absolute;top:12px;right:12px;color:var(--doux);display:flex}
 .tb-module.tb-plus{border-style:dashed}
+@media (max-width:900px){.tb-modules{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:480px){.tb-modules{grid-template-columns:repeat(2,1fr);gap:10px}}
 .tb-suite{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;border-radius:16px;background:var(--carte);border:1px solid var(--trait)}
 .tb-suite>div:first-child{display:flex;flex-direction:column;gap:4px}
 .tb-suite strong{font-size:18px}
@@ -348,7 +351,6 @@ footer .pied{position:relative;z-index:1;min-height:150px;padding-bottom:110px}
 .espace-tb .actions-espace{display:flex;flex-wrap:wrap;gap:10px}
 .espace-tb .actions-espace .btn{border-radius:999px;min-height:44px;padding:0 22px;font-size:15px}
 .espace-tb .actions-espace .btn-bleu{background:linear-gradient(180deg,#2557BE,#1C49A5);color:#fff;font-weight:600}
-@media (max-width:560px){.tb-module{flex-wrap:wrap}.tb-action{margin-left:50px}}
 /* quelques étoiles discrètes, en haut de la section Formations uniquement */
 #formations{position:relative}
 #formations::before{content:"";position:absolute;left:0;right:0;top:20px;height:220px;background:url("etoiles.svg") center top/1200px 220px no-repeat;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(180deg,#000 40%,transparent);mask-image:linear-gradient(180deg,#000 40%,transparent)}

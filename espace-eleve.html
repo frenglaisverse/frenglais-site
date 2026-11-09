@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <meta name="description" content="L'espace en ligne des élèves Frenglais : modules, progression et suivi.">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=202611091705">
+<link rel="stylesheet" href="style.css?v=202611091810">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -36,11 +36,15 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
   <a class="tb-module ouvert" href="introduction.html" id="carte-intro">
     <span class="tb-etiq">Offert</span>
     <div class="tb-num">00</div>
-    <div class="tb-corps"><strong>Introduction</strong><span>La Courbe des Temps · 10 min</span>
+    <div class="tb-corps"><strong>Introduction</strong><span>10 min</span>
       <div class="tb-mini"><i id="barre-intro"></i></div></div>
-    <span class="tb-action" id="action-intro">Commencer</span>
+    <span class="tb-action" id="action-intro" aria-label="Commencer"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M8 5v14l11-7Z" fill="currentColor"/></svg></span>
   </a>
-  <div class="tb-module verrou"><div class="tb-num">01</div><div class="tb-corps"><strong>Repères et codes</strong><span>1/32 · 45 min à 1 h</span></div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></div>
+  <div class="tb-module verrou"><div class="tb-num">01</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>Repères et codes</strong><span>1/32</span></div></div>
+  <div class="tb-module verrou"><div class="tb-num">02</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>T0, le temps le plus simple</strong><span>2/32</span></div></div>
+  <div class="tb-module verrou"><div class="tb-num">03</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>T-1, toujours simple</strong><span>3/32</span></div></div>
+  <div class="tb-module verrou"><div class="tb-num">04</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>BE + -ING</strong><span>4/32</span></div></div>
+  <div class="tb-module verrou"><div class="tb-num">05</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>HAVE + -EN</strong><span>5/32</span></div></div>
 </div>
 
 <a class="tb-debloquer" href="index.html#devis">Débloquer la formation<svg class="tb-fleche" viewBox="0 0 64 20" aria-hidden="true"><path d="M2 11 C 14 7, 24 14, 36 10 S 52 8, 60 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M54 5 L61 10 L54 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 6 v9" stroke="#F0766F" stroke-width="2.4" stroke-linecap="round"/><path d="M40 5 v9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
@@ -69,8 +73,8 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
   document.getElementById('barre-global').style.width=Math.max(global,1)+'%';
   document.getElementById('barre-intro').style.width=pct+'%';
   const act=document.getElementById('action-intro');
-  if(fini){ act.textContent='Terminée ✓'; document.getElementById('carte-intro').classList.add('fini'); }
-  else if(pct>0){ act.textContent='Reprendre · '+pct+' %'; }
+  if(fini){ act.innerHTML='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17 19 7"/></svg>'; act.setAttribute('aria-label','Terminée'); document.getElementById('carte-intro').classList.add('fini'); }
+  else if(pct>0){ act.setAttribute('aria-label','Reprendre · '+pct+' %'); }
 })();
 
 /* accès : identifiant floridien généré à l'inscription (nom + chiffre de 1 à 6 selon la taille de l'équipe) + code.

@@ -327,7 +327,7 @@ function lancer(){
       b.add(boule(.055, blancN, [1, 1, 1], [-.2, .27, 0], 16));
     }
     if (v === 'drapeau') {                                                     // grand drapeau américain qui flotte derrière lui
-      const p = new THREE.Group(); p.position.set(.98, solLocal, -.62); corps.add(p);
+      const p = new THREE.Group(); p.position.set(-.08, solLocal, -.62); corps.add(p);   // mât derrière le dos : le drapeau se lit de gauche à droite
       ajoute(p, new THREE.Mesh(new THREE.CylinderGeometry(.016, .02, 1.75, 10), mat(0xC9CCD1, { metalness:.7, roughness:.3 }))).position.y = .875;
       p.add(boule(.036, mat(0xD9B24C, { metalness:1, roughness:.25 }), [1, 1, 1], [0, 1.77, 0], 14));
       const tissu = etiquette(512, 270, (x, l, h) => {
@@ -336,7 +336,7 @@ function lancer(){
         for (let r = 0; r < 9; r++) for (let c = 0; c < (r % 2 ? 5 : 6); c++) { x.beginPath(); x.arc(l * .4 / 12 * (2 * c + 1 + (r % 2)), h * 7 / 13 / 10 * (r + 1), 4.5, 0, 7); x.fill(); } });
       const geo = new THREE.PlaneGeometry(1.05, .55, 30, 10); geo.translate(.525, 0, 0);
       const toile = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map:tissu, roughness:.85, side:THREE.DoubleSide }));
-      toile.position.set(-.01, 1.46, 0); toile.rotation.y = Math.PI - .2; p.add(toile);
+      toile.position.set(.012, 1.46, 0); toile.rotation.y = -.18; p.add(toile);
       drapeauFlotte = { geo, base:Float32Array.from(geo.attributes.position.array) };
     }
     if (v === 'casque') {                                                      // casque audio
@@ -567,9 +567,16 @@ function lancer(){
     }
     if (drapeauFlotte && !calme) {                                    // le drapeau ondule au vent
       const a = drapeauFlotte.geo.attributes.position, b0 = drapeauFlotte.base;
-      for (let i = 0; i < a.count; i++) { const x = b0[i * 3], y = b0[i * 3 + 1];
-        a.setZ(i, Math.sin(x * 7 - now / 260 + y * 2) * .07 * x / 1.05 + Math.sin(x * 5 - now / 410) * .03 * x / 1.05);
-        a.setY(i, y - x * x * .04); }
+      const rafale = .72 + .28 * Math.sin(now / 1700) * Math.sin(now / 2900 + 1);   // le vent faiblit et reprend
+      for (let i = 0; i < a.count; i++) { const x = b0[i * 3], y = b0[i * 3 + 1], u = x / 1.05, bas = (.275 - y) / .55;
+        // tissu : il pend sous son poids (le bord libre et le coin bas tombent plus), des plis verticaux partent du mât
+        const vague = Math.sin(x * 6.2 - now / 330 + y * 1.4) * (.022 + .11 * u) * rafale
+                    + Math.sin(x * 11 - now / 190 - y * 2) * .024 * u * rafale
+                    + Math.sin(x * 3.1 - now / 620) * .03 * u * u;
+        const chute = (.19 + .12 * bas) * Math.pow(u, 1.7) * (1.25 - .45 * rafale);
+        a.setX(i, x - .05 * u * u * (1.2 - rafale) - Math.abs(vague) * .25 * u);
+        a.setY(i, y * (1 - .07 * u) - chute + Math.sin(x * 4 - now / 450) * .012 * u);
+        a.setZ(i, vague); }
       a.needsUpdate = true; drapeauFlotte.geo.computeVertexNormals();
     }
     rendu.render(scene, camera);

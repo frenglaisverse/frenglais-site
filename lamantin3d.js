@@ -32,36 +32,40 @@ function lancer(){
   camera.position.set(-0.1, 1.15, 5.2);
   camera.lookAt(0.4, 0.32, 0);
 
-  scene.add(new THREE.HemisphereLight(0xEEF3FF, 0x0E2766, .95));
+  scene.add(new THREE.HemisphereLight(0xEEF3FF, 0x2A4483, 1.05));
   const cle = new THREE.DirectionalLight(0xFFF6EA, 2.8); cle.position.set(-2.5, 3.5, 3); scene.add(cle);
   const contre = new THREE.DirectionalLight(0xB9CCFF, 2.2); contre.position.set(2, 2.5, -3); scene.add(contre);
+  const liseré = new THREE.DirectionalLight(0xDDE6FF, 1.1); liseré.position.set(-3, .6, -2.5); scene.add(liseré);   // liseré sur la silhouette
 
-  /* peau : gris-brun mat, légèrement tachetée */
-  const c = document.createElement('canvas'); c.width = c.height = 256;
-  const g = c.getContext('2d'); g.fillStyle = VARIANTE === 'rose' ? '#9C5A55' : '#545955'; g.fillRect(0, 0, 256, 256);
-  for (let i = 0; i < 2600; i++) {
-    const v = 60 + Math.random() * 50 | 0, rose = VARIANTE === 'rose';
-    g.fillStyle = rose ? `rgba(${v + 90},${v + 25},${v + 20},${Math.random() * .4})` : `rgba(${v},${v + 4},${v + 2},${Math.random() * .4})`;
-    g.beginPath(); g.arc(Math.random() * 256, Math.random() * 256, Math.random() * 2.2, 0, 7); g.fill();
-  }
-  // voile d'algues vertes, par taches, comme sur les lamantins sauvages
-  for (let i = 0; i < 16; i++) { const x = Math.random() * 256, y = Math.random() * 120, r = 10 + Math.random() * 24;
-    const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, VARIANTE === 'rose' ? 'rgba(84,118,48,.5)' : 'rgba(88,124,52,.24)'); gr.addColorStop(1, 'rgba(88,124,52,0)');
-    g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2); }
-  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
-  // quelques cicatrices claires, très discrètes (les lamantins en portent presque tous)
+  /* peau : gris-brun velouté, marbrures douces, voile d'algues et cicatrices peintes dans la texture (plus de plaques en relief) */
+  const ROSE = VARIANTE === 'rose', T = 512;
+  const c = document.createElement('canvas'); c.width = c.height = T;
+  const g = c.getContext('2d'); g.fillStyle = ROSE ? '#9C5A55' : '#565B57'; g.fillRect(0, 0, T, T);
+  const tache = (x, y, r, couleur) => { for (const dx of [-T, 0, T]) for (const dy of [-T, 0, T]) {   // raccord sans couture
+      const gr = g.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r); gr.addColorStop(0, couleur); gr.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = gr; g.fillRect(x + dx - r, y + dy - r, r * 2, r * 2); } };
+  for (let i = 0; i < 70; i++) tache(Math.random() * T, Math.random() * T, 18 + Math.random() * 60,
+    Math.random() < .5 ? (ROSE ? 'rgba(190,120,110,.16)' : 'rgba(120,124,116,.16)') : 'rgba(30,32,30,.14)');      // marbrures
+  for (let i = 0; i < 22; i++) tache(Math.random() * T, Math.random() * T * .55, 20 + Math.random() * 46, ROSE ? 'rgba(96,128,56,.32)' : 'rgba(92,126,58,.2)'); // algues
+  for (let i = 0; i < 9000; i++) { const v = 70 + Math.random() * 60 | 0;
+    g.fillStyle = ROSE ? `rgba(${v + 80},${v + 20},${v + 16},${Math.random() * .16})` : `rgba(${v},${v + 3},${v + 1},${Math.random() * .16})`;
+    g.fillRect(Math.random() * T, Math.random() * T, 1.2, 1.2); }
   g.lineCap = 'round';
-  for (let i = 0; i < 5; i++) { g.strokeStyle = 'rgba(190,192,184,.35)'; g.lineWidth = 1 + Math.random();
-    const x = Math.random() * 256, y = Math.random() * 256; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + 14, y + 6 - Math.random() * 12, x + 26 + Math.random() * 14, y + Math.random() * 8 - 4); g.stroke(); }
-  // relief : grain fin + rides
-  const rc = document.createElement('canvas'); rc.width = rc.height = 256; const rg = rc.getContext('2d');
-  rg.fillStyle = '#808080'; rg.fillRect(0, 0, 256, 256);
-  for (let i = 0; i < 5000; i++) { const v = Math.random() * 255 | 0; rg.fillStyle = `rgba(${v},${v},${v},.12)`; rg.fillRect(Math.random() * 256, Math.random() * 256, 1.5, 1.5); }
-  for (let y = 0; y < 256; y += 9 + Math.random() * 6) { rg.strokeStyle = 'rgba(40,40,40,.18)'; rg.lineWidth = 1; rg.beginPath(); rg.moveTo(0, y); for (let x = 0; x <= 256; x += 16) rg.lineTo(x, y + Math.sin(x * .05 + y) * 2); rg.stroke(); }
+  for (let i = 0; i < 6; i++) { g.strokeStyle = 'rgba(186,188,178,.22)'; g.lineWidth = 1.4 + Math.random() * 1.4;
+    const x = Math.random() * T, y = Math.random() * T; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + 26, y + 10 - Math.random() * 20, x + 50 + Math.random() * 30, y + Math.random() * 14 - 7); g.stroke(); }
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  // relief : grain très fin et rides souples, sans bosses dures
+  const rc = document.createElement('canvas'); rc.width = rc.height = T; const rg = rc.getContext('2d');
+  rg.fillStyle = '#808080'; rg.fillRect(0, 0, T, T);
+  for (let i = 0; i < 14000; i++) { const v = Math.random() * 255 | 0; rg.fillStyle = `rgba(${v},${v},${v},.08)`; rg.fillRect(Math.random() * T, Math.random() * T, 2, 2); }
+  rg.filter = 'blur(.6px)'; rg.drawImage(rc, 0, 0); rg.filter = 'none';
+  for (let y = 0; y < T; y += 16 + Math.random() * 12) { rg.strokeStyle = 'rgba(50,50,50,.12)'; rg.lineWidth = 2; rg.beginPath(); rg.moveTo(0, y); for (let x = 0; x <= T; x += 24) rg.lineTo(x, y + Math.sin(x * .025 + y) * 3); rg.stroke(); }
   const relief = new THREE.CanvasTexture(rc); relief.wrapS = relief.wrapT = THREE.RepeatWrapping; relief.repeat.set(3, 2);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(3, 2);
-  const peau = new THREE.MeshStandardMaterial({ map:tex, bumpMap:relief, bumpScale:.6, roughness:.84, metalness:0 });
-  const peauClaire = new THREE.MeshStandardMaterial({ color:VARIANTE === 'rose' ? 0xB06C66 : 0x676C67, roughness:.95 });
+  // fini légèrement satiné : un lamantin sort de l'eau, sa peau garde un voile humide
+  const peau = new THREE.MeshPhysicalMaterial({ map:tex, bumpMap:relief, bumpScale:.35, roughness:.72, metalness:0, clearcoat:.28, clearcoatRoughness:.5, sheen:.4, sheenRoughness:.8, sheenColor:new THREE.Color(ROSE ? 0xE8B8B0 : 0xB8C4C0) });
+  const peauMuseau = peau;
+  const peauClaire = new THREE.MeshStandardMaterial({ color:ROSE ? 0xB06C66 : 0x676C67, roughness:.95 });
   const noir = new THREE.MeshStandardMaterial({ color:0x07080A, roughness:.15 });
   const ongle = new THREE.MeshStandardMaterial({ color:0xD9D3C4, roughness:.5 });
 
@@ -87,7 +91,7 @@ function lancer(){
   const PROFIL = lisser([[0, .09], [.13, .18], [.3, .36], [.5, .45], [.7, .44], [.87, .36], [1, .28]]);   // bien en chair
   // bosses irrégulières : quelques ondulations lentes, tirées au hasard à chaque visite
   const ph = Array.from({ length: 6 }, () => Math.random() * 6.3);
-  const bosses = (t, a) => .04 * Math.sin(7 * t + ph[0]) * Math.sin(3 * a + ph[1]) + .028 * Math.sin(13 * t + ph[2]) * Math.cos(5 * a + ph[3]) + .014 * Math.sin(29 * t + ph[4] + 7 * a);
+  const bosses = (t, a) => .026 * Math.sin(7 * t + ph[0]) * Math.sin(3 * a + ph[1]) + .012 * Math.sin(11 * t + ph[2]) * Math.cos(4 * a + ph[3]);   // rondeurs douces, plus de grumeaux
   function fuseau(points, rayons, radial = 48, n = 90){
     const courbe = new THREE.CatmullRomCurve3(points);
     const pos = [], idx = [], uv = [];
@@ -122,7 +126,10 @@ function lancer(){
   const colonne = [[1.16, .3], [.9, .33], [.56, .42], [.22, .47], [-.08, .52], [-.32, .6]].map(([x, y]) => new THREE.Vector3(x, y, 0));
   corps.add(new THREE.Mesh(fuseau(colonne, PROFIL, 56, 120), peau));
   // queue en pagaie, arrondie, posée à plat
-  { const q = boule(.33, peau, [1.15, .11, 1], [1.4, .29, 0]); q.rotation.set(.75, 0, .08); corps.add(q); }
+  { const q = boule(.33, peau, [1.15, .12, 1], [1.4, .29, 0], 64); q.rotation.set(.75, 0, .08);
+    // UV à plat (vues de dessus) : plus d'étoile au centre de la pagaie
+    const P = q.geometry.attributes.position, U = q.geometry.attributes.uv; for (let i = 0; i < P.count; i++) U.setXY(i, P.getX(i) * .9 + .5, P.getZ(i) * .9 + .5); U.needsUpdate = true;
+    corps.add(q); }
   // nageoires, avec leurs trois ongles
   const nageoires = {};
   for (const z of [-1, 1]) {
@@ -138,16 +145,36 @@ function lancer(){
 
   const tete = new THREE.Group(); cou.add(tete);
   // volumes de raccord rattachés à la tête : ils tournent avec elle, donc pas de « double tête »
-  tete.add(boule(.25, peau, [1.15, .97, 1.08], [.11, .0, 0], 40));
-  tete.add(boule(.19, peau, [1.15, .8, 1.08], [-.05, -.1, 0], 32));
   const face = new THREE.Vector3(-.75, -.12, .65).normalize();          // regarde vers l'avant-gauche
   const cote = new THREE.Vector3(.65, 0, .75).normalize();
   const centre = new THREE.Vector3(-.04, .08, 0);
-  tete.add(boule(.25, peau, [1.05, .9, 1.04], centre.toArray()));
+  /* crâne et museau d'un seul tenant : une surface balayée, lisse, sans coutures entre boules */
+  { const Y = new THREE.Vector3(0, 1, 0);
+    const chemin = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(.2, -.03, 0), new THREE.Vector3(.09, 0, 0), centre.clone().add(new THREE.Vector3(0, -.015, 0)),
+      centre.clone().addScaledVector(face, .12).add(new THREE.Vector3(0, -.035, 0)),
+      centre.clone().addScaledVector(face, .2).add(new THREE.Vector3(0, -.06, 0)).addScaledVector(face, .035)]);
+    const R = [[0, .272], [.25, .262], [.5, .246], [.7, .2], [.84, .158], [1, .158]], FIN = .84;
+    const rayon = t => { if (t > FIN) { const u = (t - FIN) / (1 - FIN); return .158 * Math.sqrt(Math.max(0, 1 - u * u)); }
+      for (let k = 1; k < R.length; k++) if (t <= R[k][0]) { const [t0, r0] = R[k - 1], [t1, r1] = R[k], u = (t - t0) / (t1 - t0), e = u * u * (3 - 2 * u); return r0 + (r1 - r0) * e; } return 0; };
+    const n = 90, radial = 64, pos = [], uv = [], idx = [];
+    for (let i = 0; i <= n; i++) {
+      const t = i / n, P = chemin.getPointAt(t), T = chemin.getTangentAt(t);
+      const cote2 = new THREE.Vector3().crossVectors(T, Y).normalize(), haut = new THREE.Vector3().crossVectors(cote2, T).normalize();
+      const r = rayon(t), large = 1.02 + .1 * Math.max(0, 1 - t / .35), bas = t < .6 ? .9 : .93;
+      for (let j = 0; j <= radial; j++) {
+        const a = j / radial * Math.PI * 2, ch = Math.cos(a), sh = Math.sin(a);
+        const v = P.clone().addScaledVector(haut, ch * r * (ch < 0 ? bas * .92 : .95)).addScaledVector(cote2, sh * r * large);
+        pos.push(v.x, v.y, v.z); uv.push(j / radial, t * .5);
+      }
+    }
+    for (let i = 0; i < n; i++) for (let j = 0; j < radial; j++) { const a = i * (radial + 1) + j, b = a + radial + 1; idx.push(a, a + 1, b, b, a + 1, b + 1); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    g.setIndex(idx); g.computeVertexNormals(); tete.add(new THREE.Mesh(g, peau)); }
   // gros museau carré, lèvre supérieure fendue en deux lobes
   const museau = centre.clone().addScaledVector(face, .2).add(new THREE.Vector3(0, -.06, 0));
   for (const s of [-1, 1]) {
-    const lobe = boule(.125, peauClaire, [.9, .88, 1], museau.clone().addScaledVector(cote, s * .06).addScaledVector(face, .02).toArray(), 32);
+    const lobe = boule(.118, peauMuseau, [.88, .86, .95], museau.clone().addScaledVector(cote, s * .06).addScaledVector(face, .02).toArray(), 32);
     tete.add(lobe);
     for (let i = 0; i < 16; i++) {           // soies
       const u = Math.random() * 1.2 - .6, w = Math.random() * .9 - .5;
@@ -355,19 +382,19 @@ function lancer(){
   habiller(VARIANTE);
 
   /* algues : quelques touffes sur le dos et le haut du flanc, au hasard */
-  { const algue = new THREE.MeshStandardMaterial({ color:0x6E9444, roughness:.7 }), algueSombre = new THREE.MeshStandardMaterial({ color:0x5B7A3C, roughness:.9 });
+  { const algue = new THREE.MeshStandardMaterial({ color:0x6F8C4A, roughness:.8 }), algueSombre = new THREE.MeshStandardMaterial({ color:0x55703A, roughness:.95 });
     const libres = VARIANTE === 'tshirt' ? [.22, .3, .38, .46, .54] : [.22, .3, .38, .46, .54, .62, .7, .78];
-    const choix = libres.sort(() => Math.random() - .5).slice(0, 7);
+    const choix = libres.sort(() => Math.random() - .5).slice(0, 4);
     for (const t of choix) {
       const a = .15 + Math.random() * .75, P = dos.getPointAt(t), T = dos.getTangentAt(t);
       const B = new THREE.Vector3().crossVectors(T, new THREE.Vector3(0, 0, 1)).normalize(), r = rayonCorps(t);
       const normale = B.clone().multiplyScalar(Math.cos(a)).add(new THREE.Vector3(0, 0, Math.sin(a))).normalize();
       const touffe = new THREE.Group(); touffe.position.copy(P).addScaledVector(B, Math.cos(a) * r).add(new THREE.Vector3(0, 0, Math.sin(a) * r * 1.1));
       touffe.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), normale); corps.add(touffe);
-      touffe.add(boule(.03 + Math.random() * .02, algueSombre, [1.5, .15, 1.2], [0, 0, 0], 14));
-      const n = 5 + (Math.random() * 5 | 0);
+      touffe.add(boule(.026 + Math.random() * .016, algueSombre, [1.5, .12, 1.2], [0, 0, 0], 20));
+      const n = 7 + (Math.random() * 5 | 0);
       for (let i = 0; i < n; i++) {
-        const h = .07 + Math.random() * .1, brin = new THREE.Mesh(new THREE.ConeGeometry(.012, h, 5), algue);
+        const h = .06 + Math.random() * .07, brin = new THREE.Mesh(new THREE.ConeGeometry(.0065, h, 6), algue);
         brin.geometry.translate(0, h / 2, 0);
         brin.position.set((Math.random() - .5) * .07, 0, (Math.random() - .5) * .05);
         brin.rotation.set((Math.random() - .5) * .9, Math.random() * 3, (Math.random() - .5) * .9 + .35);   // couchés vers l'arrière
@@ -383,7 +410,7 @@ function lancer(){
 
   /* croûtes d'algues claires et irrégulières, comme sur la photo : plaques en relief sur le dos et le flanc */
   { const croute = VARIANTE === 'rose' ? [0xC08A7C, 0xA88F72, 0xB59A80] : [0x7A7A6A, 0x6E7562, 0x82806C]; croute.forEach((c, i, arr) => arr[i] = new THREE.MeshStandardMaterial({ color:c, roughness:1 }));
-    const nb = VARIANTE === 'tshirt' ? 26 : 50;
+    const nb = 0;   // les plaques en relief faisaient « cailloux » : le voile est désormais peint dans la peau
     for (let i = 0; i < nb; i++) {
       const t = VARIANTE === 'tshirt' ? .15 + Math.random() * .42 : .12 + Math.random() * .8, a = -.2 + Math.random() * 1.9;
       const P = dos.getPointAt(t), T = dos.getTangentAt(t), B = new THREE.Vector3().crossVectors(T, new THREE.Vector3(0, 0, 1)).normalize();

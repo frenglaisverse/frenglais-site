@@ -19,14 +19,14 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611101830">
+<link rel="stylesheet" href="style.css?v=202611110100">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
 if(a.matches('.nav-devis'))n='menu-devis';else if(a.matches('.nav-eleve'))n='menu-espace-eleve';else if(a.matches('.btn-coffret')){var c=a.closest('[data-public]');n='coffret-devis-'+(c?c.getAttribute('data-public'):'');}
 else if(a.matches('.solo-cta'))n='solo-acces';else if(h.indexOf('introduction.html')===0)n='essai-introduction';else if(h.indexOf('#devis')===0)n='devis-lien';else if(h.indexOf('trustpilot')>-1)n='trustpilot';else if(h.indexOf('amazon')>-1)n='livre-amazon';
 else if(h.indexOf('fulbright')>-1)n='carte-fulbright';else if(h.indexOf('wlu.edu')>-1)n='carte-article';else if(h.indexOf('youtube')>-1)n='youtube';else if(h.indexOf('instagram')>-1)n='instagram';else if(h.indexOf('tiktok')>-1)n='tiktok';
-else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,title:n,event:true});},true);</script>
+else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')===0)n='jeu-courbe';if(n)g.count({path:'clic-'+n,title:n,event:true});},true);</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[
 {"@type":"EducationalOrganization","@id":"https://frenglais.co/#org","name":"Frenglais","url":"https://frenglais.co/","logo":"https://frenglais.co/logo-nav.png","email":"contact@frenglais.co","description":"Formations d'anglais en ligne pour particuliers et entreprises, construites sur la méthode de la Courbe des Temps.","founder":{"@id":"https://frenglais.co/#paul"},"sameAs":["https://www.youtube.com/@PaulowFrenglais","https://www.instagram.com/paulowfrenglais/","https://www.tiktok.com/@paulowfrenglais","https://fr.trustpilot.com/review/frenglais.co"]},
 {"@type":"Person","@id":"https://frenglais.co/#paul","name":"Paul Moreaux","jobTitle":"Fondateur de Frenglais","worksFor":{"@id":"https://frenglais.co/#org"},"sameAs":["https://columns.wlu.edu/meet-a-colleague-paul-moreaux/"]},
@@ -53,6 +53,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
       <div class="nav-liens">
         <a class="lien-sec" href="#formations">Formations</a>
         <a class="lien-sec" href="#methode">La méthode</a>
+        <a class="lien-sec" href="courbe/">Jeu du jour</a>
         <span class="sep" aria-hidden="true"></span>
         <a class="nav-eleve" href="espace-eleve.html"><span>Espace élève</span></a>
         <a class="nav-devis" href="#devis"><span>Demander un devis</span></a>
@@ -269,6 +270,24 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
       </ol>
     </div>
   </section>
+
+  <section class="in bloc defi" id="courbe-du-jour" aria-labelledby="t-defi">
+    <div class="defi-ecran">
+      <div class="defi-tete"><span>JEU GRATUIT</span><span id="defi-num"></span></div>
+      <div class="defi-corps">
+        <div class="defi-texte">
+          <h2 id="t-defi">COURBE<br>DU JOUR</h2>
+          <p class="defi-chapo">Une phrase en français, tirée de l'actualité. À vous de trouver la bonne traduction anglaise. Attention aux pièges.</p>
+        </div>
+        <a class="defi-jeu" href="courbe/" aria-label="Jouer à la Courbe du jour">
+          <span class="defi-bulle"><small>A TRADUIRE EN ANGLAIS</small><span id="defi-fr">Une phrase. Trois questions.</span></span>
+                    <span class="defi-go">▶ JOUER</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <script src="courbe/donnees.js" defer></script>
+  <script>addEventListener('DOMContentLoaded',function(){var C=window.COURBE;if(!C)return;var n=C.numero(),f=document.getElementById('defi-fr'),k=document.getElementById('defi-num');if(f)f.textContent='« '+C.du(n)[0]+' »';if(k)k.textContent='JOUR '+String(n).padStart(3,'0');});</script>
 
   <section class="in bloc avis" id="avis" aria-labelledby="t-avis">
     <div class="avis-titre"><h2 id="t-avis">Ils ont appris avec la Courbe.</h2><a href="https://fr.trustpilot.com/review/frenglais.co" target="_blank" rel="noopener">Tous les avis sur Trustpilot →</a></div>

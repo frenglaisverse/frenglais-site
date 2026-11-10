@@ -1036,3 +1036,28 @@ footer::after{opacity:.58}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .garantie .g-lien{color:#9DBBFA}}
 :root[data-theme="dark"] .garantie .g-lien{color:#9DBBFA}
 @media (max-width:640px){.garantie{align-items:start}}
+
+/* Courbe du jour : le jeu, en écran 8 bits sur la page d'accueil */
+@font-face{font-family:"Press Start 2P";src:url("fonts/press-start-2p.woff2") format("woff2");font-display:swap}
+@font-face{font-family:"VT323";src:url("fonts/vt323.woff2") format("woff2");font-display:swap}
+.defi-ecran{background:#0E1B3D;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:6px 6px;color:#F4EEDC;padding:22px 22px 26px;margin:4px;
+  box-shadow:0 -4px 0 0 #1C49A5,0 4px 0 0 #1C49A5,-4px 0 0 0 #1C49A5,4px 0 0 0 #1C49A5,0 12px 0 0 rgba(14,27,61,.25);position:relative}
+.defi-tete{display:flex;justify-content:space-between;gap:10px;font:9px/1.6 "Press Start 2P",ui-monospace,monospace;color:#9AA8CC;margin-bottom:18px}
+.defi-corps{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:center}
+.defi-texte h2{font:22px/1.35 "Press Start 2P",ui-monospace,monospace;color:#F4EEDC;margin:0 0 14px;text-shadow:3px 3px 0 #F0766F;letter-spacing:0}
+.defi-chapo{color:#C9D3E6;margin:0;font-size:16px;line-height:1.55}
+.defi-jeu{display:flex;flex-direction:column;gap:14px;text-decoration:none;color:inherit}
+.defi-bulle{display:block;background:#F4EEDC;color:#0E1B3D;padding:12px 14px;margin:4px;box-shadow:0 -4px 0 0 #F4EEDC,0 4px 0 0 #F4EEDC,-4px 0 0 0 #F4EEDC,4px 0 0 0 #F4EEDC}
+.defi-bulle small{display:block;font:8px "Press Start 2P",ui-monospace,monospace;color:#1C49A5;margin-bottom:8px}
+.defi-bulle span{font:26px/1.05 "VT323",ui-monospace,monospace}
+.defi-q{font:10px "Press Start 2P",ui-monospace,monospace;color:#F4EEDC}
+.defi-zones{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 4px}
+.defi-zones i{font:11px "Press Start 2P",ui-monospace,monospace;font-style:normal;text-align:center;background:#1C49A5;padding:12px 0 10px;box-shadow:0 -3px 0 0 #0A1330,0 3px 0 0 #0A1330,-3px 0 0 0 #0A1330,3px 0 0 0 #0A1330,inset 0 -3px 0 rgba(0,0,0,.25)}
+.defi-go{align-self:flex-start;font:12px "Press Start 2P",ui-monospace,monospace;background:#F0766F;color:#0E1B3D;padding:14px 18px 12px;margin:4px;box-shadow:0 -4px 0 0 #0A1330,0 4px 0 0 #0A1330,-4px 0 0 0 #0A1330,4px 0 0 0 #0A1330}
+.defi-jeu:hover .defi-go,.defi-jeu:focus-visible .defi-go{background:#FFD25A}
+.defi-jeu:hover .defi-zones i{background:#4D7BE0}
+.defi-jeu:focus-visible{outline:3px solid #FFD25A;outline-offset:6px}
+@keyframes defi-cl{50%{opacity:0}}
+.defi-go::first-letter{animation:defi-cl 1s steps(2) infinite}
+@media (max-width:760px){.defi-corps{grid-template-columns:1fr;gap:20px}.defi-texte h2{font-size:18px}.defi-ecran{padding:18px 16px 22px}}
+@media (prefers-reduced-motion:reduce){.defi-go::first-letter{animation:none}}

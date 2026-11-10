@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwbc67r3"></script>
+<script src="donnees.js?v=mwbch3w7"></script>
 </head>
 <body>
 <style>
@@ -31,6 +31,7 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--nuit:#0E1B3D;--ecran:#0A1330;--creme:#F4EEDC}}
 :root[data-theme="dark"]{--nuit:#0E1B3D;--ecran:#0A1330;--creme:#F4EEDC}
+html:has(body.vice){background:#1E0733}
 *{box-sizing:border-box}
 html{background:var(--nuit)}
 body{margin:0;background:var(--nuit);background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:6px 6px;color:var(--creme);font:22px/1.15 var(--vt);
@@ -154,6 +155,35 @@ body.lancement .carte{transform:scale(1.06)}
 .gagne p{margin:0 0 8px}
 .gagne b{color:var(--jaune);font-weight:400}
 
+/* Vice City : un jour par saison, tout passe en rose et les points doublent */
+.vice-badge{display:none;font:8px/1.8 var(--pix);color:#FFE45C;margin-top:10px;text-shadow:2px 2px 0 #FF2E93}
+body.vice .vice-badge{display:block}
+body.vice{min-height:100vh;position:relative;z-index:0;--nuit:#2A0B3F;--ecran:#1B0730;--ecran2:#33124F;--bleu:#FF2E93;--bleu-clair:#FF6EC7;--corail:#00E0FF;--jaune:#FFE45C;--cadre:#7B2FBE;--doux:#E3B5F0;
+  background:linear-gradient(180deg,#1E0733 0%,#4A1162 40%,#C8336E 72%,#FF9E5E 100%) fixed}
+body.vice::before{content:"";position:fixed;left:-20%;right:-20%;bottom:0;height:38vh;z-index:-1;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(0,224,255,.45) 0 2px,transparent 2px 70px),repeating-linear-gradient(0deg,rgba(0,224,255,.45) 0 2px,transparent 2px 34px);
+  transform:perspective(260px) rotateX(58deg);transform-origin:bottom;-webkit-mask-image:linear-gradient(transparent,#000 60%);mask-image:linear-gradient(transparent,#000 60%)}
+body.vice::after{content:"";position:fixed;left:50%;bottom:34vh;width:220px;height:110px;margin-left:-110px;z-index:-1;pointer-events:none;border-radius:110px 110px 0 0;
+  background:repeating-linear-gradient(180deg,#FFE45C 0 14px,#FF6E8A 14px 18px)}
+body.vice .titre{text-shadow:3px 3px 0 #00E0FF}
+body.vice .titre span{color:#FF6EC7}
+body.vice .ecran{--b:#FF2E93}
+body.vice .bulle{--b:#FFE45C}
+.vc{font:9px var(--pix);color:#FFE45C;margin:0 0 10px;text-shadow:2px 2px 0 #FF2E93}
+
+/* Question 4 */
+.question4 p{font-size:23px;line-height:1.15}
+.cases-mot{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.cases-mot i{width:30px;height:38px;border-bottom:4px solid var(--creme);display:flex;align-items:center;justify-content:center;font:16px var(--pix);font-style:normal;color:var(--creme)}
+.cases-mot i.fixe{color:var(--jaune);border-color:var(--jaune)}
+.cases-mot.secoue{animation:secoue .3s steps(4)}
+.tuiles{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;padding:4px}
+.tuiles button{width:44px;height:48px;background:var(--bleu);border:0;font:16px var(--pix);color:var(--creme);cursor:pointer;box-shadow:0 -4px 0 0 var(--nuit),0 4px 0 0 var(--nuit),-4px 0 0 0 var(--nuit),4px 0 0 0 var(--nuit),inset 0 -4px 0 rgba(0,0,0,.25)}
+.tuiles button:hover:not(:disabled){background:var(--bleu-clair)}
+.tuiles button:active:not(:disabled){transform:translateY(3px)}
+.tuiles button:disabled{opacity:.25;cursor:default}
+@media (max-width:380px){.cases-mot i{width:24px;font-size:13px}.tuiles button{width:38px}}
+
 /* Fin */
 .fin{display:flex;flex-direction:column;gap:18px}
 .verdict{text-align:center}
@@ -214,6 +244,7 @@ body.lancement .carte{transform:scale(1.06)}
       <a class="retour" href="../">◀ FRENGLAIS.CO</a>
       <h1 class="titre">COURBE<br><span>DU JOUR</span></h1>
       <div class="num" id="num">JOUR 1/30</div>
+      <div class="vice-badge" id="vice">★ VICE CITY ★<br>POINTS ×2</div>
     </div>
     <div class="compteurs">
       <div>SCORE <b id="hud-score">0000</b></div>
@@ -228,7 +259,7 @@ body.lancement .carte{transform:scale(1.06)}
       <div class="labels" id="labels"></div>
       <div class="pastille px" id="pastille"></div>
     </div>
-    <div class="cases flou" id="cases" aria-label="Vos trois réponses"><i class="px"></i><i class="px"></i><i class="px"></i></div>
+    <div class="cases flou" id="cases" aria-label="Vos quatre réponses"><i class="px"></i><i class="px"></i><i class="px"></i><i class="px"></i></div>
     <div class="carte" id="carte"><div class="carte-in"><div class="face dos px" aria-hidden="true"><canvas id="dos-lam" width="20" height="10"></canvas><span>?</span></div><div class="face bulle px"><small>A TRADUIRE EN ANGLAIS</small><p id="fr"></p></div></div></div>
     <div id="jeu" class="flou"></div>
   </section>
@@ -322,7 +353,7 @@ body.lancement .carte{transform:scale(1.06)}
         }; return; } } } catch (e) {}
     if (C.api) { monId = lire('courbe-id', '') || (Math.random().toString(36).slice(2) + Date.now().toString(36)); ecrire('courbe-id', monId);
       classement = {
-        async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms, bonus: detail.bonus && { rep: detail.bonus.rep, indices: detail.bonus.indices } }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
+        async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms, bonus: detail.bonus && { rep: detail.bonus.rep, aides: detail.bonus.aides } }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
         async lire(n){ const r = await fetch(C.api + '/top?n=' + n + '&id=' + encodeURIComponent(monId)); return r.json(); },
         async gagnant(S){ const r = await fetch(C.api + '/gagnant?s=' + S + '&id=' + encodeURIComponent(monId)); return r.json(); },
         async reclamer(S, email){ const r = await fetch(C.api + '/gagnant', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ s: S, id: monId, email }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); }
@@ -346,13 +377,14 @@ body.lancement .carte{transform:scale(1.06)}
     $('num').textContent = 'JOUR ' + C.jourSaison(num) + '/' + C.dureeSaison + (C.saison(num) > 1 ? ' · SAISON ' + C.saison(num) : '') + (num !== AUJ ? ' (TEST)' : '');
     $('apercu-num').textContent = 'S' + C.saison(num) + ' · ' + C.jourSaison(num) + '/' + C.dureeSaison;
     $('hud-serie').textContent = serie();
+    document.body.classList.toggle('vice', C.viceCity(num));
     reinitScene(); [...$('cases').children].forEach(c => c.className = 'px'); document.body.classList.remove('lancement');
     const carte = $('carte'); carte.classList.add('sans-anim'); carte.classList.toggle('retournee', !!etat[num]); void carte.offsetWidth; carte.classList.remove('sans-anim');
     const fait = etat[num];
     if (fait) { $('fr').textContent = fr; poserZone(zone); poserCode(zone, code); $('hud-score').textContent = pad(fait.s, 4); if (!fait.bonus) { niveauBonus(fait); return; } fin(fait, true); return; }
     $('hud-score').textContent = '0000'; $('fr').textContent = '';
     $('jeu').innerHTML = `<div class="titre-ecran">
-      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS L'ENIGME DU JOUR.<br>30 JOURS : LE N°1 GAGNE -${C.reduction} %.</p>
+      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>30 JOURS : LE N°1 GAGNE -${C.reduction} %.</p>
       <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button><div id="gagnant-titre" style="width:100%;text-align:left"></div></div>`;
     afficherGagnant($('gagnant-titre'));
     $('start').addEventListener('click', jouer); $('start').focus({ preventScroll: true });
@@ -383,13 +415,13 @@ body.lancement .carte{transform:scale(1.06)}
       let fini = false;
       const repondre = b => {
         if (fini) return; fini = true; clearInterval(chrono);
-        const dt = Math.min(C.duree, performance.now() - t0), choisi = b ? b.textContent : null, juste = choisi === e.bon, pts = C.points(juste, dt);
+        const dt = Math.min(C.duree, performance.now() - t0), choisi = b ? b.textContent : null, juste = choisi === e.bon, m = C.multi(num), pts = C.points(juste, dt) * m;
         res[k] = juste; rep[k] = choisi; ms[k] = Math.round(dt); total += pts;
         btns.forEach(x => { x.disabled = true; if (x !== b) x.classList.add('eteint'); });
         if (b) b.classList.add(juste ? 'ok' : 'ko');
         cases[k].className = 'px ' + (juste ? 'juste' : 'rate');
         $('flash').className = 'flash ' + (juste ? 'ok' : 'ko');
-        $('flash').innerHTML = juste ? `EXACT ! <b>+100</b> ${pts > 100 ? '<b>+' + (pts - 100) + ' VITESSE</b>' : ''}` : (b ? 'RATE.' : 'TEMPS ECOULE.') + ' REPONSE A LA FIN.';
+        $('flash').innerHTML = juste ? `EXACT ! <b>+${100 * m}</b> ${pts > 100 * m ? '<b>+' + (pts - 100 * m) + ' VITESSE</b>' : ''}` : (b ? 'RATE.' : 'TEMPS ECOULE.') + ' REPONSE A LA FIN.';
         (juste ? SON.juste : SON.faux)();
         $('hud-score').textContent = pad(total, 4);
                 setTimeout(() => { k++; if (k < 3) etape(); else terminer(); }, juste ? 800 : 1100);
@@ -412,31 +444,40 @@ body.lancement .carte{transform:scale(1.06)}
     }
   }
 
-  /* ---------- Niveau bonus : l'énigme du jour ---------- */
+  /* ---------- Question 4 : le mot mystère (lettres données) ---------- */
   function niveauBonus(r){
-    const E = C.enigme(num); let ind = 1, fini = false;
-    [...$('cases').children].forEach((c, i) => c.className = 'px ' + (r.res[i] ? 'juste' : 'rate'));
+    const M = C.mot(num), L = C.lettres(num), mult = C.multi(num); let aides = 0, essais = 0, choix = [], fini = false;
+    [...$('cases').children].forEach((c, i) => c.className = 'px ' + (i < 3 ? (r.res[i] ? 'juste' : 'rate') : 'en-cours'));
     [988, 1318, 1568, 1976].forEach((f, i) => bip(f, .09, i * .07));
-    document.querySelector('.ecran').classList.add('eclair'); setTimeout(() => document.querySelector('.ecran').classList.remove('eclair'), 700);
+    const ec = document.querySelector('.ecran'); ec.classList.add('eclair'); setTimeout(() => ec.classList.remove('eclair'), 700);
+    const fixes = () => M.a.slice(0, aides);   /* lettres révélées, au début du mot */
     function dessin(msg, cls){
+      const mot = fixes().split('').concat(choix.map(i => L[i]));
       $('jeu').innerHTML = `<div class="bonus">
-        <div class="bonus-titre"><span>NIVEAU BONUS</span><b>L'ENIGME DU JOUR</b><small>LE MONDE ANGLOPHONE</small></div>
-        <ol class="indices">${E.i.map((t, k) => k < ind ? `<li class="px"><span>INDICE ${k + 1}</span>${esc(t)}</li>` : `<li class="px ferme"><span>INDICE ${k + 1}</span>? ? ?</li>`).join('')}</ol>
-        <form class="pseudo" id="f-bonus"><input id="i-bonus" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Votre réponse" placeholder="QUI OU QUOI ?"><button class="btn" type="submit">OK</button></form>
-        <p class="flash ${cls || ''}" id="flash-b">${msg || 'A GAGNER : <b>' + C.bonus(true, ind) + ' PTS</b>'}</p>
-        <div class="bonus-actions">${ind < 3 ? '<button type="button" class="lien" id="b-indice">INDICE SUIVANT (-100)</button>' : ''}<button type="button" class="lien" id="b-stop">JE SECHE</button></div></div>`;
-      $('i-bonus').focus({ preventScroll: true });
-      $('f-bonus').addEventListener('submit', ev => { ev.preventDefault(); const t = $('i-bonus').value.trim(); if (!t || fini) return;
-        if (C.enigmeOk(num, t)) return finir(true, t);
-        SON.faux(); $('f-bonus').classList.add('secoue');
-        if (ind < 3) { ind++; setTimeout(() => dessin('RATE. NOUVEL INDICE : <b>' + C.bonus(true, ind) + ' PTS</b>', 'ko'), 350); } else finir(false, t); });
-      const bi = $('b-indice'); if (bi) bi.addEventListener('click', () => { SON.clic(); ind++; dessin(); });
-      $('b-stop').addEventListener('click', () => finir(false, null));
+        <div class="bonus-titre"><span>QUESTION 4</span><b>LE MOT MYSTERE</b><small>EN ANGLAIS · ${M.a.length} LETTRES</small></div>
+        <div class="boite px question4"><p>${esc(M.q)}</p></div>
+        <div class="cases-mot" aria-label="Votre mot">${M.a.split('').map((_, i) => `<i class="${i < aides ? 'fixe' : ''}">${mot[i] || ''}</i>`).join('')}</div>
+        <div class="tuiles">${L.map((l, i) => `<button type="button" class="px" data-i="${i}" ${choix.includes(i) ? 'disabled' : ''}>${l}</button>`).join('')}</div>
+        <p class="flash ${cls || ''}" id="flash-b">${msg || 'EN JEU : <b>' + C.bonus(true, aides + essais) * mult + ' PTS</b>'}</p>
+        <div class="bonus-actions"><button type="button" class="lien" id="b-eff">EFFACER</button>${aides < M.a.length - 1 ? '<button type="button" class="lien" id="b-indice">UNE LETTRE (-50)</button>' : ''}<button type="button" class="lien" id="b-stop">JE PASSE</button></div></div>`;
+      document.querySelectorAll('.tuiles button').forEach(bt => bt.addEventListener('click', () => { if (fini) return; SON.clic(); choix.push(+bt.dataset.i); verifier(); }));
+      $('b-eff').addEventListener('click', () => { choix = []; dessin(); });
+      const bi = $('b-indice'); if (bi) bi.addEventListener('click', () => { SON.clic(); aides++; choix = []; dessin(); });
+      $('b-stop').addEventListener('click', () => finir(false));
+    }
+    function verifier(){
+      const mot = fixes() + choix.map(i => L[i]).join('');
+      if (mot.length < M.a.length) return dessin();
+      if (C.motOk(num, mot)) return finir(true, mot);
+      essais++; SON.faux(); choix = [];
+      if (essais >= 3) return finir(false, mot);
+      dessin('RATE. ENCORE ' + (3 - essais) + ' ESSAI' + (3 - essais > 1 ? 'S' : '') + '. EN JEU : <b>' + C.bonus(true, aides + essais) * mult + ' PTS</b>', 'ko');
+      document.querySelector('.cases-mot').classList.add('secoue');
     }
     function finir(ok, rep){
-      fini = true; const pts = C.bonus(ok, ind);
-      r.bonus = { ok, rep, indices: ind, pts }; r.s += pts; etat[num] = r; ecrire('courbe-jours', etat);
-      $('hud-score').textContent = pad(r.s, 4); compter(ok ? 'bonus-trouve' : 'bonus-rate');
+      fini = true; const pts = C.bonus(ok, aides + essais) * mult;
+      r.bonus = { ok, rep: rep || null, aides: aides + essais, pts }; r.s += pts; etat[num] = r; ecrire('courbe-jours', etat);
+      $('hud-score').textContent = pad(r.s, 4); compter(ok ? 'mot-trouve' : 'mot-rate');
       SON.fin(r.res.filter(Boolean).length + (ok ? 1 : 0) > 2 ? 3 : r.res.filter(Boolean).length);
       fin(r, false);
     }
@@ -446,18 +487,18 @@ body.lancement .carte{transform:scale(1.06)}
   /* ---------- Écran de fin ---------- */
   let minuteur;
   function fin(r, deja){
-    const P = C.du(num), src = C.S[P[6]], n = r.res.filter(Boolean).length, s = serie();
-    [...$('cases').children].forEach((c, i) => c.className = 'px ' + (r.res[i] ? 'juste' : 'rate'));
+    const P = C.du(num), src = C.S[P[6]], n = r.res.filter(Boolean).length + (r.bonus && r.bonus.ok ? 1 : 0), s = serie();
+    [...$('cases').children].forEach((c, i) => c.className = 'px ' + ((i < 3 ? r.res[i] : r.bonus && r.bonus.ok) ? 'juste' : 'rate'));
     const grille = r.res.map(x => x ? '🟦' : '🟥').join('');
-    const b = r.bonus || { ok: false, indices: 3 }, E = C.enigme(num);
-    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.dureeSaison} ${grille} 🧩${b.ok ? b.indices + '/3' : '✖'}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
-    const titres = ['GAME OVER', 'UN SUR TROIS', 'PRESQUE !', 'PARFAIT !'];
+    const b = r.bonus || { ok: false }, M = C.mot(num), vc = C.viceCity(num);
+    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.dureeSaison} ${grille}${b.ok ? '🟦' : '🟥'}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
+    const titres = ['GAME OVER', 'UN SUR QUATRE', 'DEUX SUR QUATRE', 'PRESQUE !', 'PARFAIT !'];
     const jours = Object.keys(etat).length, parfaits = Object.values(etat).filter(x => x.res.every(Boolean)).length, record = Math.max(0, ...Object.values(etat).map(x => x.s));
     $('jeu').innerHTML = `<div class="fin">
-      <div class="verdict"><h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div></div>
+      <div class="verdict">${vc ? '<p class="vc">★ VICE CITY · POINTS ×2 ★</p>' : ''}<h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div></div>
       <div class="boite px explication"><canvas class="ico-lam" id="ico-lam" width="20" height="10" aria-hidden="true"></canvas><div><p class="juste">${esc(P[4][0])}</p><p class="reperes">${esc(P[1])} · ${esc(P[2])}</p><p>${P[5]}</p>
         <p class="source">D'après une info du Courrier des Amériques : <a href="${src[1]}" target="_blank" rel="noopener">${esc(src[0])} ↗</a></p></div></div>
-      <div class="boite px explication enigme-fin"><span class="ico-q" aria-hidden="true">?</span><div><p class="reperes">ENIGME · ${b.ok ? 'TROUVEE AVEC ' + b.indices + ' INDICE' + (b.indices > 1 ? 'S' : '') + ' · +' + b.pts : 'PAS TROUVEE'}</p><p class="juste">${esc(E.a)}</p><p>${esc(E.f)}</p></div></div>
+      <div class="boite px explication enigme-fin"><span class="ico-q" aria-hidden="true">?</span><div><p class="reperes">MOT MYSTERE · ${b.ok ? 'TROUVE · +' + b.pts : 'PAS TROUVE'}</p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
       <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
       <div id="gagnant"></div>
       <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.dureeSaison}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.<br>EGALITE : LE PREMIER A FINIR LE JOUR 30.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>

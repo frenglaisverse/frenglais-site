@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwbbt3bn"></script>
+<script src="donnees.js?v=mwbc67r3"></script>
 </head>
 <body>
 <style>
@@ -125,6 +125,35 @@ body.lancement .carte{transform:scale(1.06)}
 .start:hover,.start:focus-visible{background:var(--jaune);outline:none}
 .start .cl{animation:clig2 1s steps(2) infinite}
 
+/* Bonus */
+@keyframes eclair{0%,100%{background:var(--ecran)}20%,60%{background:#2B4FA8}40%{background:var(--ecran)}}
+.ecran.eclair{animation:eclair .6s steps(5)}
+.bonus{display:flex;flex-direction:column;gap:16px}
+.bonus-titre{text-align:center;display:flex;flex-direction:column;gap:8px}
+.bonus-titre span{font:9px var(--pix);color:var(--corail);animation:clig2 .9s steps(2) 4}
+.bonus-titre b{font:15px/1.4 var(--pix);color:var(--jaune);text-shadow:3px 3px 0 var(--bleu);font-weight:400}
+.bonus-titre small{font:8px var(--pix);color:var(--doux)}
+.indices{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.indices li{background:var(--ecran2);padding:10px 12px;margin:4px;--b:var(--cadre);font-size:22px;line-height:1.15;animation:apparait .35s steps(4)}
+.indices li span{display:block;font:8px var(--pix);color:var(--jaune);margin-bottom:6px}
+.indices li.ferme{color:var(--cadre);animation:none}
+.indices li.ferme span{color:var(--cadre)}
+@keyframes apparait{from{opacity:0;transform:translateY(6px)}}
+.bonus-actions{display:flex;justify-content:space-between;gap:10px}
+.lien{background:none;border:0;padding:6px 0;font:9px var(--pix);color:var(--doux);cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.lien:hover,.lien:focus-visible{color:var(--creme);outline:none}
+.secoue{animation:secoue .3s steps(4)}
+.ico-q{width:64px;height:64px;display:grid;place-items:center;font:28px var(--pix);color:var(--nuit);background:var(--jaune);box-shadow:0 -4px 0 0 var(--nuit),0 4px 0 0 var(--nuit),-4px 0 0 0 var(--nuit),4px 0 0 0 var(--nuit),inset -4px -4px 0 rgba(0,0,0,.2)}
+.lot{font:8px/1.9 var(--pix);color:var(--doux);margin:0 0 12px!important}
+.lot b{color:var(--jaune);font-weight:400}
+.signature{text-align:center;font-size:19px;color:var(--doux);margin:0}
+.signature a{color:var(--doux)}
+
+.gagne{--b:var(--jaune)}
+.gagne h3{color:var(--jaune)}
+.gagne p{margin:0 0 8px}
+.gagne b{color:var(--jaune);font-weight:400}
+
 /* Fin */
 .fin{display:flex;flex-direction:column;gap:18px}
 .verdict{text-align:center}
@@ -184,7 +213,7 @@ body.lancement .carte{transform:scale(1.06)}
     <div>
       <a class="retour" href="../">◀ FRENGLAIS.CO</a>
       <h1 class="titre">COURBE<br><span>DU JOUR</span></h1>
-      <div class="num" id="num">JOUR 001</div>
+      <div class="num" id="num">JOUR 1/30</div>
     </div>
     <div class="compteurs">
       <div>SCORE <b id="hud-score">0000</b></div>
@@ -280,16 +309,23 @@ body.lancement .carte{transform:scale(1.06)}
     try { if (window.claude && claude.use) { const db = await claude.use('db'), user = db && await claude.use('user'); monId = user && await user.id();
       if (db && monId) { const col = db.collection('joueurs');
         classement = {
-          async envoyer(n, pseudo, score){ const ref = col.doc(monId), s = await ref.get(), d = s.exists ? JSON.parse(JSON.stringify(s.data())) : { jours: {}, total: 0 };
-            d.pseudo = pseudo; if (d.jours[n] == null) { d.jours[n] = score; d.total = (d.total || 0) + score; } d.maj = Date.now(); await ref.set(d); },
-          async lire(n){ const snap = await col.get(), L = snap.docs.map(x => ({ id: x.id, ...x.data() }));
+          async envoyer(n, pseudo, score){ const ref = col.doc(monId), s = await ref.get(), d = s.exists ? JSON.parse(JSON.stringify(s.data())) : {};
+            d.jours = d.jours || {}; d.t30 = d.t30 || {}; d.pseudo = pseudo; if (d.jours[n] == null) { d.jours[n] = score; if (C.jourSaison(n) === C.dureeSaison) d.t30[C.saison(n)] = Date.now(); } d.tl = Date.now(); await ref.set(d); },
+          async tous(){ const snap = await col.get(); return snap.docs.map(x => ({ id: x.id, ...x.data() })); },
+          classer(L, S){ return C.trierSaison(L.map(x => { let s = 0; Object.keys(x.jours || {}).forEach(k => { if (C.saison(+k) === S) s += x.jours[k]; }); return { id: x.id, p: x.pseudo, s, t30: (x.t30 || {})[S], tl: x.tl, rec: (x.reclame || {})[S] }; }).filter(x => x.s > 0)); },
+          async lire(n){ const L = await this.tous();
             return { jour: L.filter(x => x.jours && x.jours[n] != null).map(x => ({ p: x.pseudo, s: x.jours[n], moi: x.id === monId })).sort((a, b) => b.s - a.s),
-                     general: L.map(x => ({ p: x.pseudo, s: x.total || 0, moi: x.id === monId })).sort((a, b) => b.s - a.s) }; }
+                     saison: this.classer(L, C.saison(n)).map(x => ({ p: x.p, s: x.s, moi: x.id === monId })) }; },
+          async gagnant(S, auj){ if (!C.saisonClose(S, auj)) return { fini: false }; const g = this.classer(await this.tous(), S)[0];
+            return g ? { fini: true, pseudo: g.p, moi: g.id === monId, reclame: !!g.rec } : { fini: true }; },
+          async reclamer(S, email){ const ref = col.doc(monId), s = await ref.get(), d = JSON.parse(JSON.stringify(s.data())); d.reclame = d.reclame || {}; d.reclame[S] = email; await ref.set(d); }
         }; return; } } } catch (e) {}
     if (C.api) { monId = lire('courbe-id', '') || (Math.random().toString(36).slice(2) + Date.now().toString(36)); ecrire('courbe-id', monId);
       classement = {
-        async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
-        async lire(n){ const r = await fetch(C.api + '/top?n=' + n + '&id=' + encodeURIComponent(monId)); return r.json(); }
+        async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms, bonus: detail.bonus && { rep: detail.bonus.rep, indices: detail.bonus.indices } }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
+        async lire(n){ const r = await fetch(C.api + '/top?n=' + n + '&id=' + encodeURIComponent(monId)); return r.json(); },
+        async gagnant(S){ const r = await fetch(C.api + '/gagnant?s=' + S + '&id=' + encodeURIComponent(monId)); return r.json(); },
+        async reclamer(S, email){ const r = await fetch(C.api + '/gagnant', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ s: S, id: monId, email }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); }
       }; }
   }
   const pret = brancherClassement();
@@ -307,17 +343,18 @@ body.lancement .carte{transform:scale(1.06)}
 
   function rendre(){
     const P = C.du(num), [fr, zone, code, codes, phrases] = P;
-    $('num').textContent = 'JOUR ' + pad(num, 3) + (num !== AUJ ? ' (TEST)' : '');
-    $('apercu-num').textContent = 'JOUR ' + pad(num, 3);
+    $('num').textContent = 'JOUR ' + C.jourSaison(num) + '/' + C.dureeSaison + (C.saison(num) > 1 ? ' · SAISON ' + C.saison(num) : '') + (num !== AUJ ? ' (TEST)' : '');
+    $('apercu-num').textContent = 'S' + C.saison(num) + ' · ' + C.jourSaison(num) + '/' + C.dureeSaison;
     $('hud-serie').textContent = serie();
     reinitScene(); [...$('cases').children].forEach(c => c.className = 'px'); document.body.classList.remove('lancement');
     const carte = $('carte'); carte.classList.add('sans-anim'); carte.classList.toggle('retournee', !!etat[num]); void carte.offsetWidth; carte.classList.remove('sans-anim');
     const fait = etat[num];
-    if (fait) { $('fr').textContent = fr; poserZone(zone); poserCode(zone, code); $('hud-score').textContent = pad(fait.s, 4); fin(fait, true); return; }
+    if (fait) { $('fr').textContent = fr; poserZone(zone); poserCode(zone, code); $('hud-score').textContent = pad(fait.s, 4); if (!fait.bonus) { niveauBonus(fait); return; } fin(fait, true); return; }
     $('hud-score').textContent = '0000'; $('fr').textContent = '';
     $('jeu').innerHTML = `<div class="titre-ecran">
-      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PUIS PLACEZ-LA SUR LA COURBE.<br>20 SECONDES PAR QUESTION.</p>
-      <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button></div>`;
+      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS L'ENIGME DU JOUR.<br>30 JOURS : LE N°1 GAGNE -${C.reduction} %.</p>
+      <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button><div id="gagnant-titre" style="width:100%;text-align:left"></div></div>`;
+    afficherGagnant($('gagnant-titre'));
     $('start').addEventListener('click', jouer); $('start').focus({ preventScroll: true });
   }
 
@@ -367,13 +404,43 @@ body.lancement .carte{transform:scale(1.06)}
     }
     function terminer(){
       onkeydown = null;
-      const r = { res, s: total, rep, ms, t: Date.now() };
+      const r = { res, s: total, rep, ms, t: Date.now(), bonus: null };
       etat[num] = r; ecrire('courbe-jours', etat); compter('fin');
       $('hud-serie').textContent = serie();
       poserZone(zone); setTimeout(() => poserCode(zone, code), 700);
-      SON.fin(res.filter(Boolean).length);
+      setTimeout(() => niveauBonus(r), 900);
+    }
+  }
+
+  /* ---------- Niveau bonus : l'énigme du jour ---------- */
+  function niveauBonus(r){
+    const E = C.enigme(num); let ind = 1, fini = false;
+    [...$('cases').children].forEach((c, i) => c.className = 'px ' + (r.res[i] ? 'juste' : 'rate'));
+    [988, 1318, 1568, 1976].forEach((f, i) => bip(f, .09, i * .07));
+    document.querySelector('.ecran').classList.add('eclair'); setTimeout(() => document.querySelector('.ecran').classList.remove('eclair'), 700);
+    function dessin(msg, cls){
+      $('jeu').innerHTML = `<div class="bonus">
+        <div class="bonus-titre"><span>NIVEAU BONUS</span><b>L'ENIGME DU JOUR</b><small>LE MONDE ANGLOPHONE</small></div>
+        <ol class="indices">${E.i.map((t, k) => k < ind ? `<li class="px"><span>INDICE ${k + 1}</span>${esc(t)}</li>` : `<li class="px ferme"><span>INDICE ${k + 1}</span>? ? ?</li>`).join('')}</ol>
+        <form class="pseudo" id="f-bonus"><input id="i-bonus" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Votre réponse" placeholder="QUI OU QUOI ?"><button class="btn" type="submit">OK</button></form>
+        <p class="flash ${cls || ''}" id="flash-b">${msg || 'A GAGNER : <b>' + C.bonus(true, ind) + ' PTS</b>'}</p>
+        <div class="bonus-actions">${ind < 3 ? '<button type="button" class="lien" id="b-indice">INDICE SUIVANT (-100)</button>' : ''}<button type="button" class="lien" id="b-stop">JE SECHE</button></div></div>`;
+      $('i-bonus').focus({ preventScroll: true });
+      $('f-bonus').addEventListener('submit', ev => { ev.preventDefault(); const t = $('i-bonus').value.trim(); if (!t || fini) return;
+        if (C.enigmeOk(num, t)) return finir(true, t);
+        SON.faux(); $('f-bonus').classList.add('secoue');
+        if (ind < 3) { ind++; setTimeout(() => dessin('RATE. NOUVEL INDICE : <b>' + C.bonus(true, ind) + ' PTS</b>', 'ko'), 350); } else finir(false, t); });
+      const bi = $('b-indice'); if (bi) bi.addEventListener('click', () => { SON.clic(); ind++; dessin(); });
+      $('b-stop').addEventListener('click', () => finir(false, null));
+    }
+    function finir(ok, rep){
+      fini = true; const pts = C.bonus(ok, ind);
+      r.bonus = { ok, rep, indices: ind, pts }; r.s += pts; etat[num] = r; ecrire('courbe-jours', etat);
+      $('hud-score').textContent = pad(r.s, 4); compter(ok ? 'bonus-trouve' : 'bonus-rate');
+      SON.fin(r.res.filter(Boolean).length + (ok ? 1 : 0) > 2 ? 3 : r.res.filter(Boolean).length);
       fin(r, false);
     }
+    dessin();
   }
 
   /* ---------- Écran de fin ---------- */
@@ -382,24 +449,47 @@ body.lancement .carte{transform:scale(1.06)}
     const P = C.du(num), src = C.S[P[6]], n = r.res.filter(Boolean).length, s = serie();
     [...$('cases').children].forEach((c, i) => c.className = 'px ' + (r.res[i] ? 'juste' : 'rate'));
     const grille = r.res.map(x => x ? '🟦' : '🟥').join('');
-    const texte = `COURBE DU JOUR n°${num} ${grille}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
+    const b = r.bonus || { ok: false, indices: 3 }, E = C.enigme(num);
+    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.dureeSaison} ${grille} 🧩${b.ok ? b.indices + '/3' : '✖'}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
     const titres = ['GAME OVER', 'UN SUR TROIS', 'PRESQUE !', 'PARFAIT !'];
     const jours = Object.keys(etat).length, parfaits = Object.values(etat).filter(x => x.res.every(Boolean)).length, record = Math.max(0, ...Object.values(etat).map(x => x.s));
     $('jeu').innerHTML = `<div class="fin">
       <div class="verdict"><h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div></div>
       <div class="boite px explication"><canvas class="ico-lam" id="ico-lam" width="20" height="10" aria-hidden="true"></canvas><div><p class="juste">${esc(P[4][0])}</p><p class="reperes">${esc(P[1])} · ${esc(P[2])}</p><p>${P[5]}</p>
         <p class="source">D'après une info du Courrier des Amériques : <a href="${src[1]}" target="_blank" rel="noopener">${esc(src[0])} ↗</a></p></div></div>
+      <div class="boite px explication enigme-fin"><span class="ico-q" aria-hidden="true">?</span><div><p class="reperes">ENIGME · ${b.ok ? 'TROUVEE AVEC ' + b.indices + ' INDICE' + (b.indices > 1 ? 'S' : '') + ' · +' + b.pts : 'PAS TROUVEE'}</p><p class="juste">${esc(E.a)}</p><p>${esc(E.f)}</p></div></div>
       <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
-      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><div id="zone-top"><p class="note">Chargement…</p></div></div>
+      <div id="gagnant"></div>
+      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.dureeSaison}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.<br>EGALITE : LE PREMIER A FINIR LE JOUR 30.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
       <div class="stats"><div><b>${jours}</b>JOUÉS</div><div><b>${parfaits}</b>PARFAITS</div><div><b>${record}</b>RECORD</div></div>
       <p class="prochaine">PROCHAINE PHRASE DANS<br><b id="compte">--:--:--</b></p>
-      <div class="pub px"><p>TOUTE LA GRAMMAIRE ANGLAISE TIENT SUR CETTE LIGNE.</p><p>La méthode complète, avec un niveau gagné ou remboursé.</p><a class="btn" href="../#formations">DECOUVRIR LA METHODE ▶</a></div>
+      <p class="signature">Un jeu <a href="../">Frenglais</a> · <a href="../courbe/reglement.html">règlement</a></p>
     </div>`;
     sprite($('ico-lam').getContext('2d'), 0, 0, 1);
     if (!deja) { let v = 0; const pas = Math.max(1, Math.round(r.s / 30)), el = $('score-fin'); const it = setInterval(() => { v = Math.min(r.s, v + pas); el.textContent = pad(v, 4); bip(880 + v, .02, 0, 'square', .02); if (v >= r.s) clearInterval(it); }, 30); }
     $('copier').addEventListener('click', async () => { compter('partage'); try { await navigator.clipboard.writeText(texte); $('copie').textContent = 'Copié ! Collez-le où vous voulez.'; } catch (e) { const rg = document.createRange(); rg.selectNodeContents($('texte')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(rg); $('copie').textContent = 'Texte sélectionné : copiez-le avec votre clavier ou un appui long.'; } });
     clearInterval(minuteur); const tick = () => { const el = $('compte'); if (!el) return clearInterval(minuteur); const now = new Date(), dem = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1), x = Math.max(0, Math.floor((dem - now) / 1000)); el.textContent = [x / 3600 | 0, (x % 3600) / 60 | 0, x % 60].map(v => pad(v, 2)).join(':'); }; tick(); minuteur = setInterval(tick, 1000);
-    afficherTop(r);
+    afficherTop(r); afficherGagnant($('gagnant'));
+  }
+
+
+  /* ---------- Fin de saison : le gagnant laisse son mail ---------- */
+  async function afficherGagnant(el){
+    await pret; if (!el || !classement || !classement.gagnant) return;
+    const ref = TEST ? Math.max(AUJ, num) : AUJ, S = C.saison(ref) - 1; if (S < 1) return;
+    let g; try { g = await classement.gagnant(S, ref); } catch (e) { return; }
+    if (!g || !g.fini || !g.pseudo) return;
+    if (!g.moi) { el.innerHTML = `<div class="boite px gagne"><h3>SAISON ${S} TERMINEE</h3><p>Gagnant : <b>${esc(g.pseudo)}</b>. La saison ${S + 1} est lancée.</p></div>`; return; }
+    if (g.reclame) { el.innerHTML = `<div class="boite px gagne"><h3>VOUS AVEZ GAGNE LA SAISON ${S}</h3><p>Demande bien reçue : votre code de réduction arrive par mail.</p></div>`; return; }
+    el.innerHTML = `<div class="boite px gagne"><h3>VOUS AVEZ GAGNE LA SAISON ${S} !</h3><p>N°1 sur 30 jours : <b>-${C.reduction} %</b> sur une formation Frenglais. Laissez votre mail pour recevoir votre code.</p>
+      <form class="pseudo" id="f-mail"><input id="i-mail" type="email" required autocomplete="email" aria-label="Votre adresse mail" placeholder="vous@exemple.com" style="text-transform:none"><button class="btn" type="submit">ENVOYER</button></form><p class="note" id="n-mail"></p></div>`;
+    $('f-mail').addEventListener('submit', async ev => { ev.preventDefault(); const m = $('i-mail').value.trim(), note = $('n-mail');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m)) { note.textContent = 'Adresse invalide.'; note.className = 'note err'; return; }
+      note.textContent = 'Envoi…'; note.className = 'note';
+      try { await classement.reclamer(S, m);
+        try { await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/json' }, body: JSON.stringify({ access_key: C.web3forms, subject: 'Courbe du jour · gagnant de la saison ' + S, from_name: 'Courbe du jour', email: m, message: 'Gagnant de la saison ' + S + ' : ' + g.pseudo + '\nMail : ' + m + '\nRéduction : -' + C.reduction + ' %' }) }); } catch (e) {}
+        $('f-mail').remove(); note.textContent = 'Reçu ! Votre code de réduction arrive par mail.'; SON.fin(3); compter('gagnant'); }
+      catch (e) { note.textContent = 'Envoi impossible : ' + (e.message || 'réessayez plus tard') + '.'; note.className = 'note err'; } });
   }
 
   let onglet = 'jour';
@@ -410,7 +500,7 @@ body.lancement .carte{transform:scale(1.06)}
     const pseudo = lire('courbe-pseudo', '');
     let html = '';
     if (!r.envoye) html += `<form class="pseudo" id="f-pseudo"><input id="i-pseudo" maxlength="14" autocomplete="nickname" aria-label="Votre pseudo" placeholder="VOTRE PSEUDO" value="${esc(pseudo)}"><button class="btn" type="submit">ENTRER</button></form><p class="note" id="n-pseudo">Entrez un pseudo pour inscrire votre score.</p>`;
-    html += `<div class="onglets" role="tablist"><button type="button" role="tab" data-o="jour" aria-selected="${onglet === 'jour'}">AUJOURD'HUI</button><button type="button" role="tab" data-o="general" aria-selected="${onglet === 'general'}">TOUS LES JOURS</button></div><ol class="top" id="liste"></ol><p class="rang" id="rang"></p>`;
+    html += `<div class="onglets" role="tablist"><button type="button" role="tab" data-o="jour" aria-selected="${onglet === 'jour'}">AUJOURD'HUI</button><button type="button" role="tab" data-o="saison" aria-selected="${onglet === 'saison'}">LA SAISON</button></div><ol class="top" id="liste"></ol><p class="rang" id="rang"></p>`;
     zone.innerHTML = html;
     zone.querySelectorAll('[data-o]').forEach(b => b.addEventListener('click', () => { onglet = b.dataset.o; zone.querySelectorAll('[data-o]').forEach(x => x.setAttribute('aria-selected', x === b)); remplir(); }));
     let donnees = null;
@@ -419,9 +509,9 @@ body.lancement .carte{transform:scale(1.06)}
       const L = $('liste'); if (!L) return;
       if (!donnees) { L.innerHTML = '<li class="vide">Classement indisponible pour l\'instant.</li>'; return; }
       const liste = donnees[onglet] || [];
-      L.innerHTML = [0, 1, 2].map(i => { const x = liste[i]; return x ? `<li class="${x.moi ? 'moi' : ''}"><span class="rg">${i + 1}${i ? 'E' : 'ER'}</span><span>${esc(x.p)}</span><span class="pt">${pad(x.s, onglet === 'jour' ? 4 : 5)}</span></li>` : `<li class="vide"><span class="rg">${i + 1}${i ? 'E' : 'ER'}</span><span>- - -</span><span></span></li>`; }).join('');
+      L.innerHTML = [0, 1, 2].map(i => { const x = liste[i]; return x ? `<li class="${x.moi ? 'moi' : ''}"><span class="rg">${i + 1}${i ? 'E' : 'ER'}</span><span>${esc(x.p)}</span><span class="pt">${pad(x.s, onglet === 'jour' ? 3 : 5)}</span></li>` : `<li class="vide"><span class="rg">${i + 1}${i ? 'E' : 'ER'}</span><span>- - -</span><span></span></li>`; }).join('');
       const pos = liste.findIndex(x => x.moi);
-      $('rang').textContent = pos > 2 ? `Vous êtes ${pos + 1}e sur ${liste.length}.` : (liste.length ? `${liste.length} joueur${liste.length > 1 ? 's' : ''}.` : '');
+      $('rang').textContent = (pos > 2 ? `Vous êtes ${pos + 1}e sur ${liste.length}.` : (liste.length ? `${liste.length} joueur${liste.length > 1 ? 's' : ''}.` : '')) + (r.envoye && monId ? ` Votre code joueur : ${String(monId).slice(0, 8).toUpperCase()} (gardez-le, il prouve votre victoire).` : '');
     }
     const f = $('f-pseudo');
     if (f) f.addEventListener('submit', async ev => { ev.preventDefault(); const p = $('i-pseudo').value.trim().toUpperCase(), err = C.pseudoValide(p), note = $('n-pseudo');

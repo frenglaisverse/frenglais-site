@@ -1061,3 +1061,14 @@ footer::after{opacity:.58}
 .defi-go::first-letter{animation:defi-cl 1s steps(2) infinite}
 @media (max-width:760px){.defi-corps{grid-template-columns:1fr;gap:20px}.defi-texte h2{font-size:18px}.defi-ecran{padding:18px 16px 22px}}
 @media (prefers-reduced-motion:reduce){.defi-go::first-letter{animation:none}}
+
+/* Onglet du jeu à côté du surtitre : lettres pixel, contour qui épouse les lettres */
+.hero-haut{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
+.hero-haut .surtitre{margin:0}
+.onglet-jeu{display:inline-flex;flex-direction:column;gap:3px;font:15px/1.25 "Press Start 2P",ui-monospace,monospace;letter-spacing:.02em;text-decoration:none;color:#F4EEDC;padding:4px 6px 8px 4px;
+  text-shadow:3px 0px 0 #0E1B3D,-3px 0px 0 #0E1B3D,0px 3px 0 #0E1B3D,0px -3px 0 #0E1B3D,3px 3px 0 #0E1B3D,-3px -3px 0 #0E1B3D,3px -3px 0 #0E1B3D,-3px 3px 0 #0E1B3D,6px 6px 0 #0E1B3D,5px 5px 0 #1C49A5;transition:transform .15s steps(2)}
+.onglet-jeu span+span{color:#F0766F}
+.onglet-jeu:hover,.onglet-jeu:focus-visible{transform:translate(-2px,-2px);outline:none}
+.onglet-jeu:hover span:first-child,.onglet-jeu:focus-visible span:first-child{color:#FFD25A}
+.onglet-jeu:focus-visible{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+@media (max-width:640px){.onglet-jeu{font-size:12px}}

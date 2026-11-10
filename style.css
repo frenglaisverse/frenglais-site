@@ -1023,3 +1023,16 @@ footer::after{opacity:.58}
 .hero .surtitre{font-family:var(--f-txt);font-weight:600;font-size:16px;letter-spacing:-.005em;text-transform:none;padding:9px 20px 9px 15px}
 .hero .surtitre .st-doux{font-weight:500;color:#4A5C8F}
 @media (max-width:640px){.hero .surtitre{font-size:13.5px}}
+
+/* garantie de résultats, sous le titre des formations */
+.garantie{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px 18px;padding:18px 22px;border-radius:22px;background:var(--carte);border:1px solid var(--trait);box-shadow:0 1px 0 rgba(14,27,61,.03),0 12px 32px -18px rgba(14,27,61,.22);margin-top:-6px}
+.garantie .g-ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(160deg,var(--bleu),var(--nuit));color:#fff}
+.garantie .g-ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.garantie .g-titre{margin:0;font-size:clamp(18px,2.4vw,21px);font-weight:600;letter-spacing:-.01em;color:var(--encre)}
+.garantie .g-sous{margin:4px 0 0;font-size:15px;line-height:1.5;color:var(--doux);max-width:70ch}
+.garantie .g-lien{font:500 14px var(--f-txt);color:var(--bleu);text-decoration:none;padding:9px 16px;border-radius:99px;border:1px solid var(--trait);white-space:nowrap;transition:border-color .2s,background .2s}
+.garantie .g-lien:hover{border-color:var(--bleu);background:rgba(28,73,165,.06)}
+@media (max-width:640px){.garantie{grid-template-columns:auto 1fr;padding:16px}.garantie .g-lien{grid-column:1/-1;justify-self:start}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .garantie .g-lien{color:#9DBBFA}}
+:root[data-theme="dark"] .garantie .g-lien{color:#9DBBFA}
+@media (max-width:640px){.garantie{align-items:start}}

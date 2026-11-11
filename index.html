@@ -273,24 +273,6 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
     </div>
   </section>
 
-  <section class="in bloc defi" id="courbe-du-jour" aria-labelledby="t-defi">
-    <div class="defi-ecran">
-      <div class="defi-tete"><span>JEU GRATUIT</span><span id="defi-num"></span></div>
-      <div class="defi-corps">
-        <div class="defi-texte">
-          <h2 id="t-defi">COURBE<br>DU JOUR</h2>
-          <p class="defi-chapo">Une phrase en français, tirée de l'actualité. Trouvez la bonne traduction anglaise, puis le mot mystère. Tous les 30 jours, le n°1 gagne 20 % sur une formation.</p>
-        </div>
-        <a class="defi-jeu" href="courbe/" aria-label="Jouer à la Courbe du jour">
-          <span class="defi-bulle"><small>A TRADUIRE EN ANGLAIS</small><span id="defi-fr">Une phrase. Trois questions.</span></span>
-                    <span class="defi-go">▶ JOUER</span>
-        </a>
-      </div>
-    </div>
-  </section>
-  <script src="courbe/donnees.js" defer></script>
-  <script>addEventListener('DOMContentLoaded',function(){var C=window.COURBE;if(!C)return;var n=C.numero(),f=document.getElementById('defi-fr'),k=document.getElementById('defi-num');if(f)f.textContent='« '+C.du(n)[0]+' »';if(k)k.textContent='JOUR '+String(n).padStart(3,'0');});</script>
-
   <section class="in bloc avis" id="avis" aria-labelledby="t-avis">
     <div class="avis-titre"><h2 id="t-avis">Ils ont appris avec la Courbe.</h2><a href="https://fr.trustpilot.com/review/frenglais.co" target="_blank" rel="noopener">Tous les avis sur Trustpilot →</a></div>
     <div class="avis-grille">

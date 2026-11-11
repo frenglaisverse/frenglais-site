@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwbxoavc"></script>
+<script src="donnees.js?v=mwc0ekjc"></script>
 </head>
 <body>
 <style>
@@ -183,6 +183,11 @@ body.vice .bulle{--b:#FFE45C}
 .tuiles button:active:not(:disabled){transform:translateY(3px)}
 .tuiles button:disabled{opacity:.25;cursor:default}
 @media (max-width:380px){.cases-mot i{width:24px;font-size:13px}.tuiles button{width:38px}}
+
+.nom-avant{flex-direction:column;align-items:stretch;gap:8px;width:100%;max-width:300px}
+.nom-avant label{font:8px var(--pix);color:var(--jaune)}
+.nom-avant input{text-align:center}
+.titre-ecran .note{margin:0;min-height:1.1em}
 
 /* Fin */
 .fin{display:flex;flex-direction:column;gap:18px}
@@ -385,9 +390,15 @@ body.vice .bulle{--b:#FFE45C}
     $('hud-score').textContent = '0000'; $('fr').textContent = '';
     $('jeu').innerHTML = `<div class="titre-ecran">
       <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>30 JOURS : LE N°1 GAGNE -${C.reduction} %.</p>
+      <form class="pseudo nom-avant" id="f-nom"><label for="i-nom">VOTRE PSEUDO</label><input id="i-nom" maxlength="14" autocomplete="nickname" placeholder="3 A 14 LETTRES" value="${esc(lire('courbe-pseudo', ''))}"></form>
+      <p class="note" id="n-nom"></p>
       <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button><div id="gagnant-titre" style="width:100%;text-align:left"></div></div>`;
     afficherGagnant($('gagnant-titre'));
-    $('start').addEventListener('click', jouer); $('start').focus({ preventScroll: true });
+    const lancer = ev => { if (ev) ev.preventDefault(); const p = $('i-nom').value.trim().toUpperCase(), err = C.pseudoValide(p);
+      if (err) { $('n-nom').textContent = p ? err : 'Choisissez un pseudo pour entrer au classement.'; $('n-nom').className = 'note err'; SON.faux(); $('i-nom').focus(); return; }
+      ecrire('courbe-pseudo', p); jouer(); };
+    $('start').addEventListener('click', lancer); $('f-nom').addEventListener('submit', lancer);
+    ($('i-nom').value ? $('start') : $('i-nom')).focus({ preventScroll: true });
   }
 
   function jouer(){
@@ -554,6 +565,9 @@ body.vice .bulle{--b:#FFE45C}
       const pos = liste.findIndex(x => x.moi);
       $('rang').textContent = (pos > 2 ? `Vous êtes ${pos + 1}e sur ${liste.length}.` : (liste.length ? `${liste.length} joueur${liste.length > 1 ? 's' : ''}.` : '')) + (r.envoye && monId ? ` Votre code joueur : ${String(monId).slice(0, 8).toUpperCase()} (gardez-le, il prouve votre victoire).` : '');
     }
+    if (!r.envoye && pseudo && !C.pseudoValide(pseudo)) { const note = $('n-pseudo'); note.textContent = 'Envoi de votre score…';
+      try { await classement.envoyer(num, pseudo, r.s, r); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); const ff = $('f-pseudo'); if (ff) ff.remove(); if ($('n-pseudo')) $('n-pseudo').textContent = 'Score inscrit. Bravo, ' + pseudo + ' !'; compter('pseudo'); }
+      catch (e) { if ($('n-pseudo')) { $('n-pseudo').textContent = 'Votre score n\'a pas pu être inscrit : ' + (e.message || 'réessayez plus tard') + '.'; $('n-pseudo').className = 'note err'; } } }
     const f = $('f-pseudo');
     if (f) f.addEventListener('submit', async ev => { ev.preventDefault(); const p = $('i-pseudo').value.trim().toUpperCase(), err = C.pseudoValide(p), note = $('n-pseudo');
       if (err) { note.textContent = err; note.className = 'note err'; SON.faux(); return; }

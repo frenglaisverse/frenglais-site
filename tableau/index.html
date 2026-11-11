@@ -564,7 +564,7 @@ a.btn{text-decoration:none}
 
   <section class="carte">
     <h2>Recevoir un rapport</h2>
-    <p class="doux petit" style="margin:0">L'élève touche « Envoyer mon rapport » : vous recevez un message WhatsApp qui contient un code <code>FRG1…</code>. Collez le message entier ici. Le rapport le plus récent remplace le précédent ; vos notes, présences et validations sont gardées.</p>
+    <p class="doux petit" style="margin:0">L'élève touche « Préparer mon bilan » dans son espace : vous recevez un message qui contient un code <code>FRG1…</code>. Collez le message entier ici. Le rapport le plus récent remplace le précédent ; vos notes, présences et validations sont gardées.</p>
     <textarea id="code" placeholder="Collez ici le message WhatsApp de l'élève"></textarea>
     <div class="ligne"><button class="btn plein" id="importer" type="button">Ajouter ou mettre à jour</button><span id="imp-msg"></span></div>
   </section>
@@ -799,11 +799,11 @@ a.btn{text-decoration:none}
   /* ---------- envoyer le rapport au tuteur ---------- */
   FRG.envoyerRapport = async (info) => {
     const code = await FRG.encoder(FRG.collecter()), p = FRG.prenom();
-    const texte = `Rapport Frenglais · ${p || 'élève'} (${FRG.id()})\nÀ coller dans l'espace de suivi.\n\n${code}`;
+    const texte = `Bilan Frenglais · ${p || 'élève'} (${FRG.id()})\nPaul, voici mon bilan. Le code ci-dessous contient mes modules et mes scores.\n\n${code}`;
     const lien = FRG.whatsapp(texte);
-    if (lien) { window.open(lien, '_blank', 'noopener'); if (info) info.textContent = 'WhatsApp s\'ouvre avec votre rapport. Il ne reste qu\'à l\'envoyer.'; return; }
-    try { await navigator.clipboard.writeText(texte); if (info) info.textContent = 'Rapport copié. Collez-le dans WhatsApp, à votre tuteur.'; }
-    catch (e) { if (info) info.textContent = 'Copie impossible ici. Code du rapport : ' + code.slice(0, 40) + '…'; }
+    if (lien) { window.open(lien, '_blank', 'noopener'); if (info) info.textContent = 'WhatsApp s\'ouvre avec votre bilan. Il ne reste qu\'à appuyer sur Envoyer.'; return; }
+    try { await navigator.clipboard.writeText(texte); if (info) info.textContent = 'Bilan copié. Collez-le dans un message à Paul et envoyez-le.'; }
+    catch (e) { if (info) info.textContent = 'Copie impossible ici. Code de votre bilan : ' + code.slice(0, 40) + '…'; }
     return texte;
   };
 })();</script>

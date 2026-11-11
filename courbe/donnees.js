@@ -186,7 +186,8 @@ window.COURBE = {
   C.bonus = function (juste, aides) { return juste ? Math.max(50, 200 - 50 * Math.max(0, aides | 0)) : 0; };
 
   /* Mode Vice City : un jour au hasard par saison de 30 jours, le jeu passe en rose et les points sont doublés */
-  C.viceCity = function (n) { var S = Math.floor((n - 1) / 30) + 1, j = 2 + ((S * 7919 + 4243) % 9973) % 28; return n === (S - 1) * 30 + j; };
+  C.vcFixe = { 1: 9 }; /* jours Vice City choisis à la main, par saison. Saison 1 : jour 9 = 19 novembre 2026, sortie de GTA VI */
+  C.viceCity = function (n) { var S = Math.floor((n - 1) / 30) + 1, j = C.vcFixe[S] || 2 + ((S * 7919 + 4243) % 9973) % 28; return n === (S - 1) * 30 + j; };
   C.multi = function (n) { return C.viceCity(n) ? 2 : 1; };
 })(window.COURBE);
 

@@ -929,7 +929,7 @@ a.btn{text-decoration:none}
   function vue(){
     const E = Object.values(B.eleves), sous = E.filter(e => FRG.volume(donnees(e)).tenu === false).length, k = [];
     k.push([E.length, 'élève' + (E.length > 1 ? 's' : '') + ' suivi' + (E.length > 1 ? 's' : '')], [sous, 'sous le seuil de volume']);
-    if (J) { const auj = (J.parJour[J.jourSaison] || []).length; k.push([auj, 'joueur' + (auj > 1 ? 's' : '') + ' aujourd\'hui'], [J.saison.length, 'joueur' + (J.saison.length > 1 ? 's' : '') + ' cette saison'], [J.jourSaison + ' / 30', 'jour de la saison ' + J.saisonEnCours + (J.viceCity ? ' · Vice City' : '')], [J.saison[0] ? esc(J.saison[0].p) : '—', 'en tête de la saison']); }
+    if (J) { const auj = (J.parJour[J.jourSaison] || []).length; k.push([auj, 'joueur' + (auj > 1 ? 's' : '') + ' aujourd\'hui'], [J.saison.length, 'joueur' + (J.saison.length > 1 ? 's' : '') + ' cette saison'], [J.jourSaison + ' / 30', 'jour de la saison ' + J.saisonEnCours + (J.viceCity ? ' · Vice City' : '')], [(J.saison.find(x => !x.hors) || {}).p ? esc(J.saison.find(x => !x.hors).p) : '—', 'en tête de la saison']); }
     else k.push(['—', 'Courbe du jour : entrez la clé']);
     document.getElementById('vue-kpis').innerHTML = k.map(x => `<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
     document.getElementById('vue-date').textContent = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -939,10 +939,10 @@ a.btn{text-decoration:none}
     document.getElementById('jeu-s').textContent = J.S; document.getElementById('jeu-j').textContent = J.jourSaison + ' / 30';
     const nbJ = {}; Object.values(J.parJour).forEach(L => L.forEach(x => nbJ[x.id] = (nbJ[x.id] || 0) + 1));
     document.getElementById('jeu-saison-vide').hidden = !!J.saison.length;
-    document.getElementById('jeu-saison').innerHTML = J.saison.map((x, i) => `<tr><td>${i + 1}</td><td><b>${esc(x.p)}</b></td><td>${x.s}</td><td>${nbJ[x.id] || 0}${x.t30 ? ' · jour 30 fait' : ''}</td><td class="cache-m"><code>${esc(x.id)}</code></td></tr>`).join('');
+    document.getElementById('jeu-saison').innerHTML = (() => { let rg = 0; return J.saison.map(x => `<tr${x.hors ? ' style="opacity:.55"' : ''}><td>${x.hors ? '–' : ++rg}</td><td><b>${esc(x.p)}</b>${x.hors ? ' <small class="doux">hors classement</small>' : ''}</td><td>${x.s}</td><td>${nbJ[x.id] || 0}${x.t30 ? ' · jour 30 fait' : ''}</td><td class="cache-m"><code>${esc(x.id)}</code></td></tr>`).join(''); })();
     const auj = J.parJour[J.jourSaison] || [];
     document.getElementById('jeu-jour-vide').hidden = !!auj.length;
-    document.getElementById('jeu-jour').innerHTML = auj.map((x, i) => `<tr><td>${i + 1}</td><td><b>${esc(x.p)}</b></td><td>${x.s}</td></tr>`).join('');
+    document.getElementById('jeu-jour').innerHTML = (() => { let rg = 0; return auj.map(x => `<tr${x.hors ? ' style="opacity:.55"' : ''}><td>${x.hors ? '–' : ++rg}</td><td><b>${esc(x.p)}</b>${x.hors ? ' <small class="doux">hors classement</small>' : ''}</td><td>${x.s}</td></tr>`).join(''); })();
     const max = Math.max(1, ...Object.values(J.parJour).map(L => L.length));
     document.getElementById('jeu-barres').innerHTML = Array.from({ length: 30 }, (_, i) => { const n = (J.parJour[i + 1] || []).length; return `<i class="${n ? '' : 'vide-j'}" style="height:${n ? Math.max(6, n / max * 100) : 3}%" title="Jour ${i + 1} : ${n} joueur${n > 1 ? 's' : ''}"></i>`; }).join('');
     let g = '';

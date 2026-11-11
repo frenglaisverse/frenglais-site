@@ -3,7 +3,7 @@
    Entrée : [français, repère, code juste, 4 codes, [phrase juste, piège 1, piège 2], explication, n° de source] */
 window.COURBE = {
   lancement: [2026, 10, 11], /* n°1 = 11 novembre 2026 (mois 0-indexés) */
-  api: '', /* adresse du classement en ligne (Cloudflare Worker), vide tant qu'il n'est pas branché */
+  api: 'https://courbe-classement.paulodubmx84.workers.dev', /* adresse du classement en ligne (Cloudflare Worker), vide tant qu'il n'est pas branché */
   zones: ['T-2', 'T-1', 'T0', 'T+1'],
   S: [
     ['Le Courrier des Amériques, juin 2026', 'https://courrierdesameriques.com/wp-content/uploads/2026/05/Courrier-des-ameriques-Juin-2026.pdf'],

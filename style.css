@@ -1170,3 +1170,12 @@ footer::after{opacity:.58}
 .pol-grand .v-pied{margin-top:auto!important;min-height:max(32px,5.6cqi);align-items:center!important}
 .pol-grand .v-pied i{display:none!important}
 .pol-grand .v-photo{height:calc(100% - 10.2cqi)!important;bottom:auto!important}
+/* racines de mangrove autour de la carte : même boîte que la carte, le dessin déborde (overflow visible) */
+.polaroid .pol-mangrove{position:absolute;left:0;top:0;width:100%;aspect-ratio:1.72;height:auto;overflow:visible;pointer-events:none;z-index:0}
+.mgv-rides ellipse{transform-box:fill-box;transform-origin:center;animation:mgvRide 5.5s ease-in-out infinite}
+.mgv-rides ellipse:nth-child(2n){animation-delay:-2.2s}.mgv-rides ellipse:nth-child(3n){animation-delay:-3.9s}
+@keyframes mgvRide{0%,100%{transform:scaleX(1);opacity:1}50%{transform:scaleX(1.35);opacity:.35}}
+.mgv-reflet{animation:mgvReflet 7s ease-in-out infinite}@keyframes mgvReflet{50%{opacity:.6}}
+@media (prefers-reduced-motion:reduce){.mgv-rides ellipse,.mgv-reflet{animation:none}}
+@media (max-width:760px){.polaroid .pol-mangrove{--cw:min(320px,100vw - 32px);left:calc(var(--cw)*.21);width:calc(var(--cw)*.58);top:calc(var(--cw)/1.72 - var(--cw)*.58/272*148)}.hero-bas .polaroid{margin-bottom:56px!important}}
+/* fin mangrove */

@@ -1192,4 +1192,8 @@ footer::after{opacity:.58}
 .marque .onglet-jeu{position:absolute;left:calc(100% + 14px);top:10px;font-size:10.5px;gap:2px;padding:3px 5px 6px 3px;white-space:nowrap;z-index:2;
   text-shadow:2px 0 0 #0E1B3D,-2px 0 0 #0E1B3D,0 2px 0 #0E1B3D,0 -2px 0 #0E1B3D,2px 2px 0 #0E1B3D,-2px -2px 0 #0E1B3D,2px -2px 0 #0E1B3D,-2px 2px 0 #0E1B3D,3px 3px 0 #0E1B3D}
 @media (max-width:1100px){.marque .onglet-jeu{font-size:9.5px;left:calc(100% + 10px)}}
-@media (max-width:760px){.marque .onglet-jeu{left:0;top:calc(100% + 24px);font-size:8.5px}}
+@media (max-width:520px){.marque .onglet-jeu{left:calc(100% + 12px);top:50px;font-size:8px}}
+/* incitation : l'onglet grossit au survol */
+.marque .onglet-jeu{transform-origin:0 50%;transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+.marque .onglet-jeu:hover,.marque .onglet-jeu:focus-visible{transform:scale(1.32)}
+@media (prefers-reduced-motion:reduce){.marque .onglet-jeu{transition:none}}

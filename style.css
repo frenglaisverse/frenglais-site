@@ -1197,3 +1197,8 @@ footer::after{opacity:.58}
 .marque .onglet-jeu{transform-origin:0 50%;transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
 .marque .onglet-jeu:hover,.marque .onglet-jeu:focus-visible{transform:scale(1.32)}
 @media (prefers-reduced-motion:reduce){.marque .onglet-jeu{transition:none}}
+/* symétrie : au-delà de la colonne du site, la bande droite de l'arbre est floutée */
+@media (min-width:1101px){
+  .bandeau .in-mousse::after{content:"";position:absolute;top:0;bottom:0;left:calc(100% - 24px);width:calc((100vw - 100%) / 2 + 24px);z-index:5;pointer-events:none;
+    -webkit-backdrop-filter:blur(9px) saturate(.9);backdrop-filter:blur(9px) saturate(.9);background:rgba(31,79,174,.18);
+    -webkit-mask:linear-gradient(90deg,transparent,#000 70px);mask:linear-gradient(90deg,transparent,#000 70px)}}

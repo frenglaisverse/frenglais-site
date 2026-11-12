@@ -1090,12 +1090,8 @@ footer::after{opacity:.58}
 .livre-ferme{position:absolute;top:0;right:4px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:26px;line-height:1;cursor:pointer}
 .livre-ferme:hover{background:rgba(255,255,255,.26)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-@media (max-width:760px){.bandeau .nav-liens .lien-sec.lien-livre{display:inline-flex}}
 @media (prefers-reduced-motion:reduce){.livre-couv{transition:none}.livre-dlg[open]{animation:none}}
 .livre-dlg .livre-amazon{background:#fff;color:#1C49A5}
-.lien-livre .l-court{display:none!important}
-@media (max-width:760px){.bandeau .nav-liens .lien-sec.lien-livre{padding:0 6px;font-size:13px;height:32px;align-items:center}.lien-livre .l-long{display:none!important}.lien-livre .l-court{display:inline!important}}
-@media (max-width:420px){.bandeau .nav{gap:6px!important}.bandeau .nav .marque img{height:28px!important;width:auto}.bandeau .nav-liens{padding:3px}.bandeau .nav-liens a{padding:0 6px!important;font-size:12px!important}.bandeau .nav-liens .lien-sec.lien-livre{padding:0 4px!important}}
 
 /* carte Paul.M, accordée au reste du site : même verre dépoli que le menu, angles ronds, liseré clair doublé d'un fin contour sombre */
 .polaroid .pol-mousse{display:none!important}
@@ -1115,3 +1111,6 @@ footer::after{opacity:.58}
 .pol-grand .v-courbe{filter:none}.pol-grand .v-logo{filter:brightness(0) invert(1)}
 @media (prefers-reduced-motion:reduce){.polaroid .pol-carte{transition:none}}
 .pol-racines g{stroke:rgba(214,226,255,.55)}
+
+/* menu rétréci : « Mon livre » n'y apparaît pas */
+@media (max-width:760px){.bandeau .nav-liens .lien-livre{display:none!important}}

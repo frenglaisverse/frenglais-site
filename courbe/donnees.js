@@ -188,7 +188,7 @@ window.COURBE = {
   /* Mode Vice City : un jour au hasard par saison de 30 jours, le jeu passe en rose et les points sont doublés */
   C.vcFixe = { 1: 9 }; /* jours Vice City choisis à la main, par saison. Saison 1 : jour 9 = 19 novembre 2026, sortie de GTA VI */
   C.noel = function (n) { var d = C.dateDe(n); return d.getMonth() === 11 && d.getDate() === 25; }; /* 25 décembre : décor de Noël, points normaux */
-  C.viceCity = function (n) { var S = C.saison(n), deb = C.debutSaison(S), j = C.vcFixe[S] || 2 + ((S * 7919 + 4243) % 9973) % (C.duree(S) - 2); if (C.noel(deb + j - 1)) j--; return n === deb + j - 1; };
+  C.viceCity = function (n) { var S = C.saison(n), deb = C.debutSaison(S), j = C.vcFixe[S] || 2 + ((S * 7919 + 4243) % 9973) % (C.longueur(S) - 2); if (C.noel(deb + j - 1)) j--; return n === deb + j - 1; };
   C.multi = function (n) { return C.viceCity(n) ? 2 : 1; };
 })(window.COURBE);
 
@@ -200,7 +200,7 @@ window.COURBE = {
   C.saison = function (n) { var d = C.dateDe(n); return (d.getFullYear() - l[0]) * 12 + d.getMonth() - l[1] + 1; };
   C.debutSaison = function (s) { return s <= 1 ? 1 : C.numero(new Date(l[0], l[1] + s - 1, 1)); };
   C.finSaison = function (s) { return C.debutSaison(s + 1) - 1; };
-  C.duree = function (s) { return C.finSaison(s) - C.debutSaison(s) + 1; };
+  C.longueur = function (s) { return C.finSaison(s) - C.debutSaison(s) + 1; };
   C.jourSaison = function (n) { return n - C.debutSaison(C.saison(n)) + 1; };
   C.dernierJour = function (n) { return n === C.finSaison(C.saison(n)); };
   C.saisonClose = function (s, auj) { return auj >= C.finSaison(s) + 2; }; /* un jour de marge pour les fuseaux horaires */

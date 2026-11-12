@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwdoaswf"></script>
+<script src="donnees.js?v=mwe0u1y7"></script>
 </head>
 <body>
 <style>
@@ -254,6 +254,20 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
 .apercu{display:flex;justify-content:center;align-items:center;gap:10px;font:8px var(--pix);color:var(--doux)}
 .apercu button{background:var(--ecran2);border:0;color:var(--creme);font:10px var(--pix);padding:8px 10px;cursor:pointer}
 .cache{display:none!important}
+/* boutons plus visibles et plus faciles à toucher (cibles de 44 px minimum) */
+.onglets{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 4px 16px}
+.onglets button{min-height:44px;padding:12px 8px 10px;font:10px/1.2 var(--pix);color:var(--creme);background:var(--ecran2);box-shadow:0 -4px 0 0 var(--cadre),0 4px 0 0 var(--cadre),-4px 0 0 0 var(--cadre),4px 0 0 0 var(--cadre);text-decoration:none}
+.onglets button:hover,.onglets button:focus-visible{background:var(--bleu);outline:none}
+.onglets button[aria-selected="true"]{background:var(--jaune);color:var(--nuit);text-decoration:none;box-shadow:0 -4px 0 0 var(--nuit),0 4px 0 0 var(--nuit),-4px 0 0 0 var(--nuit),4px 0 0 0 var(--nuit),inset 0 -4px 0 rgba(0,0,0,.2)}
+.onglets button[aria-selected="true"]::before{content:"▶ "}
+.btn{font-size:11px;min-height:44px;padding:14px 16px 12px}
+.son,.retour{font-size:11px;min-height:44px;padding:12px 4px;display:inline-flex;align-items:center;color:var(--creme)}
+.son:hover,.son:focus-visible,.retour:hover,.retour:focus-visible{color:var(--jaune);outline:none}
+.lien{font-size:10px;min-height:44px;padding:12px 4px;color:var(--creme)}
+.lien:hover,.lien:focus-visible{color:var(--jaune);outline:none}
+.apercu button{min-height:40px;min-width:44px}
+.top li .rg{font-size:10px}.top li .pt{font-size:12px}
+:focus-visible{outline:3px solid var(--jaune);outline-offset:3px}
 @media (max-width:380px){.titre{font-size:13px}.choix.mono button{font-size:10px}.choix.deux{grid-template-columns:1fr 1fr}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -296,6 +310,11 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
   const compter = n => { try { window.goatcounter && window.goatcounter.count && window.goatcounter.count({ path: 'courbe-' + n, title: n, event: true }); } catch (e) {} };
   const AUJ = C.numero(), TEST = false || /[?&]apercu/.test(location.search);
   let num = AUJ, etat = lire('courbe-jours', {}), sonOn = lire('courbe-son', true);
+  /* bug du 12 novembre 2026 : certains scores ont été enregistrés « NaN ». On les recalcule avec les réponses gardées sur l'appareil, et on les renvoie. */
+  Object.keys(etat).forEach(k => { const r = etat[k], n = +k; if (!r || Number.isFinite(r.s) || !Array.isArray(r.res)) return;
+    let s = 0; for (let i = 0; i < 3; i++) s += C.points(!!r.res[i], +(r.ms || [])[i] || C.duree) * C.multi(n);
+    if (r.bonus && Number.isFinite(r.bonus.pts)) s += r.bonus.pts; r.s = s; if (n >= AUJ - 1) r.envoye = false; });
+  ecrire('courbe-jours', etat);
 
   /* ---------- Sons 8 bits ---------- */
   let ac = null;
@@ -438,7 +457,8 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
         async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms, bonus: detail.bonus && { rep: detail.bonus.rep, aides: detail.bonus.aides } }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
         async lire(n){ const r = await fetch(C.api + '/top?n=' + n + '&id=' + encodeURIComponent(monId)); return r.json(); },
         async gagnant(S){ const r = await fetch(C.api + '/gagnant?s=' + S + '&id=' + encodeURIComponent(monId)); return r.json(); },
-        async reclamer(S, email){ const r = await fetch(C.api + '/gagnant', { method: 'POST', body: JSON.stringify({ s: S, id: monId, email }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); }
+        async reclamer(S, email){ const r = await fetch(C.api + '/gagnant', { method: 'POST', body: JSON.stringify({ s: S, id: monId, email }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
+        async prereclamer(S, email){ const r = await fetch(C.api + '/gagnant', { method: 'POST', body: JSON.stringify({ s: S, id: monId, email, pre: true }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); }
       }; }
   }
   const pret = brancherClassement();
@@ -456,8 +476,8 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
 
   function rendre(){
     const P = C.du(num), [fr, zone, code, codes, phrases] = P;
-    $('num').textContent = 'JOUR ' + C.jourSaison(num) + '/' + C.duree(C.saison(num)) + (C.saison(num) > 1 ? ' · SAISON ' + C.saison(num) : '') + (num !== AUJ ? ' (TEST)' : '');
-    $('apercu-num').textContent = 'S' + C.saison(num) + ' · ' + C.jourSaison(num) + '/' + C.duree(C.saison(num));
+    $('num').textContent = 'JOUR ' + C.jourSaison(num) + '/' + C.longueur(C.saison(num)) + (C.saison(num) > 1 ? ' · SAISON ' + C.saison(num) : '') + (num !== AUJ ? ' (TEST)' : '');
+    $('apercu-num').textContent = 'S' + C.saison(num) + ' · ' + C.jourSaison(num) + '/' + C.longueur(C.saison(num));
     $('hud-serie').textContent = serie();
     document.body.classList.toggle('vice', C.viceCity(num));
     document.body.classList.toggle('noel', C.noel(num)); $('vice').innerHTML = C.noel(num) ? '★ JOYEUX CHRISTMAS ★' : '★ VICE CITY ★<br>POINTS ×2';
@@ -580,7 +600,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     [...$('cases').children].forEach((c, i) => c.className = 'px ' + ((i < 3 ? r.res[i] : r.bonus && r.bonus.ok) ? 'juste' : 'rate'));
     const grille = r.res.map(x => x ? '🟦' : '🟥').join('');
     const b = r.bonus || { ok: false }, M = C.mot(num), vc = C.viceCity(num);
-    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.duree(C.saison(num))} ${grille}${b.ok ? '🟦' : '🟥'}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
+    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))} ${grille}${b.ok ? '🟦' : '🟥'}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
     const titres = ['GAME OVER', 'UN SUR QUATRE', 'DEUX SUR QUATRE', 'PRESQUE !', 'PARFAIT !'];
     const jours = Object.keys(etat).length, parfaits = Object.values(etat).filter(x => x.res.every(Boolean)).length, record = Math.max(0, ...Object.values(etat).map(x => x.s));
     $('jeu').innerHTML = `<div class="fin">
@@ -590,7 +610,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       <div class="boite px explication enigme-fin"><span class="ico-q" aria-hidden="true">?</span><div><p class="reperes">MOT MYSTERE · ${b.ok ? 'TROUVE · +' + b.pts : 'PAS TROUVE'}</p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
       <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
       <div id="gagnant"></div>
-      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.duree(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
+      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
       <div class="stats"><div><b>${jours}</b>JOUÉS</div><div><b>${parfaits}</b>PARFAITS</div><div><b>${record}</b>RECORD</div></div>
       <p class="prochaine">PROCHAINE PHRASE DANS<br><b id="compte">--:--:--</b></p>
       <p class="signature">Un jeu <a href="../">Frenglais</a> · <a href="../courbe/reglement.html">règlement</a></p>
@@ -622,6 +642,22 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       catch (e) { note.textContent = 'Envoi impossible : ' + (e.message || 'réessayez plus tard') + '.'; note.className = 'note err'; } });
   }
 
+  /* dernier jour de la saison : le joueur en tête est prévenu et peut laisser son mail tout de suite */
+  function alerteDernierJour(saison){
+    const el = $('gagnant'), S = C.saison(num);
+    if (!el || el.dataset.pre || !C.dernierJour(num) || (num !== AUJ && !TEST) || !saison[0] || !saison[0].moi || !classement || !classement.prereclamer) return;
+    el.dataset.pre = '1';
+    if (lire('courbe-pre-' + S, false)) { el.innerHTML = `<div class="boite px gagne"><h3>VOUS ETES N°1 !</h3><p>Votre mail est noté. Si personne ne vous dépasse avant minuit, votre code <b>-${C.reduction} %</b> vous sera envoyé.</p></div>`; return; }
+    el.innerHTML = `<div class="boite px gagne"><h3>VOUS ETES N°1 !</h3><p>Dernier jour de la saison ${S}. Si personne ne vous dépasse avant minuit, vous gagnez <b>-${C.reduction} %</b> sur une formation Frenglais. Laissez votre mail maintenant pour recevoir votre code.</p>
+      <form class="pseudo" id="f-pre"><input id="i-pre" type="email" required autocomplete="email" aria-label="Votre adresse mail" placeholder="vous@exemple.com" style="text-transform:none"><button class="btn" type="submit">ENVOYER</button></form><p class="note" id="n-pre">Votre adresse ne sert qu'à cela. Si vous ne gagnez pas, elle est supprimée.</p></div>`;
+    SON.fin(3); el.scrollIntoView({ block: 'nearest', behavior: calme ? 'auto' : 'smooth' });
+    $('f-pre').addEventListener('submit', async ev => { ev.preventDefault(); const m = $('i-pre').value.trim(), note = $('n-pre');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m)) { note.textContent = 'Adresse invalide.'; note.className = 'note err'; return; }
+      note.textContent = 'Envoi…'; note.className = 'note';
+      try { await classement.prereclamer(S, m); ecrire('courbe-pre-' + S, true); $('f-pre').remove(); note.textContent = 'C\'est noté ! Résultat définitif demain.'; compter('pre-gagnant'); }
+      catch (e) { note.textContent = 'Envoi impossible : ' + (e.message || 'réessayez plus tard') + '.'; note.className = 'note err'; } });
+  }
+
   let onglet = 'jour';
   async function afficherTop(r){
     await pret;
@@ -642,10 +678,11 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       const nb = onglet === 'saison' ? Math.min(10, Math.max(3, liste.length)) : 3; const h = document.querySelector('#bloc-top h3'); if (h) h.textContent = onglet === 'saison' ? 'TOP 10' : 'TOP 3';
       L.innerHTML = Array.from({ length: nb }, (_, i) => i).map(i => { const x = liste[i]; return x ? `<li class="${x.moi ? 'moi' : ''}"><span class="rg">${i + 1}${i ? 'E' : 'ER'}</span><span>${esc(x.p)}</span><span class="pt">${pad(x.s, onglet === 'jour' ? 3 : 5)}</span></li>` : `<li class="vide"><span class="rg">${i + 1}${i ? 'E' : 'ER'}</span><span>- - -</span><span></span></li>`; }).join('');
       const pos = liste.findIndex(x => x.moi);
+      alerteDernierJour(donnees.saison || []);
       $('rang').textContent = (pos > nb - 1 ? `Vous êtes ${pos + 1}e sur ${liste.length}.` : (liste.length ? `${liste.length} joueur${liste.length > 1 ? 's' : ''}.` : '')) + (r.envoye && monId ? ` Votre code joueur : ${String(monId).slice(0, 8).toUpperCase()} (gardez-le, il prouve votre victoire).` : '');
     }
     if (!r.envoye && pseudo && !C.pseudoValide(pseudo)) { const note = $('n-pseudo'); note.textContent = 'Envoi de votre score…';
-      try { await classement.envoyer(num, pseudo, r.s, r); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); const ff = $('f-pseudo'); if (ff) ff.remove(); if ($('n-pseudo')) $('n-pseudo').textContent = 'Score inscrit. Bravo, ' + pseudo + ' !'; compter('pseudo'); }
+      try { await classement.envoyer(num, pseudo, r.s, r); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); const ff = $('f-pseudo'); if (ff) ff.remove(); charger(); if ($('n-pseudo')) $('n-pseudo').textContent = 'Score inscrit. Bravo, ' + pseudo + ' !'; compter('pseudo'); }
       catch (e) { if ($('n-pseudo')) { $('n-pseudo').textContent = 'Votre score n\'a pas pu être inscrit : ' + (e.message || 'réessayez plus tard') + '.'; $('n-pseudo').className = 'note err'; } } }
     const f = $('f-pseudo');
     if (f) f.addEventListener('submit', async ev => { ev.preventDefault(); const p = $('i-pseudo').value.trim().toUpperCase(), err = C.pseudoValide(p), note = $('n-pseudo');
@@ -654,6 +691,10 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       try { await classement.envoyer(num, p, r.s, r); ecrire('courbe-pseudo', p); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); f.remove(); note.textContent = 'Score inscrit. Bravo, ' + p + ' !'; SON.juste(); compter('pseudo'); charger(); }
       catch (e) { note.textContent = 'Votre score n\'a pas pu être inscrit : ' + (e.message || 'réessayez plus tard') + '.'; note.className = 'note err'; } });
     charger();
+    /* le classement se met à jour tout seul : toutes les 30 s tant que la page est visible, et dès qu'on revient sur l'onglet */
+    clearInterval(afficherTop.minuteur); afficherTop.minuteur = setInterval(() => { if (!document.hidden && $('liste')) charger(); }, 30000);
+    if (!afficherTop.vue) { afficherTop.vue = true; document.addEventListener('visibilitychange', () => { if (!document.hidden && $('liste') && afficherTop.recharger) afficherTop.recharger(); }); }
+    afficherTop.recharger = charger;
   }
 
   if (TEST) { $('apercu').classList.remove('cache'); $('prec').addEventListener('click', () => { if (num > 1) { num--; rendre(); } }); $('suiv').addEventListener('click', () => { num++; rendre(); }); }

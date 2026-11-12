@@ -1140,3 +1140,5 @@ footer::after{opacity:.58}
 /* carte de visite sur petit écran : sur sa propre ligne, sous les boutons */
 @media (max-width:760px){.hero-bas{flex-wrap:wrap!important}.hero-bas .polaroid{order:5;flex:1 1 100%!important;width:100%!important;margin:22px 0 0!important;display:flex;justify-content:flex-start}
   .hero-bas .polaroid .pol-carte,.polaroid .pol-carte{width:min(320px,100%)!important}.polaroid .pol-nom{font-size:25px!important}.polaroid .pol-marque{font-size:9px}.polaroid .pol-role{font-size:9.5px}}
+/* grand écran : la carte descend dans l'espace libre, à droite de « Depuis la base » et des boutons */
+@media (min-width:1101px){.polaroid{top:205px!important}}

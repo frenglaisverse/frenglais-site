@@ -190,7 +190,7 @@ function lancer(){
     const HAUT = lisser([[0, .012], [.06, .034], [.22, .05], [.45, .085], [.68, .165], [.86, .275], [1, .36]], 60);
     const LARGE = lisser([[0, .02], [.035, .17], [.1, .29], [.22, .35], [.36, .32], [.52, .255], [.68, .265], [.86, .345], [1, .407]], 60);
     const rB = interp(PROFIL, .8), [hC, lC] = profTete(tC, 0);
-    const n = 230, radial = 72, pos = [], uv = [], idx = [], qs = [], poids = [];
+    const n = 230, radial = 72, pos = [], uv = [], idx = [], qs = [], poids = [], teinte = [];
     for (let i = 0; i <= n; i++) {
       const u = i / n, P = axe.getPointAt(u), T = axe.getTangentAt(u), q = u / uJ, tOld = .8 * (u - uA) / (uB - uA);
       const c2 = new THREE.Vector3().crossVectors(T, HAUTV).normalize(), up = new THREE.Vector3().crossVectors(c2, T).normalize();
@@ -206,13 +206,18 @@ function lancer(){
         else { const k = 1 + bosses(tOld, a) * lisse(.6, 1, q); rh = Math.max(.008, interp(HAUT, q)) * k; rw = Math.max(.012, interp(LARGE, q)) * k; dessous = .86 + .14 * (1 - lisse(.5, 1, q)); }
         const v = P.clone().addScaledVector(B, ch * rh * (ch < 0 ? dessous : dessus)).addScaledVector(N, sh * rw);
         pos.push(v.x, v.y, v.z); uv.push(j / radial, u * 2.2);
+        /* algues : un voile vert-brun sur le dos seulement, en plaques irrégulières, comme sur un vrai lamantin qui se laisse flotter au soleil */
+        const zone = lisse(uJ * .7, uJ * 1.15, u) * (1 - lisse(uB, uP, u)), bruitA = .5 + .5 * Math.sin(u * 61 + Math.sin(a * 3) * 2.1) * Math.sin(a * 5.3 + u * 23) + .28 * Math.sin(u * 143 + a * 9) + .18 * Math.sin(u * 37 - a * 13);
+        const algue = Math.min(.85, (lisse(.38, .8, bruitA) * .8 + .16) * lisse(.3, .9, ch) * zone);
+        teinte.push(1 - algue * .46, 1 - algue * .2, 1 - algue * .58);
       }
     }
     for (let i = 0; i < n; i++) for (let j = 0; j < radial; j++) { const a = i * (radial + 1) + j, b = a + radial + 1; idx.push(a, a + 1, b, b, a + 1, b + 1); }
-    const geo = new THREE.BufferGeometry();
+    const geo = new THREE.BufferGeometry(); geo.setAttribute('color', new THREE.Float32BufferAttribute(teinte, 3));
     geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
     geo.setIndex(idx); geo.computeVertexNormals();
-    corps.add(new THREE.Mesh(geo, peau));
+    const peauCorps = peau.clone(); peauCorps.vertexColors = true;
+    corps.add(new THREE.Mesh(geo, peauCorps));
     queueVivante = { geo, base:Float32Array.from(pos), qs, poids, radial, pivot };
   }
   for (const s of [-1, 1]) {

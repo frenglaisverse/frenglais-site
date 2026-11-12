@@ -1096,3 +1096,6 @@ footer::after{opacity:.58}
 .lien-livre .l-court{display:none!important}
 @media (max-width:760px){.bandeau .nav-liens .lien-sec.lien-livre{padding:0 6px;font-size:13px;height:32px;align-items:center}.lien-livre .l-long{display:none!important}.lien-livre .l-court{display:inline!important}}
 @media (max-width:420px){.bandeau .nav{gap:6px!important}.bandeau .nav .marque img{height:28px!important;width:auto}.bandeau .nav-liens{padding:3px}.bandeau .nav-liens a{padding:0 6px!important;font-size:12px!important}.bandeau .nav-liens .lien-sec.lien-livre{padding:0 4px!important}}
+
+/* carte Paul.M : un fin contour noir, recto et verso */
+.pol-face{outline:2px solid #111;outline-offset:-1px}

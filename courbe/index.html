@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwe4jbv2"></script>
+<script src="donnees.js?v=mwe5w9f3"></script>
 </head>
 <body>
 <style>
@@ -658,8 +658,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     const titres = ['GAME OVER', 'UN SUR QUATRE', 'DEUX SUR QUATRE', 'PRESQUE !', 'PARFAIT !'];
     const jours = Object.keys(etat).length, parfaits = Object.values(etat).filter(x => x.res.every(Boolean)).length, record = Math.max(0, ...Object.values(etat).map(x => x.s));
     $('jeu').innerHTML = `<div class="fin">
-      <div class="verdict">${vc ? '<p class="vc">★ VICE CITY · POINTS ×2 ★</p>' : ''}<h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div>
-        <p class="correction">La correction ? Pour ne plus vous tromper, elle se travaille en formation : <a href="../#devis">demander un devis →</a></p></div>
+      <div class="verdict">${vc ? '<p class="vc">★ VICE CITY · POINTS ×2 ★</p>' : ''}<h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div></div>
       <div class="boite px explication enigme-fin"><span class="ico-q ${b.ok ? 'ok' : 'ko'}" aria-hidden="true">${b.ok ? '✔' : '✖'}</span><div><p class="reperes">MOT MYSTERE${b.ok ? ' · +' + b.pts : ''}<span class="sr">${b.ok ? ' : trouvé' : ' : non trouvé'}</span></p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
       <div id="gagnant"></div>
       <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>

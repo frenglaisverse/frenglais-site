@@ -126,37 +126,7 @@ function lancer(){
   const colonne = [[1.16, .3], [.9, .33], [.56, .42], [.22, .47], [-.08, .52], [-.32, .6]].map(([x, y]) => new THREE.Vector3(x, y, 0));
   /* corps et queue d'un seul tenant : le fuseau s'amincit en pédoncule puis s'élargit en palette, sans raccord.
      La palette se vrille doucement vers le visiteur pour qu'on la reconnaisse ; elle ondule lentement (voir boucle). */
-  let queueVivante = null;
-  if (VARIANTE !== 'gator') {
-    const axe = new THREE.CatmullRomCurve3([[1.82, .4], [1.62, .33], [1.38, .29], [1.16, .3], [.9, .33], [.56, .42], [.22, .47], [-.08, .52], [-.32, .6]].map(([x, y]) => new THREE.Vector3(x, y, 0)));
-    const Lnew = axe.getLength(), Lold = new THREE.CatmullRomCurve3(colonne).getLength(), u0 = 1 - Lold / Lnew, uJ = u0 + .3 * (1 - u0);
-    const interp = (tab, x) => { for (let k = 1; k < tab.length; k++) if (x <= tab[k][0]) { const [a0, r0] = tab[k - 1], [a1, r1] = tab[k]; return r0 + (r1 - r0) * (x - a0) / (a1 - a0); } return tab.at(-1)[1]; };
-    const HAUT = lisser([[0, .012], [.06, .034], [.22, .05], [.45, .085], [.68, .165], [.86, .275], [1, .36]], 60);
-    const LARGE = lisser([[0, .02], [.035, .17], [.1, .29], [.22, .35], [.36, .32], [.52, .255], [.68, .265], [.86, .345], [1, .407]], 60);
-    const lisse = (a, b, x) => { const u = Math.max(0, Math.min(1, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
-    const n = 150, radial = 56, pos = [], uv = [], idx = [], qs = [];
-    for (let i = 0; i <= n; i++) {
-      const u = i / n, P = axe.getPointAt(u), T = axe.getTangentAt(u), q = u / uJ, tOld = (u - u0) / (1 - u0);
-      const N0 = new THREE.Vector3(0, 0, 1), B0 = new THREE.Vector3().crossVectors(T, N0).normalize();
-      const phi = .78 * (1 - lisse(.12, .8, q)), B = B0.clone().multiplyScalar(Math.cos(phi)).addScaledVector(N0, Math.sin(phi)), N = N0.clone().multiplyScalar(Math.cos(phi)).addScaledVector(B0, -Math.sin(phi));
-      const epaule = lisse(.88, 1, tOld), rh = q < 1 ? Math.max(.008, interp(HAUT, q)) : interp(PROFIL, tOld) * (1 - .36 * epaule * epaule),   // l'avant se referme en épaule ronde : plus de col ouvert autour de la tête
-      rw = q < 1 ? Math.max(.012, interp(LARGE, q)) : rh * 1.13;
-      qs.push(q);
-      for (let j = 0; j <= radial; j++) {
-        const a = j / radial * Math.PI * 2, haut = Math.cos(a), k = q >= 1 ? 1 + bosses(tOld, a) : 1 + bosses(tOld, a) * lisse(.6, 1, q);
-        const pli = tOld > .78 && tOld < .97 ? Math.sin(tOld * 150) * .003 * Math.max(0, Math.sin(a)) : 0;
-        const aplati = haut < 0 ? .86 + .14 * (1 - lisse(.5, 1, q)) : 1;
-        const v = P.clone().addScaledVector(B, haut * (rh * k + pli) * aplati).addScaledVector(N, Math.sin(a) * (rw * k + pli));
-        pos.push(v.x, v.y, v.z); uv.push(j / radial, u * 1.3);
-      }
-    }
-    for (let i = 0; i < n; i++) for (let j = 0; j < radial; j++) { const a = i * (radial + 1) + j, b = a + radial + 1; idx.push(a, b, a + 1, b, b + 1, a + 1); }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-    geo.setIndex(idx); geo.computeVertexNormals();
-    corps.add(new THREE.Mesh(geo, peau));
-    queueVivante = { geo, base:Float32Array.from(pos), qs, radial };
-  }
+  let queueVivante = null;   // le corps est construit plus bas, d'une seule peau avec la tête
   // nageoires, avec leurs trois ongles
   const nageoires = {};
   for (const z of [-1, 1]) {
@@ -180,7 +150,7 @@ function lancer(){
      Le museau s'élargit et tombe, son bout est arrondi court, et la lèvre fendue est creusée dans la surface même. */
   const museau = centre.clone().addScaledVector(face, .2).add(new THREE.Vector3(0, -.06, 0));
   const HAUTV = new THREE.Vector3(0, 1, 0), gris = new THREE.MeshStandardMaterial({ color:0x33383C, roughness:.7 });
-  let surfTete;
+  let surfTete, cheminTete, profTete;
   { const chemin = new THREE.CatmullRomCurve3([
       new THREE.Vector3(.2, -.03, 0), new THREE.Vector3(.09, 0, 0), centre.clone().add(new THREE.Vector3(0, -.015, 0)),
       centre.clone().addScaledVector(face, .13).add(new THREE.Vector3(0, -.04, 0)),
@@ -201,11 +171,50 @@ function lancer(){
       const ch = Math.cos(a), sh = Math.sin(a), rh = interp(HT, t) * bout * relief, rw = interp(LG, t) * bout * relief;
       return P.clone().addScaledVector(haut, ch * (rh + hors) * (ch < 0 ? .86 : .95)).addScaledVector(c2, sh * (rw + hors));
     };
-    const n = 120, radial = 72, pos = [], uv = [], idx = [];
-    for (let i = 0; i <= n; i++) for (let j = 0; j <= radial; j++) { const v = surfTete(i / n, j / radial * Math.PI * 2); pos.push(v.x, v.y, v.z); uv.push(j / radial, i / n * .5); }
+    cheminTete = chemin;
+    profTete = (t, a) => { const bout = t > FIN ? Math.pow(Math.max(0, 1 - Math.pow((t - FIN) / (1 - FIN), 2.6)), 1 / 2.2) : 1;
+      const da = Math.abs(Math.atan2(Math.sin(a - Math.PI), Math.cos(a - Math.PI))), m = lisse(.74, .9, t), relief = 1 - .13 * m * gauss(da, .2) + .07 * m * gauss(da - .8, .42);
+      return [interp(HT, t) * bout * relief, interp(LG, t) * bout * relief]; };
+  }
+  /* UNE SEULE PEAU, de la palette de la queue au bout du museau : plus aucun raccord au cou.
+     La tête tourne en pliant cette peau (poids progressifs le long du cou), comme la queue ondule. */
+  if (VARIANTE !== 'gator') {
+    const ES = 1.08, pivot = cou.position.clone(), versCorps = v => v.clone().multiplyScalar(ES).add(pivot);
+    const axe = new THREE.CatmullRomCurve3([[1.82, .4], [1.62, .33], [1.38, .29], [1.16, .3], [.9, .33], [.56, .42], [.22, .47], [-.02, .52]].map(([x, y]) => new THREE.Vector3(x, y, 0)).concat(cheminTete.points.slice(1).map(versCorps)));
+    const ancien = new THREE.CatmullRomCurve3(colonne);
+    const pres = (courbe, pt) => { let m = 1e9, um = 0; for (let k = 0; k <= 1200; k++) { const d = courbe.getPointAt(k / 1200).distanceToSquared(pt); if (d < m) { m = d; um = k / 1200; } } return um; };
+    const pCentre = cheminTete.points[2], uA = pres(axe, ancien.getPointAt(0)), uB = pres(axe, ancien.getPointAt(.8)), uC = pres(axe, versCorps(pCentre)), tC = pres(cheminTete, pCentre);
+    const uJ = uA + .3 / .8 * (uB - uA), uW0 = uA + .66 / .8 * (uB - uA), uW1 = uB + .6 * (uC - uB);
+    const interp = (tab, x) => { for (let k = 1; k < tab.length; k++) if (x <= tab[k][0]) { const [a0, r0] = tab[k - 1], [a1, r1] = tab[k]; return r0 + (r1 - r0) * (x - a0) / (a1 - a0); } return tab.at(-1)[1]; };
+    const lisse = (a, b, x) => { const u = Math.max(0, Math.min(1, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
+    const HAUT = lisser([[0, .012], [.06, .034], [.22, .05], [.45, .085], [.68, .165], [.86, .275], [1, .36]], 60);
+    const LARGE = lisser([[0, .02], [.035, .17], [.1, .29], [.22, .35], [.36, .32], [.52, .255], [.68, .265], [.86, .345], [1, .407]], 60);
+    const rB = interp(PROFIL, .8), [hC, lC] = profTete(tC, 0);
+    const n = 230, radial = 72, pos = [], uv = [], idx = [], qs = [], poids = [];
+    for (let i = 0; i <= n; i++) {
+      const u = i / n, P = axe.getPointAt(u), T = axe.getTangentAt(u), q = u / uJ, tOld = .8 * (u - uA) / (uB - uA);
+      const c2 = new THREE.Vector3().crossVectors(T, HAUTV).normalize(), up = new THREE.Vector3().crossVectors(c2, T).normalize();
+      const phi = -.78 * (1 - lisse(.12, .8, q)), B = up.clone().multiplyScalar(Math.cos(phi)).addScaledVector(c2, Math.sin(phi)), N = c2.clone().multiplyScalar(Math.cos(phi)).addScaledVector(up, -Math.sin(phi));
+      const xc = Math.max(0, Math.min(1, (u - uB) / (uC - uB))), cou01 = .55 * xc * (2 - xc) + .45 * lisse(uB, uC, u);   // départ en pente : pas de bourrelet à l'épaule
+      qs.push(q); poids.push(lisse(uW0, uW1, u));
+      for (let j = 0; j <= radial; j++) {
+        const a = j / radial * Math.PI * 2, ch = Math.cos(a), sh = Math.sin(a);
+        let rh, rw, dessus = 1, dessous = .86;
+        if (u >= uC) { const th = tC + (u - uC) / (1 - uC) * (1 - tC), [h, l] = profTete(th, a); rh = h * ES; rw = l * ES; dessus = .95; }
+        else if (u > uB) { rh = rB + (hC * ES - rB) * cou01; rw = rB * 1.13 + (lC * ES - rB * 1.13) * cou01; dessus = 1 - .05 * cou01; }
+        else if (q >= 1) { const k = 1 + bosses(tOld, a) * (1 - lisse(.62, .8, tOld)); rh = interp(PROFIL, tOld) * k; rw = rh * 1.13; }
+        else { const k = 1 + bosses(tOld, a) * lisse(.6, 1, q); rh = Math.max(.008, interp(HAUT, q)) * k; rw = Math.max(.012, interp(LARGE, q)) * k; dessous = .86 + .14 * (1 - lisse(.5, 1, q)); }
+        const v = P.clone().addScaledVector(B, ch * rh * (ch < 0 ? dessous : dessus)).addScaledVector(N, sh * rw);
+        pos.push(v.x, v.y, v.z); uv.push(j / radial, u * 2.2);
+      }
+    }
     for (let i = 0; i < n; i++) for (let j = 0; j < radial; j++) { const a = i * (radial + 1) + j, b = a + radial + 1; idx.push(a, a + 1, b, b, a + 1, b + 1); }
-    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-    g.setIndex(idx); g.computeVertexNormals(); tete.add(new THREE.Mesh(g, peau)); }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    geo.setIndex(idx); geo.computeVertexNormals();
+    corps.add(new THREE.Mesh(geo, peau));
+    queueVivante = { geo, base:Float32Array.from(pos), qs, poids, radial, pivot };
+  }
   for (const s of [-1, 1]) {
     for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) tete.add(boule(.0042, gris, [1, 1, 1], surfTete(.9 + r * .03, Math.PI + s * (.42 + c * .33 + r * .05), .001).toArray(), 6));   // vibrisses, posées sur la surface
     const nar = boule(.013, gris, [1, 1, 1], surfTete(.9, s * .42, -.006).toArray(), 12); nar.scale.set(1.2, .7, 1.2); tete.add(nar);                         // narines, sur le dessus du museau
@@ -637,6 +646,9 @@ function lancer(){
       const { geo, base, qs, radial } = queueVivante, a = geo.attributes.position, R = radial + 1;
       for (let i = 0; i < qs.length && qs[i] < 1; i++) { const w = (1 - qs[i]) * (1 - qs[i]), dy = .075 * w * Math.sin(now / 1250 - qs[i] * 2.4) + .012 * w;
         for (let j = 0; j < R; j++) { const k = (i * R + j) * 3 + 1; a.array[k] = base[k] + dy; } }
+      const { poids, pivot } = queueVivante, ID = new THREE.Quaternion(), Q = new THREE.Quaternion(), V = new THREE.Vector3();
+      for (let i = 0; i < poids.length; i++) { if (!poids[i]) continue; Q.copy(ID).slerp(tete.quaternion, poids[i]);
+        for (let j = 0; j < R; j++) { const k = (i * R + j) * 3; V.set(base[k] - pivot.x, base[k + 1] - pivot.y, base[k + 2] - pivot.z).applyQuaternion(Q); a.array[k] = V.x + pivot.x; a.array[k + 1] = V.y + pivot.y; a.array[k + 2] = V.z + pivot.z; } }
       a.needsUpdate = true; geo.computeVertexNormals();
     }
     rendu.render(scene, camera);

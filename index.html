@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611121536">
+<link rel="stylesheet" href="style.css?v=202611121545">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -53,6 +53,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
       <div class="nav-liens">
         <a class="lien-sec" href="#formations">Formations</a>
         <a class="lien-sec" href="#methode">La méthode</a>
+        <a class="lien-sec lien-livre" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener" id="ouvre-livre" aria-haspopup="dialog" aria-label="Mon livre"><span class="l-long">Mon livre</span><span class="l-court">Livre</span></a>
         <span class="sep" aria-hidden="true"></span>
         <a class="nav-eleve" href="espace-eleve.html"><span>Espace élève</span></a>
         <a class="nav-devis" href="#devis"><span>Demander un devis</span></a>
@@ -139,7 +140,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
   <section class="in bloc" id="formations" aria-labelledby="t-formations">
     <div class="titre-bloc">
       <h2 id="t-formations">Les formations</h2>
-      <p class="chapo"><strong class="chapo-fort">La seule formation qui condense 5 ans d'études approfondies en quelques mois.</strong><br>Une méthode, trois formules. En ligne, avec un vrai suivi.</p>
+      <p class="chapo"><strong class="chapo-fort">La formation qui condense 5 ans d'études approfondies en quelques mois.</strong><br>Une méthode, trois formules. En ligne, avec un vrai suivi.</p>
     </div>
     <div class="garantie">
       <span class="g-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m8.5 12 2.4 2.4 4.6-4.8"/></svg></span>
@@ -273,16 +274,6 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
     </div>
   </section>
 
-  <section class="in bloc livre-bloc" id="livre" aria-labelledby="t-livre">
-    <div class="titre-bloc"><h2 id="t-livre">Mon livre.</h2><p class="chapo">La Courbe des Temps, sur papier.</p></div>
-    <div class="livre-scene">
-      <img class="livre-halo" src="livre-couverture.jpg" alt="" aria-hidden="true" loading="lazy">
-      <a class="livre-couv" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener"><img src="livre-couverture.jpg" alt="Couverture du livre « Tu n'as rien compris à l'anglais », de Paul Moreaux" width="240" height="360" loading="lazy"></a>
-    </div>
-    <p class="livre-titre">Tu n'as rien compris à l'anglais</p>
-    <a class="btn btn-bleu livre-amazon" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener">Amazon</a>
-  </section>
-
   <section class="in bloc avis" id="avis" aria-labelledby="t-avis">
     <div class="avis-titre"><h2 id="t-avis">Ils ont appris avec la Courbe.</h2><a href="https://fr.trustpilot.com/review/frenglais.co" target="_blank" rel="noopener">Tous les avis sur Trustpilot →</a></div>
     <div class="avis-grille">
@@ -363,6 +354,16 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
   </section>
 </main>
 
+<dialog class="livre-dlg" id="livre" aria-labelledby="t-livre">
+  <button class="livre-ferme" type="button" aria-label="Fermer">×</button>
+  <h2 id="t-livre" class="sr">Mon livre : Tu n'as rien compris à l'anglais</h2>
+  <div class="livre-scene">
+    <img class="livre-halo" src="livre-couverture.jpg" alt="" aria-hidden="true" loading="lazy">
+    <a class="livre-couv" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener"><img src="livre-couverture.jpg" alt="Couverture du livre « Tu n'as rien compris à l'anglais », de Paul Moreaux" width="720" height="1079" loading="lazy"></a>
+  </div>
+  <a class="btn btn-blanc livre-amazon" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener">Amazon</a>
+</dialog>
+<script>(function(){var d=document.getElementById('livre'),o=document.getElementById('ouvre-livre');if(!d||!o||!d.showModal)return;o.addEventListener('click',function(e){e.preventDefault();d.showModal()});d.addEventListener('click',function(e){if(e.target===d||e.target.closest('.livre-ferme'))d.close()})})();</script>
 <footer>
   <div class="in pied">
     <div>
@@ -373,7 +374,6 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
       <a href="https://www.youtube.com/@PaulowFrenglais" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5.2 3Z"/></svg></a>
       <a href="https://www.instagram.com/paulowfrenglais/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
       <a href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.7 3.5 3.9 3.7v3.1a7 7 0 0 1-3.9-1.2v6.2A5.8 5.8 0 1 1 10.8 9v3.2a2.7 2.7 0 1 0 2.6 2.7V3Z"/></svg></a>
-      <a class="livre" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener" aria-label="Mon livre : Tu n'as rien compris à l'anglais, sur Amazon"><img src="livre.jpg" alt="" width="24" height="36" loading="lazy">Mon livre</a>
     </div>
     </div>
     <nav aria-label="Liens légaux">
@@ -491,7 +491,7 @@ dessiner();addEventListener('resize',dessiner);})();
 </script>
 <script src="mousse.js?v=202611091705"></script>
 <script>/* lamantin 3D chargé après la page, pour un affichage plus rapide */
-addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611121535")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
+addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611121545")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
 <script>
 /* ouverture : la mousse « devant » n'apparaît que sous le logo, pour passer derrière lui puis tomber sur les drapeaux */
 (function(){var c=document.querySelector('#ouverture .ouv-mousse.devant'),sc=document.querySelector('#ouverture .ouv-scene');if(!c||!sc)return;

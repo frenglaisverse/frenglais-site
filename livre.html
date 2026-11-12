@@ -12,7 +12,7 @@
 
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a');if(a&&(a.getAttribute('href')||'').indexOf('amazon')>-1)g.count({path:'clic-livre-amazon',title:'livre-amazon',event:true});},true);</script>
-<link rel="stylesheet" href="style.css?v=202611121600">
+<link rel="stylesheet" href="style.css?v=202611121610">
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -25,7 +25,14 @@ main{display:grid;place-items:center;padding:8px 16px 40px}
 /* derrière le livre, le fond est flouté ; le flou s'estompe vers les bords */
 .flou{position:absolute;inset:-8% -38%;z-index:-1;-webkit-backdrop-filter:blur(26px) saturate(1.15);backdrop-filter:blur(26px) saturate(1.15);
   -webkit-mask-image:radial-gradient(closest-side,#000 55%,transparent 100%);mask-image:radial-gradient(closest-side,#000 55%,transparent 100%);border-radius:50%}
-.couv{display:block;border-radius:18px;overflow:hidden;box-shadow:0 36px 80px rgba(6,14,40,.6),0 8px 20px rgba(6,14,40,.4);transition:transform .35s ease;animation:entre .6s cubic-bezier(.2,.8,.2,1) both}
+.couv{display:block;position:relative;border-radius:8px 16px 16px 8px;transition:transform .35s ease;animation:entre .6s cubic-bezier(.2,.8,.2,1) both;
+  box-shadow:1.5px 1.5px 0 #F6F3EA,3px 3px 0 #D9D4C6,4.5px 4.5px 0 #F6F3EA,6px 6px 0 #D9D4C6,7.5px 7.5px 0 #F6F3EA,10px 10px 0 #0A7A76,
+    0 40px 80px rgba(6,14,40,.6),0 10px 22px rgba(6,14,40,.4)}
+.couv img{border-radius:inherit}
+/* la tranche : un pli d'ombre et de lumière le long de la reliure */
+.couv::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(90deg,rgba(0,0,0,.22) 0,rgba(0,0,0,.05) 2.2%,rgba(255,255,255,.2) 3.6%,rgba(255,255,255,0) 6.5%,rgba(0,0,0,.07) 8%,rgba(0,0,0,0) 10%),linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 22%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
 .couv:hover,.couv:focus-visible{transform:translateY(-6px)}
 .couv img{display:block;width:min(340px,66vw);height:auto}
 @media (max-height:760px) and (min-width:700px){.couv img{width:min(300px,calc((100dvh - 250px) * .667))}}
@@ -41,7 +48,7 @@ a:focus-visible{outline:3px solid #fff;outline-offset:3px}
 <header class="bandeau bandeau-livre">
   <div class="in">
     <nav class="nav" aria-label="Navigation principale">
-      <div class="marque"><a href="./" aria-label="Frenglais, accueil"><img src="logo-nav.webp" alt="Frenglais" width="158" height="56"></a><a class="badge-tp haut" href="https://fr.trustpilot.com/review/frenglais.co" target="_blank" rel="noopener" aria-label="4,8 sur 5 sur Trustpilot, 35 avis — voir les avis"><svg class="tp-etoiles" viewBox="0 0 128 24" width="80" height="15" aria-hidden="true"><defs><linearGradient id="tpv9"><stop offset=".5" stop-color="#5B8F76"/><stop offset=".5" stop-color="rgba(255,255,255,.25)"/></linearGradient></defs><rect x="0" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(0 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/><rect x="26" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(26 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/><rect x="52" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(52 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/><rect x="78" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(78 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/><rect x="104" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(104 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/></svg><span><b>4,8</b><i class="tp-suite">/5 · Trustpilot</i></span></a></div>
+      <div class="marque"><a href="./?ouverture" aria-label="Frenglais, accueil"><img src="logo-nav.webp" alt="Frenglais" width="158" height="56"></a><a class="badge-tp haut" href="https://fr.trustpilot.com/review/frenglais.co" target="_blank" rel="noopener" aria-label="4,8 sur 5 sur Trustpilot, 35 avis — voir les avis"><svg class="tp-etoiles" viewBox="0 0 128 24" width="80" height="15" aria-hidden="true"><defs><linearGradient id="tpv9"><stop offset=".5" stop-color="#5B8F76"/><stop offset=".5" stop-color="rgba(255,255,255,.25)"/></linearGradient></defs><rect x="0" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(0 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/><rect x="26" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(26 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/><rect x="52" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(52 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/><rect x="78" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(78 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/><rect x="104" y="0" width="24" height="24" rx="3" fill="#5B8F76"/><path transform="translate(104 0)" d="M12 4.2l2.2 4.7 5.1.6-3.8 3.4 1.1 5L12 15.4 7.4 17.9l1.1-5-3.8-3.4 5.1-.6z" fill="#fff"/></svg><span><b>4,8</b><i class="tp-suite">/5 · Trustpilot</i></span></a></div>
       <div class="nav-liens">
         <a class="lien-sec" href="./#formations">Formations</a>
         <a class="lien-sec" href="./#methode">La méthode</a>

@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwdb7kn8"></script>
+<script src="donnees.js?v=mwdo19bn"></script>
 </head>
 <body>
 <style>
@@ -310,8 +310,54 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     carte: () => { [180, 260, 380, 560, 820].forEach((f, i) => bip(f, .05, i * .045, 'triangle', .07)); },
     start: () => { [262, 330, 392, 523].forEach((f, i) => bip(f, .07, i * .06)); }
   };
+  /* ---------- Musique de fond : une boucle 8 bits composée ici, jouée par le navigateur (aucun fichier, aucun droit d'auteur tiers) ---------- */
+  const MUS = (() => {
+    let on = false, voulue = false, minuteur = null, pas = 0, tProch = 0, sortie = null, bruit = null;
+    const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+    const BASE = { bpm:104, acc:[[45, 57, 60, 64], [41, 57, 60, 65], [48, 55, 60, 64], [43, 55, 59, 62], [45, 57, 60, 64], [41, 57, 60, 65], [48, 55, 60, 64], [40, 56, 59, 64]],
+      mel:[[76, 0, 72, 0, 69, 0, 72, 74], [72, 0, 69, 0, 65, 0, 69, 72], [76, 0, 79, 0, 76, 72, 0, 0], [74, 0, 71, 0, 67, 0, 71, 74], [76, 76, 0, 72, 69, 0, 72, 76], [77, 0, 76, 0, 72, 0, 69, 0], [79, 0, 76, 0, 72, 0, 76, 79], [80, 0, 76, 0, 71, 0, 68, 0]] };
+    const VICE = { bpm:92, acc:[[41, 57, 60, 65], [43, 55, 59, 62], [40, 55, 59, 64], [45, 57, 60, 64], [41, 57, 60, 65], [43, 55, 59, 62], [40, 55, 59, 64], [45, 57, 60, 64]],
+      mel:[[72, 0, 0, 69, 0, 0, 65, 0], [74, 0, 0, 71, 0, 0, 67, 0], [76, 0, 0, 71, 0, 0, 67, 0], [76, 0, 72, 0, 69, 0, 0, 0], [77, 0, 0, 72, 0, 0, 69, 0], [79, 0, 0, 74, 0, 0, 71, 0], [79, 0, 76, 0, 71, 0, 0, 0], [81, 0, 76, 0, 72, 0, 69, 0]] };
+    function init(){
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      if (sortie) return;
+      sortie = ac.createGain(); sortie.gain.value = 0;
+      const doux = ac.createBiquadFilter(); doux.type = 'lowpass'; doux.frequency.value = 3200; sortie.connect(doux).connect(ac.destination);
+      bruit = ac.createBuffer(1, Math.floor(ac.sampleRate * .2), ac.sampleRate); const d = bruit.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    function note(m, t0, d, type, vol){ const o = ac.createOscillator(), g = ac.createGain(); o.type = type; o.frequency.setValueAtTime(hz(m), t0);
+      g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(.0001, t0 + d); o.connect(g).connect(sortie); o.start(t0); o.stop(t0 + d + .02); }
+    function coup(t0, d, vol, aigu){ const s = ac.createBufferSource(), g = ac.createGain(), f = ac.createBiquadFilter(); s.buffer = bruit; f.type = 'highpass'; f.frequency.value = aigu;
+      g.gain.setValueAtTime(vol, t0); g.gain.exponentialRampToValueAtTime(.0001, t0 + d); s.connect(f).connect(g).connect(sortie); s.start(t0); s.stop(t0 + d + .02); }
+    function pied(t0){ const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(130, t0); o.frequency.exponentialRampToValueAtTime(45, t0 + .11);
+      g.gain.setValueAtTime(.16, t0); g.gain.exponentialRampToValueAtTime(.0001, t0 + .14); o.connect(g).connect(sortie); o.start(t0); o.stop(t0 + .16); }
+    function programme(){
+      if (!on) return;
+      const V = document.body.classList.contains('vice'), P = V ? VICE : BASE, d16 = 60 / P.bpm / 4;
+      if (tProch < ac.currentTime) tProch = ac.currentTime + .05;
+      while (tProch < ac.currentTime + .3) {
+        const s = pas % 256, i = s % 16, mesure = Math.floor(s / 16) % 8, chant = s >= 128, A = P.acc[mesure], t0 = tProch;
+        if (V) { if (i % 2 === 0) note(A[0], t0, d16 * 1.7, 'sawtooth', .034);                         // basse qui pulse, façon synthwave
+                 if (i % 2 === 0) note(A[1 + (i / 2) % 3] + (i >= 8 ? 12 : 0), t0, d16 * 1.9, 'triangle', .05); }
+        else   { if (i === 0 || i === 6 || i === 8 || i === 14) note(A[0], t0, d16 * 2.6, 'triangle', .11);
+                 else if (i === 4 || i === 12) note(A[0] + 7, t0, d16 * 1.8, 'triangle', .08);
+                 note(A[1 + [0, 1, 2, 1][i % 4]] + (i % 8 >= 4 ? 12 : 0), t0, d16 * .9, 'square', .016); }
+        if (chant && i % 2 === 0) { const m = P.mel[mesure][i / 2]; if (m) note(m, t0, d16 * (V ? 5 : 1.9), V ? 'sawtooth' : 'square', V ? .022 : .03); }
+        if (i === 0 || i === 8 || (!V && i === 10 && mesure % 2)) pied(t0);
+        if (i === 4 || i === 12) coup(t0, V ? .16 : .09, V ? .07 : .05, 1800);
+        if (i % 2 === 0) coup(t0, .03, .014, 7000);
+        tProch += d16; pas++;
+      }
+    }
+    function marche(){ if (on || !voulue || !sonOn || document.hidden) return; try { init(); if (ac.resume) ac.resume(); } catch (e) { return; }
+      on = true; tProch = ac.currentTime + .1; sortie.gain.cancelScheduledValues(ac.currentTime); sortie.gain.setValueAtTime(sortie.gain.value, ac.currentTime); sortie.gain.linearRampToValueAtTime(.5, ac.currentTime + 1.2);
+      minuteur = setInterval(programme, 80); programme(); }
+    function arret(){ if (!on) return; on = false; clearInterval(minuteur); sortie.gain.cancelScheduledValues(ac.currentTime); sortie.gain.setValueAtTime(sortie.gain.value, ac.currentTime); sortie.gain.linearRampToValueAtTime(0, ac.currentTime + .25); }
+    document.addEventListener('visibilitychange', () => document.hidden ? arret() : marche());
+    return { lancer(){ voulue = true; marche(); }, maj(){ sonOn ? marche() : arret(); } };
+  })();
   const majSon = () => { $('son').textContent = '♪ SON : ' + (sonOn ? 'OUI' : 'NON'); $('son').setAttribute('aria-pressed', sonOn); };
-  $('son').addEventListener('click', () => { sonOn = !sonOn; ecrire('courbe-son', sonOn); majSon(); SON.clic(); });
+  $('son').addEventListener('click', () => { sonOn = !sonOn; ecrire('courbe-son', sonOn); majSon(); SON.clic(); MUS.maj(); });
   majSon();
 
   /* ---------- La Courbe en pixels, et le lamantin ---------- */
@@ -418,7 +464,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
   }
 
   function jouer(){
-    SON.start(); compter('debut');
+    SON.start(); MUS.lancer(); compter('debut');
     const P = C.du(num), [fr, zone, code, codes, phrases] = P, calme = matchMedia('(prefers-reduced-motion: reduce)').matches;
     $('start').disabled = true; $('fr').textContent = '';
     document.body.classList.add('lancement');

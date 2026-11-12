@@ -114,6 +114,17 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
   document.querySelectorAll('.coffret[data-public]').forEach(c=>{
     const pub=c.dataset.public; let duree=pub==='part'?'16':'12', secteur=(c.querySelector('[data-secteur]')||{dataset:{}}).dataset.secteur||'Hôtellerie';
     const q=sel=>c.querySelector(sel), det=q('.details'), plus=q('.plus');
+    /* ce que le parcours contient, selon le profil ou le secteur choisi */
+    const PROPRE={"Professionnels":["Réunions, e-mails et appels : les situations de votre semaine","Un point progression régulier avec votre tuteur"],
+      "Freelance":["Devis, relances et visios clients, en anglais","Vos vrais e-mails clients comme supports de travail"],
+      "Internationaux":["Banque, logement, collègues : vivre et travailler en anglais","L'anglais réel et ses accents, tel qu'on le parle"],
+      "Reconversion":["CV, lettre et entretien d'embauche en anglais","Le vocabulaire de votre nouveau métier"],
+      "Hôtellerie":["Check-in, réclamations, room service : les phrases de la réception","Mises en situation à partir de vos vrais cas clients"],
+      "Commerce, luxe":["Accueil, conseil et vente : le ton juste avec une clientèle internationale","Le vocabulaire de vos produits et de votre maison"],
+      "Tourisme":["Visites, réservations, imprévus : guider et rassurer en anglais","Comprendre chaque visiteur, quel que soit son accent"],
+      "Immobilier":["Visites, négociation, compromis : le vocabulaire de la transaction","Expliquer un achat en France à un client étranger, pas à pas"],
+      "Sur mesure":["Un parcours construit sur vos situations réelles","Vos documents et vos cas comme supports de travail"]};
+    const COMMUN={part:["Évaluation orale finale et certificat de niveau"],ent:["Suivi pour les RH, évaluation orale finale","Devis et facture entreprise"]};
     /* petite carte « en situation » : elle se retourne à chaque changement de profil ou de secteur */
     const SITU={"Professionnels":["Visio · lundi 9 h","“Any questions?”","Vous en aviez trois. Vous n’en posez aucune."],
       "Freelance":["Client à Londres","“Could you send me a quote by Friday?”","Le devis part vendredi, ou jamais."],
@@ -133,7 +144,7 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
       sitAvant=k; }
     function rendu(){
       q('.c-nom').textContent=noms[pub][duree]; q('.c-rythme').textContent=rythme[duree];
-      q('.c-liste').innerHTML=['<strong>Communiquer partout, en déduisant au lieu de réciter</strong>',objectif[duree],...inclus[pub]].map(x=>`<li>${x}</li>`).join('');
+      q('.c-liste').innerHTML=['<strong>Communiquer partout, en déduisant au lieu de réciter</strong>',objectif[duree],...(PROPRE[secteur]||inclus[pub].slice(0,2)),...COMMUN[pub]].map(x=>`<li>${x}</li>`).join('');
       const ex=q('.secteur-ex'); if(ex) ex.textContent=exemples[secteur];
       situation(secteur);
       c.querySelectorAll('[data-duree]').forEach(b=>b.setAttribute('aria-checked',b.dataset.duree===duree));
@@ -167,15 +178,22 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
     "Études":["Amphi · 8 h","“Any volunteers to present first?”","Lever la main, ou se faire tout petit."],
     "Tests officiels":["TOEIC · TOEFL · IELTS","“You have thirty seconds to prepare.”","Le chrono tourne. Vous savez où vous êtes sur la Courbe."],
     "Autre":["Votre projet","“So, where do we start?”","Par vous. Le parcours se construit autour de votre situation."]};
+  /* ce que le parcours Solo contient, selon la situation choisie */
+  const DET={"Voyages":["Aéroport, hôtel, restaurant, imprévus : les situations du voyage","Un point progression chaque semaine","Un parcours calé sur votre date de départ"],
+    "Expatriation":["Banque, logement, santé, école : les démarches de l'installation","Un point progression chaque semaine","Votre arrivée préparée, étape par étape"],
+    "Études":["Cours, exposés, e-mails aux professeurs","Un point progression chaque semaine","L'oral et la prise de notes, travaillés sur vos sujets"],
+    "Tests officiels":["TOEIC, TOEFL ou IELTS : entraînement au format de votre test","Suivi hebdomadaire de progression avec votre tuteur","Un score cible, et un entraînement chronométré pour l'atteindre"],
+    "Autre":["Un parcours construit autour de votre projet","Un point progression chaque semaine","Vos situations réelles comme supports de travail"]};
+  const detail=k=>{ const u=c.querySelector('.solo-det'); if(u) u.innerHTML=[...DET[k],'Accès à la communauté VIP Frenglais'].map(x=>`<li>${x}</li>`).join(''); };
   let sit='Voyages', sitAvant=null; const sitIn=c.querySelector('.sit-in');
   const carte=k=>{ if(!sitIn||k===sitAvant) return; const d=SIT[k], faces=sitIn.querySelectorAll('.sit-face'), t=sitIn.classList.contains('tourne');
     const cible=sitAvant===null?faces[0]:faces[t?0:1];
     cible.innerHTML=`<span class="sit-lieu">${d[0]}</span><span class="sit-en" lang="en">${d[1]}</span><span class="sit-choc">${d[2]}</span>`;
     if(sitAvant!==null){ sitIn.classList.toggle('tourne'); faces.forEach(f=>f.setAttribute('aria-hidden',f!==cible)); } sitAvant=k;
     c.querySelectorAll('[data-sit]').forEach(b=>b.setAttribute('aria-checked',b.dataset.sit===k)); };
-  carte(sit);
+  carte(sit); detail(sit);
   c.addEventListener('click',e=>{ const f=e.target.closest('[data-fmt]'); if(f){ fmt=f.dataset.fmt; dur=f.dataset.dur; rendu(); }
-    const st=e.target.closest('[data-sit]'); if(st){ sit=st.dataset.sit; carte(sit); } });
+    const st=e.target.closest('[data-sit]'); if(st){ sit=st.dataset.sit; carte(sit); detail(sit); } });
   const plus=c.querySelector('.solo-plus'), det=c.querySelector('.solo-det');
   plus.addEventListener('click',()=>{ const o=det.hidden; det.hidden=!o; plus.setAttribute('aria-expanded',o); plus.setAttribute('aria-label',o?'Masquer le détail':'Voir ce qui est inclus'); c.classList.toggle('ouvert',o); });
   c.querySelector('.solo-cta').addEventListener('click',()=>{

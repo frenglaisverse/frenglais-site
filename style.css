@@ -1187,3 +1187,9 @@ footer::after{opacity:.58}
   .hero{overflow-x:visible!important}.bandeau{overflow-x:clip}.hero-texte,.hero .ctas,.polaroid{position:relative;z-index:2}}
 @media (max-width:640px){.banian-arriere{width:820px;right:calc(18vw - 443px);opacity:.34}}
 /* fin banian */
+/* Courbe du jour : petit onglet rétro à côté du logo */
+.marque{position:relative}
+.marque .onglet-jeu{position:absolute;left:calc(100% + 14px);top:10px;font-size:10.5px;gap:2px;padding:3px 5px 6px 3px;white-space:nowrap;z-index:2;
+  text-shadow:2px 0 0 #0E1B3D,-2px 0 0 #0E1B3D,0 2px 0 #0E1B3D,0 -2px 0 #0E1B3D,2px 2px 0 #0E1B3D,-2px -2px 0 #0E1B3D,2px -2px 0 #0E1B3D,-2px 2px 0 #0E1B3D,3px 3px 0 #0E1B3D}
+@media (max-width:1100px){.marque .onglet-jeu{font-size:9.5px;left:calc(100% + 10px)}}
+@media (max-width:760px){.marque .onglet-jeu{left:0;top:calc(100% + 24px);font-size:8.5px}}

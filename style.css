@@ -1180,4 +1180,10 @@ footer::after{opacity:.58}
   .banian-arriere{z-index:1}.polaroid{z-index:3!important}.banian-avant{z-index:4}
   .bandeau nav{z-index:6}
   .hero-texte,.hero .ctas{position:relative;z-index:5}}
+/* fenêtre réduite (tablette, mobile) : un banian léger, en transparence, à droite derrière le texte */
+@media (max-width:1100px){
+  .banian-arriere{display:block;position:absolute;bottom:0;right:calc(22vw - 594px);width:1100px;max-width:none;height:auto;opacity:.42;pointer-events:none;user-select:none;z-index:0;
+    -webkit-mask:linear-gradient(90deg,transparent 30%,#000 52%),linear-gradient(180deg,transparent 0,#000 38%);-webkit-mask-composite:source-in;mask:linear-gradient(90deg,transparent 30%,#000 52%),linear-gradient(180deg,transparent 0,#000 38%);mask-composite:intersect}
+  .hero{overflow-x:visible!important}.bandeau{overflow-x:clip}.hero-texte,.hero .ctas,.polaroid{position:relative;z-index:2}}
+@media (max-width:640px){.banian-arriere{width:820px;right:calc(18vw - 443px);opacity:.34}}
 /* fin banian */

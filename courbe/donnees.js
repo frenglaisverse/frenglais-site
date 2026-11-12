@@ -187,18 +187,22 @@ window.COURBE = {
 
   /* Mode Vice City : un jour au hasard par saison de 30 jours, le jeu passe en rose et les points sont doublés */
   C.vcFixe = { 1: 9 }; /* jours Vice City choisis à la main, par saison. Saison 1 : jour 9 = 19 novembre 2026, sortie de GTA VI */
-  C.viceCity = function (n) { var S = Math.floor((n - 1) / 30) + 1, j = C.vcFixe[S] || 2 + ((S * 7919 + 4243) % 9973) % 28; return n === (S - 1) * 30 + j; };
+  C.noel = function (n) { var d = C.dateDe(n); return d.getMonth() === 11 && d.getDate() === 25; }; /* 25 décembre : décor de Noël, points normaux */
+  C.viceCity = function (n) { var S = C.saison(n), deb = C.debutSaison(S), j = C.vcFixe[S] || 2 + ((S * 7919 + 4243) % 9973) % (C.duree(S) - 2); if (C.noel(deb + j - 1)) j--; return n === deb + j - 1; };
   C.multi = function (n) { return C.viceCity(n) ? 2 : 1; };
 })(window.COURBE);
 
-/* Saisons de 30 jours : le n°1 de la saison (total des 30 jours) gagne -20 % sur une formation.
-   Égalité : celui qui a terminé le jour 30 en premier. */
+/* Une saison = un mois du calendrier (saison 1 : du 11 au 30 novembre 2026). Le n°1 de la saison gagne -20 % sur une formation.
+   Égalité : celui qui a terminé le dernier jour de la saison en premier. */
 (function (C) {
-  C.dureeSaison = 30; C.reduction = 20;
+  C.reduction = 20; var l = C.lancement;
   C.web3forms = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
-  C.saison = function (n) { return Math.floor((n - 1) / C.dureeSaison) + 1; };
-  C.jourSaison = function (n) { return (n - 1) % C.dureeSaison + 1; };
-  C.finSaison = function (s) { return s * C.dureeSaison; };
+  C.saison = function (n) { var d = C.dateDe(n); return (d.getFullYear() - l[0]) * 12 + d.getMonth() - l[1] + 1; };
+  C.debutSaison = function (s) { return s <= 1 ? 1 : C.numero(new Date(l[0], l[1] + s - 1, 1)); };
+  C.finSaison = function (s) { return C.debutSaison(s + 1) - 1; };
+  C.duree = function (s) { return C.finSaison(s) - C.debutSaison(s) + 1; };
+  C.jourSaison = function (n) { return n - C.debutSaison(C.saison(n)) + 1; };
+  C.dernierJour = function (n) { return n === C.finSaison(C.saison(n)); };
   C.saisonClose = function (s, auj) { return auj >= C.finSaison(s) + 2; }; /* un jour de marge pour les fuseaux horaires */
   C.trierSaison = function (L) { return L.sort(function (a, b) { return (b.s - a.s) || ((a.t30 || 9e15) - (b.t30 || 9e15)) || ((a.tl || 9e15) - (b.tl || 9e15)); }); };
 })(window.COURBE);

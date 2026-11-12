@@ -238,10 +238,16 @@ em{font-style:italic}
 .fusion .bi .an.t1{border-color:var(--ok);background:var(--ok);color:#fff;font-weight:600}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .fusion .bi .fr.t1{background:rgba(240,118,111,.14);border-color:rgba(240,118,111,.5)}}
 @media (max-width:520px){.bi{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.trous{position:relative;background:#1C49A5;border-radius:20px;height:200px;overflow:hidden}
+.trous{position:relative;background:#1C49A5;border-radius:20px;height:232px;overflow:hidden}
 .trous svg{position:absolute;inset:0;width:100%;height:100%}
 .trou{position:absolute;transform:translateX(-50%);width:min(76px,21%);padding:0;height:42px;border-radius:10px;border:1.5px solid rgba(255,255,255,.8);background:#fff;color:#1C49A5;font:500 16px var(--f-mono);text-align:center}
-.trou.haut{top:26px}.trou.bas{top:124px}
+.trou.haut{top:40px}.trou.bas{top:136px}
+.trou::placeholder{color:#9FB3DE}
+.trou.vu::placeholder{color:#1C49A5;font-weight:600}
+.trou-et{position:absolute;transform:translateX(-50%);font:500 11px var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.78);white-space:nowrap;pointer-events:none}
+.trou-et.haut{top:16px}.trou-et.bas{top:186px}
+.ligne-btn{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+@media (max-width:520px){.trou-et{font-size:9px;letter-spacing:0}}
 .trou.ok{background:#E7F4EC;border-color:#1E7A4F;color:#1E7A4F}.trou.ko{background:#F7ECEA;border-color:#8A4A44;color:#8A4A44}
 .situ{background:var(--fond);border:1px solid var(--trait);border-radius:16px;padding:16px 18px;font-size:18px;line-height:2.1}
 .mot{font:inherit;border:0;background:transparent;color:var(--encre);padding:1px 2px;margin:0 -1px;border-radius:6px;cursor:pointer;transition:opacity .5s,background .2s}
@@ -694,14 +700,14 @@ a.btn{text-decoration:none}
   FRG.NIVEAUX = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
   FRG.TOEIC = { A1: 120, A2: 225, B1: 550, B2: 785, C1: 945 };  /* seuils d'entrée ETS (écoute + lecture, sur 990) */
   FRG.niveauDepuisBandes = bandes => {
-    /* bandes : [{niveau, bons, total}] dans l'ordre A1 → C1. Un niveau est acquis si ≥ 4/6 sur sa bande
-       et ≥ 3/6 sur chacune des bandes inférieures. */
+    /* bandes : [{niveau, bons, total}] dans l'ordre A1 → C1. Un niveau est acquis si ≥ 5/8 sur sa bande
+       et ≥ 4/8 sur chacune des bandes inférieures. */
     let acquis = null;
     for (let i = 0; i < bandes.length; i++) {
       const b = bandes[i], basOk = bandes.slice(0, i).every(x => x.bons / x.total >= 0.5);
-      if (b.bons / b.total >= 0.66 && basOk) acquis = b.niveau; else if (!basOk) break;
+      if (b.bons / b.total >= 0.625 && basOk) acquis = b.niveau; else if (!basOk) break;
     }
-    return acquis || 'pré-A1';
+    return acquis || 'Débutant';
   };
   FRG.rangNiveau = n => { const i = FRG.NIVEAUX.indexOf((n || '').replace('+', '')); return i < 0 ? -1 : i; };
   FRG.niveauGlobal = (ecrit, oral) => { if (!oral) return ecrit; return FRG.rangNiveau(oral) < FRG.rangNiveau(ecrit) ? oral : ecrit; };
@@ -929,14 +935,14 @@ a.btn{text-decoration:none}
   function vue(){
     const E = Object.values(B.eleves), sous = E.filter(e => FRG.volume(donnees(e)).tenu === false).length, k = [];
     k.push([E.length, 'élève' + (E.length > 1 ? 's' : '') + ' suivi' + (E.length > 1 ? 's' : '')], [sous, 'sous le seuil de volume']);
-    if (J) { const auj = (J.parJour[J.jourSaison] || []).length; k.push([auj, 'joueur' + (auj > 1 ? 's' : '') + ' aujourd\'hui'], [J.saison.length, 'joueur' + (J.saison.length > 1 ? 's' : '') + ' cette saison'], [J.jourSaison + ' / 30', 'jour de la saison ' + J.saisonEnCours + (J.viceCity ? ' · Vice City' : '')], [(J.saison.find(x => !x.hors) || {}).p ? esc(J.saison.find(x => !x.hors).p) : '—', 'en tête de la saison']); }
+    if (J) { const auj = (J.parJour[J.jourSaison] || []).length; k.push([auj, 'joueur' + (auj > 1 ? 's' : '') + ' aujourd\'hui'], [J.saison.length, 'joueur' + (J.saison.length > 1 ? 's' : '') + ' cette saison'], [J.jourSaison + ' / ' + (J.duree || 30), 'jour de la saison ' + J.saisonEnCours + (J.viceCity ? ' · Vice City' : '')], [(J.saison.find(x => !x.hors) || {}).p ? esc(J.saison.find(x => !x.hors).p) : '—', 'en tête de la saison']); }
     else k.push(['—', 'Courbe du jour : entrez la clé']);
     document.getElementById('vue-kpis').innerHTML = k.map(x => `<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
     document.getElementById('vue-date').textContent = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
   }
   function jeuRendu(){
     document.getElementById('jeu-cle').hidden = true; document.getElementById('jeu-corps').hidden = false;
-    document.getElementById('jeu-s').textContent = J.S; document.getElementById('jeu-j').textContent = J.jourSaison + ' / 30';
+    document.getElementById('jeu-s').textContent = J.S; document.getElementById('jeu-j').textContent = J.jourSaison + ' / ' + (J.duree || 30);
     const nbJ = {}; Object.values(J.parJour).forEach(L => L.forEach(x => nbJ[x.id] = (nbJ[x.id] || 0) + 1));
     document.getElementById('jeu-saison-vide').hidden = !!J.saison.length;
     document.getElementById('jeu-saison').innerHTML = (() => { let rg = 0; return J.saison.map(x => `<tr${x.hors ? ' style="opacity:.55"' : ''}><td>${x.hors ? '–' : ++rg}</td><td><b>${esc(x.p)}</b>${x.hors ? ' <small class="doux">hors classement</small>' : ''}</td><td>${x.s}</td><td>${nbJ[x.id] || 0}${x.t30 ? ' · jour 30 fait' : ''}</td><td class="cache-m"><code>${esc(x.id)}</code></td></tr>`).join(''); })();
@@ -944,7 +950,7 @@ a.btn{text-decoration:none}
     document.getElementById('jeu-jour-vide').hidden = !!auj.length;
     document.getElementById('jeu-jour').innerHTML = (() => { let rg = 0; return auj.map(x => `<tr${x.hors ? ' style="opacity:.55"' : ''}><td>${x.hors ? '–' : ++rg}</td><td><b>${esc(x.p)}</b>${x.hors ? ' <small class="doux">hors classement</small>' : ''}</td><td>${x.s}</td></tr>`).join(''); })();
     const max = Math.max(1, ...Object.values(J.parJour).map(L => L.length));
-    document.getElementById('jeu-barres').innerHTML = Array.from({ length: 30 }, (_, i) => { const n = (J.parJour[i + 1] || []).length; return `<i class="${n ? '' : 'vide-j'}" style="height:${n ? Math.max(6, n / max * 100) : 3}%" title="Jour ${i + 1} : ${n} joueur${n > 1 ? 's' : ''}"></i>`; }).join('');
+    document.getElementById('jeu-barres').innerHTML = Array.from({ length: J.duree || 30 }, (_, i) => { const n = (J.parJour[i + 1] || []).length; return `<i class="${n ? '' : 'vide-j'}" style="height:${n ? Math.max(6, n / max * 100) : 3}%" title="Jour ${i + 1} : ${n} joueur${n > 1 ? 's' : ''}"></i>`; }).join('');
     let g = '';
     if (J.precedente && J.precedente.gagnant) g += `<div class="gagnant"><b>Saison ${J.S - 1} : ${esc(J.precedente.gagnant)} a gagné.</b> ${J.precedente.reclame ? 'Mail pour le code de réduction : <a href="mailto:' + esc(J.precedente.reclame.email) + '">' + esc(J.precedente.reclame.email) + '</a> (reçu le ' + dt(J.precedente.reclame.t) + ').' : 'Il n\'a pas encore laissé son mail.'}</div>`;
     document.getElementById('jeu-gagnant').innerHTML = g;

@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwd9tcn3"></script>
+<script src="donnees.js?v=mwda5is7"></script>
 </head>
 <body>
 <style>
@@ -169,6 +169,21 @@ body.vice .titre{text-shadow:3px 3px 0 #00E0FF}
 body.vice .titre span{color:#FF6EC7}
 body.vice .ecran{--b:#FF2E93}
 body.vice .bulle{--b:#FFE45C}
+/* Noël : le 25 décembre, décor vert et rouge sous la neige */
+html:has(body.noel){background:#06231A}
+body.noel .vice-badge{display:block;color:#FFF;text-shadow:2px 2px 0 #D62839}
+body.noel{min-height:100vh;position:relative;z-index:0;--nuit:#0B3B2A;--ecran:#062418;--ecran2:#0F4A33;--bleu:#D62839;--bleu-clair:#FF6B6B;--corail:#FFD166;--jaune:#FFD166;--cadre:#1F7A4D;--doux:#CFE8D8;
+  background:linear-gradient(180deg,#06231A 0%,#0B3B2A 60%,#145C3F 100%) fixed}
+body.noel::before{content:"";position:fixed;inset:-200px 0 0 0;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(#FFF 0 2px,transparent 2.5px),radial-gradient(#FFF 0 3px,transparent 3.5px),radial-gradient(rgba(255,255,255,.7) 0 2px,transparent 2.5px);
+  background-size:90px 100px,150px 200px,60px 200px;background-position:10px 0,60px 50px,30px 120px;animation:neige 9s linear infinite}
+@keyframes neige{to{transform:translateY(200px)}}
+@media (prefers-reduced-motion:reduce){body.noel::before{animation:none}}
+body.noel .titre{text-shadow:3px 3px 0 #D62839}
+body.noel .titre span{color:#FFD166}
+body.noel .ecran{--b:#D62839}
+body.noel .bulle{--b:#FFD166}
+body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visible,body.noel .choix button:hover:not(:disabled),body.noel .choix button:focus-visible,body.vice .tuiles button:hover:not(:disabled),body.noel .tuiles button:hover:not(:disabled){color:var(--nuit)}
 .vc{font:9px var(--pix);color:#FFE45C;margin:0 0 10px;text-shadow:2px 2px 0 #FF2E93}
 
 /* Question 4 */
@@ -248,7 +263,7 @@ body.vice .bulle{--b:#FFE45C}
     <div>
       <a class="retour" href="../">◀ FRENGLAIS.CO</a>
       <h1 class="titre">COURBE<br><span>DU JOUR</span></h1>
-      <div class="num" id="num">JOUR 1/30</div>
+      <div class="num" id="num">JOUR 1</div>
       <div class="vice-badge" id="vice">★ VICE CITY ★<br>POINTS ×2</div>
     </div>
     <div class="compteurs">
@@ -346,7 +361,7 @@ body.vice .bulle{--b:#FFE45C}
       if (db && monId) { const col = db.collection('joueurs');
         classement = {
           async envoyer(n, pseudo, score){ const ref = col.doc(monId), s = await ref.get(), d = s.exists ? JSON.parse(JSON.stringify(s.data())) : {};
-            d.jours = d.jours || {}; d.t30 = d.t30 || {}; d.pseudo = pseudo; if (d.jours[n] == null) { d.jours[n] = score; if (C.jourSaison(n) === C.dureeSaison) d.t30[C.saison(n)] = Date.now(); } d.tl = Date.now(); await ref.set(d); },
+            d.jours = d.jours || {}; d.t30 = d.t30 || {}; d.pseudo = pseudo; if (d.jours[n] == null) { d.jours[n] = score; if (C.dernierJour(n)) d.t30[C.saison(n)] = Date.now(); } d.tl = Date.now(); await ref.set(d); },
           async tous(){ const snap = await col.get(); return snap.docs.map(x => ({ id: x.id, ...x.data() })); },
           classer(L, S){ return C.trierSaison(L.map(x => { let s = 0; Object.keys(x.jours || {}).forEach(k => { if (C.saison(+k) === S) s += x.jours[k]; }); return { id: x.id, p: x.pseudo, s, t30: (x.t30 || {})[S], tl: x.tl, rec: (x.reclame || {})[S] }; }).filter(x => x.s > 0)); },
           async lire(n){ const L = await this.tous();
@@ -379,17 +394,18 @@ body.vice .bulle{--b:#FFE45C}
 
   function rendre(){
     const P = C.du(num), [fr, zone, code, codes, phrases] = P;
-    $('num').textContent = 'JOUR ' + C.jourSaison(num) + '/' + C.dureeSaison + (C.saison(num) > 1 ? ' · SAISON ' + C.saison(num) : '') + (num !== AUJ ? ' (TEST)' : '');
-    $('apercu-num').textContent = 'S' + C.saison(num) + ' · ' + C.jourSaison(num) + '/' + C.dureeSaison;
+    $('num').textContent = 'JOUR ' + C.jourSaison(num) + '/' + C.duree(C.saison(num)) + (C.saison(num) > 1 ? ' · SAISON ' + C.saison(num) : '') + (num !== AUJ ? ' (TEST)' : '');
+    $('apercu-num').textContent = 'S' + C.saison(num) + ' · ' + C.jourSaison(num) + '/' + C.duree(C.saison(num));
     $('hud-serie').textContent = serie();
     document.body.classList.toggle('vice', C.viceCity(num));
+    document.body.classList.toggle('noel', C.noel(num)); $('vice').innerHTML = C.noel(num) ? '★ JOYEUX NOEL ★' : '★ VICE CITY ★<br>POINTS ×2';
     reinitScene(); [...$('cases').children].forEach(c => c.className = 'px'); document.body.classList.remove('lancement');
     const carte = $('carte'); carte.classList.add('sans-anim'); carte.classList.toggle('retournee', !!etat[num]); void carte.offsetWidth; carte.classList.remove('sans-anim');
     const fait = etat[num];
     if (fait) { $('fr').textContent = fr; poserZone(zone); poserCode(zone, code); $('hud-score').textContent = pad(fait.s, 4); if (!fait.bonus) { niveauBonus(fait); return; } fin(fait, true); return; }
     $('hud-score').textContent = '0000'; $('fr').textContent = '';
     $('jeu').innerHTML = `<div class="titre-ecran">
-      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>30 JOURS : LE N°1 GAGNE -${C.reduction} %.</p>
+      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>CHAQUE MOIS : LE N°1 GAGNE -${C.reduction} %.</p>
       <form class="pseudo nom-avant" id="f-nom"><label for="i-nom">VOTRE PSEUDO</label><input id="i-nom" maxlength="14" autocomplete="nickname" placeholder="3 A 14 LETTRES" value="${esc(lire('courbe-pseudo', ''))}"></form>
       <p class="note" id="n-nom"></p>
       <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button><div id="gagnant-titre" style="width:100%;text-align:left"></div></div>`;
@@ -502,7 +518,7 @@ body.vice .bulle{--b:#FFE45C}
     [...$('cases').children].forEach((c, i) => c.className = 'px ' + ((i < 3 ? r.res[i] : r.bonus && r.bonus.ok) ? 'juste' : 'rate'));
     const grille = r.res.map(x => x ? '🟦' : '🟥').join('');
     const b = r.bonus || { ok: false }, M = C.mot(num), vc = C.viceCity(num);
-    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.dureeSaison} ${grille}${b.ok ? '🟦' : '🟥'}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
+    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.duree(C.saison(num))} ${grille}${b.ok ? '🟦' : '🟥'}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
     const titres = ['GAME OVER', 'UN SUR QUATRE', 'DEUX SUR QUATRE', 'PRESQUE !', 'PARFAIT !'];
     const jours = Object.keys(etat).length, parfaits = Object.values(etat).filter(x => x.res.every(Boolean)).length, record = Math.max(0, ...Object.values(etat).map(x => x.s));
     $('jeu').innerHTML = `<div class="fin">
@@ -512,7 +528,7 @@ body.vice .bulle{--b:#FFE45C}
       <div class="boite px explication enigme-fin"><span class="ico-q" aria-hidden="true">?</span><div><p class="reperes">MOT MYSTERE · ${b.ok ? 'TROUVE · +' + b.pts : 'PAS TROUVE'}</p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
       <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
       <div id="gagnant"></div>
-      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.dureeSaison}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
+      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.duree(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
       <div class="stats"><div><b>${jours}</b>JOUÉS</div><div><b>${parfaits}</b>PARFAITS</div><div><b>${record}</b>RECORD</div></div>
       <p class="prochaine">PROCHAINE PHRASE DANS<br><b id="compte">--:--:--</b></p>
       <p class="signature">Un jeu <a href="../">Frenglais</a> · <a href="../courbe/reglement.html">règlement</a></p>
@@ -533,7 +549,7 @@ body.vice .bulle{--b:#FFE45C}
     if (!g || !g.fini || !g.pseudo) return;
     if (!g.moi) { el.innerHTML = `<div class="boite px gagne"><h3>SAISON ${S} TERMINEE</h3><p>Gagnant : <b>${esc(g.pseudo)}</b>. La saison ${S + 1} est lancée.</p></div>`; return; }
     if (g.reclame) { el.innerHTML = `<div class="boite px gagne"><h3>VOUS AVEZ GAGNE LA SAISON ${S}</h3><p>Demande bien reçue : votre code de réduction arrive par mail.</p></div>`; return; }
-    el.innerHTML = `<div class="boite px gagne"><h3>VOUS AVEZ GAGNE LA SAISON ${S} !</h3><p>N°1 sur 30 jours : <b>-${C.reduction} %</b> sur une formation Frenglais. Laissez votre mail pour recevoir votre code.</p>
+    el.innerHTML = `<div class="boite px gagne"><h3>VOUS AVEZ GAGNE LA SAISON ${S} !</h3><p>N°1 de la saison : <b>-${C.reduction} %</b> sur une formation Frenglais. Laissez votre mail pour recevoir votre code.</p>
       <form class="pseudo" id="f-mail"><input id="i-mail" type="email" required autocomplete="email" aria-label="Votre adresse mail" placeholder="vous@exemple.com" style="text-transform:none"><button class="btn" type="submit">ENVOYER</button></form><p class="note" id="n-mail"></p></div>`;
     $('f-mail').addEventListener('submit', async ev => { ev.preventDefault(); const m = $('i-mail').value.trim(), note = $('n-mail');
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m)) { note.textContent = 'Adresse invalide.'; note.className = 'note err'; return; }

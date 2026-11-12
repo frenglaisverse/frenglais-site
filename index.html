@@ -53,7 +53,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
       <div class="nav-liens">
         <a class="lien-sec" href="#formations">Formations</a>
         <a class="lien-sec" href="#methode">La méthode</a>
-        <a class="lien-sec lien-livre" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener" id="ouvre-livre" aria-haspopup="dialog" aria-label="Mon livre"><span class="l-long">Mon livre</span><span class="l-court">Livre</span></a>
+        <a class="lien-sec lien-livre" href="livre.html" aria-label="Mon livre"><span class="l-long">Mon livre</span><span class="l-court">Livre</span></a>
         <span class="sep" aria-hidden="true"></span>
         <a class="nav-eleve" href="espace-eleve.html"><span>Espace élève</span></a>
         <a class="nav-devis" href="#devis"><span>Demander un devis</span></a>
@@ -354,16 +354,6 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
   </section>
 </main>
 
-<dialog class="livre-dlg" id="livre" aria-labelledby="t-livre">
-  <button class="livre-ferme" type="button" aria-label="Fermer">×</button>
-  <h2 id="t-livre" class="sr">Mon livre : Tu n'as rien compris à l'anglais</h2>
-  <div class="livre-scene">
-    <img class="livre-halo" src="livre-couverture.jpg" alt="" aria-hidden="true" loading="lazy">
-    <a class="livre-couv" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener"><img src="livre-couverture.jpg" alt="Couverture du livre « Tu n'as rien compris à l'anglais », de Paul Moreaux" width="720" height="1079" loading="lazy"></a>
-  </div>
-  <a class="btn btn-blanc livre-amazon" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener">Amazon</a>
-</dialog>
-<script>(function(){var d=document.getElementById('livre'),o=document.getElementById('ouvre-livre');if(!d||!o||!d.showModal)return;o.addEventListener('click',function(e){e.preventDefault();d.showModal()});d.addEventListener('click',function(e){if(e.target===d||e.target.closest('.livre-ferme'))d.close()})})();</script>
 <footer>
   <div class="in pied">
     <div>

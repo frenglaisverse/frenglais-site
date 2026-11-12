@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mon livre · Tu n'as rien compris à l'anglais · Frenglais</title>
+<meta name="description" content="Tu n'as rien compris à l'anglais : le livre de Paul Moreaux, disponible sur Amazon.">
+<link rel="canonical" href="https://frenglais.co/livre.html">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1C49A5">
+<meta property="og:type" content="book"><meta property="og:site_name" content="Frenglais"><meta property="og:title" content="Tu n'as rien compris à l'anglais"><meta property="og:url" content="https://frenglais.co/livre.html"><meta property="og:image" content="https://frenglais.co/livre-couverture.jpg">
+<link rel="preload" as="image" href="livre-couverture.jpg">
+<script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a');if(a&&(a.getAttribute('href')||'').indexOf('amazon')>-1)g.count({path:'clic-livre-amazon',title:'livre-amazon',event:true});},true);</script>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#1C49A5;color:#fff;font:500 16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100dvh;display:grid;grid-template-rows:auto 1fr;position:relative;isolation:isolate;overflow-x:hidden}
+/* le bleu du site, et par-dessus la photo de Miami à 50 % */
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:url("livre-fond.jpg") center/cover no-repeat;opacity:.5}
+.haut{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px)}
+.haut img{display:block;height:44px;width:auto}
+.retour{color:#fff;text-decoration:none;padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.42);background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.retour:hover{background:rgba(255,255,255,.2)}
+main{display:grid;place-items:center;padding:8px 16px 40px}
+.scene{position:relative;display:flex;flex-direction:column;align-items:center;gap:28px;padding:clamp(40px,7vw,80px) clamp(40px,9vw,120px)}
+/* derrière le livre, le fond est flouté ; le flou s'estompe vers les bords */
+.flou{position:absolute;inset:-8% -38%;z-index:-1;-webkit-backdrop-filter:blur(26px) saturate(1.15);backdrop-filter:blur(26px) saturate(1.15);
+  -webkit-mask-image:radial-gradient(closest-side,#000 55%,transparent 100%);mask-image:radial-gradient(closest-side,#000 55%,transparent 100%);border-radius:50%}
+.couv{display:block;border-radius:18px;overflow:hidden;box-shadow:0 36px 80px rgba(6,14,40,.6),0 8px 20px rgba(6,14,40,.4);transform:rotate(-2deg);transition:transform .35s ease;animation:entre .6s cubic-bezier(.2,.8,.2,1) both}
+.couv:hover,.couv:focus-visible{transform:rotate(0) translateY(-6px)}
+.couv img{display:block;width:min(320px,64vw);height:auto;max-height:66dvh;object-fit:contain}
+@keyframes entre{from{opacity:0;transform:translateY(22px) rotate(-2deg) scale(.96)}}
+.amazon{display:inline-flex;align-items:center;justify-content:center;min-width:190px;min-height:48px;padding:14px 26px;border-radius:999px;background:#fff;color:#1C49A5;text-decoration:none;font-size:17px;box-shadow:0 10px 26px rgba(6,14,40,.35)}
+.amazon:hover{background:#EAF0FF}
+a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.couv{animation:none;transition:none}}
+</style>
+</head>
+<body>
+<header class="haut">
+  <a href="./" aria-label="Frenglais, accueil"><img src="logo-nav.webp" alt="Frenglais" width="158" height="56"></a>
+  <a class="retour" href="./">← Retour au site</a>
+</header>
+<main>
+  <h1 class="sr">Mon livre : Tu n'as rien compris à l'anglais</h1>
+  <div class="scene">
+    <div class="flou" aria-hidden="true"></div>
+    <a class="couv" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener"><img src="livre-couverture.jpg" alt="Couverture du livre « Tu n'as rien compris à l'anglais », de Paul Moreaux" width="720" height="1079"></a>
+    <a class="amazon" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener">Amazon</a>
+  </div>
+</main>
+</body>
+</html>

@@ -1093,24 +1093,34 @@ footer::after{opacity:.58}
 @media (prefers-reduced-motion:reduce){.livre-couv{transition:none}.livre-dlg[open]{animation:none}}
 .livre-dlg .livre-amazon{background:#fff;color:#1C49A5}
 
-/* carte Paul.M, accordée au reste du site : même verre dépoli que le menu, angles ronds, liseré clair doublé d'un fin contour sombre */
-.polaroid .pol-mousse{display:none!important}
-.pol-face{border-radius:18px;outline:0;box-shadow:0 0 0 1.5px rgba(6,12,34,.85),0 22px 40px -18px rgba(3,10,35,.75),0 3px 8px rgba(3,10,35,.3)}
-.pol-recto{background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.1));-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
-  border:1px solid rgba(255,255,255,.5);padding:9px 9px 0}
-.pol-cadre,.pol-recto img{border-radius:11px}
-.pol-cadre{box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
-.pol-nom,.polaroid .pol-nom{color:#fff;font:600 14px/1 "Cinzel",Georgia,serif;letter-spacing:.16em;text-shadow:0 1px 2px rgba(6,12,34,.45)}
-.polaroid .pol-carte{transition:transform .3s ease}
-.polaroid .pol-carte:hover{transform:translateY(-4px) scale(1.02)}
-.pol-carte:focus-visible{border-radius:18px}
-/* la grande carte : le bleu nuit du site plutôt que le vert du livre */
-.pol-grand .pol-face{border-radius:22px;box-shadow:0 0 0 1.5px rgba(6,12,34,.9),0 40px 80px -30px rgba(0,0,0,.8),0 4px 10px rgba(0,0,0,.3)}
-.pol-grand .pol-verso{background:radial-gradient(120% 80% at 85% 0,rgba(240,118,111,.22),transparent 55%),linear-gradient(165deg,#2A5BC2,#1C49A5 42%,#10245C);border:1px solid rgba(255,255,255,.42)}
-.pol-grand .pol-verso b,.pol-grand .pol-verso span,.pol-grand .v-nom,.pol-grand .v-liste,.pol-grand .v-cit{text-shadow:0 1px 2px rgba(6,12,34,.45)}
-.pol-grand .v-courbe{filter:none}.pol-grand .v-logo{filter:brightness(0) invert(1)}
-@media (prefers-reduced-motion:reduce){.polaroid .pol-carte{transition:none}}
-.pol-racines g{stroke:rgba(214,226,255,.55)}
 
 /* menu rétréci : « Mon livre » n'y apparaît pas */
 @media (max-width:760px){.bandeau .nav-liens .lien-livre{display:none!important}}
+
+/* carte Paul.M, version épurée : une fiche blanche aux angles ronds, comme les boutons du site.
+   Photo nette (plus de buée ni de « flocons »), plus de racines ni d'épingle, nom en Geist. */
+.polaroid .pol-racines,.polaroid .pol-mousse,.pol-buee,.pol-carte::before{display:none!important}
+.polaroid{animation:none!important;transform:none!important}
+.polaroid .pol-carte{transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.polaroid .pol-carte:hover{transform:translateY(-5px)}
+.pol-face{border-radius:22px!important}
+.pol-recto{background:#fff!important;border:0!important;outline:0!important;padding:8px 8px 0!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 24px 44px -20px rgba(3,10,35,.7),0 4px 12px rgba(3,10,35,.22)!important}
+.pol-recto img,.pol-cadre{border-radius:15px!important}
+.pol-cadre{box-shadow:none!important}
+.polaroid .pol-nom,.pol-nom{flex:1;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font:700 15px/1 var(--f-txt)!important;letter-spacing:-.01em!important;color:#10245C!important;text-shadow:none!important;transform:none!important}
+.polaroid .pol-nom::after{content:"Fondateur";font:500 10.5px/1 var(--f-mono,ui-monospace);letter-spacing:.14em;text-transform:uppercase;color:#E2685F}
+.pol-carte:focus-visible{border-radius:22px;outline:3px solid #fff;outline-offset:4px}
+@media (max-width:1100px){.hero-bas .polaroid .pol-nom{font-size:13px!important}.polaroid .pol-nom::after{font-size:9px}}
+@media (prefers-reduced-motion:reduce){.polaroid .pol-carte{transition:none}}
+.pol-recto{padding-bottom:8px!important}
+/* verso agrandi : le bleu du site, photo nette aux angles ronds, nom en Geist */
+.pol-grand .pol-verso,.pol-verso{background:radial-gradient(120% 80% at 90% 0,rgba(240,118,111,.22),transparent 55%),linear-gradient(165deg,#2A5BC2,#1C49A5 45%,#12307A)!important;border:1px solid rgba(255,255,255,.35)!important}
+.pol-grand .pol-face{border-radius:26px!important;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 4px 10px rgba(0,0,0,.3)!important}
+.pol-verso .v-mousse{display:none!important}
+.pol-verso .v-photo{border:0!important;padding:0!important;border-radius:18px!important;transform:none!important;box-shadow:0 12px 26px rgba(3,10,35,.45)!important;background:none!important}
+.pol-grand .v-nom{font-family:var(--f-txt)!important;font-weight:700!important;letter-spacing:-.02em!important;text-shadow:none!important}
+.pol-verso b,.pol-verso span,.pol-grand .v-cit{text-shadow:none!important}
+.pol-grand .v-courbe{filter:none!important}
+.pol-grand .pol-verso::before{display:none!important}

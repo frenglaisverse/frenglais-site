@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwe0u1y7"></script>
+<script src="donnees.js?v=mwe2raqw"></script>
 </head>
 <body>
 <style>
@@ -254,6 +254,23 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
 .apercu{display:flex;justify-content:center;align-items:center;gap:10px;font:8px var(--pix);color:var(--doux)}
 .apercu button{background:var(--ecran2);border:0;color:var(--creme);font:10px var(--pix);padding:8px 10px;cursor:pointer}
 .cache{display:none!important}
+/* page de fin : mot mystère, classement, partage, compte à rebours sur 24 h */
+.correction{font-size:20px;line-height:1.25;color:var(--doux);margin:14px auto 0;max-width:34ch}
+.correction a{color:var(--jaune);text-underline-offset:4px;white-space:nowrap}
+.ico-q.ok{background:var(--vert);font-size:34px}
+.ico-q.ko{background:var(--corail);font-size:30px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.prochaine{text-align:center;margin:6px 0 0}
+.prochaine p{font:11px/1.8 var(--pix);color:var(--doux);margin:0 0 8px}
+.prochaine b{display:block;font:34px/1 var(--pix);color:var(--jaune);font-weight:400;letter-spacing:2px;text-shadow:3px 3px 0 var(--nuit)}
+.jour24{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;max-width:420px;margin:14px auto 0}
+.jour24 i{height:12px;background:var(--ecran2);box-shadow:inset 0 0 0 2px var(--cadre)}
+.jour24 i.passe{background:var(--bleu);box-shadow:none}
+.jour24 i.en-cours{background:var(--jaune);box-shadow:none;animation:clignote 1s steps(2) infinite}
+/* l'onglet non sélectionné clignote doucement pour inviter au clic */
+.onglets button[aria-selected="false"]{animation:appel 1.1s steps(2) infinite}
+@keyframes appel{50%{background:var(--bleu);box-shadow:0 -4px 0 0 var(--jaune),0 4px 0 0 var(--jaune),-4px 0 0 0 var(--jaune),4px 0 0 0 var(--jaune)}}
+@keyframes clignote{50%{opacity:.35}}
 /* boutons plus visibles et plus faciles à toucher (cibles de 44 px minimum) */
 .onglets{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 4px 16px}
 .onglets button{min-height:44px;padding:12px 8px 10px;font:10px/1.2 var(--pix);color:var(--creme);background:var(--ecran2);box-shadow:0 -4px 0 0 var(--cadre),0 4px 0 0 var(--cadre),-4px 0 0 0 var(--cadre),4px 0 0 0 var(--cadre);text-decoration:none}
@@ -530,7 +547,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
         if (b) b.classList.add(juste ? 'ok' : 'ko');
         cases[k].className = 'px ' + (juste ? 'juste' : 'rate');
         $('flash').className = 'flash ' + (juste ? 'ok' : 'ko');
-        $('flash').innerHTML = juste ? `EXACT ! <b>+${100 * m}</b> ${pts > 100 * m ? '<b>+' + (pts - 100 * m) + ' VITESSE</b>' : ''}` : (b ? 'RATE.' : 'TEMPS ECOULE.') + ' REPONSE A LA FIN.';
+        $('flash').innerHTML = juste ? `EXACT ! <b>+${100 * m}</b> ${pts > 100 * m ? '<b>+' + (pts - 100 * m) + ' VITESSE</b>' : ''}` : (b ? 'RATE.' : 'TEMPS ECOULE.');
         (juste ? SON.juste : SON.faux)();
         $('hud-score').textContent = pad(total, 4);
                 setTimeout(() => { k++; if (k < 3) etape(); else terminer(); }, juste ? 800 : 1100);
@@ -604,21 +621,19 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     const titres = ['GAME OVER', 'UN SUR QUATRE', 'DEUX SUR QUATRE', 'PRESQUE !', 'PARFAIT !'];
     const jours = Object.keys(etat).length, parfaits = Object.values(etat).filter(x => x.res.every(Boolean)).length, record = Math.max(0, ...Object.values(etat).map(x => x.s));
     $('jeu').innerHTML = `<div class="fin">
-      <div class="verdict">${vc ? '<p class="vc">★ VICE CITY · POINTS ×2 ★</p>' : ''}<h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div></div>
-      <div class="boite px explication"><canvas class="ico-lam" id="ico-lam" width="20" height="10" aria-hidden="true"></canvas><div><p class="juste">${esc(P[4][0])}</p><p class="reperes">${esc(P[1])} · ${esc(P[2])}</p><p>${P[5]}</p>
-        <p class="source">D'après une info du Courrier des Amériques : <a href="${src[1]}" target="_blank" rel="noopener">${esc(src[0])} ↗</a></p></div></div>
-      <div class="boite px explication enigme-fin"><span class="ico-q" aria-hidden="true">?</span><div><p class="reperes">MOT MYSTERE · ${b.ok ? 'TROUVE · +' + b.pts : 'PAS TROUVE'}</p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
-      <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
+      <div class="verdict">${vc ? '<p class="vc">★ VICE CITY · POINTS ×2 ★</p>' : ''}<h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div>
+        <p class="correction">La correction ? Pour ne plus vous tromper, elle se travaille en formation : <a href="../#devis">demander un devis →</a></p></div>
+      <div class="boite px explication enigme-fin"><span class="ico-q ${b.ok ? 'ok' : 'ko'}" aria-hidden="true">${b.ok ? '✔' : '✖'}</span><div><p class="reperes">MOT MYSTERE${b.ok ? ' · +' + b.pts : ''}<span class="sr">${b.ok ? ' : trouvé' : ' : non trouvé'}</span></p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
       <div id="gagnant"></div>
       <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
-      <div class="stats"><div><b>${jours}</b>JOUÉS</div><div><b>${parfaits}</b>PARFAITS</div><div><b>${record}</b>RECORD</div></div>
-      <p class="prochaine">PROCHAINE PHRASE DANS<br><b id="compte">--:--:--</b></p>
+      <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
+      <div class="prochaine"><p>NOUVELLE PHRASE A MINUIT</p><b id="compte">--:--:--</b><div class="jour24" id="jour24" aria-hidden="true">${'<i></i>'.repeat(24)}</div></div>
       <p class="signature">Un jeu <a href="../">Frenglais</a> · <a href="../courbe/reglement.html">règlement</a></p>
     </div>`;
-    sprite($('ico-lam').getContext('2d'), 0, 0, 1);
     if (!deja) { let v = 0; const pas = Math.max(1, Math.round(r.s / 30)), el = $('score-fin'); const it = setInterval(() => { v = Math.min(r.s, v + pas); el.textContent = pad(v, 4); bip(880 + v, .02, 0, 'square', .02); if (v >= r.s) clearInterval(it); }, 30); }
     $('copier').addEventListener('click', async () => { compter('partage'); try { await navigator.clipboard.writeText(texte); $('copie').textContent = 'Copié ! Collez-le où vous voulez.'; } catch (e) { const rg = document.createRange(); rg.selectNodeContents($('texte')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(rg); $('copie').textContent = 'Texte sélectionné : copiez-le avec votre clavier ou un appui long.'; } });
-    clearInterval(minuteur); const tick = () => { const el = $('compte'); if (!el) return clearInterval(minuteur); const now = new Date(), dem = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1), x = Math.max(0, Math.floor((dem - now) / 1000)); el.textContent = [x / 3600 | 0, (x % 3600) / 60 | 0, x % 60].map(v => pad(v, 2)).join(':'); }; tick(); minuteur = setInterval(tick, 1000);
+    clearInterval(minuteur); const tick = () => { const el = $('compte'); if (!el) return clearInterval(minuteur); const now = new Date(), hp = new Intl.DateTimeFormat('fr-FR', { timeZone:'Europe/Paris', hour:'numeric', minute:'numeric', second:'numeric', hourCycle:'h23' }).formatToParts(now).reduce((o, x) => (o[x.type] = +x.value, o), {}), x = Math.max(0, 86400 - (hp.hour * 3600 + hp.minute * 60 + hp.second));   /* minuit à Paris, comme le serveur */ el.textContent = [x / 3600 | 0, (x % 3600) / 60 | 0, x % 60].map(v => pad(v, 2)).join(':');
+      const h = hp.hour; [...$('jour24').children].forEach((c, i) => c.className = i < h ? 'passe' : i === h ? 'en-cours' : ''); if (x === 0) setTimeout(() => location.reload(), 1500); }; tick(); minuteur = setInterval(tick, 1000);
     afficherTop(r); afficherGagnant($('gagnant'));
   }
 
@@ -679,7 +694,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       L.innerHTML = Array.from({ length: nb }, (_, i) => i).map(i => { const x = liste[i]; return x ? `<li class="${x.moi ? 'moi' : ''}"><span class="rg">${i + 1}${i ? 'E' : 'ER'}</span><span>${esc(x.p)}</span><span class="pt">${pad(x.s, onglet === 'jour' ? 3 : 5)}</span></li>` : `<li class="vide"><span class="rg">${i + 1}${i ? 'E' : 'ER'}</span><span>- - -</span><span></span></li>`; }).join('');
       const pos = liste.findIndex(x => x.moi);
       alerteDernierJour(donnees.saison || []);
-      $('rang').textContent = (pos > nb - 1 ? `Vous êtes ${pos + 1}e sur ${liste.length}.` : (liste.length ? `${liste.length} joueur${liste.length > 1 ? 's' : ''}.` : '')) + (r.envoye && monId ? ` Votre code joueur : ${String(monId).slice(0, 8).toUpperCase()} (gardez-le, il prouve votre victoire).` : '');
+      $('rang').textContent = (pos > nb - 1 ? `Vous êtes ${pos + 1}e sur ${liste.length}.` : (liste.length ? `${liste.length} joueur${liste.length > 1 ? 's' : ''}.` : ''));
     }
     if (!r.envoye && pseudo && !C.pseudoValide(pseudo)) { const note = $('n-pseudo'); note.textContent = 'Envoi de votre score…';
       try { await classement.envoyer(num, pseudo, r.s, r); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); const ff = $('f-pseudo'); if (ff) ff.remove(); charger(); if ($('n-pseudo')) $('n-pseudo').textContent = 'Score inscrit. Bravo, ' + pseudo + ' !'; compter('pseudo'); }

@@ -104,9 +104,15 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
   const f=document.getElementById('acces'); if(!f) return;
   const ident=document.getElementById('acces-id'), code=document.getElementById('acces-code'), etat=document.getElementById('acces-etat');
   const valide=v=>{ const m=/^([A-Za-z]+)([1-6])$/.exec(v.trim()); return m && NOMS_FLORIDE.some(n=>n.toLowerCase()===m[1].toLowerCase()); };
+  { const q=new URLSearchParams(location.search).get('code'); if(q) code.value=q.toUpperCase(); }
   code.addEventListener('input',()=>{ let v=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); if(v.startsWith('FRG')) v=v.slice(3);
     v=v.slice(0,8); code.value=v?'FRG-'+v.slice(0,4)+(v.length>4?'-'+v.slice(4):''):''; });
   f.addEventListener('submit',e=>{ e.preventDefault(); etat.className='tb-acces-etat';
+    if(/^FRG-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.value)&&window.FRG&&FRG.demoVerifier&&!f.dataset.demo){
+      etat.textContent='Vérification…'; f.dataset.demo='1';
+      FRG.demoVerifier(code.value).then(r=>{ if(r.ok){ etat.classList.add('ok'); etat.textContent='Bienvenue '+r.nom+' : votre démo s\'ouvre…'; setTimeout(()=>location.href='modules.html',700); } else { etat.textContent=''; f.requestSubmit(); } delete f.dataset.demo; })
+        .catch(()=>{ etat.textContent=''; f.requestSubmit(); delete f.dataset.demo; });
+      return; }
     if(!valide(ident.value)){ etat.classList.add('ko'); etat.textContent='Identifiant introuvable : un nom de Floride suivi d\'un chiffre, par exemple Manatee3.'; ident.focus(); return; }
     if(!/^FRG-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.value)){ etat.classList.add('ko'); etat.textContent='Le code a la forme FRG-XXXX-XXXX.'; code.focus(); return; }
     if(PLATEFORME_URL){ location.href=PLATEFORME_URL; return; }
@@ -120,6 +126,7 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
       <a href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.7 3.5 3.9 3.7v3.1a7 7 0 0 1-3.9-1.2v6.2A5.8 5.8 0 1 1 10.8 9v3.2a2.7 2.7 0 1 0 2.6 2.7V3Z"/></svg></a>
     </div></div>
 <nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a></nav></div></footer>
+<script src="frenglais-commun.js?v=2"></script>
 <script src="mousse.js?v=202611091705"></script>
 </body>
 </html>

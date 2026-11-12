@@ -509,6 +509,8 @@ a.btn{text-decoration:none}
 .pastille{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;margin-left:4px;border-radius:99px;background:#F0766F;color:#fff;font:700 12px/1 var(--f-txt);vertical-align:1px}
 .zoho{border:1.5px dashed #C9D3EE;border-radius:14px;padding:10px 14px;margin:0 0 14px}.zoho summary{cursor:pointer}.zoho ol{margin:10px 0;padding-left:20px;line-height:1.55}.zoho code{font-size:12px;word-break:break-all}
 .zoho-champs{display:flex;flex-wrap:wrap;gap:8px}.zoho-champs input{flex:1 1 180px;padding:10px 12px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt)}
+#demos input{padding:10px 12px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt)}
+.repli summary{cursor:pointer;padding:6px 0}.repli[open] summary{margin-bottom:10px}
 .rappel{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border:1.5px solid #F0766F;background:rgba(240,118,111,.12);border-radius:14px;padding:12px 14px;margin:0 0 14px}
 .actions-bandeau .btn-mail{text-decoration:none}
 .bon-outils{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin:10px 0 6px}.bon-outils label{display:flex;flex-direction:column;gap:3px;font-size:12px}.bon-outils input{font:500 15px ui-monospace,Menlo,monospace;padding:8px 10px;border:1.5px solid #C9D3EE;border-radius:10px;width:210px;text-transform:uppercase}
@@ -576,6 +578,45 @@ a.btn{text-decoration:none}
     </div>
   </section>
 
+
+
+
+
+
+
+
+  <section class="carte" id="demos">
+    <div class="ligne" style="justify-content:space-between"><h2>Démos prospects</h2><span class="doux petit">Un code invité ouvre quelques modules, pour une durée limitée</span></div>
+    <div class="ligne">
+      <label>Prospect <input id="dm-nom" placeholder="ex. Hôtel Le Negresco" maxlength="60" style="width:240px"></label>
+      <label>Durée <select id="dm-jours"><option value="3">3 jours</option><option value="7" selected>7 jours</option><option value="14">14 jours</option><option value="30">30 jours</option></select></label>
+      <label>Modules <select id="dm-mod"><option value="1-3" selected>1 à 3 (les fondations)</option><option value="1-6">1 à 6 (arc 1 complet)</option><option value="1,2,3,11,13">1 à 3 + Spit it + couteaux suisses</option><option value="1-32">Tout le parcours</option></select></label>
+      <button class="btn plein" id="dm-creer" type="button">Créer le code</button><span id="dm-msg" class="petit"></span>
+    </div>
+    <div id="dm-nouveau"></div>
+    <table class="tab"><thead><tr><th>Prospect</th><th>Code</th><th class="cache-m">Modules</th><th>Expire</th><th>Ouvertures</th><th></th></tr></thead><tbody id="dm-liste"></tbody></table>
+    <p class="vide" id="dm-vide">Aucun code invité actif.</p>
+  </section>
+
+  <section class="carte">
+    <div class="ligne" style="justify-content:space-between"><h2>Vos élèves</h2><span class="doux petit" id="resume"></span></div>
+    <table class="tab"><thead><tr><th>Élève</th><th class="cache-m">Secteur</th><th>Semaine</th><th>Modules</th><th>Volume tenu</th><th class="cache-m">Niveau</th><th class="cache-m">Rapport reçu</th></tr></thead><tbody id="liste"></tbody></table>
+    <p class="vide" id="liste-vide">Aucun élève pour l'instant. Dès qu'un élève vous envoie son bilan, collez-le ci-dessous.</p>
+    <details class="repli" id="rapport-repli"><summary><b>Recevoir un rapport d'élève</b> · coller le message WhatsApp « FRG1… »</summary>
+    <p class="doux petit" style="margin:0">L'élève touche « Préparer mon bilan » dans son espace : vous recevez un message qui contient un code <code>FRG1…</code>. Collez le message entier ici. Le rapport le plus récent remplace le précédent ; vos notes, présences et validations sont gardées.</p>
+    <textarea id="code" placeholder="Collez ici le message WhatsApp de l'élève"></textarea>
+    <div class="ligne"><button class="btn plein" id="importer" type="button">Ajouter ou mettre à jour</button><span id="imp-msg"></span></div>
+    </details>
+  </section>
+
+  <section class="carte" id="fiche" hidden></section>
+
+  <section class="carte" id="classement" hidden>
+    <div class="ligne" style="justify-content:space-between"><h2>Classement des élèves</h2><label class="petit">Classer par <select id="tri"><option value="modules">modules validés</option><option value="volume">volume tenu</option><option value="score">score moyen</option><option value="minute">jours de Minute Courbe</option></select></label></div>
+    <table class="tab"><thead><tr><th>#</th><th>Élève</th><th>Modules validés</th><th>Score moyen</th><th>Volume tenu</th><th class="cache-m">Minute Courbe</th></tr></thead><tbody id="rang-eleves"></tbody></table>
+    <p class="vide" id="rang-vide">Le classement apparaîtra dès le premier rapport reçu.</p>
+  </section>
+
   <section class="carte" id="jeu">
     <div class="ligne" style="justify-content:space-between"><h2>Courbe du jour · classement complet</h2><span class="doux petit" id="jeu-etat"></span></div>
     <div id="jeu-cle" class="ligne">
@@ -594,40 +635,18 @@ a.btn{text-decoration:none}
   </section>
 
   <section class="carte">
-    <div class="ligne" style="justify-content:space-between"><h2>Classement des élèves</h2><label class="petit">Classer par <select id="tri"><option value="modules">modules validés</option><option value="volume">volume tenu</option><option value="score">score moyen</option><option value="minute">jours de Minute Courbe</option></select></label></div>
-    <table class="tab"><thead><tr><th>#</th><th>Élève</th><th>Modules validés</th><th>Score moyen</th><th>Volume tenu</th><th class="cache-m">Minute Courbe</th></tr></thead><tbody id="rang-eleves"></tbody></table>
-    <p class="vide" id="rang-vide">Le classement apparaîtra dès le premier rapport reçu.</p>
-  </section>
-
-  <section class="carte">
-    <h2>Recevoir un rapport</h2>
-    <p class="doux petit" style="margin:0">L'élève touche « Préparer mon bilan » dans son espace : vous recevez un message qui contient un code <code>FRG1…</code>. Collez le message entier ici. Le rapport le plus récent remplace le précédent ; vos notes, présences et validations sont gardées.</p>
-    <textarea id="code" placeholder="Collez ici le message WhatsApp de l'élève"></textarea>
-    <div class="ligne"><button class="btn plein" id="importer" type="button">Ajouter ou mettre à jour</button><span id="imp-msg"></span></div>
-  </section>
-
-  <section class="carte">
-    <div class="ligne" style="justify-content:space-between"><h2>Vos élèves</h2><span class="doux petit" id="resume"></span></div>
-    <table class="tab"><thead><tr><th>Élève</th><th class="cache-m">Secteur</th><th>Semaine</th><th>Modules</th><th>Volume tenu</th><th class="cache-m">Niveau</th><th class="cache-m">Rapport reçu</th></tr></thead><tbody id="liste"></tbody></table>
-    <p class="vide" id="liste-vide">Aucun élève pour l'instant. Collez un premier rapport ci-dessus.</p>
-  </section>
-
-  <section class="carte" id="fiche" hidden></section>
-
-  <section class="carte">
-    <h2>Réglages de la condition de résultats</h2>
+    <details class="repli"><summary><h2 style="display:inline">Réglages et sauvegarde</h2></summary>
+    <h3 class="h3">Réglages de la condition de résultats</h3>
     <p class="doux petit" style="margin:0">Les résultats annoncés ne valent que si l'élève tient son volume hebdomadaire : ses modules (selon son rythme), ses jours de Minute Courbe, une mission par module et, si vous l'activez, l'atelier hebdomadaire. Ces réglages s'appliquent à tous les rapports.</p>
     <div class="ligne">
       <label>Seuil de volume tenu <input type="number" id="seuil" min="50" max="100" step="5" style="width:80px"> %</label>
       <label>Minute Courbe <input type="number" id="minutes" min="1" max="7" style="width:64px"> jours / semaine</label>
       <label><input type="checkbox" id="atelier"> L'atelier hebdomadaire compte dans le volume</label>
     </div>
-  </section>
-
-  <section class="carte">
-    <h2>Sauvegarde</h2>
+    <h3 class="h3">Sauvegarde</h3>
     <p class="doux petit" style="margin:0">Tout est enregistré dans ce navigateur, sur cet ordinateur, et nulle part ailleurs. Téléchargez une sauvegarde chaque semaine : si le navigateur est vidé, c'est elle qui vous sauve.</p>
     <div class="ligne"><button class="btn" id="exporter" type="button">Télécharger la sauvegarde</button><label class="btn" style="cursor:pointer">Restaurer une sauvegarde<input type="file" id="restaurer" accept="application/json" hidden></label><span id="sauv-msg" class="petit"></span></div>
+    </details>
   </section>
 </div>
 <div id="impression"></div>
@@ -647,6 +666,17 @@ a.btn{text-decoration:none}
   const lire = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
   const ecrire = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
   FRG.lire = lire; FRG.ecrire = ecrire;
+  /* ---------- démo prospect : un code invité ouvre quelques modules pour une durée limitée ---------- */
+  FRG.API = 'https://courbe-classement.paulodubmx84.workers.dev';
+  FRG.demo = () => { const d = lire('frg-demo', null); return d && d.expire > Date.now() ? d : null; };
+  FRG.demoExpiree = () => { const d = lire('frg-demo', null); return !!(d && d.expire <= Date.now()); };
+  FRG.demoVerifier = async code => { const r = await fetch(FRG.API + '/invite/verifier', { method: 'POST', body: JSON.stringify({ code }) }).then(x => x.json());
+    if (r.ok) ecrire('frg-demo', { code, nom: r.nom, expire: r.expire, modules: r.modules }); return r; };
+  /* page de module ouverte hors du périmètre de la démo : on remplace le contenu par un message */
+  FRG.demoGarde = n => { const d = FRG.demo(), exp = FRG.demoExpiree(); if (!d && !exp) return;
+    if (d && d.modules.includes(n)) return;
+    document.addEventListener('DOMContentLoaded', () => { const m = document.createElement('div'); m.style.cssText = 'position:fixed;inset:64px 0 0;z-index:50;background:var(--fond,#F5F6FA);overflow:auto'; document.body.appendChild(m);
+      m.innerHTML = '<div style="max-width:560px;margin:12vh auto;text-align:center;padding:0 20px"><p class="eyebrow">' + (exp ? 'Démo terminée' : 'Hors démo') + '</p><h1 style="font-size:clamp(28px,5vw,40px);margin:.2em 0">' + (exp ? 'Votre accès démo est terminé.' : 'Ce module fait partie de la formation complète.') + '</h1><p class="lead">Pour ouvrir tout le parcours, demandez un devis : on cale le format avec vous.</p><p style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn" href="index.html#devis">Demander un devis</a><a class="btn btn-contour" href="modules.html">Retour aux modules</a></p></div>'; }); };
   const JOUR = 864e5, SEM = 7 * JOUR;
   FRG.jourCle = (t = Date.now()) => { const d = new Date(t); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
 
@@ -974,6 +1004,7 @@ a.btn{text-decoration:none}
       return { nom: [d.prenom, el.nom || d.nom].filter(Boolean).join(' ') || '(sans prénom)', modules: val.length, score: sc, volume: v.moyenne, tenu: v.tenu, minute: mn }; });
     L.sort((a, b) => ((b[tri] == null ? -1 : b[tri]) - (a[tri] == null ? -1 : a[tri])) || (b.modules - a.modules));
     document.getElementById('rang-vide').hidden = !!L.length;
+    document.getElementById('classement').hidden = L.length < 2;
     document.getElementById('rang-eleves').innerHTML = L.map((e, i) => `<tr><td>${i + 1}</td><td><b>${esc(e.nom)}</b></td><td>${e.modules} / 32</td><td>${e.score == null ? '—' : e.score + ' %'}</td><td>${e.volume == null ? '—' : `<span class="pill ${e.tenu ? 'ok' : 'ko'}">${e.volume} %</span>`}</td><td class="cache-m">${e.minute} j</td></tr>`).join('');
   }
   document.getElementById('tri').addEventListener('change', rangEleves);
@@ -1014,6 +1045,30 @@ a.btn{text-decoration:none}
     catch (e) { msg.textContent = 'Serveur injoignable : ' + e.message; } });
   setInterval(() => { if (!document.hidden) majMails(); }, 120000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) majMails(); });
+  /* démos prospects : codes invités créés et vérifiés par le serveur Cloudflare */
+  const dmPost = (action, b) => fetch(API + '/invite/' + action, { method: 'POST', body: JSON.stringify(Object.assign({ cle: FRG.lire('frg-cle-tableau', '') }, b)) }).then(r => r.json());
+  const dmDate = t => new Date(t).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+  const dmMods = m => { const s = [...m].sort((a, b) => a - b); return s.length > 6 && s[s.length - 1] - s[0] === s.length - 1 ? s[0] + ' à ' + s[s.length - 1] : s.join(', '); };
+  async function dmCharger(){ if (!FRG.lire('frg-cle-tableau', '')) { document.getElementById('dm-msg').textContent = 'Entrez d\'abord votre clé dans le bloc « Courbe du jour ».'; return; }
+    let j; try { j = await dmPost('liste', {}); } catch (e) { document.getElementById('dm-msg').textContent = 'Serveur injoignable. Le nouveau code serveur est-il collé dans Cloudflare ?'; return; }
+    if (!j.ok) { document.getElementById('dm-msg').textContent = j.erreur || 'Liste indisponible.'; return; }
+    const L = j.invites.filter(x => x.expire > 0);
+    document.getElementById('dm-vide').hidden = !!L.length;
+    document.getElementById('dm-liste').innerHTML = L.map(x => { const fini = x.expire < Date.now();
+      return `<tr${fini ? ' style="opacity:.5"' : ''}><td><b>${esc(x.nom)}</b></td><td><code>${esc(x.code)}</code></td><td class="cache-m">${esc(dmMods(x.modules || []))}</td><td>${fini ? 'terminé' : dmDate(x.expire)}</td><td>${x.vues || 0}${x.derniere ? ' <span class="doux petit">· ' + dmDate(x.derniere) + '</span>' : ''}</td><td>${fini ? '' : `<button class="btn" type="button" data-rev="${esc(x.code)}">Révoquer</button>`}</td></tr>`; }).join('');
+    document.querySelectorAll('[data-rev]').forEach(b => b.onclick = async () => { if (!confirm('Révoquer le code ' + b.dataset.rev + ' ? Le prospect perd l\'accès tout de suite.')) return; await dmPost('revoquer', { code: b.dataset.rev }); dmCharger(); }); }
+  document.getElementById('dm-creer').addEventListener('click', async () => { const msg = document.getElementById('dm-msg'), nom = document.getElementById('dm-nom').value.trim();
+    if (!nom) { msg.textContent = 'Indiquez le nom du prospect.'; return; }
+    const v = document.getElementById('dm-mod').value, modules = [];
+    v.split(',').forEach(p => { const [a, b] = p.split('-').map(Number); for (let n = a; n <= (b || a); n++) modules.push(n); });
+    msg.textContent = 'Création…'; let j; try { j = await dmPost('creer', { nom, jours: +document.getElementById('dm-jours').value, modules }); } catch (e) { msg.textContent = 'Serveur injoignable.'; return; }
+    if (!j.ok) { msg.textContent = j.erreur || 'Refusé.'; return; }
+    msg.textContent = ''; document.getElementById('dm-nom').value = '';
+    const lien = 'https://frenglais.co/espace-eleve.html?code=' + j.code;
+    const texte = 'Bonjour,\n\nComme promis, voici votre accès démo à la formation Frenglais, valable jusqu\'au ' + dmDate(j.expire) + ' :\n' + lien + '\n\nVotre code : ' + j.code + ' (il est déjà rempli si vous passez par le lien ; laissez l\'identifiant vide).\n\nBonne découverte,\nPaul';
+    document.getElementById('dm-nouveau').innerHTML = `<div class="rappel"><p style="margin:0 0 8px"><b>Code créé pour ${esc(nom)} : <code>${esc(j.code)}</code></b></p><textarea id="dm-texte" rows="8" style="width:100%">${esc(texte)}</textarea><div class="ligne"><button class="btn plein" type="button" id="dm-copier">Copier le message</button><a class="btn" href="${esc(lien)}" target="_blank" rel="noopener">Tester le lien ↗</a></div></div>`;
+    document.getElementById('dm-copier').onclick = async () => { try { await navigator.clipboard.writeText(document.getElementById('dm-texte').value); document.getElementById('dm-copier').textContent = 'Copié'; } catch (e) {} };
+    dmCharger(); });
   function jeuRendu(){
     document.getElementById('jeu-cle').hidden = true; document.getElementById('jeu-corps').hidden = false;
     document.getElementById('jeu-s').textContent = J.S; document.getElementById('jeu-j').textContent = J.jourSaison + ' / ' + (J.duree || 30);
@@ -1048,7 +1103,7 @@ a.btn{text-decoration:none}
     const msg = document.getElementById('cle-msg'); msg.className = 'petit'; msg.textContent = depuisSaisie ? 'Ouverture…' : '';
     try { const rep = await fetch(API + '/admin', { method: 'POST', body: JSON.stringify({ cle }) }), j = await rep.json();
       if (!rep.ok) throw new Error(j.erreur || 'refus');
-      J = j; FRG.ecrire('frg-cle-tableau', cle); msg.textContent = ''; jeuRendu(); majMails(); }
+      J = j; FRG.ecrire('frg-cle-tableau', cle); msg.textContent = ''; jeuRendu(); majMails(); dmCharger(); }
     catch (e) { J = null; document.getElementById('jeu-cle').hidden = false; document.getElementById('jeu-corps').hidden = true; msg.className = 'msg-ko';
       msg.textContent = /clé/.test(e.message) ? 'Clé refusée.' : 'Serveur du jeu injoignable : ' + e.message; vue(); }
   }

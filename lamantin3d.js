@@ -40,15 +40,15 @@ function lancer(){
   /* peau : gris-brun velouté, marbrures douces, voile d'algues et cicatrices peintes dans la texture (plus de plaques en relief) */
   const ROSE = VARIANTE === 'rose', T = 512;
   const c = document.createElement('canvas'); c.width = c.height = T;
-  const g = c.getContext('2d'); g.fillStyle = ROSE ? '#9C5A55' : '#565B57'; g.fillRect(0, 0, T, T);
+  const g = c.getContext('2d'); g.fillStyle = ROSE ? '#A9655F' : '#6A7278'; g.fillRect(0, 0, T, T);
   const tache = (x, y, r, couleur) => { for (const dx of [-T, 0, T]) for (const dy of [-T, 0, T]) {   // raccord sans couture
       const gr = g.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r); gr.addColorStop(0, couleur); gr.addColorStop(1, 'rgba(0,0,0,0)');
       g.fillStyle = gr; g.fillRect(x + dx - r, y + dy - r, r * 2, r * 2); } };
   for (let i = 0; i < 70; i++) tache(Math.random() * T, Math.random() * T, 18 + Math.random() * 60,
-    Math.random() < .5 ? (ROSE ? 'rgba(190,120,110,.16)' : 'rgba(120,124,116,.16)') : 'rgba(30,32,30,.14)');      // marbrures
-  for (let i = 0; i < 22; i++) tache(Math.random() * T, Math.random() * T * .55, 20 + Math.random() * 46, ROSE ? 'rgba(96,128,56,.32)' : 'rgba(92,126,58,.2)'); // algues
-  for (let i = 0; i < 9000; i++) { const v = 70 + Math.random() * 60 | 0;
-    g.fillStyle = ROSE ? `rgba(${v + 80},${v + 20},${v + 16},${Math.random() * .16})` : `rgba(${v},${v + 3},${v + 1},${Math.random() * .16})`;
+    Math.random() < .5 ? (ROSE ? 'rgba(200,132,122,.12)' : 'rgba(142,150,156,.12)') : 'rgba(40,46,52,.08)');      // marbrures
+  for (let i = 0; i < 22; i++) tache(Math.random() * T, Math.random() * T * .55, 20 + Math.random() * 46, ROSE ? 'rgba(96,128,56,.14)' : 'rgba(96,124,84,.07)'); // voile d'algues, à peine
+  for (let i = 0; i < 2500; i++) { const v = 90 + Math.random() * 60 | 0;
+    g.fillStyle = ROSE ? `rgba(${v + 80},${v + 20},${v + 16},${Math.random() * .08})` : `rgba(${v},${v + 4},${v + 8},${Math.random() * .08})`;
     g.fillRect(Math.random() * T, Math.random() * T, 1.2, 1.2); }
   g.lineCap = 'round';
   for (let i = 0; i < 6; i++) { g.strokeStyle = 'rgba(186,188,178,.22)'; g.lineWidth = 1.4 + Math.random() * 1.4;
@@ -63,9 +63,9 @@ function lancer(){
   const relief = new THREE.CanvasTexture(rc); relief.wrapS = relief.wrapT = THREE.RepeatWrapping; relief.repeat.set(3, 2);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(3, 2);
   // fini légèrement satiné : un lamantin sort de l'eau, sa peau garde un voile humide
-  const peau = new THREE.MeshPhysicalMaterial({ map:tex, bumpMap:relief, bumpScale:.35, roughness:.72, metalness:0, clearcoat:.28, clearcoatRoughness:.5, sheen:.4, sheenRoughness:.8, sheenColor:new THREE.Color(ROSE ? 0xE8B8B0 : 0xB8C4C0) });
+  const peau = new THREE.MeshPhysicalMaterial({ map:tex, bumpMap:relief, bumpScale:.1, roughness:.66, metalness:0, clearcoat:.28, clearcoatRoughness:.5, sheen:.4, sheenRoughness:.8, sheenColor:new THREE.Color(ROSE ? 0xE8B8B0 : 0xB8C4C0) });
   const peauMuseau = peau;
-  const peauClaire = new THREE.MeshStandardMaterial({ color:ROSE ? 0xB06C66 : 0x676C67, roughness:.95 });
+  const peauClaire = new THREE.MeshStandardMaterial({ color:ROSE ? 0xB06C66 : 0x7A8288, roughness:.95 });
   const noir = new THREE.MeshStandardMaterial({ color:0x07080A, roughness:.15 });
   const ongle = new THREE.MeshStandardMaterial({ color:0xD9D3C4, roughness:.5 });
 
@@ -124,18 +124,45 @@ function lancer(){
   const corps = new THREE.Group(); lamantin.add(corps);
   const ORIENT = 0; corps.rotation.y = ORIENT;   // trois quarts : la tête et ses accessoires tournés vers le visiteur
   const colonne = [[1.16, .3], [.9, .33], [.56, .42], [.22, .47], [-.08, .52], [-.32, .6]].map(([x, y]) => new THREE.Vector3(x, y, 0));
-  corps.add(new THREE.Mesh(fuseau(colonne, PROFIL, 56, 120), peau));
-  // queue en pagaie, arrondie, posée à plat
-  { const q = boule(.33, peau, [1.15, .12, 1], [1.4, .29, 0], 64); q.rotation.set(.75, 0, .08);
-    // UV à plat (vues de dessus) : plus d'étoile au centre de la pagaie
-    const P = q.geometry.attributes.position, U = q.geometry.attributes.uv; for (let i = 0; i < P.count; i++) U.setXY(i, P.getX(i) * .9 + .5, P.getZ(i) * .9 + .5); U.needsUpdate = true;
-    corps.add(q); }
+  /* corps et queue d'un seul tenant : le fuseau s'amincit en pédoncule puis s'élargit en palette, sans raccord.
+     La palette se vrille doucement vers le visiteur pour qu'on la reconnaisse ; elle ondule lentement (voir boucle). */
+  let queueVivante = null;
+  if (VARIANTE !== 'gator') {
+    const axe = new THREE.CatmullRomCurve3([[1.82, .4], [1.62, .33], [1.38, .29], [1.16, .3], [.9, .33], [.56, .42], [.22, .47], [-.08, .52], [-.32, .6]].map(([x, y]) => new THREE.Vector3(x, y, 0)));
+    const Lnew = axe.getLength(), Lold = new THREE.CatmullRomCurve3(colonne).getLength(), u0 = 1 - Lold / Lnew, uJ = u0 + .3 * (1 - u0);
+    const interp = (tab, x) => { for (let k = 1; k < tab.length; k++) if (x <= tab[k][0]) { const [a0, r0] = tab[k - 1], [a1, r1] = tab[k]; return r0 + (r1 - r0) * (x - a0) / (a1 - a0); } return tab.at(-1)[1]; };
+    const HAUT = lisser([[0, .012], [.06, .034], [.22, .05], [.45, .085], [.68, .165], [.86, .275], [1, .36]], 60);
+    const LARGE = lisser([[0, .02], [.035, .17], [.1, .29], [.22, .35], [.36, .32], [.52, .255], [.68, .265], [.86, .345], [1, .407]], 60);
+    const lisse = (a, b, x) => { const u = Math.max(0, Math.min(1, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
+    const n = 150, radial = 56, pos = [], uv = [], idx = [], qs = [];
+    for (let i = 0; i <= n; i++) {
+      const u = i / n, P = axe.getPointAt(u), T = axe.getTangentAt(u), q = u / uJ, tOld = (u - u0) / (1 - u0);
+      const N0 = new THREE.Vector3(0, 0, 1), B0 = new THREE.Vector3().crossVectors(T, N0).normalize();
+      const phi = .78 * (1 - lisse(.12, .8, q)), B = B0.clone().multiplyScalar(Math.cos(phi)).addScaledVector(N0, Math.sin(phi)), N = N0.clone().multiplyScalar(Math.cos(phi)).addScaledVector(B0, -Math.sin(phi));
+      const rh = q < 1 ? Math.max(.008, interp(HAUT, q)) : interp(PROFIL, tOld), rw = q < 1 ? Math.max(.012, interp(LARGE, q)) : rh * 1.13;
+      qs.push(q);
+      for (let j = 0; j <= radial; j++) {
+        const a = j / radial * Math.PI * 2, haut = Math.cos(a), k = q >= 1 ? 1 + bosses(tOld, a) : 1 + bosses(tOld, a) * lisse(.6, 1, q);
+        const pli = tOld > .78 && tOld < .97 ? Math.sin(tOld * 150) * .003 * Math.max(0, Math.sin(a)) : 0;
+        const aplati = haut < 0 ? .86 + .14 * (1 - lisse(.5, 1, q)) : 1;
+        const v = P.clone().addScaledVector(B, haut * (rh * k + pli) * aplati).addScaledVector(N, Math.sin(a) * (rw * k + pli));
+        pos.push(v.x, v.y, v.z); uv.push(j / radial, u * 1.3);
+      }
+    }
+    for (let i = 0; i < n; i++) for (let j = 0; j < radial; j++) { const a = i * (radial + 1) + j, b = a + radial + 1; idx.push(a, b, a + 1, b, b + 1, a + 1); }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    geo.setIndex(idx); geo.computeVertexNormals();
+    corps.add(new THREE.Mesh(geo, peau));
+    queueVivante = { geo, base:Float32Array.from(pos), qs, radial };
+  }
   // nageoires, avec leurs trois ongles
   const nageoires = {};
   for (const z of [-1, 1]) {
-    const n = new THREE.Group(); nageoires[z] = n; n.position.set(-.1, .42, z * .43); n.rotation.set(z * -.45, z * .2, -.55);
-    n.add(boule(.085, peau, [.7, 2.5, 1.4], [0, -.17, 0], 28));
-    for (const k of [-1, 0, 1]) n.add(boule(.013, ongle, [1, .7, 1], [-.05, -.35, k * .04], 10));
+    const n = new THREE.Group(); nageoires[z] = n; n.position.set(-.06, .47, z * .4); n.rotation.set(z * -.38, z * .1, .32);
+    { const prof = [[.001, .02], [.06, -.02], [.078, -.1], [.092, -.2], [.1, -.29], [.094, -.36], [.07, -.415], [.035, -.445], [.001, -.455]].map(([r, y]) => new THREE.Vector2(r, y));   // palette en goutte : large vers le bas, la base reste dans le corps
+      const pal = new THREE.Mesh(new THREE.LatheGeometry(new THREE.SplineCurve(prof).getPoints(40), 28), peau); pal.scale.set(1.15, .92, .42); n.add(pal); }
+    for (const k of [-1, 0, 1]) n.add(boule(.011, ongle, [1, .8, 1], [k * .055, -.405 + Math.abs(k) * .018, .012], 10));
     corps.add(n);
   }
 
@@ -171,30 +198,34 @@ function lancer(){
     for (let i = 0; i < n; i++) for (let j = 0; j < radial; j++) { const a = i * (radial + 1) + j, b = a + radial + 1; idx.push(a, a + 1, b, b, a + 1, b + 1); }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
     g.setIndex(idx); g.computeVertexNormals(); tete.add(new THREE.Mesh(g, peau)); }
-  // gros museau carré, lèvre supérieure fendue en deux lobes
+  // museau de lamantin : deux larges coussinets tombants, bien plus larges que hauts, raccordés au crâne
   const museau = centre.clone().addScaledVector(face, .2).add(new THREE.Vector3(0, -.06, 0));
+  const HAUTV = new THREE.Vector3(0, 1, 0), gris = new THREE.MeshStandardMaterial({ color:0x33383C, roughness:.7 });
+  tete.add(boule(.17, peau, [1.02, .8, 1.08], centre.clone().addScaledVector(face, .15).add(new THREE.Vector3(0, -.075, 0)).toArray(), 36));   // raccord crâne-museau : plus de « boule posée »
+  { const pad = boule(.15, peauMuseau, [1.32, .8, .86], museau.clone().addScaledVector(face, .03).add(new THREE.Vector3(0, -.04, 0)).toArray(), 40);   // un seul large coussinet, plus large que haut
+    pad.lookAt(pad.position.clone().add(face)); tete.add(pad); }
   for (const s of [-1, 1]) {
-    const lobe = boule(.118, peauMuseau, [.88, .86, .95], museau.clone().addScaledVector(cote, s * .06).addScaledVector(face, .02).toArray(), 32);
+    const lobe = boule(.092, peauMuseau, [1, .9, 1], museau.clone().addScaledVector(cote, s * .082).addScaledVector(face, .085).add(new THREE.Vector3(0, -.05, 0)).toArray(), 32);   // la lèvre fendue, à peine marquée
     tete.add(lobe);
-    for (let i = 0; i < 16; i++) {           // soies
-      const u = Math.random() * 1.2 - .6, w = Math.random() * .9 - .5;
-      const d = face.clone().addScaledVector(cote, s * .35 + u * .5).add(new THREE.Vector3(0, w * .6, 0)).normalize();
-      tete.add(boule(.0055, noir, [1, 1, 1], lobe.position.clone().addScaledVector(d, .1).toArray(), 6));
+    for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {      // vibrisses : trois rangées nettes sur chaque côté
+      const d = face.clone().addScaledVector(cote, s * (.15 + c * .34)).addScaledVector(HAUTV, .25 - r * .32).normalize();
+      tete.add(boule(.0042, gris, [1, 1, 1], lobe.position.clone().addScaledVector(d, .088).toArray(), 6));
     }
   }
-  tete.add(boule(.085, peau, [1, .7, 1], museau.clone().add(new THREE.Vector3(0, -.075, 0)).addScaledVector(face, -.01).toArray(), 28)); // menton
-  for (const s of [-1, 1]) tete.add(boule(.018, noir, [1.4, .55, 1], museau.clone().addScaledVector(cote, s * .045).add(new THREE.Vector3(0, .085, 0)).addScaledVector(face, .04).toArray(), 12)); // narines
-  // petits yeux enfoncés
+  tete.add(boule(.075, peau, [1.25, .6, 1], museau.clone().add(new THREE.Vector3(0, -.115, 0)).addScaledVector(face, -.005).toArray(), 28)); // menton, en retrait
+  for (const s of [-1, 1]) { const nar = boule(.015, gris, [1.5, .5, .9], museau.clone().addScaledVector(cote, s * .05).add(new THREE.Vector3(0, .078, 0)).addScaledVector(face, .075).toArray(), 12); nar.rotation.z = 0; tete.add(nar); } // narines, sur le dessus
+  // petits yeux ronds et brillants, sans cerne clair
   const yeux = [];
-  for (const a of [1.12, -1.12]) {
+  for (const a of [1.08, -1.08]) {
     const d = face.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), a);
-    yeux.push(centre.clone().addScaledVector(d, .245).add(new THREE.Vector3(0, .06, 0)));
-    const oeil = centre.clone().addScaledVector(d, .245).add(new THREE.Vector3(0, .06, 0));
-    tete.add(boule(.05, new THREE.MeshStandardMaterial({ color:VARIANTE === 'rose' ? 0xC98880 : 0x868A85, roughness:.9 }), [1, 1, .45], centre.clone().addScaledVector(d, .236).add(new THREE.Vector3(0, .06, 0)).toArray(), 20)); // paupière claire
-    tete.add(boule(.04, noir, [1, 1.1, .8], oeil.toArray(), 20));                       // œil noir bien visible
-    const reflet = oeil.clone().addScaledVector(d, .029).add(new THREE.Vector3(-.01, .016, .007));
-    tete.add(boule(.01, new THREE.MeshBasicMaterial({ color:0xffffff }), [1, 1, 1], reflet.toArray(), 10));
+    const oeil = centre.clone().addScaledVector(d, .243).add(new THREE.Vector3(0, .065, 0));
+    yeux.push(oeil.clone());
+    tete.add(boule(.047, peauClaire, [1, 1, .5], centre.clone().addScaledVector(d, .232).add(new THREE.Vector3(0, .065, 0)).toArray(), 20)); // orbite, ton sur ton
+    tete.add(boule(.036, noir, [1, 1.05, .8], oeil.toArray(), 22));
+    const reflet = oeil.clone().addScaledVector(d, .027).add(new THREE.Vector3(-.009, .015, .006));
+    tete.add(boule(.0105, new THREE.MeshBasicMaterial({ color:0xffffff }), [1, 1, 1], reflet.toArray(), 10));
   }
+  tete.scale.setScalar(1.1);   // visage un peu plus grand, plus lisible
 
 
   /* ---------- les variantes ---------- */
@@ -384,7 +415,7 @@ function lancer(){
   /* algues : quelques touffes sur le dos et le haut du flanc, au hasard */
   { const algue = new THREE.MeshStandardMaterial({ color:0x6F8C4A, roughness:.8 }), algueSombre = new THREE.MeshStandardMaterial({ color:0x55703A, roughness:.95 });
     const libres = VARIANTE === 'tshirt' ? [.22, .3, .38, .46, .54] : [.22, .3, .38, .46, .54, .62, .7, .78];
-    const choix = libres.sort(() => Math.random() - .5).slice(0, 4);
+    const choix = libres.sort(() => Math.random() - .5).slice(0, 0);   // plus de touffes : elles faisaient « sale »
     for (const t of choix) {
       const a = .15 + Math.random() * .75, P = dos.getPointAt(t), T = dos.getTangentAt(t);
       const B = new THREE.Vector3().crossVectors(T, new THREE.Vector3(0, 0, 1)).normalize(), r = rayonCorps(t);
@@ -405,7 +436,7 @@ function lancer(){
 
   // un léger sourire sous le museau : le visage reste aimable
   { const pts = []; for (let k = 0; k <= 10; k++) { const u = k / 10 - .5;
-      pts.push(museau.clone().addScaledVector(cote, u * .2).addScaledVector(face, .1 - u * u * .1).add(new THREE.Vector3(0, -.075 + u * u * .1, 0))); }
+      pts.push(museau.clone().addScaledVector(cote, u * .25).addScaledVector(face, .128 - u * u * .16).add(new THREE.Vector3(0, -.105 + u * u * .14, 0))); }
     tete.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 16, .006, 6, false), new THREE.MeshStandardMaterial({ color:0x2B2E2C, roughness:.8 }))); }
 
   /* croûtes d'algues claires et irrégulières, comme sur la photo : plaques en relief sur le dos et le flanc */
@@ -584,7 +615,7 @@ function lancer(){
     lacet += (cibleLacet - lacet) * k; tangage += (cibleTangage - tangage) * k;
     tete.quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), lacet)
       .multiply(new THREE.Quaternion().setFromAxisAngle(cote, tangage));
-    corps.rotation.y = ORIENT + lacet * .22;
+    corps.rotation.y = ORIENT + lacet * .07;   // le corps ne pivote presque plus d'un bloc
     if (!calme) corps.scale.y = 1 + Math.sin(now / 900) * .006;      // respiration
     if (emote >= 0) {
       emote += dt;
@@ -606,8 +637,14 @@ function lancer(){
         a.setZ(i, vague); }
       a.needsUpdate = true; drapeauFlotte.geo.computeVertexNormals();
     }
+    if (queueVivante && !calme) {                                     // la queue ondule lentement, de plus en plus vers la palette
+      const { geo, base, qs, radial } = queueVivante, a = geo.attributes.position, R = radial + 1;
+      for (let i = 0; i < qs.length && qs[i] < 1; i++) { const w = (1 - qs[i]) * (1 - qs[i]), dy = .075 * w * Math.sin(now / 1250 - qs[i] * 2.4) + .012 * w;
+        for (let j = 0; j < R; j++) { const k = (i * R + j) * 3 + 1; a.array[k] = base[k] + dy; } }
+      a.needsUpdate = true; geo.computeVertexNormals();
+    }
     rendu.render(scene, camera);
-    if (now - actif > 4000 && emote < 0 && !drapeauFlotte) setTimeout(() => requestAnimationFrame(boucle), 110);
+    if (now - actif > 4000 && emote < 0 && !drapeauFlotte) setTimeout(() => requestAnimationFrame(boucle), queueVivante ? 24 : 110);
     else requestAnimationFrame(boucle);
   }
   boucle();

@@ -1170,12 +1170,46 @@ footer::after{opacity:.58}
 .pol-grand .v-pied{margin-top:auto!important;min-height:max(32px,5.6cqi);align-items:center!important}
 .pol-grand .v-pied i{display:none!important}
 .pol-grand .v-photo{height:calc(100% - 10.2cqi)!important;bottom:auto!important}
-/* racines de mangrove autour de la carte : même boîte que la carte, le dessin déborde (overflow visible) */
-.polaroid .pol-mangrove{position:absolute;left:0;top:0;width:100%;aspect-ratio:1.72;height:auto;overflow:visible;pointer-events:none;z-index:0}
-.mgv-rides ellipse{transform-box:fill-box;transform-origin:center;animation:mgvRide 5.5s ease-in-out infinite}
-.mgv-rides ellipse:nth-child(2n){animation-delay:-2.2s}.mgv-rides ellipse:nth-child(3n){animation-delay:-3.9s}
-@keyframes mgvRide{0%,100%{transform:scaleX(1);opacity:1}50%{transform:scaleX(1.35);opacity:.35}}
-.mgv-reflet{animation:mgvReflet 7s ease-in-out infinite}@keyframes mgvReflet{50%{opacity:.6}}
-@media (prefers-reduced-motion:reduce){.mgv-rides ellipse,.mgv-reflet{animation:none}}
-@media (max-width:760px){.polaroid .pol-mangrove{--cw:min(320px,100vw - 32px);left:calc(var(--cw)*.21);width:calc(var(--cw)*.58);top:calc(var(--cw)/1.72 - var(--cw)*.58/272*148)}.hero-bas .polaroid{margin-bottom:56px!important}}
-/* fin mangrove */
+/* ===== Carte Floride : la carte de verre prend la forme de la Floride =====
+   Découpe par clip-path (#floride, coordonnées 0–1 : la forme suit la taille de la carte).
+   Recto : nom le long du Panhandle, photo dans la péninsule. Verso : la Floride vue de dos (miroir). */
+.polaroid .pol-carte{width:clamp(240px,21.5vw,310px)!important;aspect-ratio:1.1!important}
+.pol-grand{width:min(600px,92vw,calc(86vh * 1.1))!important;height:calc(min(600px,92vw,calc(86vh * 1.1)) / 1.1)!important}
+:is(.polaroid,.pol-grand) .pol-face{border-radius:0!important;box-shadow:none!important;clip-path:url(#floride)}
+.pol-grand .pol-verso{clip-path:url(#floride-m)}
+:is(.polaroid,.pol-grand) .pol-face::after{display:none!important}
+.fl-bord{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4;overflow:visible}
+/* ombre portée : copie floutée de la forme, posée derrière le verre (pas de filter sur la carte, sinon le flou du verre disparaît) */
+.fl-ombre{position:absolute;inset:0;transform:translate(0,4.5%);filter:blur(10px);opacity:.55;pointer-events:none;z-index:-1}
+.fl-ombre>span{position:absolute;inset:0;background:#06123A;clip-path:url(#floride)}
+.pol-grand .fl-ombre{display:none}
+.polaroid .pol-carte:focus-visible{outline:none}.polaroid .pol-carte:focus-visible .fl-bord use{stroke:#fff;stroke-width:3.5}
+/* recto */
+:is(.polaroid,.pol-grand) .pol-recto{display:block!important;padding:0!important;
+  background:linear-gradient(160deg,rgba(255,255,255,.38) 0%,rgba(255,255,255,.16) 40%,rgba(255,255,255,.09) 100%)!important}
+:is(.polaroid,.pol-grand) .pol-info,:is(.polaroid,.pol-grand) .pol-info>span{display:contents}
+:is(.polaroid,.pol-grand) .pol-marque{position:absolute;left:5%;top:3.6%;font-size:2.7cqi;letter-spacing:.32em}
+:is(.polaroid,.pol-grand) .pol-gravure{position:absolute;left:8%;top:5.2%;width:52%!important;margin:0!important}
+:is(.polaroid,.pol-grand) .pol-cadre{position:absolute;left:67%;top:23%;width:22%!important;height:24%!important;border-radius:3cqi!important}
+:is(.polaroid,.pol-grand) .pol-nom{position:absolute!important;left:67.5%;top:54%;margin:0!important;font-size:7.6cqi!important}
+:is(.polaroid,.pol-grand) .pol-role{position:absolute;left:71%;top:63.5%;margin:0!important;font-size:2.6cqi!important;letter-spacing:.2em}
+/* verso (miroir : la péninsule est à gauche, le Panhandle en haut à droite) */
+.pol-grand .pol-verso{display:block!important;padding:0!important;
+  background:linear-gradient(200deg,rgba(255,255,255,.34) 0%,rgba(255,255,255,.15) 45%,rgba(255,255,255,.08) 100%)!important}
+.pol-grand .pol-verso>*{position:absolute!important}
+.pol-grand .v-photo,.pol-grand .v-mousse,.pol-grand .v-courbe,.pol-grand .v-eti{display:none!important}
+.pol-grand .v-nom{left:17%;top:12.5%;font-size:5.4cqi!important;line-height:1!important}
+.pol-grand .v-pied{left:17.5%;top:19.5%;margin:0!important;min-height:0!important}
+.pol-grand .v-logo{width:13cqi!important}
+/* citation le long du Panhandle */
+.pol-grand .v-cit{left:37%;top:6%;width:50%;font-size:max(10px,1.8cqi)!important;line-height:1.35!important;padding-left:1.6cqi!important}
+/* trois repères empilés dans la péninsule */
+.pol-grand .v-liste{left:12%;top:30%;width:19%;display:flex!important;flex-direction:column;gap:2.2cqi!important;line-height:1.2!important}
+.pol-grand .v-liste span{padding-left:0!important;display:block}.pol-grand .v-liste span::before{display:none!important}
+.pol-grand .v-liste em,.pol-grand .v-liste .v-fulbright{display:block;font:700 max(13px,3.1cqi)/1.1 var(--f-txt)!important;color:#fff}
+.pol-grand .v-liste small{display:block;margin-top:.4cqi;font-size:max(9.5px,1.75cqi);line-height:1.25;color:rgba(255,255,255,.82)}
+.pol-grand .v-liens{left:4.5%!important;right:auto!important;top:69%;bottom:auto!important;flex-direction:column;gap:1.2cqi}
+.pol-grand .v-liens a{width:max(34px,6.6cqi);height:max(34px,6.6cqi);padding:0!important;display:grid;place-items:center}
+@media (max-width:560px){.pol-grand .v-cit{display:none!important}.pol-grand .v-liste{left:11%;top:29%;width:20.5%;gap:7px!important}.pol-grand .v-liste small{font-size:8.5px}.pol-grand .v-nom{font-size:15px!important}.pol-grand .v-logo{width:52px!important}}
+@media (min-width:1101px){.polaroid{top:130px!important}}
+/* fin Floride */

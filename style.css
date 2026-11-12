@@ -1175,8 +1175,9 @@ footer::after{opacity:.58}
 .banian{display:none}
 @media (min-width:1101px){
   .hero{overflow-x:visible!important}.bandeau{overflow-x:clip}
-  .banian{display:block;position:absolute;bottom:0;right:calc(clamp(40px,7vw,120px) - 225px);width:660px;height:auto;pointer-events:none;user-select:none;
-    -webkit-mask:linear-gradient(90deg,transparent 30px,#000 150px,#000 calc(100% - 50px),transparent);mask:linear-gradient(90deg,transparent 30px,#000 150px,#000 calc(100% - 50px),transparent)}
+  .banian{display:block;position:absolute;bottom:0;right:calc(clamp(40px,7vw,120px) - 245px);width:1140px;height:auto;pointer-events:none;user-select:none;
+    -webkit-mask:linear-gradient(90deg,transparent,rgba(0,0,0,.32) 90px,rgba(0,0,0,.32) 460px,#000 600px,#000 calc(100% - 40px),transparent);mask:linear-gradient(90deg,transparent,rgba(0,0,0,.32) 90px,rgba(0,0,0,.32) 460px,#000 600px,#000 calc(100% - 40px),transparent)}
   .banian-arriere{z-index:1}.polaroid{z-index:3!important}.banian-avant{z-index:4}
-  .bandeau nav{z-index:6}}
+  .bandeau nav{z-index:6}
+  .hero-texte,.hero .ctas{position:relative;z-index:5}}
 /* fin banian */

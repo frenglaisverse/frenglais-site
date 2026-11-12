@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwdo83kx"></script>
+<script src="donnees.js?v=mwdoaswf"></script>
 </head>
 <body>
 <style>
@@ -316,8 +316,36 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     const hz = m => 440 * Math.pow(2, (m - 69) / 12);
     const BASE = { bpm:104, acc:[[45, 57, 60, 64], [41, 57, 60, 65], [48, 55, 60, 64], [43, 55, 59, 62], [45, 57, 60, 64], [41, 57, 60, 65], [48, 55, 60, 64], [40, 56, 59, 64]],
       mel:[[76, 0, 72, 0, 69, 0, 72, 74], [72, 0, 69, 0, 65, 0, 69, 72], [76, 0, 79, 0, 76, 72, 0, 0], [74, 0, 71, 0, 67, 0, 71, 74], [76, 76, 0, 72, 69, 0, 72, 76], [77, 0, 76, 0, 72, 0, 69, 0], [79, 0, 76, 0, 72, 0, 76, 79], [80, 0, 76, 0, 71, 0, 68, 0]] };
-    const VICE = { bpm:92, acc:[[41, 57, 60, 65], [43, 55, 59, 62], [40, 55, 59, 64], [45, 57, 60, 64], [41, 57, 60, 65], [43, 55, 59, 62], [40, 55, 59, 64], [45, 57, 60, 64]],
-      mel:[[72, 0, 0, 69, 0, 0, 65, 0], [74, 0, 0, 71, 0, 0, 67, 0], [76, 0, 0, 71, 0, 0, 67, 0], [76, 0, 72, 0, 69, 0, 0, 0], [77, 0, 0, 72, 0, 0, 69, 0], [79, 0, 0, 74, 0, 0, 71, 0], [79, 0, 76, 0, 71, 0, 0, 0], [81, 0, 76, 0, 72, 0, 69, 0]] };
+    /* Vice City : un groove mineur à la manière du disco-rock des années 70 (basse syncopée, pied sur tous les temps, accords à contretemps). Mélodie originale. */
+    const VICE = { style:'vice', bpm:112, acc:[[45, 57, 60, 64], [45, 57, 60, 64], [38, 57, 62, 65], [45, 57, 60, 64], [41, 57, 60, 65], [43, 55, 59, 62], [45, 57, 60, 64], [40, 56, 59, 64]],
+      mel:[[69, 0, 72, 0, 74, 72, 69, 0], [67, 69, 0, 0, 0, 0, 64, 67], [69, 0, 74, 0, 77, 74, 72, 0], [76, 0, 72, 69, 0, 0, 0, 0], [72, 0, 77, 0, 81, 0, 79, 77], [74, 0, 79, 0, 83, 0, 81, 79], [81, 0, 76, 0, 72, 0, 69, 0], [71, 0, 68, 0, 64, 0, 68, 71]] };
+    /* Noël : le refrain de Jingle Bells (1857, domaine public), avec des grelots. */
+    const NOEL = { style:'noel', bpm:116, acc:[[48, 55, 60, 64], [48, 55, 60, 64], [48, 55, 60, 64], [48, 55, 60, 64], [41, 57, 60, 65], [48, 55, 60, 64], [43, 55, 59, 62], [43, 55, 59, 62]],
+      mel:[[76, 0, 76, 0, 76, 0, 0, 0], [76, 0, 76, 0, 76, 0, 0, 0], [76, 0, 79, 0, 72, 0, 74, 0], [76, 0, 0, 0, 0, 0, 0, 0], [77, 0, 77, 0, 77, 0, 77, 0], [77, 0, 76, 0, 76, 0, 76, 76], [76, 0, 74, 0, 74, 0, 76, 0], [74, 0, 0, 0, 79, 0, 0, 0]] };
+    function unPas(P, pas, t0, d16){
+      const s = pas % 256, i = s % 16, mesure = Math.floor(s / 16) % 8, tour2 = s >= 128, A = P.acc[mesure], st = P.style;
+      const tenue = () => { const M = P.mel[mesure]; let k = 1; while (i / 2 + k < 8 && !M[i / 2 + k]) k++; return Math.min(k, 4); };
+      if (st === 'vice') {
+        const B = { 0:0, 3:12, 6:0, 8:0, 10:10, 12:12, 14:7 }[i]; if (B !== undefined) note(A[0] + B, t0, d16 * 1.5, 'sawtooth', .05);          // basse syncopée
+        if (i === 2 || i === 6 || i === 10 || i === 14) for (const n of A.slice(1)) note(n + 12, t0, d16 * .8, 'square', .009);                   // accords à contretemps
+        if (tour2 && i % 2 === 0) { const m = P.mel[mesure][i / 2]; if (m) note(m, t0, d16 * 1.9 * tenue(), 'sawtooth', .02); }
+        if (i % 4 === 0) pied(t0); if (i === 4 || i === 12) coup(t0, .12, .06, 1800);
+        coup(t0, .025, i % 4 === 2 ? .03 : .008, 7000);
+      } else if (st === 'noel') {
+        if (i === 0 || i === 8) note(A[0], t0, d16 * 3.4, 'triangle', .11); else if (i === 4 || i === 12) note(A[0] + 7, t0, d16 * 3, 'triangle', .08);
+        if (i % 4 === 2) for (const n of A.slice(1)) note(n, t0, d16 * 1.2, 'triangle', .022);
+        if (i % 2 === 0) { const m = P.mel[mesure][i / 2]; if (m) { note(m + (tour2 ? 12 : 0), t0, d16 * 1.8 * tenue(), 'square', tour2 ? .02 : .028); if (tour2) note(m, t0, d16 * 1.8 * tenue(), 'triangle', .04); } }
+        if (i % 2 === 0) { coup(t0, .05, .03, 9000); coup(t0 + .012, .04, .018, 11000); }                                                   // grelots
+        if (i === 0 || i === 8) pied(t0);
+      } else {
+        if (i === 0 || i === 6 || i === 8 || i === 14) note(A[0], t0, d16 * 2.6, 'triangle', .11); else if (i === 4 || i === 12) note(A[0] + 7, t0, d16 * 1.8, 'triangle', .08);
+        note(A[1 + [0, 1, 2, 1][i % 4]] + (i % 8 >= 4 ? 12 : 0), t0, d16 * .9, 'square', .016);
+        if (tour2 && i % 2 === 0) { const m = P.mel[mesure][i / 2]; if (m) note(m, t0, d16 * 1.9, 'square', .03); }
+        if (i === 0 || i === 8 || (i === 10 && mesure % 2)) pied(t0);
+        if (i === 4 || i === 12) coup(t0, .09, .05, 1800);
+        if (i % 2 === 0) coup(t0, .03, .014, 7000);
+      }
+    }
     function init(){
       ac = ac || new (window.AudioContext || window.webkitAudioContext)();
       if (sortie) return;
@@ -333,24 +361,12 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       g.gain.setValueAtTime(.16, t0); g.gain.exponentialRampToValueAtTime(.0001, t0 + .14); o.connect(g).connect(sortie); o.start(t0); o.stop(t0 + .16); }
     function programme(){
       if (!on) return;
-      const V = document.body.classList.contains('vice'), P = V ? VICE : BASE, d16 = 60 / P.bpm / 4;
+      const c = document.body.classList, P = c.contains('vice') ? VICE : c.contains('noel') ? NOEL : BASE, d16 = 60 / P.bpm / 4;
       if (tProch < ac.currentTime) tProch = ac.currentTime + .05;
-      while (tProch < ac.currentTime + .3) {
-        const s = pas % 256, i = s % 16, mesure = Math.floor(s / 16) % 8, chant = s >= 128, A = P.acc[mesure], t0 = tProch;
-        if (V) { if (i % 2 === 0) note(A[0], t0, d16 * 1.7, 'sawtooth', .034);                         // basse qui pulse, façon synthwave
-                 if (i % 2 === 0) note(A[1 + (i / 2) % 3] + (i >= 8 ? 12 : 0), t0, d16 * 1.9, 'triangle', .05); }
-        else   { if (i === 0 || i === 6 || i === 8 || i === 14) note(A[0], t0, d16 * 2.6, 'triangle', .11);
-                 else if (i === 4 || i === 12) note(A[0] + 7, t0, d16 * 1.8, 'triangle', .08);
-                 note(A[1 + [0, 1, 2, 1][i % 4]] + (i % 8 >= 4 ? 12 : 0), t0, d16 * .9, 'square', .016); }
-        if (chant && i % 2 === 0) { const m = P.mel[mesure][i / 2]; if (m) note(m, t0, d16 * (V ? 5 : 1.9), V ? 'sawtooth' : 'square', V ? .022 : .03); }
-        if (i === 0 || i === 8 || (!V && i === 10 && mesure % 2)) pied(t0);
-        if (i === 4 || i === 12) coup(t0, V ? .16 : .09, V ? .07 : .05, 1800);
-        if (i % 2 === 0) coup(t0, .03, .014, 7000);
-        tProch += d16; pas++;
-      }
+      while (tProch < ac.currentTime + .3) { unPas(P, pas, tProch, d16); tProch += d16; pas++; }
     }
     function marche(){ if (on || !voulue || !sonOn || document.hidden) return; try { init(); if (ac.resume) ac.resume(); } catch (e) { return; }
-      on = true; tProch = ac.currentTime + .1; sortie.gain.cancelScheduledValues(ac.currentTime); sortie.gain.setValueAtTime(sortie.gain.value, ac.currentTime); sortie.gain.linearRampToValueAtTime(.8, ac.currentTime + 1.2);
+      on = true; tProch = ac.currentTime + .1; sortie.gain.cancelScheduledValues(ac.currentTime); sortie.gain.setValueAtTime(sortie.gain.value, ac.currentTime); sortie.gain.linearRampToValueAtTime(.22, ac.currentTime + 1.5)   /* très bas : un fond, pas un morceau */;
       minuteur = setInterval(programme, 80); programme(); }
     function arret(){ if (!on) return; on = false; clearInterval(minuteur); sortie.gain.cancelScheduledValues(ac.currentTime); sortie.gain.setValueAtTime(sortie.gain.value, ac.currentTime); sortie.gain.linearRampToValueAtTime(0, ac.currentTime + .25); }
     document.addEventListener('visibilitychange', () => document.hidden ? arret() : marche());

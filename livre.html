@@ -17,7 +17,7 @@
 html,body{margin:0;height:100%}
 body{background:#1C49A5;color:#fff;font:500 16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100dvh;display:grid;grid-template-rows:auto 1fr;position:relative;isolation:isolate;overflow-x:hidden}
 /* le bleu du site, et par-dessus la photo de Miami à 50 % */
-body::before{content:"";position:fixed;inset:0;z-index:-2;background:url("livre-fond.jpg") center/cover no-repeat;opacity:.5}
+body::before{content:"";position:fixed;inset:-60px;z-index:-2;background:url("livre-fond.jpg") center/cover no-repeat;opacity:.5;filter:blur(20px) saturate(1.15)}
 .haut{display:flex;align-items:center;justify-content:space-between;padding:18px clamp(16px,4vw,40px)}
 .haut img{display:block;height:44px;width:auto}
 .retour{color:#fff;text-decoration:none;padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.42);background:rgba(255,255,255,.1);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
@@ -46,7 +46,6 @@ a:focus-visible{outline:3px solid #fff;outline-offset:3px}
 <main>
   <h1 class="sr">Mon livre : Tu n'as rien compris à l'anglais</h1>
   <div class="scene">
-    <div class="flou" aria-hidden="true"></div>
     <a class="couv" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener"><img src="livre-couverture.jpg" alt="Couverture du livre « Tu n'as rien compris à l'anglais », de Paul Moreaux" width="720" height="1079"></a>
     <a class="amazon" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener">Amazon</a>
   </div>

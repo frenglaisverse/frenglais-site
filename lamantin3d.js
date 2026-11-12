@@ -184,7 +184,7 @@ function lancer(){
     const ancien = new THREE.CatmullRomCurve3(colonne);
     const pres = (courbe, pt) => { let m = 1e9, um = 0; for (let k = 0; k <= 1200; k++) { const d = courbe.getPointAt(k / 1200).distanceToSquared(pt); if (d < m) { m = d; um = k / 1200; } } return um; };
     const pCentre = cheminTete.points[2], uA = pres(axe, ancien.getPointAt(0)), uB = pres(axe, ancien.getPointAt(.8)), uC = pres(axe, versCorps(pCentre)), tC = pres(cheminTete, pCentre);
-    const uJ = uA + .3 / .8 * (uB - uA), uW0 = uA + .66 / .8 * (uB - uA), uW1 = uB + .6 * (uC - uB);
+    const uJ = uA + .3 / .8 * (uB - uA), uP = pres(axe, pivot), uW0 = uP - .3 * (uP - uB), uW1 = uP + .55 * (uC - uP);   // le pli part du pivot du cou : pas de bosse sur le dos, et le crâne entier suit la tête (les chapeaux tiennent)
     const interp = (tab, x) => { for (let k = 1; k < tab.length; k++) if (x <= tab[k][0]) { const [a0, r0] = tab[k - 1], [a1, r1] = tab[k]; return r0 + (r1 - r0) * (x - a0) / (a1 - a0); } return tab.at(-1)[1]; };
     const lisse = (a, b, x) => { const u = Math.max(0, Math.min(1, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
     const HAUT = lisser([[0, .012], [.06, .034], [.22, .05], [.45, .085], [.68, .165], [.86, .275], [1, .36]], 60);
@@ -604,8 +604,9 @@ function lancer(){
     actif = performance.now();
     const r = rendu.domElement.getBoundingClientRect();
     const dx = e.clientX - (r.left + r.width * .38), dy = e.clientY - (r.top + r.height * .3);
-    cibleLacet = Math.max(-1, Math.min(1, dx / 420)) * .6;
-    cibleTangage = Math.max(-1, Math.min(1, dy / 320)) * .42;
+    cibleLacet = Math.max(-.42, Math.min(.2, dx / 420 * .5));        // il se tourne volontiers vers le visiteur, à peine vers son propre dos
+   
+    cibleTangage = Math.max(-1, Math.min(1, dy / 320)) * .24;
   }, { passive:true });
   document.querySelectorAll('[data-vitre]').forEach(b => b.addEventListener('click', () => { emote = 0; actif = performance.now(); bulle(); }));
 

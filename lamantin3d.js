@@ -139,7 +139,8 @@ function lancer(){
       const u = i / n, P = axe.getPointAt(u), T = axe.getTangentAt(u), q = u / uJ, tOld = (u - u0) / (1 - u0);
       const N0 = new THREE.Vector3(0, 0, 1), B0 = new THREE.Vector3().crossVectors(T, N0).normalize();
       const phi = .78 * (1 - lisse(.12, .8, q)), B = B0.clone().multiplyScalar(Math.cos(phi)).addScaledVector(N0, Math.sin(phi)), N = N0.clone().multiplyScalar(Math.cos(phi)).addScaledVector(B0, -Math.sin(phi));
-      const rh = q < 1 ? Math.max(.008, interp(HAUT, q)) : interp(PROFIL, tOld), rw = q < 1 ? Math.max(.012, interp(LARGE, q)) : rh * 1.13;
+      const epaule = lisse(.88, 1, tOld), rh = q < 1 ? Math.max(.008, interp(HAUT, q)) : interp(PROFIL, tOld) * (1 - .36 * epaule * epaule),   // l'avant se referme en épaule ronde : plus de col ouvert autour de la tête
+      rw = q < 1 ? Math.max(.012, interp(LARGE, q)) : rh * 1.13;
       qs.push(q);
       for (let j = 0; j <= radial; j++) {
         const a = j / radial * Math.PI * 2, haut = Math.cos(a), k = q >= 1 ? 1 + bosses(tOld, a) : 1 + bosses(tOld, a) * lisse(.6, 1, q);
@@ -175,57 +176,52 @@ function lancer(){
   const face = new THREE.Vector3(-.75, -.12, .65).normalize();          // regarde vers l'avant-gauche
   const cote = new THREE.Vector3(.65, 0, .75).normalize();
   const centre = new THREE.Vector3(-.04, .08, 0);
-  /* crâne et museau d'un seul tenant : une surface balayée, lisse, sans coutures entre boules */
-  { const Y = new THREE.Vector3(0, 1, 0);
-    const chemin = new THREE.CatmullRomCurve3([
+  /* tête d'une seule pièce : crâne, chanfrein et museau sont UNE surface balayée (plus aucune boule rapportée).
+     Le museau s'élargit et tombe, son bout est arrondi court, et la lèvre fendue est creusée dans la surface même. */
+  const museau = centre.clone().addScaledVector(face, .2).add(new THREE.Vector3(0, -.06, 0));
+  const HAUTV = new THREE.Vector3(0, 1, 0), gris = new THREE.MeshStandardMaterial({ color:0x33383C, roughness:.7 });
+  let surfTete;
+  { const chemin = new THREE.CatmullRomCurve3([
       new THREE.Vector3(.2, -.03, 0), new THREE.Vector3(.09, 0, 0), centre.clone().add(new THREE.Vector3(0, -.015, 0)),
-      centre.clone().addScaledVector(face, .12).add(new THREE.Vector3(0, -.035, 0)),
-      centre.clone().addScaledVector(face, .2).add(new THREE.Vector3(0, -.06, 0)).addScaledVector(face, .035)]);
-    const R = [[0, .272], [.25, .262], [.5, .246], [.7, .2], [.84, .158], [1, .158]], FIN = .84;
-    const rayon = t => { if (t > FIN) { const u = (t - FIN) / (1 - FIN); return .158 * Math.sqrt(Math.max(0, 1 - u * u)); }
-      for (let k = 1; k < R.length; k++) if (t <= R[k][0]) { const [t0, r0] = R[k - 1], [t1, r1] = R[k], u = (t - t0) / (t1 - t0), e = u * u * (3 - 2 * u); return r0 + (r1 - r0) * e; } return 0; };
-    const n = 90, radial = 64, pos = [], uv = [], idx = [];
-    for (let i = 0; i <= n; i++) {
-      const t = i / n, P = chemin.getPointAt(t), T = chemin.getTangentAt(t);
-      const cote2 = new THREE.Vector3().crossVectors(T, Y).normalize(), haut = new THREE.Vector3().crossVectors(cote2, T).normalize();
-      const r = rayon(t), large = 1.02 + .1 * Math.max(0, 1 - t / .35), bas = t < .6 ? .9 : .93;
-      for (let j = 0; j <= radial; j++) {
-        const a = j / radial * Math.PI * 2, ch = Math.cos(a), sh = Math.sin(a);
-        const v = P.clone().addScaledVector(haut, ch * r * (ch < 0 ? bas * .92 : .95)).addScaledVector(cote2, sh * r * large);
-        pos.push(v.x, v.y, v.z); uv.push(j / radial, t * .5);
-      }
-    }
+      centre.clone().addScaledVector(face, .13).add(new THREE.Vector3(0, -.04, 0)),
+      centre.clone().addScaledVector(face, .24).add(new THREE.Vector3(0, -.085, 0)),
+      centre.clone().addScaledVector(face, .32).add(new THREE.Vector3(0, -.125, 0)),
+      centre.clone().addScaledVector(face, .365).add(new THREE.Vector3(0, -.155, 0))]);
+    const interp = (tab, x) => { for (let k = 1; k < tab.length; k++) if (x <= tab[k][0]) { const [a0, r0] = tab[k - 1], [a1, r1] = tab[k]; return r0 + (r1 - r0) * (x - a0) / (a1 - a0); } return tab.at(-1)[1]; };
+    const HT = lisser([[0, .25], [.2, .256], [.38, .25], [.58, .2], [.72, .158], [.84, .15], [1, .15]], 80);
+    const LG = lisser([[0, .262], [.2, .268], [.38, .264], [.58, .212], [.72, .172], [.84, .192], [1, .205]], 80);
+    const lisse = (x0, x1, x) => { const u = Math.max(0, Math.min(1, (x - x0) / (x1 - x0))); return u * u * (3 - 2 * u); };
+    const FIN = .885, gauss = (x, s) => Math.exp(-x * x / (s * s));
+    surfTete = (t, a, hors = 0) => {
+      const P = chemin.getPointAt(t), T = chemin.getTangentAt(t);
+      const c2 = new THREE.Vector3().crossVectors(T, HAUTV).normalize(), haut = new THREE.Vector3().crossVectors(c2, T).normalize();
+      const bout = t > FIN ? Math.pow(Math.max(0, 1 - Math.pow((t - FIN) / (1 - FIN), 2.6)), 1 / 2.2) : 1;       // bout arrondi court, presque carré
+      const da = Math.abs(Math.atan2(Math.sin(a - Math.PI), Math.cos(a - Math.PI))), m = lisse(.74, .9, t);
+      const relief = 1 - .13 * m * gauss(da, .2) + .07 * m * gauss(da - .8, .42);                          // sillon de la lèvre + deux coussinets
+      const ch = Math.cos(a), sh = Math.sin(a), rh = interp(HT, t) * bout * relief, rw = interp(LG, t) * bout * relief;
+      return P.clone().addScaledVector(haut, ch * (rh + hors) * (ch < 0 ? .86 : .95)).addScaledVector(c2, sh * (rw + hors));
+    };
+    const n = 120, radial = 72, pos = [], uv = [], idx = [];
+    for (let i = 0; i <= n; i++) for (let j = 0; j <= radial; j++) { const v = surfTete(i / n, j / radial * Math.PI * 2); pos.push(v.x, v.y, v.z); uv.push(j / radial, i / n * .5); }
     for (let i = 0; i < n; i++) for (let j = 0; j < radial; j++) { const a = i * (radial + 1) + j, b = a + radial + 1; idx.push(a, a + 1, b, b, a + 1, b + 1); }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
     g.setIndex(idx); g.computeVertexNormals(); tete.add(new THREE.Mesh(g, peau)); }
-  // museau de lamantin : deux larges coussinets tombants, bien plus larges que hauts, raccordés au crâne
-  const museau = centre.clone().addScaledVector(face, .2).add(new THREE.Vector3(0, -.06, 0));
-  const HAUTV = new THREE.Vector3(0, 1, 0), gris = new THREE.MeshStandardMaterial({ color:0x33383C, roughness:.7 });
-  tete.add(boule(.17, peau, [1.02, .8, 1.08], centre.clone().addScaledVector(face, .15).add(new THREE.Vector3(0, -.075, 0)).toArray(), 36));   // raccord crâne-museau : plus de « boule posée »
-  { const pad = boule(.15, peauMuseau, [1.32, .8, .86], museau.clone().addScaledVector(face, .03).add(new THREE.Vector3(0, -.04, 0)).toArray(), 40);   // un seul large coussinet, plus large que haut
-    pad.lookAt(pad.position.clone().add(face)); tete.add(pad); }
   for (const s of [-1, 1]) {
-    const lobe = boule(.092, peauMuseau, [1, .9, 1], museau.clone().addScaledVector(cote, s * .082).addScaledVector(face, .085).add(new THREE.Vector3(0, -.05, 0)).toArray(), 32);   // la lèvre fendue, à peine marquée
-    tete.add(lobe);
-    for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {      // vibrisses : trois rangées nettes sur chaque côté
-      const d = face.clone().addScaledVector(cote, s * (.15 + c * .34)).addScaledVector(HAUTV, .25 - r * .32).normalize();
-      tete.add(boule(.0042, gris, [1, 1, 1], lobe.position.clone().addScaledVector(d, .088).toArray(), 6));
-    }
+    for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) tete.add(boule(.0042, gris, [1, 1, 1], surfTete(.9 + r * .03, Math.PI + s * (.42 + c * .33 + r * .05), .001).toArray(), 6));   // vibrisses, posées sur la surface
+    const nar = boule(.013, gris, [1, 1, 1], surfTete(.9, s * .42, -.006).toArray(), 12); nar.scale.set(1.2, .7, 1.2); tete.add(nar);                         // narines, sur le dessus du museau
   }
-  tete.add(boule(.075, peau, [1.25, .6, 1], museau.clone().add(new THREE.Vector3(0, -.115, 0)).addScaledVector(face, -.005).toArray(), 28)); // menton, en retrait
-  for (const s of [-1, 1]) { const nar = boule(.015, gris, [1.5, .5, .9], museau.clone().addScaledVector(cote, s * .05).add(new THREE.Vector3(0, .078, 0)).addScaledVector(face, .075).toArray(), 12); nar.rotation.z = 0; tete.add(nar); } // narines, sur le dessus
   // petits yeux ronds et brillants, sans cerne clair
   const yeux = [];
-  for (const a of [1.08, -1.08]) {
+  for (const a of [.92, -.92]) {
     const d = face.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), a);
-    const oeil = centre.clone().addScaledVector(d, .243).add(new THREE.Vector3(0, .065, 0));
+    const oeil = centre.clone().addScaledVector(d, .236).add(new THREE.Vector3(0, .06, 0));
     yeux.push(oeil.clone());
-    tete.add(boule(.047, peauClaire, [1, 1, .5], centre.clone().addScaledVector(d, .232).add(new THREE.Vector3(0, .065, 0)).toArray(), 20)); // orbite, ton sur ton
+    tete.add(boule(.047, peauClaire, [1, 1, .5], centre.clone().addScaledVector(d, .222).add(new THREE.Vector3(0, .06, 0)).toArray(), 20)); // orbite, ton sur ton
     tete.add(boule(.036, noir, [1, 1.05, .8], oeil.toArray(), 22));
     const reflet = oeil.clone().addScaledVector(d, .027).add(new THREE.Vector3(-.009, .015, .006));
     tete.add(boule(.0105, new THREE.MeshBasicMaterial({ color:0xffffff }), [1, 1, 1], reflet.toArray(), 10));
   }
-  tete.scale.setScalar(1.1);   // visage un peu plus grand, plus lisible
+  tete.scale.setScalar(1.08);   // visage un peu plus grand, plus lisible
 
 
   /* ---------- les variantes ---------- */
@@ -436,7 +432,7 @@ function lancer(){
 
   // un léger sourire sous le museau : le visage reste aimable
   { const pts = []; for (let k = 0; k <= 10; k++) { const u = k / 10 - .5;
-      pts.push(museau.clone().addScaledVector(cote, u * .25).addScaledVector(face, .128 - u * u * .16).add(new THREE.Vector3(0, -.105 + u * u * .14, 0))); }
+      pts.push(surfTete(.935 - u * u * .3, Math.PI + u * 2.3, .002)); }
     tete.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 16, .006, 6, false), new THREE.MeshStandardMaterial({ color:0x2B2E2C, roughness:.8 }))); }
 
   /* croûtes d'algues claires et irrégulières, comme sur la photo : plaques en relief sur le dos et le flanc */

@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611120936">
+<link rel="stylesheet" href="style.css?v=202611121536">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -139,7 +139,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
   <section class="in bloc" id="formations" aria-labelledby="t-formations">
     <div class="titre-bloc">
       <h2 id="t-formations">Les formations</h2>
-      <p class="chapo"><strong class="chapo-fort">La seule formation du marché réellement faite par un passionné.</strong><br>Une méthode, trois formules. En ligne, avec un vrai suivi.</p>
+      <p class="chapo"><strong class="chapo-fort">La seule formation qui condense 5 ans d'études approfondies en quelques mois.</strong><br>Une méthode, trois formules. En ligne, avec un vrai suivi.</p>
     </div>
     <div class="garantie">
       <span class="g-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m8.5 12 2.4 2.4 4.6-4.8"/></svg></span>
@@ -271,6 +271,16 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
         <li><strong>Monter les rapports.</strong> Le vocabulaire s'imbrique sur la Courbe, module après module.</li>
       </ol>
     </div>
+  </section>
+
+  <section class="in bloc livre-bloc" id="livre" aria-labelledby="t-livre">
+    <div class="titre-bloc"><h2 id="t-livre">Mon livre.</h2><p class="chapo">La Courbe des Temps, sur papier.</p></div>
+    <div class="livre-scene">
+      <img class="livre-halo" src="livre-couverture.jpg" alt="" aria-hidden="true" loading="lazy">
+      <a class="livre-couv" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener"><img src="livre-couverture.jpg" alt="Couverture du livre « Tu n'as rien compris à l'anglais », de Paul Moreaux" width="240" height="360" loading="lazy"></a>
+    </div>
+    <p class="livre-titre">Tu n'as rien compris à l'anglais</p>
+    <a class="btn btn-bleu livre-amazon" href="https://www.amazon.fr/dp/B0HJM6PGKH" target="_blank" rel="noopener">Le trouver sur Amazon →</a>
   </section>
 
   <section class="in bloc avis" id="avis" aria-labelledby="t-avis">
@@ -481,7 +491,7 @@ dessiner();addEventListener('resize',dessiner);})();
 </script>
 <script src="mousse.js?v=202611091705"></script>
 <script>/* lamantin 3D chargé après la page, pour un affichage plus rapide */
-addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611120945")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
+addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611121535")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
 <script>
 /* ouverture : la mousse « devant » n'apparaît que sous le logo, pour passer derrière lui puis tomber sur les drapeaux */
 (function(){var c=document.querySelector('#ouverture .ouv-mousse.devant'),sc=document.querySelector('#ouverture .ouv-scene');if(!c||!sc)return;

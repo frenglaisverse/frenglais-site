@@ -302,3 +302,43 @@ window.COURBE = {
     { q: "La recette en demande deux, plus un jaune. « Œufs » en anglais ?", a: 'EGGS', s: 19, f: "Eggs. Le jaune : the yolk. Le blanc : the white." }
   );
 })(window.COURBE);
+
+/* ===== Seconde chance : si les trois premières réponses sont fausses, une phrase plus simple à traduire, interface tout en anglais.
+   Banque séparée, pour ne jamais dévoiler la phrase d'un autre jour. [français, [juste, piège 1, piège 2], explication en anglais] ===== */
+(function (C) {
+  C.CH = [
+    ["J'habite à Miami depuis trois ans.", ["I have lived in Miami for three years.", "I live in Miami since three years.", "I am living in Miami for three years."], "Started in the past, still true now: <b>have lived</b> + <b>for</b> a duration."],
+    ["Il ne parle pas espagnol.", ["He doesn't speak Spanish.", "He don't speak Spanish.", "He doesn't speaks Spanish."], "After <b>doesn't</b>, the verb stays bare: speak, not speaks."],
+    ["Nous sommes allés à la plage hier.", ["We went to the beach yesterday.", "We have gone to the beach yesterday.", "We are gone to the beach yesterday."], "<b>Yesterday</b> is a finished time: go + -ed = went."],
+    ["Elle a vingt-cinq ans.", ["She is twenty-five.", "She has twenty-five years.", "She has twenty-five."], "Age uses <b>be</b> in English: she <b>is</b> twenty-five."],
+    ["Je vais t'appeler ce soir.", ["I'll call you tonight.", "I go call you tonight.", "I'll call you this night."], "Tonight, not this night. And <b>will</b> + bare verb."],
+    ["Ça dépend de la météo.", ["It depends on the weather.", "It depends of the weather.", "It's depend on the weather."], "Depend <b>on</b>, never depend of."],
+    ["Je suis d'accord avec toi.", ["I agree with you.", "I am agree with you.", "I'm agree with you."], "Agree is a verb: no <b>am</b> before it."],
+    ["Il fait chaud aujourd'hui.", ["It's hot today.", "It makes hot today.", "He is hot today."], "Weather: <b>it is</b>. « He is hot » is about a person."],
+    ["Je travaille ici depuis lundi.", ["I've been working here since Monday.", "I work here since Monday.", "I'm working here for Monday."], "From Monday until now: <b>have been working</b> + <b>since</b> a starting point."],
+    ["Tu as faim ?", ["Are you hungry?", "Do you have hunger?", "Have you hungry?"], "Hunger uses <b>be</b>: are you hungry?"],
+    ["Elle m'a dit la vérité.", ["She told me the truth.", "She said me the truth.", "She told to me the truth."], "<b>Tell</b> someone something; <b>say</b> something (to someone)."],
+    ["On se voit demain.", ["See you tomorrow.", "We see us tomorrow.", "We see ourselves tomorrow."], "The natural English: <b>see you tomorrow</b>."],
+    ["J'ai besoin d'aide.", ["I need help.", "I need of help.", "I have need of help."], "<b>Need</b> takes a direct object: no « of »."],
+    ["Il est arrivé il y a une heure.", ["He arrived an hour ago.", "He has arrived an hour ago.", "He arrived there is an hour."], "<b>Ago</b> means a finished time: -ed, never have."],
+    ["Combien ça coûte ?", ["How much does it cost?", "How much it costs?", "How many does it cost?"], "Questions need <b>does</b>; money is <b>much</b>."],
+    ["Je n'ai jamais vu d'alligator.", ["I've never seen an alligator.", "I never saw no alligator.", "I haven't never seen an alligator."], "One negative only: <b>never</b> is enough."],
+    ["Nous attendons le bus.", ["We're waiting for the bus.", "We're waiting the bus.", "We wait the bus."], "Wait <b>for</b> something."],
+    ["Elle est plus grande que moi.", ["She's taller than me.", "She's more tall than me.", "She's taller that me."], "Short adjective: <b>-er + than</b>."],
+    ["Il pleuvait quand je suis sorti.", ["It was raining when I went out.", "It rained when I was going out.", "It was raining when I was gone out."], "The background action: <b>was raining</b>; the event: <b>went</b>."],
+    ["Je cherche mes clés.", ["I'm looking for my keys.", "I'm searching my keys.", "I look my keys."], "Look <b>for</b> = chercher."],
+    ["Ils viennent de partir.", ["They've just left.", "They come from leaving.", "They just leave."], "« Venir de » = <b>have just</b> + -en."],
+    ["C'est la première fois que je viens ici.", ["It's the first time I've been here.", "It's the first time I come here.", "It's the first time I'm coming here."], "« The first time » takes <b>have + -en</b>."],
+    ["Tu devrais te reposer.", ["You should rest.", "You should to rest.", "You should resting."], "After <b>should</b>, the verb is bare."],
+    ["Je préfère le thé au café.", ["I prefer tea to coffee.", "I prefer the tea than the coffee.", "I prefer tea than coffee."], "Prefer A <b>to</b> B, and no « the » for things in general."],
+    ["Elle sait nager.", ["She can swim.", "She knows swim.", "She knows to swim."], "A skill: <b>can</b> + bare verb."],
+    ["J'ai oublié mon passeport.", ["I've forgotten my passport.", "I've forget my passport.", "I'm forgotten my passport."], "Forget, forgot, <b>forgotten</b>: have + -en."],
+    ["On m'a volé mon vélo.", ["My bike was stolen.", "They stole me my bike.", "One stole my bike."], "French « on » often becomes a passive: <b>was stolen</b>."],
+    ["Si j'avais le temps, je voyagerais.", ["If I had time, I would travel.", "If I would have time, I would travel.", "If I have time, I would travel."], "Imaginary present: <b>if + -ed</b>, then <b>would</b>."],
+    ["Il est en train de cuisiner.", ["He's cooking.", "He's in train of cooking.", "He cooks now."], "« En train de » = <b>be + -ing</b>."],
+    ["Je me suis levé tôt ce matin.", ["I got up early this morning.", "I've got up early this morning.", "I raised early this morning."], "Get up = se lever. This morning is over: <b>got</b>."]
+  ];
+  C.chance = function (n) { return C.CH[((n - 1) * 7 + 3) % C.CH.length]; };
+  C.ptsChance = 60;                                              /* récupère un peu plus que la moitié d'une bonne réponse */
+  C.chanceOk = function (n, rep) { return rep === C.chance(n)[1][0]; };
+})(window.COURBE);

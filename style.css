@@ -1096,25 +1096,6 @@ footer::after{opacity:.58}
 
 /* menu rétréci : « Mon livre » n'y apparaît pas */
 @media (max-width:760px){.bandeau .nav-liens .lien-livre{display:none!important}}
-
-/* carte Paul.M, version épurée : une fiche blanche aux angles ronds, comme les boutons du site.
-   Photo nette (plus de buée ni de « flocons »), plus de racines ni d'épingle, nom en Geist. */
-.polaroid .pol-racines,.polaroid .pol-mousse,.pol-buee,.pol-carte::before{display:none!important}
-.polaroid{animation:none!important;transform:none!important}
-.polaroid .pol-carte{transition:transform .3s cubic-bezier(.22,1,.36,1)}
-.polaroid .pol-carte:hover{transform:translateY(-5px)}
-.pol-face{border-radius:22px!important}
-.pol-recto{background:#fff!important;border:0!important;outline:0!important;padding:8px 8px 0!important;
-  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 24px 44px -20px rgba(3,10,35,.7),0 4px 12px rgba(3,10,35,.22)!important}
-.pol-recto img,.pol-cadre{border-radius:15px!important}
-.pol-cadre{box-shadow:none!important}
-.polaroid .pol-nom,.pol-nom{flex:1;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  font:700 15px/1 var(--f-txt)!important;letter-spacing:-.01em!important;color:#10245C!important;text-shadow:none!important;transform:none!important}
-.polaroid .pol-nom::after{content:"Fondateur";font:500 10.5px/1 var(--f-mono,ui-monospace);letter-spacing:.14em;text-transform:uppercase;color:#E2685F}
-.pol-carte:focus-visible{border-radius:22px;outline:3px solid #fff;outline-offset:4px}
-@media (max-width:1100px){.hero-bas .polaroid .pol-nom{font-size:13px!important}.polaroid .pol-nom::after{font-size:9px}}
-@media (prefers-reduced-motion:reduce){.polaroid .pol-carte{transition:none}}
-.pol-recto{padding-bottom:8px!important}
 /* verso agrandi : le bleu du site, photo nette aux angles ronds, nom en Geist */
 .pol-grand .pol-verso,.pol-verso{background:radial-gradient(120% 80% at 90% 0,rgba(240,118,111,.22),transparent 55%),linear-gradient(165deg,#2A5BC2,#1C49A5 45%,#12307A)!important;border:1px solid rgba(255,255,255,.35)!important}
 .pol-grand .pol-face{border-radius:26px!important;box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 4px 10px rgba(0,0,0,.3)!important}
@@ -1124,3 +1105,38 @@ footer::after{opacity:.58}
 .pol-verso b,.pol-verso span,.pol-grand .v-cit{text-shadow:none!important}
 .pol-grand .v-courbe{filter:none!important}
 .pol-grand .pol-verso::before{display:none!important}
+
+/* ===== Carte Paul.M : une carte de visite en verre fumé =====
+   Verre blanc dépoli qui laisse passer le bleu du site, liseré lumineux qui s'efface vers le milieu des bords,
+   reflet qui glisse au survol, et la Courbe des Temps gravée dans le verre, T0 en corail. */
+.polaroid .pol-racines,.polaroid .pol-mousse,.pol-buee,.pol-carte::before{display:none!important}
+.polaroid{animation:none!important;transform:none!important;width:auto!important}
+.polaroid .pol-carte{width:272px!important;aspect-ratio:1.72!important;height:auto!important;margin-top:0!important;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.polaroid .pol-carte:hover{transform:translateY(-4px) rotate(-1deg)}
+.polaroid .pol-recto{border-radius:20px!important;flex-direction:row!important;align-items:stretch;gap:16px;padding:14px!important;overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,.34) 0%,rgba(255,255,255,.14) 45%,rgba(255,255,255,.08) 100%)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:0!important;outline:0!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.12),0 34px 60px -28px rgba(3,10,35,.75),0 6px 16px rgba(3,10,35,.18)!important}
+/* liseré : lumineux aux angles, presque transparent au milieu des bords */
+.polaroid .pol-recto::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,255,255,.08) 35%,rgba(255,255,255,0) 50%,rgba(255,255,255,.08) 65%,rgba(255,255,255,.7));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+/* reflet qui traverse le verre au survol */
+.polaroid .pol-recto::before{content:"";position:absolute;top:-40%;bottom:-40%;width:38%;left:-60%;transform:rotate(18deg);pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:left .9s cubic-bezier(.22,1,.36,1)}
+.polaroid .pol-carte:hover .pol-recto::before,.polaroid .pol-carte:focus-visible .pol-recto::before{left:130%}
+.polaroid .pol-cadre{flex:none;width:36%;height:100%;border-radius:13px!important;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.4),0 10px 22px -8px rgba(3,10,35,.6)!important}
+.polaroid .pol-recto img{width:100%;height:100%!important;aspect-ratio:auto!important;object-fit:cover;object-position:50% 30%;border-radius:0!important}
+.polaroid .pol-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;text-align:left;color:#fff;position:relative;z-index:1}
+.polaroid .pol-marque{font:500 9.5px/1 var(--f-mono,ui-monospace);letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.polaroid .pol-nom{display:block!important;flex:none!important;font:700 25px/1 var(--f-txt)!important;letter-spacing:-.03em!important;color:#fff!important;text-shadow:0 1px 10px rgba(6,14,44,.25)!important;transform:none!important;margin-top:10px}
+.polaroid .pol-nom::after{content:none!important}
+.polaroid .pol-role{display:block;margin-top:6px;font:500 10px/1.3 var(--f-mono,ui-monospace);letter-spacing:.16em;text-transform:uppercase;color:#FFC2BD}
+.polaroid .pol-gravure{display:block;width:100%;height:auto;margin-top:auto;filter:drop-shadow(0 1px 0 rgba(255,255,255,.25))}
+.pol-carte:focus-visible{border-radius:20px;outline:3px solid #fff;outline-offset:4px}
+@media (max-width:1100px){.hero-bas .polaroid .pol-carte,.polaroid .pol-carte{width:250px!important}.polaroid .pol-nom{font-size:23px!important}.polaroid .pol-recto{gap:12px;padding:11px!important}}
+@media (max-width:640px){.hero-bas .polaroid .pol-carte,.polaroid .pol-carte{width:220px!important}.polaroid .pol-nom{font-size:20px!important}.polaroid .pol-marque{font-size:8px}.polaroid .pol-role{font-size:8.5px}}
+@media (prefers-reduced-motion:reduce){.polaroid .pol-carte,.polaroid .pol-recto::before{transition:none}}
+/* carte de visite sur petit écran : sur sa propre ligne, sous les boutons */
+@media (max-width:760px){.hero-bas{flex-wrap:wrap!important}.hero-bas .polaroid{order:5;flex:1 1 100%!important;width:100%!important;margin:22px 0 0!important;display:flex;justify-content:flex-start}
+  .hero-bas .polaroid .pol-carte,.polaroid .pol-carte{width:min(320px,100%)!important}.polaroid .pol-nom{font-size:25px!important}.polaroid .pol-marque{font-size:9px}.polaroid .pol-role{font-size:9.5px}}

@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwe2raqw"></script>
+<script src="donnees.js?v=mwe33bto"></script>
 </head>
 <body>
 <style>
@@ -254,6 +254,15 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
 .apercu{display:flex;justify-content:center;align-items:center;gap:10px;font:8px var(--pix);color:var(--doux)}
 .apercu button{background:var(--ecran2);border:0;color:var(--creme);font:10px var(--pix);padding:8px 10px;cursor:pointer}
 .cache{display:none!important}
+/* seconde chance */
+.chance{text-align:center}
+.chance-titre{font:22px/1.2 var(--pix);color:var(--jaune);margin:4px 0 10px;text-shadow:3px 3px 0 var(--corail)}
+.chance-sous{font-size:21px;line-height:1.25;color:var(--creme);margin:0 auto 16px;max-width:30ch}
+.chance-sous b{color:var(--jaune);font-weight:400}
+.chance-fr{background:var(--creme);color:var(--nuit);font-size:25px;line-height:1.2;padding:14px 16px;margin:4px 4px 16px;text-align:left;box-shadow:0 -4px 0 0 var(--cadre),0 4px 0 0 var(--cadre),-4px 0 0 0 var(--cadre),4px 0 0 0 var(--cadre)}
+.chance .choix{text-align:left}
+.chance-expl{font-size:20px;line-height:1.3;color:var(--doux);margin:8px auto 12px;max-width:34ch}
+.chance-expl b{color:var(--creme);font-weight:400;text-decoration:underline;text-decoration-color:var(--corail);text-underline-offset:3px}
 /* page de fin : mot mystère, classement, partage, compte à rebours sur 24 h */
 .correction{font-size:20px;line-height:1.25;color:var(--doux);margin:14px auto 0;max-width:34ch}
 .correction a{color:var(--jaune);text-underline-offset:4px;white-space:nowrap}
@@ -330,7 +339,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
   /* bug du 12 novembre 2026 : certains scores ont été enregistrés « NaN ». On les recalcule avec les réponses gardées sur l'appareil, et on les renvoie. */
   Object.keys(etat).forEach(k => { const r = etat[k], n = +k; if (!r || Number.isFinite(r.s) || !Array.isArray(r.res)) return;
     let s = 0; for (let i = 0; i < 3; i++) s += C.points(!!r.res[i], +(r.ms || [])[i] || C.duree) * C.multi(n);
-    if (r.bonus && Number.isFinite(r.bonus.pts)) s += r.bonus.pts; r.s = s; if (n >= AUJ - 1) r.envoye = false; });
+    if (r.bonus && Number.isFinite(r.bonus.pts)) s += r.bonus.pts; if (r.chance && Number.isFinite(r.chance.pts)) s += r.chance.pts; r.s = s; if (n >= AUJ - 1) r.envoye = false; });
   ecrire('courbe-jours', etat);
 
   /* ---------- Sons 8 bits ---------- */
@@ -471,7 +480,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
         }; return; } } } catch (e) {}
     if (C.api) { monId = lire('courbe-id', '') || (Math.random().toString(36).slice(2) + Date.now().toString(36)); ecrire('courbe-id', monId);
       classement = {
-        async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms, bonus: detail.bonus && { rep: detail.bonus.rep, aides: detail.bonus.aides } }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
+        async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms, bonus: detail.bonus && { rep: detail.bonus.rep, aides: detail.bonus.aides }, chance: detail.chance && { rep: detail.chance.rep } }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
         async lire(n){ const r = await fetch(C.api + '/top?n=' + n + '&id=' + encodeURIComponent(monId)); return r.json(); },
         async gagnant(S){ const r = await fetch(C.api + '/gagnant?s=' + S + '&id=' + encodeURIComponent(monId)); return r.json(); },
         async reclamer(S, email){ const r = await fetch(C.api + '/gagnant', { method: 'POST', body: JSON.stringify({ s: S, id: monId, email }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
@@ -566,11 +575,39 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       etat[num] = r; ecrire('courbe-jours', etat); compter('fin');
       $('hud-serie').textContent = serie();
       poserZone(zone); setTimeout(() => poserCode(zone, code), 700);
-      setTimeout(() => niveauBonus(r), 900);
+      setTimeout(() => (r.res.every(x => !x) ? secondeChance(r, () => niveauBonus(r)) : niveauBonus(r)), 900);
     }
   }
 
   /* ---------- Question 4 : le mot mystère (lettres données) ---------- */
+  /* ---------- Seconde chance : trois réponses fausses ? Une phrase plus simple, interface tout en anglais ---------- */
+  function secondeChance(r, suite){
+    const CH = C.chance(num), m = C.multi(num), gain = C.ptsChance * m, d = (num * 2) % 3, opts = CH[1].slice(d).concat(CH[1].slice(0, d));
+    $('jeu').innerHTML = `<div class="chance">
+        <p class="chance-titre">SECOND CHANCE!</p>
+        <p class="chance-sous">Three misses? Don't panic. Translate this sentence into English and win back <b>${gain} points</b>.</p>
+        <div class="chance-fr" lang="fr">${esc(CH[0])}</div>
+        <div class="chrono" id="chrono" aria-hidden="true">${'<i></i>'.repeat(20)}</div>
+        <div class="choix" lang="en">${opts.map((o, i) => `<button type="button" class="px" data-k="${i + 1}">${esc(o)}</button>`).join('')}</div>
+        <div id="chance-fin"></div></div>`;
+    const btns = [...document.querySelectorAll('.choix button')], segs = [...$('chrono').children], t0 = performance.now(); let fini = false;
+    const repondre = b => { if (fini) return; fini = true; clearInterval(chrono); onkeydown = null;
+      const choisi = b ? b.textContent : null, ok = C.chanceOk(num, choisi), pts = ok ? gain : 0;
+      btns.forEach(x => { x.disabled = true; if (x.textContent === CH[1][0]) x.classList.add('ok'); else if (x !== b) x.classList.add('eteint'); });
+      if (b && !ok) b.classList.add('ko');
+      r.chance = { rep: choisi, ok, pts }; r.s += pts; etat[num] = r; ecrire('courbe-jours', etat); $('hud-score').textContent = pad(r.s, 4);
+      (ok ? SON.juste : SON.faux)(); compter(ok ? 'chance-ok' : 'chance-rate');
+      $('chance-fin').innerHTML = `<p class="flash ${ok ? 'ok' : 'ko'}">${ok ? 'NICE SAVE! <b>+' + pts + '</b>' : (b ? 'NOT THIS TIME.' : 'TIME\'S UP.')}</p>
+        <p class="chance-expl" lang="en">${CH[2]}</p><button type="button" class="btn" id="chance-suite">CONTINUE ▶</button>`;
+      $('chance-suite').addEventListener('click', suite); $('chance-suite').focus({ preventScroll: true }); };
+    btns.forEach(b => b.addEventListener('click', () => repondre(b)));
+    chrono = setInterval(() => { const reste = C.duree - (performance.now() - t0), n = Math.ceil(reste / C.duree * 20);
+      segs.forEach((s, i) => s.classList.toggle('vide', i >= n)); $('chrono').classList.toggle('urgent', reste < 5000);
+      if (reste <= 0) repondre(null); }, 100);
+    onkeydown = ev => { const i = +ev.key - 1; if (i >= 0 && i < btns.length && !btns[i].disabled) btns[i].click(); };
+    SON.fin(2); btns[0].focus({ preventScroll: true });
+  }
+
   function niveauBonus(r){
     const M = C.mot(num), L = C.lettres(num), mult = C.multi(num); let aides = 0, essais = 0, choix = [], fini = false;
     [...$('cases').children].forEach((c, i) => c.className = 'px ' + (i < 3 ? (r.res[i] ? 'juste' : 'rate') : 'en-cours'));
@@ -617,7 +654,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     [...$('cases').children].forEach((c, i) => c.className = 'px ' + ((i < 3 ? r.res[i] : r.bonus && r.bonus.ok) ? 'juste' : 'rate'));
     const grille = r.res.map(x => x ? '🟦' : '🟥').join('');
     const b = r.bonus || { ok: false }, M = C.mot(num), vc = C.viceCity(num);
-    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))} ${grille}${b.ok ? '🟦' : '🟥'}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
+    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))} ${grille}${b.ok ? '🟦' : '🟥'}${r.chance && r.chance.ok ? ' 🔁' : ''}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
     const titres = ['GAME OVER', 'UN SUR QUATRE', 'DEUX SUR QUATRE', 'PRESQUE !', 'PARFAIT !'];
     const jours = Object.keys(etat).length, parfaits = Object.values(etat).filter(x => x.res.every(Boolean)).length, record = Math.max(0, ...Object.values(etat).map(x => x.s));
     $('jeu').innerHTML = `<div class="fin">

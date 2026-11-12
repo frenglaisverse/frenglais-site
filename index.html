@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611122305">
+<link rel="stylesheet" href="style.css?v=202611122325">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -388,7 +388,7 @@ l.innerHTML=''
 l.addEventListener('click',function(e){e.stopPropagation();});p.parentNode.insertBefore(l,p);
 var fb=grand.querySelector('.v-liste em');if(fb&&fb.textContent==='Fulbright'){var a=document.createElement('a');a.className='v-fulbright';a.href='https://fulbright-france.org/';a.target='_blank';a.rel='noopener';a.title='Fulbright France';a.setAttribute('aria-label','Fulbright (nouvel onglet)');a.textContent='Fulbright';a.addEventListener('click',function(e){e.stopPropagation();});fb.replaceWith(a);}})();
 var inn=grand.firstChild,ouvert=false,occupe=false,calme=matchMedia('(prefers-reduced-motion: reduce)').matches,E='cubic-bezier(.22,1,.36,1)';
-function ecart(){var r=b.getBoundingClientRect(),g=grand.getBoundingClientRect();return 'translate('+((r.left+r.width/2)-(g.left+g.width/2))+'px,'+((r.top+r.height/2)-(g.top+g.height/2))+'px) scale('+(r.width/g.width)+') rotate(1.5deg)';}
+function ecart(){var r=b.getBoundingClientRect(),g=grand.getBoundingClientRect();return 'translate('+((r.left+r.width/2)-(g.left+g.width/2))+'px,'+((r.top+r.height/2)-(g.top+g.height/2))+'px) scale('+(r.width/g.width)+')';}
 function ouvrir(){if(ouvert||occupe)return;ouvert=true;occupe=true;setTimeout(function(){occupe=false;},calme?0:960);inn.getAnimations().forEach(function(a){a.cancel();});grand.getAnimations().forEach(function(a){a.cancel();});grand.classList.add('on');var d=ecart();b.style.visibility='hidden';voile.classList.add('on');
   if(!calme){grand.animate([{transform:d},{transform:'none'}],{duration:600,easing:E});inn.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(180deg)'}],{duration:750,delay:180,easing:E,fill:'forwards'});}
   else inn.style.transform='rotateY(180deg)';

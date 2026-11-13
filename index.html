@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611131915">
+<link rel="stylesheet" href="style.css?v=202611131945">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -147,86 +147,37 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
     <div class="garantie">
       <span class="g-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m8.5 12 2.4 2.4 4.6-4.8"/></svg></span>
       <div class="g-txt"><p class="g-titre">Un niveau gagné, ou remboursé.</p>
-      <p class="g-sous">Suivez le rythme prévu : vous montez d'au moins un niveau (A2 → B1, par exemple). Sinon, on vous rembourse tout.</p></div>
+      <p class="g-sous">Formules de 12 semaines et plus : suivez le rythme prévu, vous montez d'au moins un niveau (A2 → B1, par exemple). Sinon, on vous rembourse tout.</p></div>
       <a class="g-lien" href="cgv.html#garantie">Conditions</a>
     </div>
-    <div class="coffrets">
-      <article class="coffret" data-public="part">
-        <div class="couvercle"><span class="pour-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path d="M9 7.5V5.8c0-.7.6-1.3 1.3-1.3h3.4c.7 0 1.3.6 1.3 1.3v1.7M3.5 12.5h17"/></svg></span><span class="pour"><small>Pour</small>Professionnels et indépendants</span></div>
-        <div class="contenu">
-          <h3 class="c-nom"></h3>
-          <div class="segments" role="radiogroup" aria-label="Durée">
-            <button type="button" role="radio" data-duree="6" aria-checked="false">6 sem.</button>
-            <button type="button" role="radio" data-duree="16" aria-checked="true">16 sem.</button>
-            <button type="button" role="radio" data-duree="long" aria-checked="false">Long terme</button>
-          </div>
-          <div class="cats" role="radiogroup" aria-label="Profil">
-            <button type="button" role="radio" data-secteur="Professionnels" aria-checked="true" title="Professionnels"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5V5.8c0-.7.6-1.3 1.3-1.3h3.4c.7 0 1.3.6 1.3 1.3v1.7M3.5 12.5h17"/></svg><span>Pros</span></button>
-            <button type="button" role="radio" data-secteur="Freelance" aria-checked="false" title="Freelance"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="10" rx="1.5"/><path d="M3 18.5h18"/></svg><span>Freelance</span></button>
-            <button type="button" role="radio" data-secteur="Internationaux" aria-checked="false" title="Internationaux"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 3.8 5.2 3.8 8.5s-1.2 6.1-3.8 8.5c-2.6-2.4-3.8-5.2-3.8-8.5S9.4 5.9 12 3.5z"/></svg><span>International</span></button>
-            <button type="button" role="radio" data-secteur="Reconversion" aria-checked="false" title="Reconversion"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15"/><path d="M4 20v-5h5"/></svg><span>Reconversion</span></button>
-          </div>
-          <div class="sit-carte" aria-live="polite"><div class="sit-in"><div class="sit-face"></div><div class="sit-face sit-dos" aria-hidden="true"></div></div></div>
-          <p class="rythme c-rythme"></p>
-          <div class="details" id="det-part" hidden>
-            <ul class="c-liste"></ul>
-          </div>
-          <div class="actions">
-            <a class="btn btn-coffret c-devis" href="#devis">Demander un devis</a>
-            <button type="button" class="plus" aria-expanded="false" aria-controls="det-part" aria-label="Voir le détail"><span aria-hidden="true">+</span></button>
-          </div>
-        </div>
+    <div class="offres">
+      <article class="offre" data-offre="pro">
+        <p class="o-pour">Professionnels et indépendants</p>
+        <h3 class="o-nom">L'Intégral</h3>
+        <p class="o-promesse"></p>
+        <div class="o-durees" role="radiogroup" aria-label="Durée"><button type="button" role="radio" data-k="6">6 semaines</button><button type="button" role="radio" data-k="16" aria-checked="true">16 semaines</button><button type="button" role="radio" data-k="long">Mensuel</button></div>
+        <p class="o-prix"><b></b><span></span></p>
+        <ul class="o-liste"></ul>
+        <a class="o-cta" href="#devis">Demander un devis</a>
       </article>
-      <article class="coffret" data-public="ent">
-        <div class="couvercle"><span class="pour-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5V5.5c0-.6.4-1 1-1h8c.6 0 1 .4 1 1v15M14 9.5h5c.6 0 1 .4 1 1v10M2.5 20.5h19"/><path d="M7.5 8h3M7.5 11.5h3M7.5 15h3M16.5 13h1M16.5 16.5h1"/></svg></span><span class="pour"><small>Pour</small>Entreprises et équipes</span></div>
-        <div class="contenu">
-          <h3 class="c-nom"></h3>
-          <div class="segments" role="radiogroup" aria-label="Durée">
-            <button type="button" role="radio" data-duree="8" aria-checked="false">8 sem.</button>
-            <button type="button" role="radio" data-duree="12" aria-checked="true">12 sem.</button>
-            <button type="button" role="radio" data-duree="16" aria-checked="false">16 sem.</button>
-          </div>
-          <div class="cats" role="radiogroup" aria-label="Secteur">
-            <button type="button" role="radio" data-secteur="Hôtellerie" aria-checked="true" title="Hôtellerie"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18V7M3 14h18v4M21 14v-2.5c0-1.4-1.1-2.5-2.5-2.5H11v5"/><circle cx="7" cy="11" r="1.8"/></svg><span>Hôtels</span></button>
-            <button type="button" role="radio" data-secteur="Commerce, luxe" aria-checked="false" title="Commerce, luxe"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span>Luxe</span></button>
-            <button type="button" role="radio" data-secteur="Tourisme" aria-checked="false" title="Tourisme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5l6-2 6 2 6-2v13l-6 2-6-2-6 2z"/><path d="M9 4.5v13M15 6.5v13"/></svg><span>Tourisme</span></button>
-            <button type="button" role="radio" data-secteur="Immobilier" aria-checked="false" title="Immobilier"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6.5 8 6.5"/><path d="M6 9.5V20h12V9.5M10 20v-5h4v5"/></svg><span>Immo</span></button>
-            <button type="button" role="radio" data-secteur="Sur mesure" aria-checked="false" title="Sur mesure"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span>Sur mesure</span></button>
-          </div>
-          <div class="sit-carte" aria-live="polite"><div class="sit-in"><div class="sit-face"></div><div class="sit-face sit-dos" aria-hidden="true"></div></div></div>
-          <p class="rythme c-rythme"></p>
-          <div class="details" id="det-ent" hidden>
-            <ul class="c-liste"></ul>
-          </div>
-          <div class="actions">
-            <a class="btn btn-coffret c-devis" href="#devis">Demander un devis</a>
-            <button type="button" class="plus" aria-expanded="false" aria-controls="det-ent" aria-label="Voir le détail"><span aria-hidden="true">+</span></button>
-          </div>
-        </div>
+      <article class="offre o-phare" data-offre="ent">
+        <p class="o-pour">Entreprises et équipes</p>
+        <h3 class="o-nom">Performance</h3>
+        <p class="o-promesse"></p>
+        <div class="o-durees" role="radiogroup" aria-label="Durée"><button type="button" role="radio" data-k="8">8 semaines</button><button type="button" role="radio" data-k="12" aria-checked="true">12 semaines</button><button type="button" role="radio" data-k="16">16 semaines</button></div>
+        <p class="o-prix"><b></b><span></span></p>
+        <ul class="o-liste"></ul>
+        <a class="o-cta" href="#devis">Demander un devis</a>
       </article>
-      <article class="solo" data-solo>
-      <span class="solo-jac" aria-hidden="true"></span><span class="solo-ciel" aria-hidden="true"></span>
-      <div class="solo-tete">
-        <span class="solo-eti">Édition privée</span>
-        <h3 class="solo-nom">Solo</h3>
-        <p class="solo-acc">L'anglais de vos situations réelles, taillé sur mesure pour vous.</p>
-      </div>
-      <div class="solo-choix">
-        <div class="cats solo-cats" role="radiogroup" aria-label="Votre situation"><button type="button" role="radio" data-sit="Voyages" aria-checked="true" title="Voyages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 13.5 21 6.5l-3.2 9.3-5.3-2.6-2.4 4.3-1.2-5.3z"/><path d="M12.5 13.2 21 6.5"/></svg><span>Voyages</span></button><button type="button" role="radio" data-sit="Expatriation" aria-checked="false" title="Expatriation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><circle cx="12" cy="14" r="1.6"/><path d="M12 15.6V18"/></svg><span>Expat</span></button><button type="button" role="radio" data-sit="Études" aria-checked="false" title="Études"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11v4.5c1.6 1.6 3.5 2.3 5.5 2.3s3.9-.7 5.5-2.3V11"/><path d="M21.5 9v5"/></svg><span>Études</span></button><button type="button" role="radio" data-sit="Tests officiels" aria-checked="false" title="Tests officiels"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7"/><path d="M12 13.5V10M10 3h4M12 3v3.5M18.5 7l1.5-1.5"/></svg><span>Tests</span></button><button type="button" role="radio" data-sit="Autre" aria-checked="false" title="Autre"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 13.8 9l5.7.3-4.5 3.5 1.6 5.6L12 15.2l-4.6 3.2L9 12.8 4.5 9.3l5.7-.3z"/></svg><span>Autre</span></button></div>
-        <div class="sit-carte solo-sitc" aria-live="polite"><div class="sit-in"><div class="sit-face"></div><div class="sit-face sit-dos" aria-hidden="true"></div></div></div>
-        <div class="solo-ligne solo-formats" role="radiogroup" aria-label="Formule">
-          <button type="button" role="radio" data-fmt="Complète" data-dur="0 à 3 mois" aria-checked="true"><b>Complète</b><small>0 à 3 mois</small></button>
-          <button type="button" role="radio" data-fmt="Immersion" data-dur="long terme" aria-checked="false"><b>Immersion</b><small>Long terme</small></button>
-        </div>
-        <p class="solo-ex">Places limitées.</p>
-        <ul class="solo-det" id="solo-det" hidden>
-          <li>Un point progression chaque semaine</li>
-          <li>Un parcours adapté à votre vie</li>
-          <li>Accès à la communauté VIP Frenglais</li>
-        </ul>
-      </div>
-      <div class="solo-actions"><a class="solo-cta" href="#devis">Demander l'accès</a><button type="button" class="solo-plus" aria-expanded="false" aria-controls="solo-det" aria-label="Voir ce qui est inclus"><span aria-hidden="true">+</span></button></div>
-</article>
+      <article class="offre o-prive" data-offre="solo">
+        <p class="o-pour">Édition privée</p>
+        <h3 class="o-nom">Solo</h3>
+        <p class="o-promesse"></p>
+        <div class="o-durees" role="radiogroup" aria-label="Formule"><button type="button" role="radio" data-k="complete" aria-checked="true">Complète</button><button type="button" role="radio" data-k="immersion">Immersion</button></div>
+        <p class="o-prix"><b></b><span></span></p>
+        <ul class="o-liste"></ul>
+        <a class="o-cta" href="#devis">Demander l'accès</a>
+      </article>
     </div>
   </section>
 
@@ -483,6 +434,27 @@ dessiner();addEventListener('resize',dessiner);})();
 </script>
 <script>/* banian : s'arrête au bord droit de la colonne du site, comme à gauche */
 (function(){var f=function(){var n=document.querySelector('.bandeau nav');if(!n)return;var d=n.getBoundingClientRect().right;document.querySelectorAll('.banian').forEach(function(im){var r=im.getBoundingClientRect();if(r.width)im.style.setProperty('--fin',Math.round(d-r.left)+'px');});};addEventListener('load',f);addEventListener('resize',f);f();})();</script>
+<script>/* formations : trois offres, une durée choisie, un prix assumé */
+(function(){var O={
+ pro:{6:["L'Accéléré","L'essentiel de la méthode en six semaines : les deux temps, les deux codes, toute la Courbe.","500 €","",["12 modules en ligne, à votre rythme","Le live hebdomadaire, enregistré","Vos questions par vocal WhatsApp"],"6 semaines"],
+      16:["L'Intégral","Réunions, e-mails, appels : l'anglais de votre métier, jusqu'au réflexe.","1 200 €","",["32 modules, dont 8 ateliers d'oral","Tests d'entrée et de sortie, certificat de niveau","Un niveau gagné, ou remboursé"],"16 semaines"],
+      long:["Le Cercle","Garder le cap, mois après mois, sans jamais repartir de zéro.","120 €","par mois",["Une séance live par semaine","Modules et révisions en accès libre","Séances supplémentaires sur demande"],"Long terme (abonnement mensuel)"]},
+ ent:{8:["Impulsion","L'essentiel, à un rythme soutenu, sur les situations de votre secteur.","900 €","par apprenant",["16 modules aux scénarios de votre métier","Lancement de la formation par Paul","Rapport de progression pour vos RH"],"8 semaines"],
+      12:["Performance","Le parcours complet, sur vos vrais cas clients.","1 300 €","par apprenant",["24 modules aux scénarios de votre métier","Tests, certificats et rapport RH","Un niveau gagné, ou remboursé"],"12 semaines"],
+      16:["Leadership","Présenter, négocier, animer : vos équipes prennent la parole en anglais.","1 700 €","par apprenant",["32 modules, dont 8 ateliers d'oral","Évaluation orale finale avec Paul","Un niveau gagné, ou remboursé"],"16 semaines"]},
+ solo:{complete:["Solo","L'anglais de votre vie, taillé sur mesure : départ, installation, examen.","2 400 €","0 à 3 mois",["Un parcours construit sur vos situations","Un point individuel chaque semaine","La communauté privée Frenglais"],""],
+      immersion:["Solo Immersion","Un accompagnement privé, dans la durée, au rythme de votre vie en anglais.","400 €","par mois",["Un parcours qui évolue avec vous","Un point individuel chaque semaine","La communauté privée Frenglais"],""]}};
+var note={ent:"Tarif dégressif : -10 % dès 5 apprenants, -20 % dès 10.",solo:"Places limitées."};
+document.querySelectorAll('.offre').forEach(function(c){var t=c.dataset.offre,cur=(c.querySelector('[aria-checked="true"]')||{}).dataset.k;
+ if(note[t]){var n=document.createElement('p');n.className='o-note';n.textContent=note[t];c.querySelector('.o-cta').before(n);}
+ function r(){var d=O[t][cur];c.querySelector('.o-nom').textContent=d[0];c.querySelector('.o-promesse').textContent=d[1];c.querySelector('.o-prix b').textContent=d[2];c.querySelector('.o-prix span').textContent=d[3];
+  c.querySelector('.o-liste').innerHTML=d[4].map(function(x){return '<li>'+x+'</li>'}).join('');
+  c.querySelectorAll('[data-k]').forEach(function(b){b.setAttribute('aria-checked',b.dataset.k===cur)});}
+ c.addEventListener('click',function(e){var b=e.target.closest('[data-k]');if(b){cur=b.dataset.k;r();}});
+ c.querySelector('.o-cta').addEventListener('click',function(){var id={pro:'p-pro',ent:'p-ent',solo:'p-part'}[t],x=document.getElementById(id);if(x){x.checked=true;x.dispatchEvent(new Event('change',{bubbles:true}));}
+  var fd=document.getElementById('f-duree'),v=O[t][cur][5];if(fd&&v){for(var o of fd.options)if(o.value===v||o.text===v){fd.value=o.value;}}
+  var m=document.getElementById('f-msg');if(m&&!m.value)m.value='Formule : '+O[t][cur][0]+'. ';});
+ r();});})();</script>
 <script src="mousse.js?v=202611131900"></script>
 <script>/* lamantin 3D chargé après la page, pour un affichage plus rapide */
 addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611121610")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>

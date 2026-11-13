@@ -760,6 +760,7 @@ const etapes=[
 function verifierVerrou(){
   const e=etapes[etat.step], suiv=document.getElementById('suiv'), v=document.getElementById('verrou');
   if(!e.gate||etat.step===etapes.length-1){ suiv.disabled=false; v.hidden=true; return; }
+  if((()=>{try{return !!JSON.parse(localStorage.getItem('frg-cle-tableau')||'""')}catch(e){return false}})()&&!etat.valide[etat.step]){ suiv.disabled=false; suiv.textContent='Suivant'; v.hidden=false; v.className='verrou'; v.innerHTML='Mode test : « Suivant » est libre sur votre appareil.'; return; }
   let complet=false, ratio=0, nFaux=0;
   if(Array.isArray(e.gate)){ const faits=e.gate.filter(id=>id in tentative); complet=faits.length===e.gate.length; ratio=faits.filter(id=>tentative[id]).length/e.gate.length; nFaux=faits.filter(id=>!tentative[id]).length; }
   else if(e.gate==='courbe'){ complet='__courbe' in tentative; ratio=tentative.__courbe||0; nFaux=tentative.__courbeFaux||0; }

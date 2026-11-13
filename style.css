@@ -887,7 +887,7 @@ footer::after{opacity:.58}
 .demo .video-plus svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
 .demo .video-plus .lecture{fill:currentColor;stroke:none}
 .demo .video-plus{top:-37px}
-@media (max-width:480px){.demo .video-plus .vp-suite{display:none}}
+@media (max-width:480px){.demo .video-plus{font-size:12px}}
 /* « Plus dans l'espace élève » : sans contour, grisé, net au survol */
 .demo .video-plus{background:none;box-shadow:none;color:rgba(255,255,255,.45);padding-left:2px}
 .demo .video-plus:hover,.demo .video-plus:focus-visible{background:none;box-shadow:none;color:#fff}
@@ -1185,7 +1185,7 @@ footer::after{opacity:.58}
   .banian-arriere{display:block;position:absolute;bottom:0;right:calc(22vw - 594px);width:1100px;max-width:none;height:auto;opacity:.42;pointer-events:none;user-select:none;z-index:0;
     -webkit-mask:linear-gradient(90deg,transparent 30%,#000 52%),linear-gradient(180deg,transparent 0,#000 38%);-webkit-mask-composite:source-in;mask:linear-gradient(90deg,transparent 30%,#000 52%),linear-gradient(180deg,transparent 0,#000 38%);mask-composite:intersect}
   .hero{overflow-x:visible!important}.bandeau{overflow-x:clip}.hero-texte,.hero .ctas,.polaroid{position:relative;z-index:2}}
-@media (max-width:640px){.banian-arriere{width:820px;right:calc(18vw - 443px);opacity:.34}}
+@media (max-width:640px){.banian-arriere{display:none!important}}
 /* fin banian */
 /* Courbe du jour : petit onglet rétro à côté du logo */
 .marque{position:relative}

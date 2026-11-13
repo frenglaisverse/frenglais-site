@@ -1314,3 +1314,7 @@ footer::after{opacity:.58}
  :root:not([data-theme="light"]) .o-durees{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1)}
  :root:not([data-theme="light"]) .o-liste{border-top-color:rgba(255,255,255,.1)}
  :root:not([data-theme="light"]) .offres::before{opacity:.45}}
+
+/* plus de halo derrière les offres (il dessinait un bord) */
+.offres::before{content:none!important}
+.o-liste{align-content:start}

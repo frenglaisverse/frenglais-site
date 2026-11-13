@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611131915b">
+<link rel="stylesheet" href="style.css?v=202611131930">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -170,10 +170,10 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
         <a class="o-cta" href="#devis">Demander un devis</a>
       </article>
       <article class="offre o-prive" data-offre="solo">
-        <p class="o-pour">Édition privée</p>
-        <h3 class="o-nom">Solo</h3>
+        <p class="o-pour">Particuliers</p>
+        <h3 class="o-nom">Cours particuliers</h3>
         <p class="o-promesse"></p>
-        <div class="o-durees" role="radiogroup" aria-label="Formule"><button type="button" role="radio" data-k="complete" aria-checked="true">Complète</button><button type="button" role="radio" data-k="immersion">Immersion</button></div>
+        <div class="o-durees" role="radiogroup" aria-label="Formule"><button type="button" role="radio" data-k="8" aria-checked="true">8 cours</button><button type="button" role="radio" data-k="16">16 cours</button></div>
         <p class="o-prix"><b></b><span></span></p>
         <ul class="o-liste"></ul>
         <a class="o-cta" href="#devis">Demander un devis</a>
@@ -436,18 +436,18 @@ dessiner();addEventListener('resize',dessiner);})();
 (function(){var f=function(){var n=document.querySelector('.bandeau nav');if(!n)return;var d=n.getBoundingClientRect().right;document.querySelectorAll('.banian').forEach(function(im){var r=im.getBoundingClientRect();if(r.width)im.style.setProperty('--fin',Math.round(d-r.left)+'px');});};addEventListener('load',f);addEventListener('resize',f);f();})();</script>
 <script>/* formations : trois offres, une durée choisie, un prix assumé */
 (function(){var O={
- pro:{6:["L'Accéléré","L'essentiel de la méthode en six semaines : les deux temps, les deux codes, toute la Courbe.","500 €","",["12 modules en ligne, à votre rythme","Le live hebdomadaire, enregistré","Vos questions par vocal WhatsApp"],"6 semaines"],
-      16:["L'Intégral","Réunions, e-mails, appels : l'anglais de votre métier, jusqu'au réflexe.","1 200 €","",["32 modules, dont 8 ateliers d'oral","Tests d'entrée et de sortie, certificat de niveau","Un niveau gagné, ou remboursé"],"16 semaines"],
+ pro:{6:["L'Accéléré","Modules en ligne et live collectif : l'essentiel de la méthode en six semaines.","500 €","",["12 modules en ligne, à votre rythme","Le live hebdomadaire, enregistré","Vos questions par vocal WhatsApp"],"6 semaines"],
+      16:["L'Intégral","Modules en ligne et live collectif : l'anglais de votre métier, jusqu'au réflexe.","1 200 €","",["32 modules, dont 8 ateliers d'oral","Tests d'entrée et de sortie, certificat de niveau","Un niveau gagné, ou remboursé"],"16 semaines"],
       long:["Le Cercle","Garder le cap, mois après mois, sans jamais repartir de zéro.","120 €","par mois",["Une séance live par semaine","Modules et révisions en accès libre","Séances supplémentaires sur demande"],"Long terme (abonnement mensuel)"]},
  ent:{8:["Impulsion","L'essentiel, à un rythme soutenu, sur les situations de votre secteur.","900 €","par apprenant",["16 modules aux scénarios de votre métier","Lancement de la formation par Paul","Rapport de progression pour vos RH"],"8 semaines"],
       12:["Performance","Le parcours complet, sur vos vrais cas clients.","1 300 €","par apprenant",["24 modules aux scénarios de votre métier","Tests, certificats et rapport RH","Un niveau gagné, ou remboursé"],"12 semaines"],
       16:["Leadership","Présenter, négocier, animer : vos équipes prennent la parole en anglais.","1 700 €","par apprenant",["32 modules, dont 8 ateliers d'oral","Évaluation orale finale avec Paul","Un niveau gagné, ou remboursé"],"16 semaines"]},
- solo:{complete:["Solo","L'anglais de votre vie, taillé sur mesure : départ, installation, examen.","2 400 €","0 à 3 mois",["Un parcours construit sur vos situations","Un point individuel chaque semaine","La communauté privée Frenglais"],""],
-      immersion:["Solo Immersion","Un accompagnement privé, dans la durée, au rythme de votre vie en anglais.","400 €","par mois",["Un parcours qui évolue avec vous","Un point individuel chaque semaine","La communauté privée Frenglais"],""]}};
-var note={ent:"Tarif dégressif : -10 % dès 5 apprenants, -20 % dès 10.",solo:"Places limitées."};
+ solo:{8:["Cours particuliers","En tête-à-tête, en visio : la Courbe des Temps appliquée à votre anglais, à votre rythme.","","",["8 cours individuels d'une heure, en visio","Votre progression suivie cours après cours","Certificat de niveau en fin de parcours"],"8 cours particuliers"],
+      16:["Cours particuliers","En tête-à-tête, en visio : la Courbe des Temps appliquée à votre anglais, à votre rythme.","","",["16 cours individuels d'une heure, en visio","Votre progression suivie cours après cours","Certificat de niveau en fin de parcours"],"16 cours particuliers"]}};
+var note={ent:"Tarif dégressif : -10 % dès 5 apprenants, -20 % dès 10.",solo:"Méthode de la Courbe des Temps, avec Paul ou un tuteur formé."};
 document.querySelectorAll('.offre').forEach(function(c){var t=c.dataset.offre,cur=(c.querySelector('[aria-checked="true"]')||{}).dataset.k;
  if(note[t]){var n=document.createElement('p');n.className='o-note';n.textContent=note[t];c.querySelector('.o-cta').before(n);}
- function r(){var d=O[t][cur];c.querySelector('.o-nom').textContent=d[0];c.querySelector('.o-promesse').textContent=d[1];var px=c.querySelector('.o-prix');if(t==='solo'){px.hidden=false;px.innerHTML='<span>À partir de</span><b>400 €</b><span>/ mois</span>';}else{px.hidden=true;}
+ function r(){var d=O[t][cur];c.querySelector('.o-nom').textContent=d[0];c.querySelector('.o-promesse').textContent=d[1];var px=c.querySelector('.o-prix');if(t==='solo'){px.hidden=false;px.innerHTML='<span>À partir de</span><b>400 €</b>';}else{px.hidden=true;}
   c.querySelector('.o-liste').innerHTML=d[4].map(function(x){return '<li>'+x+'</li>'}).join('');
   c.querySelectorAll('[data-k]').forEach(function(b){b.setAttribute('aria-checked',b.dataset.k===cur)});}
  c.addEventListener('click',function(e){var b=e.target.closest('[data-k]');if(b){cur=b.dataset.k;r();}});

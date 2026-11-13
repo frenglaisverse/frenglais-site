@@ -1218,3 +1218,20 @@ footer::after{opacity:.58}
 .marque .onglet-jeu:hover span,.marque .onglet-jeu:focus-visible span{opacity:0}
 .marque .onglet-jeu:hover .oj-jouer,.marque .onglet-jeu:focus-visible .oj-jouer{opacity:1}
 @media (prefers-reduced-motion:reduce){.marque .onglet-jeu{animation:none}}
+/* recentrer sur les formations : titre et surtitre plus présents, décor en retrait */
+.hero .surtitre{font-size:15px;padding:11px 20px 11px 15px}
+.hero h1{color:#fff;text-shadow:0 2px 24px rgba(8,22,70,.55),0 1px 2px rgba(8,22,70,.4)}
+.hero .h1-suite{color:#DDE6FF}
+.hero .hero-texte{position:relative}
+.hero .hero-texte::before{content:"";position:absolute;inset:-60px -120px -40px -80px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 35% 50%,rgba(20,52,140,.55),rgba(20,52,140,0) 70%)}
+@media (min-width:1101px){.banian{filter:saturate(.85)}.banian-arriere{opacity:.86}}
+@media (max-width:640px){.hero .surtitre{font-size:12.5px}}
+/* recentrer l'attention sur les formations : accroche et titre plus présents, décor un cran plus discret */
+.hero .surtitre{font-size:15px;padding:11px 22px 11px 16px;letter-spacing:.12em}
+.hero .surtitre .st-doux{opacity:.75}
+.hero h1{text-shadow:0 2px 24px rgba(8,24,72,.55),0 1px 2px rgba(8,24,72,.35)}
+.hero .h1-suite{color:#E7EEFF}
+.hero .credits{text-shadow:0 1px 10px rgba(8,24,72,.5)}
+@media (min-width:1101px){.banian-arriere{opacity:.86;filter:saturate(.85)}.banian-avant{opacity:.92}}
+.coffret .mousse-coffret{display:none!important}
+@media (max-width:640px){.hero .surtitre{font-size:12.5px;padding:9px 16px 9px 12px}}

@@ -1,6 +1,6 @@
 /* ---------- mousse espagnole : quelques touffes soumises à la gravité ---------- */
-document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
-  if(!cv.getContext) return;
+function FRGmousse(cv){
+  if(!cv.getContext||cv.dataset.vivante) return; cv.dataset.vivante=1;
   const ctx=cv.getContext('2d'), calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let W=0,H=0,brins=[],souris={x:-999,y:-999}; const vent=+(cv.dataset.vent||0); let ventEff=vent;
   // [x d'ancrage, nombre de segments] : peu de touffes, longueurs variées, la plus longue tombe sur le logo
@@ -75,4 +75,6 @@ document.querySelectorAll('canvas.mousse').forEach(function mousse(cv){
   function boucle(t){ if(!cv.isConnected){ visible=false; return; } if(!visible||document.hidden) return; requestAnimationFrame(boucle); if(t-dern<intervalle) return; const n=Math.min(3,Math.max(1,Math.round((t-dern)/16.7))); dern=t; for(let i=0;i<n;i++) pas(t); dessiner(); }
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&visible&&cv.isConnected) requestAnimationFrame(boucle); });
   requestAnimationFrame(boucle);
-});
+}
+window.FRGmousse=FRGmousse;
+document.querySelectorAll('canvas.mousse').forEach(FRGmousse);

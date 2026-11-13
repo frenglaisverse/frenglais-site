@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611131830">
+<link rel="stylesheet" href="style.css?v=202611131905">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -481,6 +481,8 @@ function dessiner(){var r=o.getBoundingClientRect(),W=r.width,H=r.height,d=Math.
 }
 dessiner();addEventListener('resize',dessiner);})();
 </script>
+<script>/* banian : s'arrête au bord droit de la colonne du site, comme à gauche */
+(function(){var f=function(){var n=document.querySelector('.bandeau nav');if(!n)return;var d=n.getBoundingClientRect().right;document.querySelectorAll('.banian').forEach(function(im){var r=im.getBoundingClientRect();if(r.width)im.style.setProperty('--fin',Math.round(d-r.left)+'px');});};addEventListener('load',f);addEventListener('resize',f);f();})();</script>
 <script src="mousse.js?v=202611131900"></script>
 <script>/* lamantin 3D chargé après la page, pour un affichage plus rapide */
 addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611121610")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>

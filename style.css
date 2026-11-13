@@ -1176,7 +1176,7 @@ footer::after{opacity:.58}
 @media (min-width:1101px){
   .hero{overflow-x:visible!important}.bandeau{overflow-x:clip}
   .banian{display:block;position:absolute;bottom:0;right:calc(clamp(40px,7vw,120px) - 745px);width:1640px;height:auto;pointer-events:none;user-select:none;
-    -webkit-mask:linear-gradient(90deg,transparent 380px,rgba(0,0,0,.35) 440px,rgba(0,0,0,.35) 520px,#000 620px,#000 calc(100% - 60px),transparent);mask:linear-gradient(90deg,transparent 380px,rgba(0,0,0,.35) 440px,rgba(0,0,0,.35) 520px,#000 620px,#000 calc(100% - 60px),transparent)}
+    --fin:996px;-webkit-mask:linear-gradient(90deg,transparent 380px,rgba(0,0,0,.35) 440px,rgba(0,0,0,.35) 520px,#000 620px,#000 calc(var(--fin) - 240px),rgba(0,0,0,.35) calc(var(--fin) - 140px),rgba(0,0,0,.35) calc(var(--fin) - 60px),transparent var(--fin));mask:linear-gradient(90deg,transparent 380px,rgba(0,0,0,.35) 440px,rgba(0,0,0,.35) 520px,#000 620px,#000 calc(var(--fin) - 240px),rgba(0,0,0,.35) calc(var(--fin) - 140px),rgba(0,0,0,.35) calc(var(--fin) - 60px),transparent var(--fin))}
   .banian-arriere{z-index:1}.polaroid{z-index:3!important}.banian-avant{z-index:4}
   .bandeau nav{z-index:6}
   .hero-texte,.hero .ctas{position:relative;z-index:5}}
@@ -1235,3 +1235,6 @@ footer::after{opacity:.58}
 @media (min-width:1101px){.banian-arriere{opacity:.86;filter:saturate(.85)}.banian-avant{opacity:.92}}
 .coffret .mousse-coffret{display:none!important}
 @media (max-width:640px){.hero .surtitre{font-size:12.5px;padding:9px 16px 9px 12px}}
+
+/* symétrie : l'arbre s'arrête au bord droit de la colonne, comme à gauche (le flou d'écran est retiré) */
+.flou-droite{display:none!important}

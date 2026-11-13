@@ -674,7 +674,7 @@ body[data-vue="pilotage"] [data-onglet="eleves"],body[data-vue="eleves"] [data-o
     <div class="dv-options" id="dv-options"></div>
     <label>Précisions (apparaissent sur le devis) <textarea id="dv-notes" rows="2" placeholder="Secteur, objectifs, calendrier…"></textarea></label>
     <div class="dv-total"><div><span class="doux petit">Total</span><b id="dv-total">—</b><small class="doux" id="dv-detail"></small></div><button class="btn plein" type="button" id="dv-pdf">Créer le devis (PDF)</button></div>
-    <p class="petit doux" style="margin:0">Prix modifiables dans « Réglages et sauvegarde ». Grille provisoire tant que vous ne l'avez pas validée.</p>
+    <p class="petit doux" style="margin:0">Prix modifiables dans « Réglages et sauvegarde ». Grille validée le 13 novembre 2026.</p>
   </section>
   </div>
 
@@ -1154,7 +1154,7 @@ body[data-vue="pilotage"] [data-onglet="eleves"],body[data-vue="eleves"] [data-o
     dmCharger(); });
   /* ---------- générateur de devis : grille de prix (modifiable dans Réglages), PDF par impression ---------- */
   const GRILLE0 = {
-    integral: { nom: 'L\'Intégral · Professionnels et indépendants', unite: 'par personne', formules: [['6 semaines · 12 modules', 390], ['16 semaines · 32 modules, tests et certificat', 890], ['Long terme · abonnement mensuel', 89, 'mois']] },
+    integral: { nom: 'L\'Intégral · Professionnels et indépendants', unite: 'par personne', formules: [['6 semaines · 12 modules', 450], ['16 semaines · 32 modules, tests et certificat', 990], ['Long terme · abonnement mensuel', 89, 'mois']] },
     performance: { nom: 'Performance · Entreprises et équipes', unite: 'par apprenant', equipe: true, formules: [['8 semaines · intensif, 16 modules', 690], ['12 semaines · classique, 24 modules', 990], ['16 semaines · approfondi, 32 modules', 1290]] },
     solo: { nom: 'Solo · Édition privée', unite: 'par personne', formules: [['Complète · 0 à 3 mois', 1490], ['Immersion · long terme', 290, 'mois']] }
   };

@@ -1205,3 +1205,5 @@ footer::after{opacity:.58}
   .flou-droite i:nth-child(1){-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);-webkit-mask:linear-gradient(90deg,transparent 0,#000 35%);mask:linear-gradient(90deg,transparent 0,#000 35%)}
   .flou-droite i:nth-child(2){-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);-webkit-mask:linear-gradient(90deg,transparent 20%,#000 60%);mask:linear-gradient(90deg,transparent 20%,#000 60%)}
   .flou-droite i:nth-child(3){-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:rgba(31,79,174,.12);-webkit-mask:linear-gradient(90deg,transparent 45%,#000 90%);mask:linear-gradient(90deg,transparent 45%,#000 90%)}}
+/* liens du verso au-dessus du pied (logo) */
+.pol-grand .v-liens{z-index:3!important}.pol-grand .v-pied{position:relative;z-index:1;pointer-events:none}

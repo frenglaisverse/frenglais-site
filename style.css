@@ -1318,3 +1318,14 @@ footer::after{opacity:.58}
 /* plus de halo derrière les offres (il dessinait un bord) */
 .offres::before{content:none!important}
 .o-liste{align-content:start}
+
+/* offres : la signature Frenglais en filigrane (banian, jacaranda, mousse espagnole) */
+.offre{overflow:hidden;isolation:isolate}
+.offre>*{position:relative;z-index:1}
+.offre>.o-deco,.offre>.o-mousse{position:absolute;z-index:0;pointer-events:none}
+.o-deco-banian{right:-40px;bottom:-10px;width:300px;height:420px;background:url("deco-banian.webp") no-repeat right bottom/contain;opacity:.16;
+  -webkit-mask:linear-gradient(180deg,transparent,#000 35%),linear-gradient(90deg,transparent,#000 40%);-webkit-mask-composite:source-in;mask:linear-gradient(180deg,transparent,#000 35%),linear-gradient(90deg,transparent,#000 40%);mask-composite:intersect}
+.o-deco-jac{right:-26px;bottom:-18px;width:260px;height:190px;background:url("jacaranda.svg") no-repeat right bottom/contain;opacity:.32}
+.o-mousse{left:0;top:0;width:100%;height:230px;opacity:.55}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .o-deco-banian{opacity:.22;filter:brightness(1.6)}:root:not([data-theme="light"]) .o-mousse{opacity:.4}}
+.o-deco-jac{bottom:58px;right:-34px;width:250px;height:200px;opacity:.38}.o-mousse{opacity:.85}

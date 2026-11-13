@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611131930">
+<link rel="stylesheet" href="style.css?v=202611131950">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -151,7 +151,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
       <a class="g-lien" href="cgv.html#garantie">Conditions</a>
     </div>
     <div class="offres">
-      <article class="offre" data-offre="pro">
+      <article class="offre" data-offre="pro"><span class="o-deco o-deco-banian" aria-hidden="true"></span>
         <p class="o-pour">Professionnels et indépendants</p>
         <h3 class="o-nom">L'Intégral</h3>
         <p class="o-promesse"></p>
@@ -160,7 +160,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
         <ul class="o-liste"></ul>
         <a class="o-cta" href="#devis">Demander un devis</a>
       </article>
-      <article class="offre o-phare" data-offre="ent">
+      <article class="offre o-phare" data-offre="ent"><span class="o-deco o-deco-jac" aria-hidden="true"></span>
         <p class="o-pour">Entreprises et équipes</p>
         <h3 class="o-nom">Performance</h3>
         <p class="o-promesse"></p>
@@ -169,7 +169,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
         <ul class="o-liste"></ul>
         <a class="o-cta" href="#devis">Demander un devis</a>
       </article>
-      <article class="offre o-prive" data-offre="solo">
+      <article class="offre o-prive" data-offre="solo"><canvas class="mousse o-mousse" data-relatif="1" data-pash="0.05" data-modele='[[0.06,7],[0.13,10],[0.2,5],[0.78,6],[0.86,11],[0.93,8]]' aria-hidden="true"></canvas>
         <p class="o-pour">Particuliers</p>
         <h3 class="o-nom">Cours particuliers</h3>
         <p class="o-promesse"></p>
@@ -444,10 +444,10 @@ dessiner();addEventListener('resize',dessiner);})();
       16:["Leadership","Présenter, négocier, animer : vos équipes prennent la parole en anglais.","1 700 €","par apprenant",["32 modules, dont 8 ateliers d'oral","Évaluation orale finale avec Paul","Un niveau gagné, ou remboursé"],"16 semaines"]},
  solo:{8:["Cours particuliers","En tête-à-tête, en visio : la Courbe des Temps appliquée à votre anglais, à votre rythme.","","",["8 cours individuels d'une heure, en visio","Votre progression suivie cours après cours","Certificat de niveau en fin de parcours"],"8 cours particuliers"],
       16:["Cours particuliers","En tête-à-tête, en visio : la Courbe des Temps appliquée à votre anglais, à votre rythme.","","",["16 cours individuels d'une heure, en visio","Votre progression suivie cours après cours","Certificat de niveau en fin de parcours"],"16 cours particuliers"]}};
-var note={ent:"Tarif dégressif : -10 % dès 5 apprenants, -20 % dès 10.",solo:"Méthode de la Courbe des Temps, avec Paul ou un tuteur formé."};
+var note={ent:"Tarif dégressif : -10 % dès 5 apprenants, -20 % dès 10.",solo:"Sur la Courbe des Temps, la méthode du livre « Tu n'as rien compris à l'anglais »."};
 document.querySelectorAll('.offre').forEach(function(c){var t=c.dataset.offre,cur=(c.querySelector('[aria-checked="true"]')||{}).dataset.k;
  if(note[t]){var n=document.createElement('p');n.className='o-note';n.textContent=note[t];c.querySelector('.o-cta').before(n);}
- function r(){var d=O[t][cur];c.querySelector('.o-nom').textContent=d[0];c.querySelector('.o-promesse').textContent=d[1];var px=c.querySelector('.o-prix');if(t==='solo'){px.hidden=false;px.innerHTML='<span>À partir de</span><b>400 €</b>';}else{px.hidden=true;}
+ function r(){var d=O[t][cur];c.querySelector('.o-nom').textContent=d[0];c.querySelector('.o-promesse').textContent=d[1];var px=c.querySelector('.o-prix');px.hidden=true;
   c.querySelector('.o-liste').innerHTML=d[4].map(function(x){return '<li>'+x+'</li>'}).join('');
   c.querySelectorAll('[data-k]').forEach(function(b){b.setAttribute('aria-checked',b.dataset.k===cur)});}
  c.addEventListener('click',function(e){var b=e.target.closest('[data-k]');if(b){cur=b.dataset.k;r();}});

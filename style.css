@@ -1210,3 +1210,11 @@ footer::after{opacity:.58}
 /* livre : petite icône parmi les réseaux */
 .reseaux .reseau-livre img{width:18px;height:auto;border-radius:1.5px 3px 3px 1.5px;box-shadow:inset 1.5px 0 0 rgba(0,0,0,.25),1.5px 1.5px 0 -.5px #E9E4D8,0 2px 6px -2px rgba(0,0,0,.6);transform:rotate(-6deg);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .reseaux .reseau-livre:hover img{transform:rotate(0) scale(1.15)}
+/* Courbe du jour : clignote doucement ; « JOUER » au survol */
+.marque .onglet-jeu{animation:oj-appel 2.6s ease-in-out infinite}
+@keyframes oj-appel{0%,100%{opacity:1}50%{opacity:.5}}
+.marque .onglet-jeu .oj-jouer{position:absolute;inset:0;display:grid;place-items:center;color:#FFD25A;font:inherit;font-size:1.15em;opacity:0;transition:opacity .15s}
+.marque .onglet-jeu:hover,.marque .onglet-jeu:focus-visible{animation:none;opacity:1}
+.marque .onglet-jeu:hover span,.marque .onglet-jeu:focus-visible span{opacity:0}
+.marque .onglet-jeu:hover .oj-jouer,.marque .onglet-jeu:focus-visible .oj-jouer{opacity:1}
+@media (prefers-reduced-motion:reduce){.marque .onglet-jeu{animation:none}}

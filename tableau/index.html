@@ -511,7 +511,7 @@ a.btn{text-decoration:none}
 .zoho{border:1.5px dashed #C9D3EE;border-radius:14px;padding:10px 14px;margin:0 0 14px}.zoho summary{cursor:pointer}.zoho ol{margin:10px 0;padding-left:20px;line-height:1.55}.zoho code{font-size:12px;word-break:break-all}
 .zoho-champs{display:flex;flex-wrap:wrap;gap:8px}.zoho-champs input{flex:1 1 180px;padding:10px 12px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt)}
 #demos input{padding:10px 12px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt)}
-.raccourcis{margin-top:14px;display:grid;gap:8px}.raccourcis .btn{padding:6px 12px;font-size:13px;min-height:0}.raccourcis p{margin:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.raccourcis b{width:120px;flex-shrink:0;color:var(--encre-doux,#5B6785);font-weight:600}
+/*rac*/.raccourcis{margin-top:14px;display:grid;gap:8px}.raccourcis .btn{padding:6px 12px;font-size:13px;min-height:0}.raccourcis p{margin:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.raccourcis b{width:120px;flex-shrink:0;color:var(--encre-doux,#5B6785);font-weight:600}
 @media (max-width:600px){.raccourcis b{width:100%}}
 .repli summary{cursor:pointer;padding:6px 0}.repli[open] summary{margin-bottom:10px}
 .rappel{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border:1.5px solid #F0766F;background:rgba(240,118,111,.12);border-radius:14px;padding:12px 14px;margin:0 0 14px}
@@ -550,6 +550,44 @@ a.btn{text-decoration:none}
 .rapport .clause.ok{border-color:#1E7A4F}.rapport .clause.ko{border-color:#C2453C}
 .rapport .r-pied{margin-top:18px;font:11px var(--f-mono);color:#4A5578;display:flex;justify-content:space-between}
 @media print{@page{size:A4;margin:12mm}.rapport{padding:0}}
+
+.acces{display:flex;flex-wrap:wrap;gap:16px 28px;margin-top:6px}
+.acces-g p{margin:0 0 8px;font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#7A86A6}
+.acces-g>div{display:flex;flex-wrap:wrap;gap:8px}
+.tuile{--c:#1C49A5;display:flex;flex-direction:column;align-items:center;gap:6px;width:84px;padding:12px 6px 10px;border-radius:14px;border:1px solid var(--trait);background:#fff;text-decoration:none;color:#10245C;font-size:12px;line-height:1.2;text-align:center;transition:transform .15s,box-shadow .15s,border-color .15s}
+.tuile svg{width:24px;height:24px;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;padding:8px;box-sizing:content-box;border-radius:12px;background:color-mix(in srgb,var(--c) 11%,#fff)}
+.tuile:hover,.tuile:focus-visible{transform:translateY(-2px);box-shadow:0 8px 20px -10px rgba(16,36,92,.35);border-color:var(--c)}
+.titre-ic{display:flex;gap:12px;align-items:center}.titre-ic h2{margin:0}.titre-ic p{margin:2px 0 0}
+.ic{--c:#1C49A5;flex-shrink:0;display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:color-mix(in srgb,var(--c) 12%,#fff)}
+.ic svg{width:22px;height:22px;fill:none;stroke:var(--c);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.duo{align-items:start}.duo>*{min-width:0}#devis select,#devis input{max-width:100%;min-width:0}.dv-grille>*{min-width:0}.duo .carte{height:100%;box-sizing:border-box}
+.duo #demos .ligne{flex-wrap:wrap}.duo #demos #dm-nom{width:100%!important}
+.dv-grille{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dv-grille label,#devis>label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:#5B6785}
+#devis input,#devis select,#devis textarea{padding:9px 11px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt);color:#10245C;background:#fff}
+.dv-options{display:flex;flex-wrap:wrap;gap:8px}
+.dv-options label{display:flex;align-items:center;gap:6px;padding:7px 11px;border:1.5px solid #C9D3EE;border-radius:99px;font-size:13px;cursor:pointer}
+.dv-options label:has(input:checked){border-color:#1C49A5;background:#EEF3FF}
+.dv-options input[type=number]{width:52px;padding:3px 6px!important}
+.dv-total{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border-radius:14px;background:#F2F5FD}
+.dv-total b{display:block;font-size:26px;color:#10245C}.dv-total small{display:block;font-size:12px}
+.defile{position:relative;max-height:268px;overflow:auto;scrollbar-width:thin}
+.defile thead th{position:sticky;top:0;background:var(--carte,#fff);z-index:1}
+.fleche{position:sticky;bottom:6px;left:100%;float:right;margin-top:-40px;width:34px;height:34px;border-radius:50%;border:1px solid var(--trait);background:#fff;color:#1C49A5;font-size:17px;cursor:pointer;box-shadow:0 4px 12px -4px rgba(16,36,92,.35)}
+.fleche[hidden]{display:none}
+.devis-doc{font-family:Geist,system-ui,sans-serif;color:#10245C;max-width:180mm;margin:0 auto;font-size:11pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.devis-doc .dd-tete{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1C49A5;padding-bottom:14px}
+.devis-doc .dd-tete img{height:44px;padding:6px 10px;background:#1C49A5;border-radius:10px}
+.devis-doc h1{font-size:22pt;margin:0;text-align:right}.devis-doc .dd-num{text-align:right;color:#5B6785;font-size:10pt}
+.devis-doc .dd-parties{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:18px 0}
+.devis-doc .dd-parties span{display:block;font-size:8.5pt;letter-spacing:.12em;text-transform:uppercase;color:#7A86A6;margin-bottom:4px}
+.devis-doc table{width:100%;border-collapse:collapse;margin:10px 0}
+.devis-doc th{text-align:left;font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:#7A86A6;border-bottom:1px solid #C9D3EE;padding:8px 6px}
+.devis-doc td{padding:10px 6px;border-bottom:1px solid #E4E9F6;vertical-align:top}.devis-doc td.n{text-align:right;white-space:nowrap}
+.devis-doc .dd-total td{border:0;font-weight:700;font-size:13pt}.devis-doc .dd-total td.n{color:#1C49A5}
+.devis-doc .dd-petit{font-size:9pt;color:#5B6785;line-height:1.5}
+.devis-doc .dd-signe{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}.devis-doc .dd-signe div{border:1px dashed #C9D3EE;border-radius:10px;padding:10px;min-height:70px;font-size:9pt;color:#5B6785}
+@media (max-width:600px){.dv-grille{grid-template-columns:1fr}.tuile{width:calc(33% - 6px)}}
 </style>
 </head>
 <body>
@@ -573,11 +611,11 @@ a.btn{text-decoration:none}
       <p class="petit doux" id="zoho-msg">Ces informations partent directement sur votre serveur Cloudflare, protégées par votre clé ; elles ne sont jamais enregistrées sur le site ni dans ce navigateur.</p>
     </details>
     <div class="kpis" id="vue-kpis"></div>
-    <div class="raccourcis petit">
-      <p><b>Le site</b> <a class="btn" href="https://frenglais.co/" target="_blank" rel="noopener">Accueil ↗</a> <a class="btn" href="https://frenglais.co/modules.html" target="_blank" rel="noopener">Modules (aperçu) ↗</a> <a class="btn" href="https://frenglais.co/introduction.html" target="_blank" rel="noopener">Introduction ↗</a> <a class="btn" href="https://frenglais.co/courbe/" target="_blank" rel="noopener">Le jeu ↗</a> <a class="btn" href="https://frenglais.co/espace-eleve.html" target="_blank" rel="noopener">Espace élève ↗</a></p>
-      <p><b>Suivi</b> <a class="btn" href="https://mail.zoho.eu/zm/#mail/views/all" target="_blank" rel="noopener">Mes mails (Zoho) ↗</a> <a class="btn" href="https://paulow.goatcounter.com" target="_blank" rel="noopener">Visites du site ↗</a> <a class="btn" href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console ↗</a> <a class="btn" href="https://business.trustpilot.com/" target="_blank" rel="noopener">Trustpilot ↗</a></p>
-      <p><b>Technique</b> <a class="btn" href="https://dash.cloudflare.com" target="_blank" rel="noopener">Cloudflare (serveur du jeu) ↗</a> <a class="btn" href="https://github.com/frenglaisverse/frenglais-site" target="_blank" rel="noopener">GitHub (code du site) ↗</a> <a class="btn" href="https://manage.wix.com/account/domains" target="_blank" rel="noopener">Wix (nom de domaine) ↗</a></p>
-      <p><b>Réseaux et livre</b> <a class="btn" href="https://studio.youtube.com/" target="_blank" rel="noopener">YouTube Studio ↗</a> <a class="btn" href="https://www.instagram.com/paulowfrenglais/" target="_blank" rel="noopener">Instagram ↗</a> <a class="btn" href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener">TikTok ↗</a> <a class="btn" href="https://kdp.amazon.com/" target="_blank" rel="noopener">Amazon KDP ↗</a></p>
+    <div class="acces">
+      <div class="acces-g"><p>Le site</p><div><a class="tuile" style="--c:#1C49A5" href="https://frenglais.co/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Accueil</span></a><a class="tuile" style="--c:#1C49A5" href="https://frenglais.co/modules.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Modules (test)</span></a><a class="tuile" style="--c:#1C49A5" href="https://frenglais.co/introduction.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z" fill="currentColor"/></svg><span>Introduction</span></a><a class="tuile" style="--c:#1C49A5" href="https://frenglais.co/courbe/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="16" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="13.5" r="1" fill="currentColor"/></svg><span>Le jeu</span></a><a class="tuile" style="--c:#1C49A5" href="https://frenglais.co/espace-eleve.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/></svg><span>Espace élève</span></a></div></div>
+      <div class="acces-g"><p>Suivi</p><div><a class="tuile" style="--c:#2E8B6E" href="https://mail.zoho.eu/zm/#mail/views/all" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>Mails</span></a><a class="tuile" style="--c:#2E8B6E" href="https://paulow.goatcounter.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>Visites</span></a><a class="tuile" style="--c:#2E8B6E" href="https://search.google.com/search-console" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Search Console</span></a><a class="tuile" style="--c:#2E8B6E" href="https://business.trustpilot.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></svg><span>Trustpilot</span></a></div></div>
+      <div class="acces-g"><p>Technique</p><div><a class="tuile" style="--c:#6B5BD2" href="https://dash.cloudflare.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 11a3.5 3.5 0 0 0 1 7z"/></svg><span>Cloudflare</span></a><a class="tuile" style="--c:#6B5BD2" href="https://github.com/frenglaisverse/frenglais-site" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 4l-4 16"/></svg><span>GitHub</span></a><a class="tuile" style="--c:#6B5BD2" href="https://manage.wix.com/account/domains" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span>Domaine (Wix)</span></a></div></div>
+      <div class="acces-g"><p>Réseaux et livre</p><div><a class="tuile" style="--c:#E0685F" href="https://www.instagram.com/paulowfrenglais/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span>Instagram</span></a><a class="tuile" style="--c:#E0685F" href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span>TikTok</span></a><a class="tuile" style="--c:#E0685F" href="https://kdp.amazon.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4zM20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/></svg><span>Amazon KDP</span></a></div></div>
     </div>
   </section>
 
@@ -588,8 +626,9 @@ a.btn{text-decoration:none}
 
 
 
+  <div class="deux duo">
   <section class="carte" id="demos">
-    <div class="ligne" style="justify-content:space-between"><h2>Démos prospects</h2><span class="doux petit">Un code invité ouvre quelques modules, pour une durée limitée</span></div>
+    <div class="titre-ic"><span class="ic" style="--c:#1C49A5"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/></svg></span><div><h2>Démos prospects</h2><p class="doux petit">Un code invité ouvre quelques modules, pour une durée limitée.</p></div></div>
     <div class="ligne">
       <label>Prospect <input id="dm-nom" placeholder="ex. Hôtel Le Negresco" maxlength="60" style="width:240px"></label>
       <label>Durée <select id="dm-jours"><option value="3">3 jours</option><option value="7" selected>7 jours</option><option value="14">14 jours</option><option value="30">30 jours</option></select></label>
@@ -600,6 +639,22 @@ a.btn{text-decoration:none}
     <table class="tab"><thead><tr><th>Prospect</th><th>Code</th><th class="cache-m">Modules</th><th>Expire</th><th>Ouvertures</th><th></th></tr></thead><tbody id="dm-liste"></tbody></table>
     <p class="vide" id="dm-vide">Aucun code invité actif.</p>
   </section>
+  <section class="carte" id="devis">
+    <div class="titre-ic"><span class="ic" style="--c:#E0685F"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></span><div><h2>Générateur de devis</h2><p class="doux petit">Cochez, vérifiez le total, créez le PDF.</p></div></div>
+    <div class="dv-grille">
+      <label>Client <input id="dv-client" placeholder="Nom ou société" maxlength="80"></label>
+      <label>Contact <input id="dv-contact" placeholder="E-mail ou adresse (facultatif)" maxlength="120"></label>
+      <label>Offre <select id="dv-offre"></select></label>
+      <label>Formule <select id="dv-formule"></select></label>
+      <label id="dv-nb-l">Apprenants <input id="dv-nb" type="number" min="1" max="200" value="1"></label>
+      <label>Remise <select id="dv-remise"><option value="0">Aucune</option><option value="10">-10 %</option><option value="20">-20 % (Courbe du jour)</option></select></label>
+    </div>
+    <div class="dv-options" id="dv-options"></div>
+    <label>Précisions (apparaissent sur le devis) <textarea id="dv-notes" rows="2" placeholder="Secteur, objectifs, calendrier…"></textarea></label>
+    <div class="dv-total"><div><span class="doux petit">Total</span><b id="dv-total">—</b><small class="doux" id="dv-detail"></small></div><button class="btn plein" type="button" id="dv-pdf">Créer le devis (PDF)</button></div>
+    <p class="petit doux" style="margin:0">Prix modifiables dans « Réglages et sauvegarde ». Grille provisoire tant que vous ne l'avez pas validée.</p>
+  </section>
+  </div>
 
   <section class="carte">
     <div class="ligne" style="justify-content:space-between"><h2>Vos élèves</h2><span class="doux petit" id="resume"></span></div>
@@ -621,7 +676,7 @@ a.btn{text-decoration:none}
   </section>
 
   <section class="carte" id="jeu">
-    <div class="ligne" style="justify-content:space-between"><h2>Courbe du jour · classement complet</h2><span class="doux petit" id="jeu-etat"></span></div>
+    <div class="ligne" style="justify-content:space-between"><h2>Courbe du jour</h2><span class="doux petit" id="jeu-etat"></span></div>
     <div id="jeu-cle" class="ligne">
       <label>Clé du tableau de bord <input type="password" id="cle" autocomplete="off" style="width:260px"></label>
       <button class="btn plein" id="cle-ok" type="button">Ouvrir</button><span id="cle-msg" class="petit"></span>
@@ -629,8 +684,8 @@ a.btn{text-decoration:none}
     <div id="jeu-corps" hidden>
       <div id="jeu-gagnant"></div>
       <div class="deux">
-        <div><h3 class="h3">La saison <span id="jeu-s"></span></h3><table class="tab"><thead><tr><th>#</th><th>Pseudo</th><th>Total</th><th>Jours joués</th><th class="cache-m">Code joueur</th></tr></thead><tbody id="jeu-saison"></tbody></table><p class="vide" id="jeu-saison-vide">Personne n'est encore classé.</p></div>
-        <div><h3 class="h3">Aujourd'hui · jour <span id="jeu-j"></span></h3><table class="tab"><thead><tr><th>#</th><th>Pseudo</th><th>Score</th></tr></thead><tbody id="jeu-jour"></tbody></table><p class="vide" id="jeu-jour-vide">Aucune partie aujourd'hui.</p>
+        <div><h3 class="h3">Classement complet · saison <span id="jeu-s"></span></h3><div class="defile"><table class="tab"><thead><tr><th>#</th><th>Pseudo</th><th>Total</th><th>Jours joués</th><th class="cache-m">Code joueur</th></tr></thead><tbody id="jeu-saison"></tbody></table><button type="button" class="fleche" aria-label="Faire défiler">↓</button></div><p class="vide" id="jeu-saison-vide">Personne n'est encore classé.</p></div>
+        <div><h3 class="h3">Classement du jour · jour <span id="jeu-j"></span></h3><div class="defile"><table class="tab"><thead><tr><th>#</th><th>Pseudo</th><th>Score</th></tr></thead><tbody id="jeu-jour"></tbody></table><button type="button" class="fleche" aria-label="Faire défiler">↓</button></div><p class="vide" id="jeu-jour-vide">Aucune partie aujourd'hui.</p>
           <h3 class="h3" style="margin-top:18px">Joueurs par jour</h3><div id="jeu-barres" class="barres"></div></div>
       </div>
       <div class="ligne"><button class="btn" id="jeu-maj" type="button">Actualiser</button><button class="btn" id="cle-oubli" type="button">Oublier la clé sur cet appareil</button></div>
@@ -639,6 +694,8 @@ a.btn{text-decoration:none}
 
   <section class="carte">
     <details class="repli"><summary><h2 style="display:inline">Réglages et sauvegarde</h2></summary>
+    <h3 class="h3">Grille de prix des devis</h3>
+    <div id="grille-prix"></div>
     <h3 class="h3">Réglages de la condition de résultats</h3>
     <p class="doux petit" style="margin:0">Les résultats annoncés ne valent que si l'élève tient son volume hebdomadaire : ses modules (selon son rythme), ses jours de Minute Courbe, une mission par module et, si vous l'activez, l'atelier hebdomadaire. Ces réglages s'appliquent à tous les rapports.</p>
     <div class="ligne">
@@ -1072,6 +1129,70 @@ a.btn{text-decoration:none}
     document.getElementById('dm-nouveau').innerHTML = `<div class="rappel"><p style="margin:0 0 8px"><b>Code créé pour ${esc(nom)} : <code>${esc(j.code)}</code></b></p><textarea id="dm-texte" rows="8" style="width:100%">${esc(texte)}</textarea><div class="ligne"><button class="btn plein" type="button" id="dm-copier">Copier le message</button><a class="btn" href="${esc(lien)}" target="_blank" rel="noopener">Tester le lien ↗</a></div></div>`;
     document.getElementById('dm-copier').onclick = async () => { try { await navigator.clipboard.writeText(document.getElementById('dm-texte').value); document.getElementById('dm-copier').textContent = 'Copié'; } catch (e) {} };
     dmCharger(); });
+  /* ---------- générateur de devis : grille de prix (modifiable dans Réglages), PDF par impression ---------- */
+  const GRILLE0 = {
+    integral: { nom: 'L\'Intégral · Professionnels et indépendants', unite: 'par personne', formules: [['6 semaines · 12 modules', 390], ['16 semaines · 32 modules, tests et certificat', 890], ['Long terme · abonnement mensuel', 89, 'mois']] },
+    performance: { nom: 'Performance · Entreprises et équipes', unite: 'par apprenant', equipe: true, formules: [['8 semaines · intensif, 16 modules', 690], ['12 semaines · classique, 24 modules', 990], ['16 semaines · approfondi, 32 modules', 1290]] },
+    solo: { nom: 'Solo · Édition privée', unite: 'par personne', formules: [['Complète · 0 à 3 mois', 1490], ['Immersion · long terme', 290, 'mois']] }
+  };
+  const OPTIONS0 = [['tuteur', 'Point tuteur supplémentaire (30 min)', 35, true], ['live', 'Séance individuelle avec Paul (1 h)', 60, true], ['lancement', 'Lancement sur site (frais de déplacement)', 0, false, true]];
+  const DEG = n => n >= 10 ? 20 : n >= 5 ? 10 : 0;   // dégressif entreprises : 5 à 9 apprenants -10 %, 10 et plus -20 %
+  let GR; try { GR = Object.assign(JSON.parse(JSON.stringify(GRILLE0)), JSON.parse(localStorage.getItem('frg-grille') || 'null') || {}); } catch (e) { GR = JSON.parse(JSON.stringify(GRILLE0)); }
+  let OPT; try { OPT = JSON.parse(localStorage.getItem('frg-options') || 'null') || OPTIONS0; } catch (e) { OPT = OPTIONS0; }
+  const eur = v => v.toLocaleString('fr-FR', { minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €';
+  const $d = id => document.getElementById(id);
+  function dvOffres(){ $d('dv-offre').innerHTML = Object.entries(GR).map(([k, o]) => `<option value="${k}">${esc(o.nom)}</option>`).join(''); dvFormules(); }
+  function dvFormules(){ const o = GR[$d('dv-offre').value]; $d('dv-formule').innerHTML = o.formules.map((f, i) => `<option value="${i}">${esc(f[0])} · ${eur(f[1])}${f[2] ? ' / ' + f[2] : ''}</option>`).join('');
+    $d('dv-nb-l').firstChild.textContent = o.equipe ? 'Apprenants ' : 'Personnes ';
+    $d('dv-options').innerHTML = OPT.map(([k, l, pr, qte, montant]) => `<label><input type="checkbox" data-o="${k}"> ${esc(l)}${montant ? ` <input type="number" min="0" step="10" data-m="${k}" placeholder="€">` : qte ? ` × <input type="number" min="1" value="1" data-q="${k}">` : ''}${!montant ? ' · ' + eur(pr) : ''}</label>`).join('');
+    dvCalcul(); }
+  function dvCalcul(){ const o = GR[$d('dv-offre').value], f = o.formules[+$d('dv-formule').value], nb = Math.max(1, +$d('dv-nb').value || 1);
+    const lignes = [], base = f[1] * nb; lignes.push([o.nom + ' · ' + f[0], (f[2] ? 'Prix ' + 'par ' + f[2] + ' · ' : '') + nb + ' × ' + eur(f[1]), base]);
+    const deg = o.equipe ? DEG(nb) : 0; if (deg) lignes.push(['Remise volume (' + nb + ' apprenants)', '-' + deg + ' %', -base * deg / 100]);
+    for (const [k, l, pr, qte, montant] of OPT) { const c = document.querySelector(`[data-o="${k}"]`); if (!c || !c.checked) continue;
+      if (montant) { const m = +(document.querySelector(`[data-m="${k}"]`).value || 0); lignes.push([l, 'Forfait', m]); }
+      else { const q = qte ? Math.max(1, +(document.querySelector(`[data-q="${k}"]`).value || 1)) : 1; lignes.push([l, q + ' × ' + eur(pr), q * pr]); } }
+    const r = +$d('dv-remise').value, sous = lignes.reduce((s, x) => s + x[2], 0);
+    if (r) lignes.push(['Remise ' + (r === 20 ? 'Courbe du jour' : 'commerciale'), '-' + r + ' %', -sous * r / 100]);
+    const total = Math.round(lignes.reduce((s, x) => s + x[2], 0) * 100) / 100;
+    $d('dv-total').textContent = eur(total) + (f[2] ? ' / ' + f[2] : ''); $d('dv-detail').textContent = lignes.length > 1 ? lignes.length + ' lignes, remises comprises' : '';
+    return { o, f, nb, lignes, total }; }
+  function devisHTML(d){ const e = esc, auj = new Date(), val = new Date(); val.setDate(val.getDate() + 30);
+    const R = JSON.parse(localStorage.getItem('frg-entreprise') || '{}'), num = 'D-' + auj.getFullYear() + String(auj.getMonth() + 1).padStart(2, '0') + '-' + String(d.num).padStart(3, '0');
+    const date = x => x.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    return `<div class="devis-doc"><div class="dd-tete"><img src="${logo}" alt="Frenglais"><div><h1>Devis</h1><p class="dd-num">N° ${num}<br>Émis le ${date(auj)} · valable jusqu'au ${date(val)}</p></div></div>
+      <div class="dd-parties"><div><span>Prestataire</span><b>Frenglais · Paul Moreaux</b><br>${e(R.adresse || '43 rue Aristide Briand, 84510 Caumont-sur-Durance')}<br>contact@frenglais.co${R.siret ? '<br>SIRET ' + e(R.siret) : ''}</div>
+        <div><span>Client</span><b>${e($d('dv-client').value || 'Client')}</b>${$d('dv-contact').value ? '<br>' + e($d('dv-contact').value) : ''}</div></div>
+      <table><thead><tr><th>Désignation</th><th>Détail</th><th class="n">Montant</th></tr></thead><tbody>
+        ${d.lignes.map(x => `<tr><td>${e(x[0])}</td><td>${e(x[1])}</td><td class="n">${eur(Math.round(x[2] * 100) / 100)}</td></tr>`).join('')}
+        <tr class="dd-total"><td colspan="2">Total${d.f[2] ? ' par ' + d.f[2] : ''}</td><td class="n">${eur(d.total)}</td></tr></tbody></table>
+      <p class="dd-petit">${R.tva === false ? 'Montants HT, TVA en sus au taux en vigueur.' : 'TVA non applicable, article 293 B du Code général des impôts.'}</p>
+      ${$d('dv-notes').value ? `<p><b>Précisions</b><br>${e($d('dv-notes').value).replace(/\n/g, '<br>')}</p>` : ''}
+      <p class="dd-petit"><b>Inclus :</b> accès aux modules en ligne, Minute Courbe quotidienne, point de progression avec tuteur toutes les deux semaines, tests d'entrée et de sortie, certificat de fin de parcours.<br>
+      <b>Garantie :</b> l'apprenant qui tient le volume hebdomadaire prévu gagne au moins un niveau du CECRL entre le test d'entrée et le test de sortie, ou il est intégralement remboursé (conditions générales de vente, frenglais.co/cgv.html).<br>
+      <b>Paiement :</b> à la commande, par virement. Le devis signé vaut acceptation des conditions générales de vente.</p>
+      <div class="dd-signe"><div>Date et signature du client, précédées de la mention « Bon pour accord »</div><div>Paul Moreaux, Frenglais</div></div></div>`; }
+  function dvInit(){ if (!$d('dv-offre')) return; dvOffres();
+    $d('dv-offre').addEventListener('change', dvFormules);
+    $d('devis').addEventListener('input', dvCalcul); $d('devis').addEventListener('change', dvCalcul);
+    $d('dv-pdf').addEventListener('click', () => { const d = dvCalcul(); if (!$d('dv-client').value.trim()) { $d('dv-client').focus(); $d('dv-client').placeholder = 'Indiquez le client'; return; }
+      d.num = (+localStorage.getItem('frg-devis-n') || 0) + 1; localStorage.setItem('frg-devis-n', d.num); imprimer(devisHTML(d)); }); }
+  /* réglages : la grille de prix */
+  function grilleReglages(){ const z = $d('grille-prix'); if (!z) return;
+    z.innerHTML = Object.entries(GR).map(([k, o]) => `<p class="petit" style="margin:8px 0 4px"><b>${esc(o.nom)}</b></p>` + o.formules.map((f, i) => `<label class="petit" style="display:flex;justify-content:space-between;gap:10px;align-items:center">${esc(f[0])} <span><input type="number" min="0" step="10" data-g="${k}:${i}" value="${f[1]}" style="width:90px"> €${f[2] ? ' / ' + f[2] : ''}</span></label>`).join('')).join('')
+      + '<p class="petit" style="margin:8px 0 4px"><b>Options</b></p>' + OPT.filter(o => !o[4]).map((o, i) => `<label class="petit" style="display:flex;justify-content:space-between;gap:10px;align-items:center">${esc(o[1])} <span><input type="number" min="0" step="5" data-op="${o[0]}" value="${o[2]}" style="width:90px"> €</span></label>`).join('')
+      + `<p class="petit" style="margin:8px 0 4px"><b>Mentions du devis</b></p><label class="petit">SIRET <input id="ent-siret" style="width:200px"></label> <label class="petit"><input type="checkbox" id="ent-tva" checked> TVA non applicable (micro-entreprise, art. 293 B)</label>`;
+    const R = JSON.parse(localStorage.getItem('frg-entreprise') || '{}'); $d('ent-siret').value = R.siret || ''; $d('ent-tva').checked = R.tva !== false;
+    z.addEventListener('change', ev => { const g = ev.target.dataset.g, op = ev.target.dataset.op;
+      if (g) { const [k, i] = g.split(':'); GR[k].formules[+i][1] = +ev.target.value || 0; localStorage.setItem('frg-grille', JSON.stringify(GR)); }
+      if (op) { OPT.find(o => o[0] === op)[2] = +ev.target.value || 0; localStorage.setItem('frg-options', JSON.stringify(OPT)); }
+      localStorage.setItem('frg-entreprise', JSON.stringify({ siret: $d('ent-siret').value.trim(), tva: $d('ent-tva').checked }));
+      dvFormules(); }); }
+  dvInit(); grilleReglages();
+  /* classements : flèche pour faire défiler, masquée quand tout est visible ou en bas */
+  function majFleches(){ document.querySelectorAll('.defile').forEach(d => { const f = d.querySelector('.fleche'); if (!f) return;
+    const maj = () => { f.hidden = d.scrollHeight <= d.clientHeight + 4 || d.scrollTop + d.clientHeight >= d.scrollHeight - 4; };
+    if (!d.dataset.ok) { d.dataset.ok = 1; d.addEventListener('scroll', maj); f.addEventListener('click', () => d.scrollBy({ top: 200, behavior: 'smooth' })); } maj(); }); }
   function jeuRendu(){
     document.getElementById('jeu-cle').hidden = true; document.getElementById('jeu-corps').hidden = false;
     document.getElementById('jeu-s').textContent = J.S; document.getElementById('jeu-j').textContent = J.jourSaison + ' / ' + (J.duree || 30);
@@ -1099,6 +1220,7 @@ a.btn{text-decoration:none}
       const m = document.getElementById('bon-mail'); if (m) m.addEventListener('click', ev => { ev.preventDefault();
         const corps = `Bonjour ${P.gagnant},\n\nBravo : vous avez gagné la saison ${Sg} de la Courbe du jour (${moisSaison(Sg)}).\n\nVoici votre code de réduction : ${code()}\nIl vous donne -20 % sur une formation Frenglais, jusqu'au ${fin().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}.\n\nPour l'utiliser, indiquez ce code dans votre demande de devis sur frenglais.co, ou répondez simplement à ce mail.\nVotre bon est en pièce jointe.\n\nÀ bientôt,\nPaul Moreaux\nFrenglais`;
         location.href = 'mailto:' + encodeURIComponent(P.reclame.email) + '?subject=' + encodeURIComponent('Courbe du jour : votre code de réduction -20 %') + '&body=' + encodeURIComponent(corps); }); }
+    majFleches();
     document.getElementById('jeu-etat').textContent = 'À jour à ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     vue();
   }

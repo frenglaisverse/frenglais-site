@@ -1295,3 +1295,4 @@ footer::after{opacity:.58}
 .offre .o-cta,.o-phare .o-cta,.o-prive .o-cta{background:linear-gradient(180deg,#F38A83,#E0685F);color:#fff;border:1px solid rgba(255,255,255,.35);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 26px -12px rgba(224,104,95,.85)}
 .offre .o-cta:hover{filter:brightness(1.05)}
+#formations{overflow-x:clip}@media (max-width:980px){.offres::before{inset:-40px 0}}

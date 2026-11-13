@@ -469,6 +469,7 @@ em{font-style:italic}
 .mission-bloc .btn{border-color:rgba(255,255,255,.35);background:transparent;color:#fff;text-decoration:none;display:inline-flex;align-items:center}
 .mission-bloc .btn.plein{background:#25D366;border-color:#25D366;color:#073B1F}
 .mission-bloc .btn:disabled{opacity:.7}
+@media (max-width:520px){.bandeau .mod{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bandeau .retour-logo img{width:96px;height:auto}.actions-bandeau{flex-shrink:0;gap:6px}.actions-bandeau .retour{padding-inline:9px;font-size:12.5px}}
 
 </style>
 <style id="css-certif"></style>
@@ -510,6 +511,8 @@ a.btn{text-decoration:none}
 .zoho{border:1.5px dashed #C9D3EE;border-radius:14px;padding:10px 14px;margin:0 0 14px}.zoho summary{cursor:pointer}.zoho ol{margin:10px 0;padding-left:20px;line-height:1.55}.zoho code{font-size:12px;word-break:break-all}
 .zoho-champs{display:flex;flex-wrap:wrap;gap:8px}.zoho-champs input{flex:1 1 180px;padding:10px 12px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt)}
 #demos input{padding:10px 12px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt)}
+.raccourcis{margin-top:14px;display:grid;gap:8px}.raccourcis .btn{padding:6px 12px;font-size:13px;min-height:0}.raccourcis p{margin:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.raccourcis b{width:120px;flex-shrink:0;color:var(--encre-doux,#5B6785);font-weight:600}
+@media (max-width:600px){.raccourcis b{width:100%}}
 .repli summary{cursor:pointer;padding:6px 0}.repli[open] summary{margin-bottom:10px}
 .rappel{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border:1.5px solid #F0766F;background:rgba(240,118,111,.12);border-radius:14px;padding:12px 14px;margin:0 0 14px}
 .actions-bandeau .btn-mail{text-decoration:none;white-space:nowrap}
@@ -570,13 +573,11 @@ a.btn{text-decoration:none}
       <p class="petit doux" id="zoho-msg">Ces informations partent directement sur votre serveur Cloudflare, protégées par votre clé ; elles ne sont jamais enregistrées sur le site ni dans ce navigateur.</p>
     </details>
     <div class="kpis" id="vue-kpis"></div>
-    <div class="ligne petit">
-      <a class="btn" href="https://mail.zoho.eu/zm/#mail/views/all" target="_blank" rel="noopener">Mes mails (Zoho) ↗</a>
-      <a class="btn" href="https://paulow.goatcounter.com" target="_blank" rel="noopener">Visites du site ↗</a>
-      <a class="btn" href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console ↗</a>
-      <a class="btn" href="https://dash.cloudflare.com" target="_blank" rel="noopener">Cloudflare ↗</a>
-      <a class="btn" href="https://github.com/frenglaisverse/frenglais-site" target="_blank" rel="noopener">GitHub (code du site) ↗</a>
-      <a class="btn" href="https://frenglais.co/courbe/" target="_blank" rel="noopener">Le jeu ↗</a>
+    <div class="raccourcis petit">
+      <p><b>Le site</b> <a class="btn" href="https://frenglais.co/" target="_blank" rel="noopener">Accueil ↗</a> <a class="btn" href="https://frenglais.co/modules.html" target="_blank" rel="noopener">Modules (aperçu) ↗</a> <a class="btn" href="https://frenglais.co/introduction.html" target="_blank" rel="noopener">Introduction ↗</a> <a class="btn" href="https://frenglais.co/courbe/" target="_blank" rel="noopener">Le jeu ↗</a> <a class="btn" href="https://frenglais.co/espace-eleve.html" target="_blank" rel="noopener">Espace élève ↗</a></p>
+      <p><b>Suivi</b> <a class="btn" href="https://mail.zoho.eu/zm/#mail/views/all" target="_blank" rel="noopener">Mes mails (Zoho) ↗</a> <a class="btn" href="https://paulow.goatcounter.com" target="_blank" rel="noopener">Visites du site ↗</a> <a class="btn" href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console ↗</a> <a class="btn" href="https://business.trustpilot.com/" target="_blank" rel="noopener">Trustpilot ↗</a></p>
+      <p><b>Technique</b> <a class="btn" href="https://dash.cloudflare.com" target="_blank" rel="noopener">Cloudflare (serveur du jeu) ↗</a> <a class="btn" href="https://github.com/frenglaisverse/frenglais-site" target="_blank" rel="noopener">GitHub (code du site) ↗</a> <a class="btn" href="https://manage.wix.com/account/domains" target="_blank" rel="noopener">Wix (nom de domaine) ↗</a></p>
+      <p><b>Réseaux et livre</b> <a class="btn" href="https://studio.youtube.com/" target="_blank" rel="noopener">YouTube Studio ↗</a> <a class="btn" href="https://www.instagram.com/paulowfrenglais/" target="_blank" rel="noopener">Instagram ↗</a> <a class="btn" href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener">TikTok ↗</a> <a class="btn" href="https://kdp.amazon.com/" target="_blank" rel="noopener">Amazon KDP ↗</a></p>
     </div>
   </section>
 

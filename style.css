@@ -1207,12 +1207,6 @@ footer::after{opacity:.58}
   .flou-droite i:nth-child(3){-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:rgba(31,79,174,.12);-webkit-mask:linear-gradient(90deg,transparent 45%,#000 90%);mask:linear-gradient(90deg,transparent 45%,#000 90%)}}
 /* liens du verso au-dessus du pied (logo) */
 .pol-grand .v-liens{z-index:3!important}.pol-grand .v-pied{position:relative;z-index:1;pointer-events:none}
-/* livre dans le pied de page */
-.pied-livre{display:flex;align-items:center;gap:16px;text-decoration:none;align-self:flex-start;padding:12px 18px 12px 12px;border-radius:16px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:background .2s}
-.pied-livre:hover{background:rgba(255,255,255,.1)}
-.pied-livre img{width:62px;height:auto;border-radius:3px 6px 6px 3px;box-shadow:inset 3px 0 0 rgba(0,0,0,.25),3px 3px 0 -1px #E9E4D8,6px 8px 18px -6px rgba(0,0,0,.6);transform:rotate(-3deg);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
-.pied-livre:hover img{transform:rotate(0) scale(1.06)}
-.pied-livre span{display:flex;flex-direction:column;gap:3px;max-width:190px}
-.pied-livre small{margin:0!important;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9FB0D6}
-.pied-livre b{font-weight:600;line-height:1.25;color:#fff}
-.pied-livre i{font-style:normal;font-size:14px;color:#F0766F}
+/* livre : petite icône parmi les réseaux */
+.reseaux .reseau-livre img{width:18px;height:auto;border-radius:1.5px 3px 3px 1.5px;box-shadow:inset 1.5px 0 0 rgba(0,0,0,.25),1.5px 1.5px 0 -.5px #E9E4D8,0 2px 6px -2px rgba(0,0,0,.6);transform:rotate(-6deg);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.reseaux .reseau-livre:hover img{transform:rotate(0) scale(1.15)}

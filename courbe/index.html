@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwe6lfm2"></script>
+<script src="donnees.js?v=mwerjixh"></script>
 </head>
 <body>
 <style>
@@ -480,7 +480,8 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
         }; return; } } } catch (e) {}
     if (C.api) { monId = lire('courbe-id', '') || (Math.random().toString(36).slice(2) + Date.now().toString(36)); ecrire('courbe-id', monId);
       classement = {
-        async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms, bonus: detail.bonus && { rep: detail.bonus.rep, aides: detail.bonus.aides }, chance: detail.chance && { rep: detail.chance.rep } }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
+        async envoyer(n, pseudo, score, detail){ const r = await fetch(C.api + '/score', { method: 'POST', body: JSON.stringify({ n, id: monId, pseudo, rep: detail.rep, ms: detail.ms, bonus: detail.bonus && { rep: detail.bonus.rep, aides: detail.bonus.aides }, chance: detail.chance && { rep: detail.chance.rep } }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); if (j.pseudo) ecrire('courbe-pseudo', j.pseudo); },
+        async pseudo(p){ const r = await fetch(C.api + '/pseudo', { method: 'POST', body: JSON.stringify({ id: monId, pseudo: p || '' }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); if (j.pseudo) ecrire('courbe-pseudo', j.pseudo); return j.pseudo; },
         async lire(n){ const r = await fetch(C.api + '/top?n=' + n + '&id=' + encodeURIComponent(monId)); return r.json(); },
         async gagnant(S){ const r = await fetch(C.api + '/gagnant?s=' + S + '&id=' + encodeURIComponent(monId)); return r.json(); },
         async reclamer(S, email){ const r = await fetch(C.api + '/gagnant', { method: 'POST', body: JSON.stringify({ s: S, id: monId, email }) }); const j = await r.json(); if (!r.ok) throw new Error(j.erreur || 'refus'); },
@@ -514,13 +515,16 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     $('hud-score').textContent = '0000'; $('fr').textContent = '';
     $('jeu').innerHTML = `<div class="titre-ecran">
       <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>CHAQUE MOIS : LE N°1 GAGNE -${C.reduction} %.</p>
-      <form class="pseudo nom-avant" id="f-nom"><label for="i-nom">VOTRE PSEUDO</label><input id="i-nom" maxlength="14" autocomplete="nickname" placeholder="3 A 14 LETTRES" value="${esc(lire('courbe-pseudo', ''))}"></form>
-      <p class="note" id="n-nom"></p>
+      <form class="pseudo nom-avant" id="f-nom"><label for="i-nom">VOTRE PSEUDO</label><input id="i-nom" maxlength="14" autocomplete="nickname" placeholder="3 A 14 LETTRES" value="${esc(lire('courbe-pseudo', ''))}"${lire('courbe-pseudo', '') ? ' readonly' : ''}></form>
+      <p class="note" id="n-nom">${lire('courbe-pseudo', '') ? 'Votre pseudo est définitif : vous gardez le même nom à chaque partie.' : 'Choisissez bien : votre pseudo sera définitif.'}</p>
       <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button><div id="gagnant-titre" style="width:100%;text-align:left"></div></div>`;
     afficherGagnant($('gagnant-titre'));
     const lancer = ev => { if (ev) ev.preventDefault(); const p = $('i-nom').value.trim().toUpperCase(), err = C.pseudoValide(p);
       if (err) { $('n-nom').textContent = p ? err : 'Choisissez un pseudo pour entrer au classement.'; $('n-nom').className = 'note err'; SON.faux(); $('i-nom').focus(); return; }
-      ecrire('courbe-pseudo', p); jouer(); };
+      if (lire('courbe-pseudo', '') || !classement || !classement.pseudo) { ecrire('courbe-pseudo', p); jouer(); return; }
+      $('n-nom').textContent = 'Vérification du pseudo…'; $('n-nom').className = 'note';
+      classement.pseudo(p).then(() => jouer(), e => { if (/pris|lettres|pseudo/i.test(e.message)) { $('n-nom').textContent = e.message.charAt(0).toUpperCase() + e.message.slice(1) + '.'; $('n-nom').className = 'note err'; SON.faux(); $('i-nom').focus(); } else { ecrire('courbe-pseudo', p); jouer(); } }); };
+    pret.then(() => { if (classement && classement.pseudo && $('i-nom')) classement.pseudo('').then(n => { const i = $('i-nom'); if (n && i) { i.value = n; i.readOnly = true; $('n-nom').textContent = 'Votre pseudo est définitif : vous gardez le même nom à chaque partie.'; $('n-nom').className = 'note'; } }).catch(() => {}); });
     $('start').addEventListener('click', lancer); $('f-nom').addEventListener('submit', lancer);
     ($('i-nom').value ? $('start') : $('i-nom')).focus({ preventScroll: true });
   }
@@ -733,13 +737,13 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       $('rang').textContent = (pos > nb - 1 ? `Vous êtes ${pos + 1}e sur ${liste.length}.` : (liste.length ? `${liste.length} joueur${liste.length > 1 ? 's' : ''}.` : ''));
     }
     if (!r.envoye && pseudo && !C.pseudoValide(pseudo)) { const note = $('n-pseudo'); note.textContent = 'Envoi de votre score…';
-      try { await classement.envoyer(num, pseudo, r.s, r); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); const ff = $('f-pseudo'); if (ff) ff.remove(); charger(); if ($('n-pseudo')) $('n-pseudo').textContent = 'Score inscrit. Bravo, ' + pseudo + ' !'; compter('pseudo'); }
+      try { await classement.envoyer(num, pseudo, r.s, r); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); const ff = $('f-pseudo'); if (ff) ff.remove(); charger(); if ($('n-pseudo')) $('n-pseudo').textContent = 'Score inscrit. Bravo, ' + lire('courbe-pseudo', pseudo) + ' !'; compter('pseudo'); }
       catch (e) { if ($('n-pseudo')) { $('n-pseudo').textContent = 'Votre score n\'a pas pu être inscrit : ' + (e.message || 'réessayez plus tard') + '.'; $('n-pseudo').className = 'note err'; } } }
     const f = $('f-pseudo');
     if (f) f.addEventListener('submit', async ev => { ev.preventDefault(); const p = $('i-pseudo').value.trim().toUpperCase(), err = C.pseudoValide(p), note = $('n-pseudo');
       if (err) { note.textContent = err; note.className = 'note err'; SON.faux(); return; }
       note.textContent = 'Envoi…'; note.className = 'note';
-      try { await classement.envoyer(num, p, r.s, r); ecrire('courbe-pseudo', p); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); f.remove(); note.textContent = 'Score inscrit. Bravo, ' + p + ' !'; SON.juste(); compter('pseudo'); charger(); }
+      try { await classement.envoyer(num, p, r.s, r); if (!lire('courbe-pseudo', '')) ecrire('courbe-pseudo', p); r.envoye = true; etat[num] = r; ecrire('courbe-jours', etat); f.remove(); note.textContent = 'Score inscrit. Bravo, ' + p + ' !'; SON.juste(); compter('pseudo'); charger(); }
       catch (e) { note.textContent = 'Votre score n\'a pas pu être inscrit : ' + (e.message || 'réessayez plus tard') + '.'; note.className = 'note err'; } });
     charger();
     /* le classement se met à jour tout seul : toutes les 30 s tant que la page est visible, et dès qu'on revient sur l'onglet */

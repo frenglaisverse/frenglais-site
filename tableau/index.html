@@ -1154,11 +1154,11 @@ body[data-vue="pilotage"] [data-onglet="eleves"],body[data-vue="eleves"] [data-o
     dmCharger(); });
   /* ---------- générateur de devis : grille de prix (modifiable dans Réglages), PDF par impression ---------- */
   const GRILLE0 = {
-    integral: { nom: 'L\'Intégral · Professionnels et indépendants', unite: 'par personne', formules: [['6 semaines · 12 modules', 450], ['16 semaines · 32 modules, tests et certificat', 990], ['Long terme · abonnement mensuel', 89, 'mois']] },
-    performance: { nom: 'Performance · Entreprises et équipes', unite: 'par apprenant', equipe: true, formules: [['8 semaines · intensif, 16 modules', 690], ['12 semaines · classique, 24 modules', 990], ['16 semaines · approfondi, 32 modules', 1290]] },
-    solo: { nom: 'Solo · Édition privée', unite: 'par personne', formules: [['Complète · 0 à 3 mois', 1490], ['Immersion · long terme', 290, 'mois']] }
+    integral: { nom: 'L\'Intégral · Professionnels et indépendants', unite: 'par personne', formules: [['6 semaines · 12 modules', 500], ['16 semaines · 32 modules, tests et certificat', 1200], ['Long terme · abonnement mensuel', 120, 'mois']] },
+    performance: { nom: 'Performance · Entreprises et équipes', unite: 'par apprenant', equipe: true, formules: [['8 semaines · intensif, 16 modules', 900], ['12 semaines · classique, 24 modules', 1300], ['16 semaines · approfondi, 32 modules', 1700]] },
+    solo: { nom: 'Solo · Édition privée', unite: 'par personne', formules: [['Complète · 0 à 3 mois', 2400], ['Immersion · long terme', 400, 'mois']] }
   };
-  const OPTIONS0 = [['tuteur', 'Point tuteur supplémentaire (30 min)', 35, true], ['live', 'Séance individuelle avec Paul (1 h)', 60, true], ['lancement', 'Lancement sur site (frais de déplacement)', 0, false, true]];
+  const OPTIONS0 = [['tuteur', 'Point tuteur supplémentaire (30 min)', 50, true], ['live', 'Séance individuelle avec Paul (1 h)', 90, true], ['lancement', 'Lancement sur site (frais de déplacement)', 0, false, true]];
   const DEG = n => n >= 10 ? 20 : n >= 5 ? 10 : 0;   // dégressif entreprises : 5 à 9 apprenants -10 %, 10 et plus -20 %
   let GR; try { GR = Object.assign(JSON.parse(JSON.stringify(GRILLE0)), JSON.parse(localStorage.getItem('frg-grille') || 'null') || {}); } catch (e) { GR = JSON.parse(JSON.stringify(GRILLE0)); }
   let OPT; try { OPT = JSON.parse(localStorage.getItem('frg-options') || 'null') || OPTIONS0; } catch (e) { OPT = OPTIONS0; }

@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611132005">
+<link rel="stylesheet" href="style.css?v=202611131915b">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -447,7 +447,7 @@ dessiner();addEventListener('resize',dessiner);})();
 var note={ent:"Tarif dégressif : -10 % dès 5 apprenants, -20 % dès 10.",solo:"Places limitées."};
 document.querySelectorAll('.offre').forEach(function(c){var t=c.dataset.offre,cur=(c.querySelector('[aria-checked="true"]')||{}).dataset.k;
  if(note[t]){var n=document.createElement('p');n.className='o-note';n.textContent=note[t];c.querySelector('.o-cta').before(n);}
- function r(){var d=O[t][cur];c.querySelector('.o-nom').textContent=d[0];c.querySelector('.o-promesse').textContent=d[1];c.querySelector('.o-prix b').textContent=d[2];c.querySelector('.o-prix span').textContent=d[3];
+ function r(){var d=O[t][cur];c.querySelector('.o-nom').textContent=d[0];c.querySelector('.o-promesse').textContent=d[1];var px=c.querySelector('.o-prix');if(t==='solo'){px.hidden=false;px.innerHTML='<span>À partir de</span><b>400 €</b><span>/ mois</span>';}else{px.hidden=true;}
   c.querySelector('.o-liste').innerHTML=d[4].map(function(x){return '<li>'+x+'</li>'}).join('');
   c.querySelectorAll('[data-k]').forEach(function(b){b.setAttribute('aria-checked',b.dataset.k===cur)});}
  c.addEventListener('click',function(e){var b=e.target.closest('[data-k]');if(b){cur=b.dataset.k;r();}});

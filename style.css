@@ -1223,7 +1223,7 @@ footer::after{opacity:.58}
 .hero h1{color:#fff;text-shadow:0 2px 24px rgba(8,22,70,.55),0 1px 2px rgba(8,22,70,.4)}
 .hero .h1-suite{color:#DDE6FF}
 .hero .hero-texte{position:relative}
-.hero .hero-texte::before{content:"";position:absolute;inset:-60px -120px -40px -80px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 35% 50%,rgba(20,52,140,.55),rgba(20,52,140,0) 70%)}
+.hero .hero-texte::before{content:none}
 @media (min-width:1101px){.banian{filter:saturate(.85)}.banian-arriere{opacity:.86}}
 @media (max-width:640px){.hero .surtitre{font-size:12.5px}}
 /* recentrer l'attention sur les formations : accroche et titre plus présents, décor un cran plus discret */
@@ -1271,3 +1271,27 @@ footer::after{opacity:.58}
 .o-phare .o-cta{background:linear-gradient(180deg,#fff,#E9EEFA);color:#0E1E4A;box-shadow:inset 0 1px 0 #fff,0 10px 24px -12px rgba(0,0,0,.6)}
 .o-prive .o-cta{background:linear-gradient(180deg,#1A1A1C,#0B0B0C);color:#F3E7CC;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 24px -12px rgba(0,0,0,.5)}
 @media (max-width:980px){.o-promesse{min-height:0}}
+
+/* bord gauche démarqué : le flou de verre du menu (backdrop-filter) faisait recomposer le haut de page en bande ; verre conservé, sans backdrop */
+
+
+/* ===== Offres en verre ===== */
+#formations{position:relative}
+.offres{position:relative;isolation:isolate}
+.offres::before{content:"";position:absolute;inset:-60px -40px;z-index:-1;pointer-events:none;filter:blur(40px);opacity:.9;
+  background:radial-gradient(38% 55% at 14% 40%,rgba(64,118,232,.42),transparent 70%),radial-gradient(32% 50% at 52% 70%,rgba(240,118,111,.28),transparent 70%),radial-gradient(34% 55% at 88% 35%,rgba(214,176,108,.38),transparent 70%)}
+.offre{--fond:linear-gradient(160deg,rgba(255,255,255,.72),rgba(236,242,255,.48));--trait:rgba(255,255,255,.7);
+  -webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,.75);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(28,73,165,.06),0 30px 60px -36px rgba(14,27,61,.45)}
+.offre .o-prix{border-bottom-color:rgba(14,27,61,.08)}
+.o-phare{--fond:linear-gradient(165deg,rgba(28,58,140,.86),rgba(12,26,66,.9));border-color:rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 34px 64px -30px rgba(10,22,54,.7)}
+.o-phare .o-prix{border-bottom-color:rgba(255,255,255,.12)}
+.o-prive{--fond:linear-gradient(160deg,rgba(255,250,238,.74),rgba(246,234,208,.5));border-color:rgba(255,255,255,.8)}
+.o-durees{background:rgba(14,27,61,.06);border-color:rgba(255,255,255,.6)}
+.o-phare .o-durees{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
+.o-durees button[aria-checked="true"]{background:rgba(255,255,255,.92)!important;color:#0E1B3D!important;box-shadow:0 1px 3px rgba(14,27,61,.18),inset 0 1px 0 #fff!important}
+/* un seul bouton, le même partout */
+.offre .o-cta,.o-phare .o-cta,.o-prive .o-cta{background:linear-gradient(180deg,#F38A83,#E0685F);color:#fff;border:1px solid rgba(255,255,255,.35);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 26px -12px rgba(224,104,95,.85)}
+.offre .o-cta:hover{filter:brightness(1.05)}

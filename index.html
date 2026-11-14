@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611131950">
+<link rel="stylesheet" href="style.css?v=202611140940">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -433,6 +433,18 @@ function dessiner(){var r=o.getBoundingClientRect(),W=r.width,H=r.height,d=Math.
 dessiner();addEventListener('resize',dessiner);})();
 </script>
 <script>/* banian : s'arrête au bord droit de la colonne du site, comme à gauche */
+(function(){var mob=function(){
+  var ims=document.querySelectorAll('.banian'),c=document.querySelector('.pol-carte'),pol=document.querySelector('.polaroid');if(!c||!ims.length)return;
+  if(innerWidth>1100){ims.forEach(function(im){['left','top','width','bottom','right'].forEach(function(k){im.style.removeProperty(k)})});pol.style.removeProperty('margin-bottom');return;}
+  pol.style.removeProperty('margin-bottom');
+  var op=ims[0].offsetParent||document.querySelector('.hero'),o=op.getBoundingClientRect(),r=c.getBoundingClientRect(),s=r.width/272;
+  var h=document.querySelector('.hero').getBoundingClientRect();
+  var sol=r.top+(700-409)*s;                       /* où tombe le sol de l'image */
+  var manque=sol-h.bottom; if(manque>0){pol.style.marginBottom=(parseFloat(getComputedStyle(pol).marginBottom)||0)+manque+'px';r=c.getBoundingClientRect();o=op.getBoundingClientRect();}
+  var L=r.left-623*s-o.left,T=r.top-409*s-o.top;
+  ims.forEach(function(im){im.style.width=1640*s+'px';im.style.left=L+'px';im.style.top=T+'px';im.style.right='auto';im.style.bottom='auto';
+    var k=(409*s-170*s)/(700*s)*100;im.style.setProperty('--m1',Math.max(0,k-12)+'%');im.style.setProperty('--m2',k+'%');});
+};addEventListener('load',mob);addEventListener('resize',mob);mob();})();
 (function(){var f=function(){var n=document.querySelector('.bandeau nav');if(!n)return;var d=n.getBoundingClientRect().right;document.querySelectorAll('.banian').forEach(function(im){var r=im.getBoundingClientRect();if(r.width)im.style.setProperty('--fin',Math.round(d-r.left)+'px');});};addEventListener('load',f);addEventListener('resize',f);f();})();</script>
 <script>/* formations : trois offres, une durée choisie, un prix assumé */
 (function(){var O={

@@ -1308,6 +1308,11 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   const liste0 = liste; liste = function(){ liste0(); rangEleves(); vue(); };
   liste();
   const cle0 = FRG.lire('frg-cle-tableau', ''); if (cle0) jeuCharger(cle0, false);
+  /* classement en direct : rafraîchi toutes les 10 s quand l'onglet est visible */
+  async function jeuRafraichir(){ const c = FRG.lire('frg-cle-tableau', ''); if (!c || document.hidden || !J) return;
+    try { const r = await fetch(API + '/admin', { method: 'POST', body: JSON.stringify({ cle: c }) }); if (!r.ok) return; const j = await r.json();
+      const pos = [...document.querySelectorAll('.defile')].map(d => d.scrollTop); J = j; jeuRendu(); document.querySelectorAll('.defile').forEach((d, i) => d.scrollTop = pos[i] || 0); } catch (e) {} }
+  setInterval(jeuRafraichir, 10000); document.addEventListener('visibilitychange', jeuRafraichir);
 })();
 </script>
 </body>

@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwf634jp"></script>
+<script src="donnees.js?v=mwg4ul4d"></script>
 </head>
 <body>
 <style>
@@ -751,7 +751,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       catch (e) { note.textContent = 'Votre score n\'a pas pu être inscrit : ' + (e.message || 'réessayez plus tard') + '.'; note.className = 'note err'; } });
     charger();
     /* le classement se met à jour tout seul : toutes les 30 s tant que la page est visible, et dès qu'on revient sur l'onglet */
-    clearInterval(afficherTop.minuteur); afficherTop.minuteur = setInterval(() => { if (!document.hidden && $('liste')) charger(); }, 30000);
+    clearInterval(afficherTop.minuteur); afficherTop.minuteur = setInterval(() => { if (!document.hidden && $('liste')) charger(); }, 5000);
     if (!afficherTop.vue) { afficherTop.vue = true; document.addEventListener('visibilitychange', () => { if (!document.hidden && $('liste') && afficherTop.recharger) afficherTop.recharger(); }); }
     afficherTop.recharger = charger;
   }

@@ -1180,12 +1180,6 @@ footer::after{opacity:.58}
   .banian-arriere{z-index:1}.polaroid{z-index:3!important}.banian-avant{z-index:4}
   .bandeau nav{z-index:6}
   .hero-texte,.hero .ctas{position:relative;z-index:5}}
-/* fenêtre réduite (tablette, mobile) : un banian léger, en transparence, à droite derrière le texte */
-@media (max-width:1100px){
-  .banian-arriere{display:block;position:absolute;bottom:0;right:calc(22vw - 594px);width:1100px;max-width:none;height:auto;opacity:.42;pointer-events:none;user-select:none;z-index:0;
-    -webkit-mask:linear-gradient(90deg,transparent 30%,#000 52%),linear-gradient(180deg,transparent 0,#000 38%);-webkit-mask-composite:source-in;mask:linear-gradient(90deg,transparent 30%,#000 52%),linear-gradient(180deg,transparent 0,#000 38%);mask-composite:intersect}
-  .hero{overflow-x:visible!important}.bandeau{overflow-x:clip}.hero-texte,.hero .ctas,.polaroid{position:relative;z-index:2}}
-@media (max-width:640px){.banian-arriere{display:none!important}}
 /* fin banian */
 /* Courbe du jour : petit onglet rétro à côté du logo */
 .marque{position:relative}
@@ -1329,3 +1323,16 @@ footer::after{opacity:.58}
 .o-mousse{left:0;top:0;width:100%;height:230px;opacity:.55}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .o-deco-banian{opacity:.22;filter:brightness(1.6)}:root:not([data-theme="light"]) .o-mousse{opacity:.4}}
 .o-deco-jac{bottom:58px;right:-34px;width:250px;height:200px;opacity:.38}.o-mousse{opacity:.85}
+
+/* tablette et mobile : le même banian que sur ordinateur, calé sur la carte (positions posées par le script) */
+@media (max-width:1100px){
+  .bandeau{overflow:hidden}
+  .banian{display:block!important;position:absolute;max-width:none;height:auto;pointer-events:none;user-select:none;opacity:1!important;filter:saturate(.9)}
+  .banian-arriere{z-index:0;-webkit-mask:linear-gradient(180deg,rgba(0,0,0,.28) 0,rgba(0,0,0,.28) var(--m1,40%),#000 var(--m2,60%));mask:linear-gradient(180deg,rgba(0,0,0,.28) 0,rgba(0,0,0,.28) var(--m1,40%),#000 var(--m2,60%))}
+  .banian-avant{z-index:4;-webkit-mask:linear-gradient(180deg,transparent 0,transparent var(--m1,40%),#000 var(--m2,60%));mask:linear-gradient(180deg,transparent 0,transparent var(--m1,40%),#000 var(--m2,60%))}
+  .polaroid{z-index:3!important}.hero-texte,.hero .ctas{position:relative;z-index:5}
+  .hero .polaroid{margin-inline:auto!important}
+  .hero{overflow:visible!important}
+  .banian-arriere{-webkit-mask:linear-gradient(180deg,transparent 0,transparent calc(var(--m1,40%) - 14%),rgba(0,0,0,.22) var(--m1,40%),#000 var(--m2,60%));mask:linear-gradient(180deg,transparent 0,transparent calc(var(--m1,40%) - 14%),rgba(0,0,0,.22) var(--m1,40%),#000 var(--m2,60%))}
+  .marque .onglet-jeu{left:0!important;top:calc(100% + 8px)!important}}
+@media (max-width:520px){.marque .onglet-jeu{left:calc(100% + 12px)!important;top:50px!important}}

@@ -1387,3 +1387,22 @@ footer::after{opacity:.58}
 .tab-prix{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:15px}
 .tab-prix th,.tab-prix td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--trait)}
 .tab-prix th{font-weight:600}
+/* formations : tailles d'équipe, listes repliables, espace Cours particuliers */
+.o-tailles{align-items:center}
+.o-tailles button{min-width:0;flex:1}
+.o-tailles-u{padding:0 10px 0 4px;font-size:13px;color:var(--doux)}
+.o-plus{display:flex;align-items:center;gap:9px;margin:-6px 0 14px;padding:0;border:0;background:none;font:500 14px var(--f-txt);color:var(--bleu);cursor:pointer;text-align:left}
+.o-plus span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;font-size:15px;line-height:1}
+.o-plus:hover{text-decoration:underline;text-underline-offset:3px}
+.o-phare .o-plus{color:#C9D8FF}
+:root[data-theme="dark"] .o-plus{color:#9DBBFA}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .o-plus{color:#9DBBFA}}
+.o-liste li[hidden]{display:none}
+.o-solo{margin-top:22px;display:grid;grid-template-columns:1fr 1.15fr;gap:12px 40px;align-items:start}
+.o-solo .o-prix-grand b{font-size:34px}
+.os-corps{display:flex;flex-direction:column;gap:6px}
+.os-corps .o-liste{margin-top:0}
+.os-corps .o-cta{align-self:flex-start;min-width:240px}
+@media (max-width:860px){.o-solo{grid-template-columns:1fr}}
+.os-tete{display:grid;gap:10px}
+.os-tete .o-tarif{padding:6px 0 0}

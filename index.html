@@ -229,16 +229,17 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
         <p class="o-pour">Particuliers</p>
         <h3 class="o-nom">Cours particuliers</h3>
         <p class="o-promesse">En tête-à-tête, en visio : la Courbe des Temps appliquée à votre anglais, à votre rythme.</p>
-        <div class="o-durees" role="radiogroup" aria-label="Formule"><button type="button" role="radio" data-k="8" aria-checked="true">8 cours</button><button type="button" role="radio" data-k="16">16 cours</button></div>
+        <div class="o-durees o-tailles" role="radiogroup" aria-label="Heures de cours par semaine"><button type="button" role="radio" data-k="1" aria-checked="true">1 h</button><button type="button" role="radio" data-k="2">2 h</button><button type="button" role="radio" data-k="3">3 h</button><button type="button" role="radio" data-k="4">4 h</button><span class="o-tailles-u">par semaine</span></div>
+        <div class="o-tarif o-tarif-solo"></div>
       </div>
       <div class="os-corps">
         <ul class="o-liste">
-          <li>Cours individuels d'une heure, en visio</li>
+          <li>Chaque semaine, de 1 à 4 heures de cours individuels en visio</li>
           <li>Entre les cours : une Courbe tous les 3 jours et un compte rendu écrit</li>
           <li>Test d'entrée, test de sortie et certificat de niveau</li>
           <li>Préparation aux tests et examens : TOEIC, IELTS, TOEFL, concours et écoles spécialisées</li>
         </ul>
-        <p class="o-note">Prix sur devis, selon le nombre de cours et votre objectif. Report sans frais jusqu'à 24 h avant le cours.</p>
+        <p class="o-note">Facturé par période de 4 semaines, sans engagement de durée. Le devis précise le programme selon votre objectif. Report sans frais jusqu'à 24 h avant le cours.</p>
         <a class="o-cta" href="#devis">Demander un devis</a>
       </div>
     </article>
@@ -544,7 +545,7 @@ function x3(v){return v/3}
 function remplir(profil,formule,msg){var x=document.getElementById(profil);if(x){x.checked=true;x.dispatchEvent(new Event('change',{bubbles:true}));}
   var f=document.getElementById('f-duree');if(f){for(var o of f.options)if(o.value===formule)f.value=formule;}
   var m=document.getElementById('f-msg');if(m&&!m.value)m.value=msg;}
-var sc=document.querySelector('[data-offre="solo"]');if(sc){var nc='8';sc.addEventListener('click',function(ev){var k=ev.target.closest('[data-k]');if(k){nc=k.dataset.k;sc.querySelectorAll('[data-k]').forEach(function(x){x.setAttribute('aria-checked',x===k)});}});sc.querySelector('.o-cta').addEventListener('click',function(){remplir('p-part','Cours particuliers','Cours particuliers en visio, '+nc+' cours. Mon objectif : ');});}
+var sc=document.querySelector('[data-offre="solo"]');if(sc){var nc='1',PH={1:55,2:50,3:45,4:40},ts=sc.querySelector('.o-tarif-solo');var majs=function(){var h=+nc,t=PH[nc];ts.innerHTML=(h>1?'<p class="o-barre"><span class="o-badge">\u2212'+Math.round((1-t/PH[1])*100)+'\u00a0%</span><s>'+e(PH[1])+'/h</s><small>tarif d\u00e9gressif</small></p>':'')+'<p class="o-prix-grand"><b>'+e(t)+'\u00a0/\u00a0h</b><span>soit '+e(t*h*4)+' pour 4 semaines</span></p>';};majs();sc.addEventListener('click',function(ev){var k=ev.target.closest('[data-k]');if(k){nc=k.dataset.k;sc.querySelectorAll('[data-k]').forEach(function(x){x.setAttribute('aria-checked',x===k)});majs();}});sc.querySelector('.o-cta').addEventListener('click',function(){remplir('p-part','Cours particuliers','Cours particuliers en visio, '+nc+' h par semaine. Mon objectif : ');});}
 /* listes repliables : 4 éléments visibles, le reste derrière le bouton + */
 function replier(c){var L=c.querySelector('.o-liste');if(!L||c.dataset.offre==='solo')return;var b=c.querySelector('.o-plus');
   if(!b){b=document.createElement('button');b.type='button';b.className='o-plus';b.setAttribute('aria-expanded','false');L.after(b);

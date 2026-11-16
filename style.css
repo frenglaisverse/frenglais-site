@@ -1406,3 +1406,19 @@ footer::after{opacity:.58}
 @media (max-width:860px){.o-solo{grid-template-columns:1fr}}
 .os-tete{display:grid;gap:10px}
 .os-tete .o-tarif{padding:6px 0 0}
+/* formations : retour à la DA des cartes en ligne (prix sobres, listes courtes, bandeaux en carte) */
+.offre .o-tarif{margin:6px 0 0;padding-bottom:18px;border-bottom:1px solid var(--trait);gap:4px}
+.offre .o-prix-grand b{font-size:40px;letter-spacing:-.03em}
+.offre .o-barre{font-size:12.5px;gap:4px 8px}
+.offre .o-barre s{font-size:15px}
+.offre .o-badge{padding:0;background:none;color:var(--acc,#E0685F);font:600 12px var(--f-mono);letter-spacing:.04em}
+.o-phare .o-badge{color:#F0A08F}
+.offre .o-3x{font-size:13px}
+.offre .o-liste{border-top:0}
+.offre .o-plus{margin:-4px 0 12px;font-size:13.5px}
+.offre .o-plus span{width:20px;height:20px;font-size:14px}
+.fondateurs{background:var(--carte);border:1px solid var(--trait);border-radius:22px;padding:16px 22px;margin:14px 0 22px;box-shadow:0 10px 30px -22px rgba(14,27,61,.35)}
+.fondateurs .fd-txt{font-size:15.5px}
+.o-solo .o-durees{max-width:320px}
+.o-solo .os-corps{padding-top:4px}
+.o-solo .o-note{margin:4px 0 10px}

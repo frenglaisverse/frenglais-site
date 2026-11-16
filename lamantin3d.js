@@ -19,12 +19,20 @@ function lancer(){
   if (H2 !== H) hote.style.height = H2 + 'px';   // l'alligator, bien plus long, a un cadre plus large
   if (L !== 200) { hote.style.width = L + 'px'; }
   const rendu = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-  rendu.setPixelRatio(Math.min((devicePixelRatio || 1) * 2.4, 4.8));   // net malgré l’agrandissement (x2,4)
+  const modeste = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 3;   // appareil modeste : un peu moins de pixels, toujours net
+  rendu.setPixelRatio(Math.min((devicePixelRatio || 1) * (innerWidth <= 640 ? 1 : 1.8), modeste ? 1.75 : 2.6));   // juste la netteté visible (affiché x1,8 sur ordinateur, x0,9 sur mobile) : 4 à 8 fois moins de pixels à calculer
   rendu.setSize(L, H2);
   rendu.outputColorSpace = THREE.SRGBColorSpace;
   rendu.toneMapping = THREE.ACESFilmicToneMapping;
   rendu.toneMappingExposure = 1.05;
   hote.appendChild(rendu.domElement);
+  /* qualité adaptative : sans carte graphique (rendu logiciel) ou si l'appareil peine, on allège sans que ça se voie */
+  let niveau = 0, cadence = 0;   // 0 = plein, 1 = résolution 1x + 30 i/s, 2 = 12 i/s, animations fines coupées
+  try { const gl = rendu.getContext(), ext = gl.getExtension('WEBGL_debug_renderer_info');
+    const nom = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
+    if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(nom)) niveau = 2; } catch (e) {}
+  const appliquer = () => { if (niveau === 1) rendu.setPixelRatio(Math.min(devicePixelRatio || 1, 1)); if (niveau === 2) rendu.setPixelRatio(Math.min((devicePixelRatio || 1) * (innerWidth <= 640 ? 1 : 1.8), 2));   /* niveau 2 dessine rarement : il peut rester net */ cadence = niveau === 1 ? 30 : niveau === 2 ? 12 : 0; };
+  appliquer();
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(26, L / H, 0.1, 50);
@@ -619,8 +627,14 @@ function lancer(){
   let visible = true, t0 = performance.now();
   new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) boucle(); }).observe(hote);
 
+  let ema = 16, vues = 0, prec = 0, endormi = false, defile = 0, dessine = 0;
+  const reveil = () => { if (endormi && visible) { endormi = false; prec = 0; requestAnimationFrame(boucle); } };
+  ['pointermove', 'pointerdown', 'lamantin:emote'].forEach(e => (e[0] === 'l' ? document : window).addEventListener(e, reveil, { passive:true }));
+  addEventListener('scroll', () => { defile = performance.now(); }, { passive:true });
   function boucle(now = performance.now()){
     if (!visible) return;
+    if (prec && now - prec < 60) { ema = ema * .9 + (now - prec) * .1; if (++vues > 45 && niveau < 2 && ema > (cadence ? 1000 / cadence + 14 : 30)) { niveau++; appliquer(); vues = 0; ema = cadence ? 1000 / cadence : 16; } }
+    prec = now;
     const dt = Math.min(.05, (now - t0) / 1000); t0 = now;
     const k = calme ? 1 : 1 - Math.pow(.0015, dt);
     lacet += (cibleLacet - lacet) * k; tangage += (cibleTangage - tangage) * k;
@@ -634,7 +648,7 @@ function lancer(){
       tete.rotateOnWorldAxis(cote.clone().applyQuaternion(corps.quaternion), e < .5 ? Math.sin(e / .5 * Math.PI) * .18 : 0);
       if (e > .6) emote = -1;
     }
-    if (drapeauFlotte && !calme) {                                    // le drapeau ondule au vent
+    if (drapeauFlotte && !calme && niveau < 2) {                                    // le drapeau ondule au vent
       const a = drapeauFlotte.geo.attributes.position, b0 = drapeauFlotte.base;
       const rafale = .72 + .28 * Math.sin(now / 1700) * Math.sin(now / 2900 + 1);   // le vent faiblit et reprend
       for (let i = 0; i < a.count; i++) { const x = b0[i * 3], y = b0[i * 3 + 1], u = x / 1.05, bas = (.275 - y) / .55;
@@ -648,7 +662,7 @@ function lancer(){
         a.setZ(i, vague); }
       a.needsUpdate = true; drapeauFlotte.geo.computeVertexNormals();
     }
-    if (queueVivante && !calme) {                                     // la queue ondule lentement, de plus en plus vers la palette
+    if (queueVivante && !calme && niveau < 2) {                                     // la queue ondule lentement, de plus en plus vers la palette
       const { geo, base, qs, radial } = queueVivante, a = geo.attributes.position, R = radial + 1;
       for (let i = 0; i < qs.length && qs[i] < 1; i++) { const w = (1 - qs[i]) * (1 - qs[i]), dy = .075 * w * Math.sin(now / 1250 - qs[i] * 2.4) + .012 * w;
         for (let j = 0; j < R; j++) { const k = (i * R + j) * 3 + 1; a.array[k] = base[k] + dy; } }
@@ -657,8 +671,11 @@ function lancer(){
         for (let j = 0; j < R; j++) { const k = (i * R + j) * 3; V.set(base[k] - pivot.x, base[k + 1] - pivot.y, base[k + 2] - pivot.z).applyQuaternion(Q); a.array[k] = V.x + pivot.x; a.array[k + 1] = V.y + pivot.y; a.array[k + 2] = V.z + pivot.z; } }
       a.needsUpdate = true; geo.computeVertexNormals();
     }
-    rendu.render(scene, camera);
-    if (now - actif > 4000 && emote < 0 && !drapeauFlotte) setTimeout(() => requestAnimationFrame(boucle), queueVivante ? 24 : 110);
+    if (niveau >= 1 && now - defile < 300) { prec = 0; setTimeout(() => requestAnimationFrame(boucle), 150); return; }   // appareil qui peine : on ne dessine pas pendant le défilement
+    rendu.render(scene, camera); dessine++;
+    if (niveau === 2 && dessine > 2 && emote < 0 && Math.abs(cibleLacet - lacet) < .003 && Math.abs(cibleTangage - tangage) < .003) { endormi = true; return; }   // immobile : plus aucun calcul jusqu'au prochain geste
+    if (now - actif > 4000 && emote < 0 && !drapeauFlotte) { prec = 0; setTimeout(() => requestAnimationFrame(boucle), niveau ? 160 : queueVivante ? 24 : 110); }
+    else if (cadence) setTimeout(() => requestAnimationFrame(boucle), Math.max(0, 1000 / cadence - 16));
     else requestAnimationFrame(boucle);
   }
   boucle();

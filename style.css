@@ -1336,3 +1336,11 @@ footer::after{opacity:.58}
   .banian-arriere{-webkit-mask:linear-gradient(180deg,transparent 0,transparent calc(var(--m1,40%) - 14%),rgba(0,0,0,.22) var(--m1,40%),#000 var(--m2,60%));mask:linear-gradient(180deg,transparent 0,transparent calc(var(--m1,40%) - 14%),rgba(0,0,0,.22) var(--m1,40%),#000 var(--m2,60%))}
   .marque .onglet-jeu{left:0!important;top:calc(100% + 8px)!important}}
 @media (max-width:520px){.marque .onglet-jeu{left:calc(100% + 12px)!important;top:50px!important}}
+
+/* fluidité : sur mobile/tablette le banian n'apparaît (en fondu) qu'une fois placé — plus de saut de mise en page */
+@media (max-width:1100px){.banian{transition:opacity .6s ease}.banian:not(.pret){visibility:hidden;opacity:0!important}}
+
+/* fluidité (16 nov) */
+.pol-voile:not(.on){visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}   /* le flou plein écran n'est calculé que lorsqu'il sert */
+.polaroid{will-change:transform;backface-visibility:hidden}                              /* la carte qui se balance a sa propre couche : rien d'autre n'est redessiné */
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-iteration-count:1!important;animation-duration:.01ms!important;scroll-behavior:auto!important}}

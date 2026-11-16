@@ -1344,3 +1344,46 @@ footer::after{opacity:.58}
 .pol-voile:not(.on){visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}   /* le flou plein écran n'est calculé que lorsqu'il sert */
 .polaroid{will-change:transform;backface-visibility:hidden}                              /* la carte qui se balance a sa propre couche : rien d'autre n'est redessiné */
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-iteration-count:1!important;animation-duration:.01ms!important;scroll-behavior:auto!important}}
+/* ---------- formations : édition Fondateurs, tarifs, comparatif (nov. 2026) ---------- */
+.fondateurs{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 22px;padding:12px 18px;border-radius:16px;
+  background:linear-gradient(100deg,rgba(240,118,111,.12),rgba(28,73,165,.08));border:1px solid rgba(240,118,111,.35)}
+.fd-pastille{width:10px;height:10px;border-radius:50%;background:var(--corail);box-shadow:0 0 0 0 rgba(240,118,111,.6);animation:fd-pouls 2s infinite}
+@keyframes fd-pouls{70%{box-shadow:0 0 0 10px rgba(240,118,111,0)}100%{box-shadow:0 0 0 0 rgba(240,118,111,0)}}
+@media (prefers-reduced-motion:reduce){.fd-pastille{animation:none}}
+.fd-txt{margin:0;flex:1 1 320px;font-size:15px;color:var(--encre)}
+.fd-compte{margin:0;font:500 14px var(--f-mono);color:var(--doux);white-space:nowrap}
+.fd-compte b{display:inline-block;min-width:1.6em;text-align:center;padding:2px 4px;border-radius:6px;background:var(--carte);color:var(--encre);border:1px solid var(--trait)}
+.o-ruban{align-self:flex-start;margin:-4px 0 2px;padding:5px 11px;border-radius:99px;font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;background:var(--corail);color:#fff}
+.o-tarif{display:grid;gap:6px;padding-bottom:16px}
+.o-barre{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:13px;color:var(--doux)}
+.o-barre s{font-size:17px;color:var(--doux);text-decoration-thickness:1.5px}
+.o-badge{padding:3px 8px;border-radius:7px;font:600 12.5px var(--f-mono);background:var(--corail);color:#fff}
+.o-prix-grand{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
+.o-prix-grand b{font:600 44px/1 var(--f-txt);letter-spacing:-.035em;color:var(--encre);font-variant-numeric:tabular-nums}
+.o-prix-grand span{font-size:14px;color:var(--doux)}
+.o-3x{margin:0;font-size:13.5px;color:var(--doux)}
+.o-tout{padding-left:0!important;font-weight:600;color:var(--encre)}
+.o-tout::before{content:none!important}
+.o-liste b{font-weight:600;color:var(--encre)}
+.o-phare .o-badge,.o-phare .o-ruban{background:#F0766F}
+.rassure{list-style:none;margin:22px 0 18px;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;font-size:14px;color:var(--doux)}
+.rassure li{display:flex;align-items:center;gap:7px}
+.rassure li::before{content:"";width:8px;height:4px;border-left:1.8px solid var(--ok);border-bottom:1.8px solid var(--ok);transform:rotate(-45deg) translateY(-2px)}
+.comparer{margin-top:18px;border-radius:22px;background:var(--carte);border:1px solid var(--trait)}
+.comparer>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;font-weight:600;font-size:16.5px;color:var(--encre)}
+.comparer>summary::-webkit-details-marker{display:none}
+.cmp-defile{overflow-x:auto;padding:0 12px 14px}
+.comparer table{width:100%;min-width:560px;border-collapse:collapse;font-size:14.5px}
+.comparer th,.comparer td{padding:11px 10px;border-top:1px solid var(--trait);text-align:center;vertical-align:middle}
+.comparer thead th{border-top:0;font-weight:600;color:var(--encre)}
+.comparer tbody th{text-align:left;font-weight:400;color:var(--encre);width:46%}
+.comparer td{color:var(--doux)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.o-particuliers{margin:18px 0 0;text-align:center;font-size:14.5px;color:var(--doux)}
+.o-particuliers a{color:var(--bleu);font-weight:500}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .o-particuliers a{color:#9DBBFA}}
+:root[data-theme="dark"] .o-particuliers a{color:#9DBBFA}
+@media (max-width:640px){.fondateurs{padding:12px 14px}.o-prix-grand b{font-size:40px}}
+.tab-prix{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:15px}
+.tab-prix th,.tab-prix td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--trait)}
+.tab-prix th{font-weight:600}

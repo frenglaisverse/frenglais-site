@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwl6llm2"></script>
+<script src="donnees.js?v=mwl6vbfq"></script>
 </head>
 <body>
 <style>
@@ -252,7 +252,10 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
 .flamme:not(.eteinte){animation:vacille 1.4s ease-in-out infinite}
 @keyframes vacille{0%,100%{rotate:-4deg}50%{rotate:4deg}}
 .joker{margin-left:6px;font-size:.9em}
-.flamme-fin{text-align:center}.flamme-grande{font-size:44px;margin:0;line-height:1.2;animation:vacille 1.4s ease-in-out infinite;transform-origin:50% 90%}
+.flamme-fin{text-align:center}
+.fidele{text-align:center}.fidele.gagne{box-shadow:0 0 0 3px var(--vert),0 0 18px rgba(80,220,140,.35)}
+.fid-barre{display:flex;gap:3px;justify-content:center;margin:10px 0 8px;flex-wrap:wrap}.fid-barre i{width:12px;height:16px;background:rgba(255,255,255,.12)}.fid-barre i.f{background:var(--vert)}
+.fidele a{color:var(--jaune,#ffd23f)}.flamme-grande{font-size:44px;margin:0;line-height:1.2;animation:vacille 1.4s ease-in-out infinite;transform-origin:50% 90%}
 .flamme-grande.f1{font-size:52px}.flamme-grande.f2{font-size:60px}.flamme-grande.f3{font-size:68px}.flamme-grande.f4{font-size:76px;filter:drop-shadow(0 0 10px #ffb347)}
 @media (prefers-reduced-motion:reduce){.flamme,.flamme-grande{animation:none}}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center}
@@ -541,7 +544,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     if (fait) { $('fr').textContent = fr; poserZone(zone); poserCode(zone, code); $('hud-score').textContent = pad(fait.s, 4); if (!fait.bonus) { niveauBonus(fait); return; } fin(fait, true); return; }
     $('hud-score').textContent = '0000'; $('fr').textContent = '';
     $('jeu').innerHTML = `<div class="titre-ecran">
-      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>CHAQUE MOIS : LE N°1 GAGNE -${C.reduction} %.</p>
+      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>CHAQUE MOIS : LE N°1 GAGNE -${C.reduction} %.<br>JOUEZ ${C.seuilFidele(C.saison(AUJ))} JOURS : -${C.fidele} % POUR VOUS.</p>
       <form class="pseudo nom-avant" id="f-nom"><label for="i-nom">VOTRE PSEUDO</label><input id="i-nom" maxlength="14" autocomplete="nickname" placeholder="3 A 14 LETTRES" value="${esc(lire('courbe-pseudo', ''))}"${lire('courbe-pseudo', '') ? ' readonly' : ''}></form>
       <p class="note" id="n-nom">${lire('courbe-pseudo', '') ? 'Votre pseudo est définitif : vous gardez le même nom à chaque partie.' : 'Choisissez bien : votre pseudo sera définitif.'}</p>
       <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button><div id="gagnant-titre" style="width:100%;text-align:left"></div></div>`;
@@ -696,11 +699,16 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       <div class="verdict">${vc ? '<p class="vc">★ VICE CITY · POINTS ×2 ★</p>' : ''}<h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div></div>
       <div class="boite px explication enigme-fin"><span class="ico-q ${b.ok ? 'ok' : 'ko'}" aria-hidden="true">${b.ok ? '✔' : '✖'}</span><div><p class="reperes">MOT MYSTERE${b.ok ? ' · +' + b.pts : ''}<span class="sr">${b.ok ? ' : trouvé' : ' : non trouvé'}</span></p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
       <div id="gagnant"></div>
-      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
+      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.<br>${C.seuilFidele(C.saison(num))} JOURS JOUES : <b>-${C.fidele} %</b> POUR TOUS.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
       ${(() => { const i = serieInfo(), sauve = i.jokers.includes(AUJ - 1);
         return `<div class="boite px flamme-fin"><p class="flamme-grande f${niveauFlamme(s)}" aria-hidden="true">🔥</p><h3>SERIE : ${s} JOUR${s > 1 ? 'S' : ''}</h3>
         <p>${sauve ? '🃏 VOTRE JOKER A SAUVÉ VOTRE SÉRIE HIER.' : i.jokerDispo ? '🃏 JOKER DE LA SEMAINE DISPONIBLE : UN JOUR MANQUÉ NE CASSERA PAS VOTRE SÉRIE.' : 'JOKER DÉJÀ UTILISÉ CETTE SEMAINE : NE MANQUEZ PAS DEMAIN.'}</p>
         <p class="note">REVENEZ DEMAIN POUR PASSER À ${s + 1} 🔥</p></div>`; })()}
+      ${(() => { const S = C.saison(num), seuil = C.seuilFidele(S), j = Object.keys(etat).filter(x => C.saison(+x) === S).length, ok = j >= seuil, ps = String(lire('courbe-pseudo', '') || '');
+        return `<div class="boite px fidele${ok ? ' gagne' : ''}"><h3>LOT FIDELE · -${C.fidele} %</h3>
+        <div class="fid-barre" aria-hidden="true">${Array.from({ length: seuil }, (_, i) => `<i class="${i < j ? 'f' : ''}"></i>`).join('')}</div>
+        <p><b>${Math.min(j, seuil)} / ${seuil}</b> jours joués cette saison.</p>
+        ${ok ? `<p>Bravo, lot débloqué ! Écrivez à <a href="mailto:contact@frenglais.co?subject=${encodeURIComponent('Lot Fidèle · Courbe du jour · ' + ps)}">contact@frenglais.co</a> avec votre pseudo : vous recevrez votre code de réduction de ${C.fidele} %.</p>` : j + Math.max(0, C.finSaison(S) - Math.max(AUJ, num)) < seuil ? `<p class="note">Le seuil n'est plus atteignable cette saison. Nouvelle chance dès le 1er du mois : jouez ${C.seuilFidele(S + 1)} jours.</p>` : `<p class="note">Encore ${seuil - j} jour${seuil - j > 1 ? 's' : ''} d'ici la fin de la saison pour -${C.fidele} % sur une formation Frenglais.</p>`}</div>`; })()}
       <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
       <div class="prochaine"><p>NOUVELLE PHRASE A MINUIT</p><b id="compte">--:--:--</b><div class="jour24" id="jour24" aria-hidden="true">${'<i></i>'.repeat(24)}</div></div>
       <p class="signature">Un jeu <a href="../">Frenglais</a> · <a href="../courbe/reglement.html">règlement</a></p>

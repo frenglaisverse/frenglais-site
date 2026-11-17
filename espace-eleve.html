@@ -94,12 +94,12 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 })();
 
 /* tuile vidéo : elle se retourne puis la vidéo se déplie au-dessus. Renseigner VIDEO_SRC quand la vidéo est tournée. */
-const VIDEO_SRC='video/presentation-1080.mp4';
+const VIDEO_SRC='video/presentation-1080.mp4?v=2';
 (function(){
   const t=document.getElementById('tuile-video'), l=document.getElementById('video'), e=document.getElementById('ecran-video');
   const ouvrir=(o)=>{ t.classList.toggle('tourne',o); t.setAttribute('aria-expanded',o); l.setAttribute('aria-hidden',!o);
     setTimeout(()=>{ l.classList.toggle('ouvert',o);
-      if(o&&VIDEO_SRC&&!e.querySelector('video')){ e.innerHTML='<video controls playsinline preload="metadata" poster="video/presentation.jpg"><source src="video/presentation-720.mp4" type="video/mp4" media="(max-width: 900px)"><source src="'+VIDEO_SRC+'" type="video/mp4"></video>'; }
+      if(o&&VIDEO_SRC&&!e.querySelector('video')){ e.innerHTML='<video controls playsinline preload="metadata" poster="video/presentation.jpg?v=2"><source src="video/presentation-720.mp4?v=2" type="video/mp4" media="(max-width: 900px)"><source src="'+VIDEO_SRC+'" type="video/mp4"></video>'; }
       const v=e.querySelector('video'); if(v){ o?v.play().catch(()=>{}):v.pause(); }
       if(o) l.scrollIntoView({behavior:'smooth',block:'nearest'}); }, o?380:0); };
   t.addEventListener('click',()=>ouvrir(!l.classList.contains('ouvert')));

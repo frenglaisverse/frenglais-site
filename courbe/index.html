@@ -17,7 +17,7 @@
 <link rel="preload" href="../fonts/vt323.woff2" as="font" type="font/woff2" crossorigin>
 <style>@font-face{font-family:"Press Start 2P";src:url("../fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("../fonts/vt323.woff2") format("woff2");font-display:swap}</style>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<script src="donnees.js?v=mwl5jzwx"></script>
+<script src="donnees.js?v=mwl6g0bc"></script>
 </head>
 <body>
 <style>
@@ -241,6 +241,15 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
 .top li.moi{color:var(--jaune)}
 .top li.vide{color:var(--doux)}
 .rang{font-size:19px;color:var(--doux);margin:10px 0 0}
+.flamme{display:inline-block;margin:0 2px 0 4px;transform-origin:50% 90%;filter:saturate(1.1)}
+.flamme.eteinte{filter:grayscale(1);opacity:.45}
+.flamme.f1{transform:scale(1.1)}.flamme.f2{transform:scale(1.25)}.flamme.f3{transform:scale(1.4)}.flamme.f4{transform:scale(1.55);filter:drop-shadow(0 0 4px #ffb347)}
+.flamme:not(.eteinte){animation:vacille 1.4s ease-in-out infinite}
+@keyframes vacille{0%,100%{rotate:-4deg}50%{rotate:4deg}}
+.joker{margin-left:6px;font-size:.9em}
+.flamme-fin{text-align:center}.flamme-grande{font-size:44px;margin:0;line-height:1.2;animation:vacille 1.4s ease-in-out infinite;transform-origin:50% 90%}
+.flamme-grande.f1{font-size:52px}.flamme-grande.f2{font-size:60px}.flamme-grande.f3{font-size:68px}.flamme-grande.f4{font-size:76px;filter:drop-shadow(0 0 10px #ffb347)}
+@media (prefers-reduced-motion:reduce){.flamme,.flamme-grande{animation:none}}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center}
 .stats div{font-size:18px;color:var(--doux)}
 .stats b{display:block;font:14px/1.6 var(--pix);color:var(--creme);font-weight:400}
@@ -308,7 +317,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     </div>
     <div class="compteurs">
       <div>SCORE <b id="hud-score">0000</b></div>
-      <div>SÉRIE <b id="hud-serie">0</b></div>
+      <div title="Série : jours joués d'affilée">SERIE <span class="flamme" id="hud-flamme" aria-hidden="true">🔥</span><b id="hud-serie">0</b><span class="joker" id="hud-joker" title="Joker de la semaine disponible : un jour manqué ne casse pas la série" hidden>🃏</span></div>
       <button type="button" class="son" id="son" aria-pressed="true">♪ SON : OUI</button>
     </div>
   </header>
@@ -320,7 +329,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       <div class="pastille px" id="pastille"></div>
     </div>
     <div class="cases flou" id="cases" aria-label="Vos quatre réponses"><i class="px"></i><i class="px"></i><i class="px"></i><i class="px"></i></div>
-    <div class="carte" id="carte"><div class="carte-in"><div class="face dos px" aria-hidden="true"><canvas id="dos-lam" width="20" height="10"></canvas><span>?</span></div><div class="face bulle px"><small>À TRADUIRE EN ANGLAIS</small><p id="fr"></p></div></div></div>
+    <div class="carte" id="carte"><div class="carte-in"><div class="face dos px" aria-hidden="true"><canvas id="dos-lam" width="20" height="10"></canvas><span>?</span></div><div class="face bulle px"><small>A TRADUIRE EN ANGLAIS</small><p id="fr"></p></div></div></div>
     <div id="jeu" class="flou"></div>
   </section>
 
@@ -496,7 +505,15 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
   const pret = brancherClassement();
 
   /* ---------- Série et stats ---------- */
-  const serie = () => { let s = 0, n = AUJ; if (!etat[n]) n--; while (n > 0 && etat[n]) { s++; n--; } return s; };
+  /* la série (flamme) : jours joués d'affilée ; un joker par semaine (lundi → dimanche) couvre un jour manqué isolé */
+  const semaineDe = n => n - ((C.dateDe(n).getDay() + 6) % 7);
+  const serieInfo = () => { let s = 0, n = AUJ; const jokers = [], pris = {}; if (!etat[n]) n--;
+    while (n > 0) { if (etat[n]) { s++; n--; continue; }
+      const w = semaineDe(n); if (s > 0 || n === AUJ - 1) { if (!pris[w] && etat[n - 1]) { pris[w] = 1; jokers.push(n); n--; continue; } } break; }
+    return { s, jokers, jokerDispo: !jokers.some(j => semaineDe(j) === semaineDe(AUJ)) }; };
+  const serie = () => serieInfo().s;
+  const niveauFlamme = s => s >= 30 ? 4 : s >= 14 ? 3 : s >= 7 ? 2 : s >= 3 ? 1 : 0;
+  function majSerie(){ const i = serieInfo(); $('hud-serie').textContent = i.s; $('hud-flamme').className = 'flamme f' + niveauFlamme(i.s) + (i.s ? '' : ' eteinte'); $('hud-joker').hidden = !i.jokerDispo; }
   const pad = (n, k) => String(n).padStart(k, '0');
 
   /* ---------- Une partie ---------- */
@@ -510,7 +527,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     const P = C.du(num), [fr, zone, code, codes, phrases] = P;
     $('num').textContent = 'JOUR ' + C.jourSaison(num) + '/' + C.longueur(C.saison(num)) + (C.saison(num) > 1 ? ' · SAISON ' + C.saison(num) : '') + (num !== AUJ ? ' (TEST)' : '');
     $('apercu-num').textContent = 'S' + C.saison(num) + ' · ' + C.jourSaison(num) + '/' + C.longueur(C.saison(num));
-    $('hud-serie').textContent = serie();
+    majSerie();
     document.body.classList.toggle('vice', C.viceCity(num));
     document.body.classList.toggle('noel', C.noel(num)); $('vice').innerHTML = C.noel(num) ? '★ JOYEUX CHRISTMAS ★' : '★ VICE CITY ★<br>POINTS ×2';
     reinitScene(); [...$('cases').children].forEach(c => c.className = 'px'); document.body.classList.remove('lancement');
@@ -519,8 +536,8 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     if (fait) { $('fr').textContent = fr; poserZone(zone); poserCode(zone, code); $('hud-score').textContent = pad(fait.s, 4); if (!fait.bonus) { niveauBonus(fait); return; } fin(fait, true); return; }
     $('hud-score').textContent = '0000'; $('fr').textContent = '';
     $('jeu').innerHTML = `<div class="titre-ecran">
-      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTÈRE.<br>CHAQUE MOIS : LE N°1 GAGNE -${C.reduction} %.</p>
-      <form class="pseudo nom-avant" id="f-nom"><label for="i-nom">VOTRE PSEUDO</label><input id="i-nom" maxlength="14" autocomplete="nickname" placeholder="3 À 14 LETTRES" value="${esc(lire('courbe-pseudo', ''))}"${lire('courbe-pseudo', '') ? ' readonly' : ''}></form>
+      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>CHAQUE MOIS : LE N°1 GAGNE -${C.reduction} %.</p>
+      <form class="pseudo nom-avant" id="f-nom"><label for="i-nom">VOTRE PSEUDO</label><input id="i-nom" maxlength="14" autocomplete="nickname" placeholder="3 A 14 LETTRES" value="${esc(lire('courbe-pseudo', ''))}"${lire('courbe-pseudo', '') ? ' readonly' : ''}></form>
       <p class="note" id="n-nom">${lire('courbe-pseudo', '') ? 'Votre pseudo est définitif : vous gardez le même nom à chaque partie.' : 'Choisissez bien : votre pseudo sera définitif.'}</p>
       <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button><div id="gagnant-titre" style="width:100%;text-align:left"></div></div>`;
     afficherGagnant($('gagnant-titre'));
@@ -543,7 +560,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     setTimeout(() => taper(fr, () => setTimeout(() => { document.body.classList.remove('lancement'); etape(); }, calme ? 0 : 650)), calme ? 0 : 1050);
     const etapes = [
       { q: 'EN ANGLAIS ?', c: 'TRADUCTION', opts: melange(phrases, num * 13 + 5), bon: phrases[0], cls: '' },
-      { q: 'SUR LA COURBE ?', c: 'REPÈRE', opts: C.zones.slice(), bon: zone, cls: 'mono deux' },
+      { q: 'SUR LA COURBE ?', c: 'REPERE', opts: C.zones.slice(), bon: zone, cls: 'mono deux' },
       { q: 'QUEL CODE ?', c: 'CODE', opts: melange(codes, num * 7 + 3), bon: code, cls: 'mono' }
     ];
     const res = [], rep = [], ms = []; let k = 0, total = 0, chrono = null;
@@ -565,7 +582,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
         if (b) b.classList.add(juste ? 'ok' : 'ko');
         cases[k].className = 'px ' + (juste ? 'juste' : 'rate');
         $('flash').className = 'flash ' + (juste ? 'ok' : 'ko');
-        $('flash').innerHTML = juste ? `EXACT ! <b>+${100 * m}</b> ${pts > 100 * m ? '<b>+' + (pts - 100 * m) + ' VITESSE</b>' : ''}` : (b ? 'RATÉ.' : 'TEMPS ÉCOULÉ.');
+        $('flash').innerHTML = juste ? `EXACT ! <b>+${100 * m}</b> ${pts > 100 * m ? '<b>+' + (pts - 100 * m) + ' VITESSE</b>' : ''}` : (b ? 'RATE.' : 'TEMPS ECOULE.');
         (juste ? SON.juste : SON.faux)();
         $('hud-score').textContent = pad(total, 4);
                 setTimeout(() => { k++; if (k < 3) etape(); else terminer(); }, juste ? 800 : 1100);
@@ -582,7 +599,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       onkeydown = null;
       const r = { res, s: total, rep, ms, t: Date.now(), bonus: null };
       etat[num] = r; ecrire('courbe-jours', etat); compter('fin');
-      $('hud-serie').textContent = serie();
+      majSerie();
       poserZone(zone); setTimeout(() => poserCode(zone, code), 700);
       setTimeout(() => (r.res.every(x => !x) ? secondeChance(r, () => niveauBonus(r)) : niveauBonus(r)), 900);
     }
@@ -626,7 +643,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     function dessin(msg, cls){
       const mot = fixes().split('').concat(choix.map(i => L[i]));
       $('jeu').innerHTML = `<div class="bonus">
-        <div class="bonus-titre"><span>QUESTION 4</span><b>LE MOT MYSTÈRE</b><small>EN ANGLAIS · ${M.a.length} LETTRES</small></div>
+        <div class="bonus-titre"><span>QUESTION 4</span><b>LE MOT MYSTERE</b><small>EN ANGLAIS · ${M.a.length} LETTRES</small></div>
         <div class="boite px question4"><p>${esc(M.q)}</p></div>
         <div class="cases-mot" aria-label="Votre mot">${M.a.split('').map((_, i) => `<i class="${i < aides ? 'fixe' : ''}">${mot[i] || ''}</i>`).join('')}</div>
         <div class="tuiles">${L.map((l, i) => `<button type="button" class="px" data-i="${i}" ${choix.includes(i) ? 'disabled' : ''}>${l}</button>`).join('')}</div>
@@ -643,7 +660,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       if (C.motOk(num, mot)) return finir(true, mot);
       essais++; SON.faux(); choix = [];
       if (essais >= 3) return finir(false, mot);
-      dessin('RATÉ. ENCORE ' + (3 - essais) + ' ESSAI' + (3 - essais > 1 ? 'S' : '') + '. EN JEU : <b>' + C.bonus(true, aides + essais) * mult + ' PTS</b>', 'ko');
+      dessin('RATE. ENCORE ' + (3 - essais) + ' ESSAI' + (3 - essais > 1 ? 'S' : '') + '. EN JEU : <b>' + C.bonus(true, aides + essais) * mult + ' PTS</b>', 'ko');
       document.querySelector('.cases-mot').classList.add('secoue');
     }
     function finir(ok, rep){
@@ -663,16 +680,20 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     [...$('cases').children].forEach((c, i) => c.className = 'px ' + ((i < 3 ? r.res[i] : r.bonus && r.bonus.ok) ? 'juste' : 'rate'));
     const grille = r.res.map(x => x ? '🟦' : '🟥').join('');
     const b = r.bonus || { ok: false }, M = C.mot(num), vc = C.viceCity(num);
-    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))} ${grille}${b.ok ? '🟦' : '🟥'}${r.chance && r.chance.ok ? ' 🔁' : ''}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · Série : ${s}\nfrenglais.co/courbe`;
+    const texte = `COURBE DU JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))} ${grille}${b.ok ? '🟦' : '🟥'}${r.chance && r.chance.ok ? ' 🔁' : ''}${vc ? ' 🌴×2' : ''}\nScore : ${r.s} · 🔥 ${s}\nfrenglais.co/courbe`;
     const titres = ['GAME OVER', 'UN SUR QUATRE', 'DEUX SUR QUATRE', 'PRESQUE !', 'PARFAIT !'];
     const jours = Object.keys(etat).length, parfaits = Object.values(etat).filter(x => x.res.every(Boolean)).length, record = Math.max(0, ...Object.values(etat).map(x => x.s));
     $('jeu').innerHTML = `<div class="fin">
       <div class="verdict">${vc ? '<p class="vc">★ VICE CITY · POINTS ×2 ★</p>' : ''}<h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div></div>
-      <div class="boite px explication enigme-fin"><span class="ico-q ${b.ok ? 'ok' : 'ko'}" aria-hidden="true">${b.ok ? '✔' : '✖'}</span><div><p class="reperes">MOT MYSTÈRE${b.ok ? ' · +' + b.pts : ''}<span class="sr">${b.ok ? ' : trouvé' : ' : non trouvé'}</span></p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
+      <div class="boite px explication enigme-fin"><span class="ico-q ${b.ok ? 'ok' : 'ko'}" aria-hidden="true">${b.ok ? '✔' : '✖'}</span><div><p class="reperes">MOT MYSTERE${b.ok ? ' · +' + b.pts : ''}<span class="sr">${b.ok ? ' : trouvé' : ' : non trouvé'}</span></p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
       <div id="gagnant"></div>
       <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
+      ${(() => { const i = serieInfo(), sauve = i.jokers.includes(AUJ - 1);
+        return `<div class="boite px flamme-fin"><p class="flamme-grande f${niveauFlamme(s)}" aria-hidden="true">🔥</p><h3>SERIE : ${s} JOUR${s > 1 ? 'S' : ''}</h3>
+        <p>${sauve ? '🃏 VOTRE JOKER A SAUVÉ VOTRE SÉRIE HIER.' : i.jokerDispo ? '🃏 JOKER DE LA SEMAINE DISPONIBLE : UN JOUR MANQUÉ NE CASSERA PAS VOTRE SÉRIE.' : 'JOKER DÉJÀ UTILISÉ CETTE SEMAINE : NE MANQUEZ PAS DEMAIN.'}</p>
+        <p class="note">REVENEZ DEMAIN POUR PASSER À ${s + 1} 🔥</p></div>`; })()}
       <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
-      <div class="prochaine"><p>NOUVELLE PHRASE À MINUIT</p><b id="compte">--:--:--</b><div class="jour24" id="jour24" aria-hidden="true">${'<i></i>'.repeat(24)}</div></div>
+      <div class="prochaine"><p>NOUVELLE PHRASE A MINUIT</p><b id="compte">--:--:--</b><div class="jour24" id="jour24" aria-hidden="true">${'<i></i>'.repeat(24)}</div></div>
       <p class="signature">Un jeu <a href="../">Frenglais</a> · <a href="../courbe/reglement.html">règlement</a></p>
     </div>`;
     if (!deja) { let v = 0; const pas = Math.max(1, Math.round(r.s / 30)), el = $('score-fin'); const it = setInterval(() => { v = Math.min(r.s, v + pas); el.textContent = pad(v, 4); bip(880 + v, .02, 0, 'square', .02); if (v >= r.s) clearInterval(it); }, 30); }
@@ -689,7 +710,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     const ref = TEST ? Math.max(AUJ, num) : AUJ, S = C.saison(ref) - 1; if (S < 1) return;
     let g; try { g = await classement.gagnant(S, ref); } catch (e) { return; }
     if (!g || !g.fini || !g.pseudo) return;
-    if (!g.moi) { el.innerHTML = `<div class="boite px gagne"><h3>SAISON ${S} TERMINÉE</h3><p>Gagnant : <b>${esc(g.pseudo)}</b>. La saison ${S + 1} est lancée.</p></div>`; return; }
+    if (!g.moi) { el.innerHTML = `<div class="boite px gagne"><h3>SAISON ${S} TERMINEE</h3><p>Gagnant : <b>${esc(g.pseudo)}</b>. La saison ${S + 1} est lancée.</p></div>`; return; }
     if (g.reclame) { el.innerHTML = `<div class="boite px gagne"><h3>VOUS AVEZ GAGNE LA SAISON ${S}</h3><p>Demande bien reçue : votre code de réduction arrive par mail.</p></div>`; return; }
     el.innerHTML = `<div class="boite px gagne"><h3>VOUS AVEZ GAGNE LA SAISON ${S} !</h3><p>N°1 de la saison : <b>-${C.reduction} %</b> sur une formation Frenglais. Laissez votre mail pour recevoir votre code.</p>
       <form class="pseudo" id="f-mail"><input id="i-mail" type="email" required autocomplete="email" aria-label="Votre adresse mail" placeholder="vous@exemple.com" style="text-transform:none"><button class="btn" type="submit">ENVOYER</button></form><p class="note" id="n-mail"></p></div>`;
@@ -707,8 +728,8 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     const el = $('gagnant'), S = C.saison(num);
     if (!el || el.dataset.pre || !C.dernierJour(num) || (num !== AUJ && !TEST) || !saison[0] || !saison[0].moi || !classement || !classement.prereclamer) return;
     el.dataset.pre = '1';
-    if (lire('courbe-pre-' + S, false)) { el.innerHTML = `<div class="boite px gagne"><h3>VOUS ÊTES N°1 !</h3><p>Votre mail est noté. Si personne ne vous dépasse avant minuit, votre code <b>-${C.reduction} %</b> vous sera envoyé.</p></div>`; return; }
-    el.innerHTML = `<div class="boite px gagne"><h3>VOUS ÊTES N°1 !</h3><p>Dernier jour de la saison ${S}. Si personne ne vous dépasse avant minuit, vous gagnez <b>-${C.reduction} %</b> sur une formation Frenglais. Laissez votre mail maintenant pour recevoir votre code.</p>
+    if (lire('courbe-pre-' + S, false)) { el.innerHTML = `<div class="boite px gagne"><h3>VOUS ETES N°1 !</h3><p>Votre mail est noté. Si personne ne vous dépasse avant minuit, votre code <b>-${C.reduction} %</b> vous sera envoyé.</p></div>`; return; }
+    el.innerHTML = `<div class="boite px gagne"><h3>VOUS ETES N°1 !</h3><p>Dernier jour de la saison ${S}. Si personne ne vous dépasse avant minuit, vous gagnez <b>-${C.reduction} %</b> sur une formation Frenglais. Laissez votre mail maintenant pour recevoir votre code.</p>
       <form class="pseudo" id="f-pre"><input id="i-pre" type="email" required autocomplete="email" aria-label="Votre adresse mail" placeholder="vous@exemple.com" style="text-transform:none"><button class="btn" type="submit">ENVOYER</button></form><p class="note" id="n-pre">Votre adresse ne sert qu'à cela. Si vous ne gagnez pas, elle est supprimée.</p></div>`;
     SON.fin(3); el.scrollIntoView({ block: 'nearest', behavior: calme ? 'auto' : 'smooth' });
     $('f-pre').addEventListener('submit', async ev => { ev.preventDefault(); const m = $('i-pre').value.trim(), note = $('n-pre');

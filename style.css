@@ -1429,3 +1429,6 @@ footer::after{opacity:.58}
 .o-solo .o-limite{margin-top:2px}
 .limite-pourquoi{max-width:720px;margin:26px auto 0;text-align:center;font-size:15px;line-height:1.55;color:var(--doux)}
 .limite-pourquoi b{color:var(--encre);font-weight:600}
+
+/* Courbe des Temps au trait de Paul (courbe-main.js) */
+.courbe-totale .cdt{color:var(--encre)}

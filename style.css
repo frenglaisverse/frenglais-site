@@ -1440,3 +1440,4 @@ footer::after{opacity:.58}
 .tb-aussi{font-size:14px;color:var(--doux);margin:2px 0 6px;line-height:1.5}
 .tb-cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
 .tb-cta span{font-size:13px;color:var(--doux)}
+@media (max-width:640px){.fd-pastille{display:none}}

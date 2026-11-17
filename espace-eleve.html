@@ -33,7 +33,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 </div>
 
 <div class="tb-lecteur" id="video" aria-hidden="true"><div class="tb-lecteur-in">
-  <div class="tb-ecran" id="ecran-video"><p class="tb-attente"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" fill="currentColor" stroke="none"/></svg><strong>La vidéo arrive</strong><span>Paul la tourne en ce moment. Elle sera ici.</span></p></div>
+  <div class="tb-ecran" id="ecran-video"><p class="tb-attente"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" fill="currentColor" stroke="none"/></svg><strong>Présentation</strong><span>Trois minutes avec Paul.</span></p></div>
   <button class="tb-fermer" type="button" id="fermer-video" aria-label="Fermer la vidéo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 </div></div>
 
@@ -83,12 +83,12 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 })();
 
 /* tuile vidéo : elle se retourne puis la vidéo se déplie au-dessus. Renseigner VIDEO_SRC quand la vidéo est tournée. */
-const VIDEO_SRC='';
+const VIDEO_SRC='video/presentation-1080.mp4';
 (function(){
   const t=document.getElementById('tuile-video'), l=document.getElementById('video'), e=document.getElementById('ecran-video');
   const ouvrir=(o)=>{ t.classList.toggle('tourne',o); t.setAttribute('aria-expanded',o); l.setAttribute('aria-hidden',!o);
     setTimeout(()=>{ l.classList.toggle('ouvert',o);
-      if(o&&VIDEO_SRC&&!e.querySelector('video')){ e.innerHTML='<video controls playsinline preload="metadata" src="'+VIDEO_SRC+'"></video>'; }
+      if(o&&VIDEO_SRC&&!e.querySelector('video')){ e.innerHTML='<video controls playsinline preload="metadata" poster="video/presentation.jpg"><source src="video/presentation-720.mp4" type="video/mp4" media="(max-width: 900px)"><source src="'+VIDEO_SRC+'" type="video/mp4"></video>'; }
       const v=e.querySelector('video'); if(v){ o?v.play().catch(()=>{}):v.pause(); }
       if(o) l.scrollIntoView({behavior:'smooth',block:'nearest'}); }, o?380:0); };
   t.addEventListener('click',()=>ouvrir(!l.classList.contains('ouvert')));

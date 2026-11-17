@@ -434,7 +434,7 @@ const listeCourbe=`<ul class="liste-courbe">
   <li><strong>Un exemple sous chaque temps</strong>, si possible le vôtre.</li>
 </ul>`;
 const etagesCourbe=`<div class="etages" aria-label="Comment la Courbe s'enrichit">
-  ${[['Semaine 1',[['Module 1','Repères et codes',1],['Module 2','Les crochets&nbsp;[&nbsp;]',0]]],['Semaine 2',[['Module 3','BE + -ING',0],['Module 4','Rappel + aperçu',0]]],['Semaine 3',[['Module 5','HAVE + -EN',0],['Module 6','T+1 : complète',0]]]].map(g=>`<div class="semaine" style="--n:${g[1].length}"><span class="semaine-lab">${g[0]}</span><div class="semaine-mods">${g[1].map(e=>`<div class="etage${e[2]?' actif':''}"><span>${e[0]}</span><strong>${e[1]}</strong></div>`).join('')}</div></div>`).join('')}
+  ${[['Semaine 1',[['Module 1','Repères et codes',1],['Module 2','Les crochets&nbsp;[&nbsp;]',0]]],['Semaine 2',[['Module 3','BE + -ING',0],['Module 4','Rappel + aperçu',0]]],['Semaine 3',[['Module 5','HAVE + -EN',0],['Module 6','T+1 : la Courbe complète',0]]]].map(g=>`<div class="semaine" style="--n:${g[1].length}"><span class="semaine-lab">${g[0]}</span><div class="semaine-mods">${g[1].map(e=>`<div class="etage${e[2]?' actif':''}"><span>${e[0]}</span><strong>${e[1]}</strong></div>`).join('')}</div></div>`).join('')}
 </div>`;
 const etagesIntro=etagesCourbe.replace(' actif','').replace('<div class="etage"><span>Module 1</span>','<div class="etage actif"><span>Module 1</span>');
 
@@ -648,7 +648,7 @@ const etapes=[
        <rect x="96" y="48" width="28" height="15" rx="4" fill="var(--corail)"/><text x="110" y="59" text-anchor="middle" class="code">-ed</text>
        <rect x="178" y="48" width="24" height="15" rx="4" fill="var(--bleu)"/><text x="190" y="59" text-anchor="middle" class="code">-s</text>
      </svg>
-     <figcaption>Voici la Courbe des Temps, tirée de recherches scientifiques et académiques, présentée dans <em>Tu n'as rien compris à l'anglais</em>.</figcaption>
+     <figcaption>Voici la Courbe des Temps, issue de recherches universitaires et présentée dans <em>Tu n'as rien compris à l'anglais</em>.</figcaption>
    </figure>
    <div class="duree-intro">
      <button type="button" class="pastille-temps" onclick="document.dispatchEvent(new CustomEvent('lamantin:emote',{detail:'courbe'}))" aria-label="10 minutes"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 13 V8.5 M12 13 L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.5 2.8 h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><b>10</b> min</button>
@@ -669,7 +669,7 @@ const etapes=[
    <h1>Une ligne. Le temps qui avance.</h1>
    ${courbe({codes:false})}
    <p>Le temps va de gauche à droite. Sur cette ligne, deux points seulement portent un temps grammatical : <strong>T-1</strong>, le passé, et <strong>T0</strong>, le présent.</p>
-   <p><span class="tout">C'est tout.</span> L'anglais n'a que deux temps. Tout ce que vous connaissez sous d'autres noms, le continu, le perfect, le futur, se construit sur ces deux points.</p>
+   <p><span class="tout">C'est tout.</span> L'anglais n'a que deux temps. Tout ce que vous connaissez sous d'autres noms (le continu, le perfect, le futur) se construit sur ces deux points.</p>
    ${qcm('i3','Sur la Courbe, quels points portent un temps grammatical ?',['T-1 et T0','T-2, T-1, T0 et T+1','T0 seulement'],0,'Deux points, deux temps : T-1, le passé, et T0, le présent.')}`},
 
  {nom:'Les repères', gate:['i4'], html:()=>`
@@ -695,7 +695,7 @@ const etapes=[
      </div>
      <p class="vd-aide">Touchez un verbe, ou faites glisser la vitre dessus.</p>
    </div>
-   <p>Un code, c'est comme une vitre : il est toujours là, mais on ne le voit qu'à la 3<sup>e</sup> personne. Partout ailleurs, il faut poser la vitre dessus pour le voir. <strong>On ne l'écrit pas, on ne le dit pas : il est là.</strong></p>
+   <p>Le code -s, c'est comme une vitre : il est toujours là, mais on ne le voit qu'à la 3<sup>e</sup> personne. Partout ailleurs, il faut poser la vitre dessus pour le voir. <strong>On ne l'écrit pas, on ne le dit pas : il est là.</strong></p>
    <p>C'est la clé de tout le parcours : <span class="tout">sentir le code d'un verbe</span>, c'est pouvoir déduire où il se trouve sur la Courbe. Le module 1 vous apprend à le faire.</p>
    ${qcm('i5','Dans « they leave », le code -s est…',['absent','là, mais invisible'],1,'Comme une vitre : toujours là, visible seulement avec he, she, it.')}`,
   apres:()=>{
@@ -720,7 +720,7 @@ const etapes=[
    <h1>La Courbe complète : votre boîte de vitesses.</h1>
    ${courbeComplete(5)}
    <p>Comme une boîte de vitesses : au début, on cale, on cherche la bonne vitesse, on regarde le levier. Puis un jour, on passe les vitesses sans y penser. La Courbe fonctionne pareil : vous la consultez, puis vous ne la voyez plus, elle travaille pour vous.</p>
-   <p>Voici votre future boîte de vitesses mentale. Tout part des deux mêmes points et des deux mêmes codes ; chaque module ajoute un étage, en six modules.</p>
+   <p>Voici votre future boîte de vitesses mentale. Tout part des deux mêmes points et des deux mêmes codes ; chaque module ajoute un étage, et en six modules la Courbe est complète.</p>
    ${etagesIntro}
    <p class="aide">Une fois la Courbe en tête, vous savez construire n'importe quelle phrase sur le papier. L'oral suit, avec la répétition.</p>`},
 
@@ -728,9 +728,9 @@ const etapes=[
    <div class="eyebrow">Comment ça marche</div>
    <h1>Quatre gestes, à chaque module.</h1>
    <div class="gestes">
-     <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="geste-num">01</span></div><strong>Dessinez</strong><span>Chaque semaine s'ouvre sur la Courbe, redessinée de mémoire sur une feuille. Deux minutes qui vous en font gagner des heures.</span></div>
+     <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="geste-num">01</span></div><strong>Dessinez</strong><span>Chaque module s'ouvre sur la Courbe, redessinée de mémoire sur une feuille. Deux minutes qui vous en font gagner des heures.</span></div>
      <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></svg></span><span class="geste-num">02</span></div><strong>Comprenez, puis pratiquez</strong><span>Une idée par écran, aussitôt mise à l'épreuve : à l'écrit, à l'oral, dans des phrases de votre métier.</span></div>
-     <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="geste-num">03</span></div><strong>Validez</strong><span>Assez de bonnes réponses et l'écran s'ouvre : <span class="en">Well done</span>. Sinon, <span class="en">Try again</span> : on reprend à zéro, c'est comme ça qu'on retient.</span></div>
+     <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="geste-num">03</span></div><strong>Validez</strong><span>Assez de bonnes réponses et l'écran s'ouvre : <span class="en">Well done</span>. Sinon, <span class="en">Try again</span> : on reprend l'écran à zéro, c'est comme ça qu'on retient.</span></div>
      <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></span><span class="geste-num">04</span></div><strong>Répétez</strong><span>Chaque notion revient, module après module, dans d'autres phrases et d'autres situations. C'est la répétition qui transforme la règle en réflexe.</span></div>
    </div>
    <p class="choc">Une expertise universitaire, concentrée : vous déduisez, vous essayez, vous répétez.</p>

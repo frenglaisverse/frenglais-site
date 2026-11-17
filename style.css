@@ -1432,3 +1432,11 @@ footer::after{opacity:.58}
 
 /* Courbe des Temps au trait de Paul (courbe-main.js) */
 .courbe-totale .cdt{color:var(--encre)}
+
+/* espace élève : ce que contiennent les formules */
+.tb-section{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--doux);margin:22px 0 2px}
+.tb-inclus .tb-num{font-size:12px}
+.tb-etiq.sig{background:#1C49A5}
+.tb-aussi{font-size:14px;color:var(--doux);margin:2px 0 6px;line-height:1.5}
+.tb-cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.tb-cta span{font-size:13px;color:var(--doux)}

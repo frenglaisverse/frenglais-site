@@ -1422,3 +1422,10 @@ footer::after{opacity:.58}
 .o-solo .o-durees{max-width:320px}
 .o-solo .os-corps{padding-top:4px}
 .o-solo .o-note{margin:4px 0 10px}
+/* places limitées */
+.o-limite{display:flex;align-items:center;gap:8px;margin:0 0 10px;font:600 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acc,#E0685F)}
+.o-limite span{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 3px rgba(240,118,111,.18)}
+.o-phare .o-limite{color:#F0A08F}
+.o-solo .o-limite{margin-top:2px}
+.limite-pourquoi{max-width:720px;margin:26px auto 0;text-align:center;font-size:15px;line-height:1.55;color:var(--doux)}
+.limite-pourquoi b{color:var(--encre);font-weight:600}

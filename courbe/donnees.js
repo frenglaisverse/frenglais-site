@@ -196,7 +196,7 @@ window.COURBE = {
    Égalité : celui qui a terminé le dernier jour de la saison en premier. */
 (function (C) {
   C.reduction = 20;
-  C.fidele = 15;   /* lot Fidèle : pour tout joueur qui atteint le seuil de jours joués dans la saison */
+  C.fidele = 10;   /* lot Fidèle : pour tout joueur qui atteint le seuil de jours joués dans la saison */
   C.seuilFidele = function (s) { return s === 1 ? 15 : 20; };   /* saison 1 plus courte (20 jours) */ var l = C.lancement;
   C.web3forms = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
   C.saison = function (n) { var d = C.dateDe(n); return (d.getFullYear() - l[0]) * 12 + d.getMonth() - l[1] + 1; };

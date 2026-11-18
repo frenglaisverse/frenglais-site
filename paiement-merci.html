@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Inscription confirmée · Frenglais</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css?v=202611180100">
+<script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
+document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
+if(a.matches('.nav-devis'))n='menu-devis';else if(a.matches('.nav-eleve'))n='menu-espace-eleve';else if(a.matches('.btn-coffret')){var c=a.closest('[data-public]');n='coffret-devis-'+(c?c.getAttribute('data-public'):'');}
+else if(a.matches('.solo-cta'))n='solo-acces';else if(h.indexOf('#devis')===0)n='devis-lien';else if(h.indexOf('trustpilot')>-1)n='trustpilot';else if(h.indexOf('amazon')>-1)n='livre-amazon';
+else if(h.indexOf('fulbright')>-1)n='carte-fulbright';else if(h.indexOf('wlu.edu')>-1)n='carte-article';else if(h.indexOf('youtube')>-1)n='youtube';else if(h.indexOf('instagram')>-1)n='instagram';else if(h.indexOf('tiktok')>-1)n='tiktok';
+else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,title:n,event:true});},true);</script>
+</head>
+<body>
+<header class="bandeau"><div class="in"><nav class="nav" aria-label="Navigation principale">
+  <a href="index.html" aria-label="Frenglais, accueil"><img src="logo-nav.webp" alt="Frenglais" width="158" height="56"></a>
+  <div class="nav-liens"><a class="lien-sec" href="index.html#formations">Formations</a><a class="lien-sec" href="index.html#methode">La méthode</a><span class="sep" aria-hidden="true"></span><a class="nav-eleve" href="espace-eleve.html"><span>Espace élève</span></a><a class="nav-devis" href="index.html#devis"><span>Demander un devis</span></a></div>
+</nav></div></header>
+<main class="in" style="max-width:720px;padding:40px 0 80px">
+<style>
+.mc{background:var(--carte);border:1px solid var(--trait);border-radius:22px;padding:28px}
+.mc h1{font-size:clamp(28px,4vw,38px);letter-spacing:-.02em;margin:10px 0 8px}.mc .sous{color:var(--doux);margin:0 0 18px}
+.mc-ok{width:54px;height:54px;border-radius:50%;background:#1E7A4F;display:grid;place-items:center;color:#fff}
+.mc table{width:100%;border-collapse:collapse;font-size:15px;margin:10px 0 18px}.mc td{padding:9px 0;border-bottom:1px solid var(--trait)}.mc td:first-child{color:var(--doux);width:38%}
+.mc ol{padding-left:20px;line-height:1.6}.mc .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.mc a.b{display:inline-flex;align-items:center;min-height:46px;padding:0 22px;border-radius:999px;text-decoration:none;font-weight:600;background:linear-gradient(180deg,#2457C4,#1C49A5);color:#fff}
+.mc a.b2{background:transparent;color:var(--encre);border:1px solid var(--trait)}
+.mc .attente{color:var(--doux)}
+</style>
+<div class="mc" id="mc"><p class="attente">Confirmation de votre paiement…</p></div>
+</main>
+<script>
+(function(){
+var API='https://courbe-classement.paulodubmx84.workers.dev',s=new URLSearchParams(location.search).get('s'),mc=document.getElementById('mc'),essais=0;
+var euro=function(c){return (c/100).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'};
+var esc=function(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var dateDans=function(m){var d=new Date();d.setMonth(d.getMonth()+m);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})};
+async function voir(){
+  if(!s){mc.innerHTML='<h1>Commande introuvable</h1><p class="sous">Si vous avez été débité(e), écrivez-nous : <a href="mailto:contact@frenglais.co">contact@frenglais.co</a>.</p>';return;}
+  var j;try{j=await (await fetch(API+'/paiement/confirmation?s='+encodeURIComponent(s),{cache:'no-store'})).json();}catch(e){j={erreur:'réseau'};}
+  if(j.erreur){if(++essais<6)return setTimeout(voir,2500);mc.innerHTML='<h1>Nous vérifions votre paiement</h1><p class="sous">Vous recevrez vos accès par e-mail dans quelques minutes. Rien n’arrive ? <a href="mailto:contact@frenglais.co">contact@frenglais.co</a></p>';return;}
+  if(j.statut!=='payé'&&++essais<6)return setTimeout(voir,2500);
+  var reg=j.mode==='3x'?j.echeances.map(function(x,i){return euro(x)+(i?' le '+dateDans(i):' (réglé)')}).join(', '):euro(j.total)+' (réglé en une fois)';
+  mc.innerHTML='<div class="mc-ok" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+   '<h1>Bienvenue dans '+esc(j.formule)+'.</h1><p class="sous">Votre paiement est confirmé. Merci pour votre confiance.</p>'+
+   '<table><tr><td>Formule</td><td>'+esc(j.formule)+(j.edition==='fondateurs'?' · édition Fondateurs':'')+'</td></tr><tr><td>Règlement</td><td>'+reg+'</td></tr><tr><td>Facture au nom de</td><td>'+esc(j.nomFacture)+'</td></tr><tr><td>Accès envoyés à</td><td>'+esc(j.email)+'</td></tr>'+(j.facture&&j.facture.numero?'<tr><td>Facture</td><td>n° '+esc(j.facture.numero)+'</td></tr>':'')+'</table>'+
+   '<h2 style="font-size:18px;margin:0 0 6px">Et maintenant ?</h2><ol><li>Vos identifiants arrivent par e-mail (pensez à vérifier les courriers indésirables).</li><li>Connectez-vous à votre espace élève et commencez par l’introduction.</li><li>Rythme conseillé : deux modules par semaine, et la Minute Courbe chaque jour.</li></ol>'+
+   '<div class="btns"><a class="b" href="espace-eleve.html">Ouvrir mon espace élève</a>'+(j.facture&&j.facture.url?'<a class="b b2" href="'+esc(j.facture.url)+'" target="_blank" rel="noopener">Voir ma facture</a>':'')+'</div>';
+  try{sessionStorage.removeItem('frg-tunnel');}catch(e){}
+}
+voir();
+})();
+</script>
+<footer><div class="in pied"><div><img src="logo.webp" class="logo-pied" alt="Frenglais" width="197" height="70"><small>© 2026 Frenglais · Paul Moreaux</small>
+    <div class="reseaux" aria-label="Réseaux sociaux">
+      <a href="https://www.youtube.com/@PaulowFrenglais" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5.2 3Z"/></svg></a>
+      <a href="https://www.instagram.com/paulowfrenglais/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      <a href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.7 3.5 3.9 3.7v3.1a7 7 0 0 1-3.9-1.2v6.2A5.8 5.8 0 1 1 10.8 9v3.2a2.7 2.7 0 1 0 2.6 2.7V3Z"/></svg></a>
+    </div></div>
+<nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a></nav></div></footer>
+</body>
+</html>

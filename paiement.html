@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Inscription · Frenglais</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css?v=202611180100">
+<script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
+document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
+if(a.matches('.nav-devis'))n='menu-devis';else if(a.matches('.nav-eleve'))n='menu-espace-eleve';else if(a.matches('.btn-coffret')){var c=a.closest('[data-public]');n='coffret-devis-'+(c?c.getAttribute('data-public'):'');}
+else if(a.matches('.solo-cta'))n='solo-acces';else if(h.indexOf('#devis')===0)n='devis-lien';else if(h.indexOf('trustpilot')>-1)n='trustpilot';else if(h.indexOf('amazon')>-1)n='livre-amazon';
+else if(h.indexOf('fulbright')>-1)n='carte-fulbright';else if(h.indexOf('wlu.edu')>-1)n='carte-article';else if(h.indexOf('youtube')>-1)n='youtube';else if(h.indexOf('instagram')>-1)n='instagram';else if(h.indexOf('tiktok')>-1)n='tiktok';
+else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,title:n,event:true});},true);</script>
+</head>
+<body>
+<header class="bandeau"><div class="in"><nav class="nav" aria-label="Navigation principale">
+  <a href="index.html" aria-label="Frenglais, accueil"><img src="logo-nav.webp" alt="Frenglais" width="158" height="56"></a>
+  <div class="nav-liens"><a class="lien-sec" href="index.html#formations">Formations</a><a class="lien-sec" href="index.html#methode">La méthode</a><span class="sep" aria-hidden="true"></span><a class="nav-eleve" href="espace-eleve.html"><span>Espace élève</span></a><a class="nav-devis" href="index.html#devis"><span>Demander un devis</span></a></div>
+</nav></div></header>
+<main class="in tunnel" id="tunnel">
+<style>
+.tunnel{max-width:1080px;padding-top:28px;padding-bottom:70px}
+.tn-tete{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:22px}
+.tn-tete h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.02em;margin:0}
+.tn-tete p{margin:6px 0 0;color:var(--doux)}
+.tn-etapes{display:flex;gap:6px;list-style:none;padding:0;margin:0 0 24px;counter-reset:e;flex-wrap:wrap}
+.tn-etapes li{counter-increment:e;display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:999px;background:var(--carte);border:1px solid var(--trait);font-size:14px;color:var(--doux)}
+.tn-etapes li::before{content:counter(e);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--trait);color:var(--encre);font-weight:600;font-size:12px}
+.tn-etapes li.on{color:var(--encre);border-color:#1C49A5;box-shadow:0 0 0 1px #1C49A5 inset}.tn-etapes li.on::before{background:#1C49A5;color:#fff}
+.tn-etapes li.fait::before{content:"✓";background:#1E7A4F;color:#fff}
+.tn-grille{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:900px){.tn-grille{grid-template-columns:1fr}}
+.tn-carte{background:var(--carte);border:1px solid var(--trait);border-radius:20px;padding:22px}
+.tn-carte h2{font-size:19px;margin:0 0 4px;letter-spacing:-.01em}.tn-carte h3{font-size:15px;margin:18px 0 8px}
+.tn-sous{color:var(--doux);font-size:14px;margin:0 0 14px}
+.tn-choix{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.tn-choix{grid-template-columns:1fr}}
+.tn-opt{position:relative;display:block;padding:14px 16px;border-radius:14px;border:1.5px solid var(--trait);cursor:pointer;background:transparent;transition:border-color .2s,box-shadow .2s}
+.tn-opt input{position:absolute;opacity:0;pointer-events:none}
+.tn-opt:has(input:checked){border-color:#1C49A5;box-shadow:0 8px 22px -14px rgba(28,73,165,.7)}
+.tn-opt:has(input:focus-visible){outline:2px solid #1C49A5;outline-offset:2px}
+.tn-opt b{display:block;font-size:16px}.tn-opt span{display:block;font-size:13px;color:var(--doux);margin-top:2px}
+.tn-opt .tn-px{font-size:20px;font-weight:700;color:var(--encre);margin-top:8px}
+.tn-opt s{color:var(--doux);font-weight:400;font-size:13px;margin-left:6px}
+.tn-liste{margin:0;padding:0;list-style:none;display:grid;gap:7px}.tn-liste li{display:flex;gap:9px;font-size:14.5px;line-height:1.4}
+.tn-liste li::before{content:"";flex:none;width:16px;height:16px;margin-top:2px;border-radius:50%;background:#1C49A5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.2 2.2 4.8-4.8' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.tn-ech{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}.tn-ech td:first-child{color:var(--doux);width:36%;padding-right:12px}#tn-ech td:first-child{width:auto}.tn-ech td{padding:8px 0;border-bottom:1px solid var(--trait)}.tn-ech td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.tn-champs{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tn-champs .large{grid-column:1/-1}
+@media (max-width:520px){.tn-champs{grid-template-columns:1fr}}
+.tn-champ label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}.tn-champ small{font-weight:400;color:var(--doux)}
+.tn-champ input,.tn-champ select{width:100%;box-sizing:border-box;padding:12px 13px;border-radius:12px;border:1px solid var(--trait);background:var(--fond,#fff);color:var(--encre);font:inherit;font-size:15px}
+.tn-champ input:focus,.tn-champ select:focus{outline:none;border-color:#1C49A5;box-shadow:0 0 0 3px rgba(28,73,165,.15)}
+.tn-champ.err input{border-color:#C0392B}
+.tn-case{display:flex;gap:11px;align-items:flex-start;padding:13px 14px;border-radius:14px;border:1px solid var(--trait);margin-top:10px;font-size:14.5px;line-height:1.45;cursor:pointer}
+.tn-case input{flex:none;width:19px;height:19px;margin-top:1px;accent-color:#1C49A5}
+.tn-case:has(input:checked){border-color:#1C49A5;background:rgba(28,73,165,.04)}
+.tn-nav{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-top:20px}
+.tn-btn{display:inline-flex;align-items:center;gap:8px;min-height:50px;padding:0 26px;border-radius:999px;border:0;background:linear-gradient(180deg,#2457C4,#1C49A5);color:#fff;font:inherit;font-weight:600;font-size:16px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 24px -12px rgba(28,73,165,.8)}
+.tn-btn:disabled{opacity:.45;cursor:not-allowed}
+.tn-retour{background:none;border:0;color:var(--doux);font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.tn-err{color:#C0392B;font-size:14px;margin:10px 0 0;min-height:1em}
+.tn-fac{font-size:13px;background:#fff;color:#0E1B3D;border-radius:16px;border:1px solid #E3E7F1;padding:18px;box-shadow:0 20px 40px -28px rgba(14,27,61,.5)}
+.tn-fac .ent{display:flex;justify-content:space-between;gap:10px;margin-bottom:14px}.tn-fac .ent b{font-size:15px}
+.tn-fac .blocs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}.tn-fac .blocs small{display:block;text-transform:uppercase;letter-spacing:.08em;font-size:10px;color:#6B7590;margin-bottom:3px}
+.tn-fac table{width:100%;border-collapse:collapse}.tn-fac td{padding:7px 0;border-top:1px solid #EEF1F7;vertical-align:top}.tn-fac td:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tn-fac .tot td{font-weight:700;font-size:14px;border-top:2px solid #0E1B3D}
+.tn-fac .mention{color:#6B7590;font-size:11.5px;margin-top:10px}
+.tn-vide{color:#9AA3BA;font-style:italic}
+.tn-sticky{position:sticky;top:90px;display:grid;gap:14px}
+.tn-securite{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--doux)}
+.tn-test{background:#FFF4D6;color:#6B4E00;border:1px solid #F0D58A;border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:16px}
+.tn-ferme{text-align:center;padding:40px 22px}
+[hidden]{display:none!important}
+</style>
+
+<div class="tn-tete"><div><h1>Votre inscription</h1><p>Tout est détaillé avant le paiement. Rien n'est prélevé avant la dernière étape.</p></div></div>
+<p class="tn-test" id="tn-test" hidden>Mode test : aucun vrai paiement. Carte d'essai Stripe uniquement.</p>
+
+<div class="tn-carte tn-ferme" id="tn-ferme" hidden><h2>Les inscriptions ouvrent très bientôt.</h2><p class="tn-sous">Laissez votre adresse dans le formulaire : vous serez prévenu(e) en premier, au prix Fondateurs.</p><a class="tn-btn" href="index.html#devis">Être prévenu(e)</a></div>
+
+<ol class="tn-etapes" id="tn-etapes" aria-label="Étapes"><li class="on">Formule</li><li>Facturation</li><li>Vérification</li><li>Paiement</li></ol>
+
+<div class="tn-grille" id="tn-grille">
+<div>
+  <!-- 1. FORMULE -->
+  <section class="tn-carte" data-etape="1">
+    <h2>1. Votre formule</h2><p class="tn-sous" id="tn-edition"></p>
+    <div class="tn-choix" role="radiogroup" aria-label="Formule">
+      <label class="tn-opt"><input type="radio" name="formule" value="integral"><b>L'Intégral</b><span>La méthode complète, en autonomie</span><div class="tn-px" data-px="integral"></div></label>
+      <label class="tn-opt"><input type="radio" name="formule" value="signature"><b>Signature</b><span>L'Intégral, plus l'oral</span><div class="tn-px" data-px="signature"></div></label>
+    </div>
+    <h3>Ce qui est inclus</h3><ul class="tn-liste" id="tn-contenu"></ul>
+    <h3>Règlement</h3>
+    <div class="tn-choix" role="radiogroup" aria-label="Mode de paiement">
+      <label class="tn-opt"><input type="radio" name="mode" value="1x" checked><b>En une fois</b><span id="tn-1x"></span></label>
+      <label class="tn-opt"><input type="radio" name="mode" value="3x"><b>En 3 fois sans frais</b><span id="tn-3x"></span></label>
+    </div>
+    <table class="tn-ech" id="tn-ech"></table>
+    <h3>Après le paiement</h3>
+    <ul class="tn-liste">
+      <li>Vos identifiants arrivent par e-mail dans la minute, et votre facture séparément.</li>
+      <li>Accès immédiat aux premiers modules, puis deux nouveaux chaque semaine jusqu'à la mi-février 2027.</li>
+      <li>Accès à vie : vous gardez la formation et ses mises à jour.</li>
+    </ul>
+    <div class="tn-nav"><span></span><button class="tn-btn" type="button" data-suivant="2">Continuer</button></div>
+  </section>
+
+  <!-- 2. FACTURATION -->
+  <section class="tn-carte" data-etape="2" hidden>
+    <h2>2. Facturation</h2><p class="tn-sous">La facture est établie exactement à ces informations : vérifiez-les, elles ne pourront plus être modifiées après le paiement.</p>
+    <div class="tn-choix" role="radiogroup" aria-label="Vous êtes">
+      <label class="tn-opt"><input type="radio" name="type" value="particulier" checked><b>Particulier</b><span>Facture à votre nom</span></label>
+      <label class="tn-opt"><input type="radio" name="type" value="entreprise"><b>Entreprise</b><span>Facture au nom de la société</span></label>
+    </div>
+    <div class="tn-champs" style="margin-top:14px">
+      <div class="tn-champ" data-ent hidden><label for="c-raison">Raison sociale</label><input id="c-raison" autocomplete="organization"></div>
+      <div class="tn-champ" data-ent hidden><label for="c-siret">SIRET <small>(14 chiffres, entreprises françaises)</small></label><input id="c-siret" inputmode="numeric" maxlength="17"></div>
+      <div class="tn-champ large" data-ent hidden><label for="c-tva">N° de TVA intracommunautaire <small>(facultatif)</small></label><input id="c-tva" placeholder="FR12345678901"></div>
+      <div class="tn-champ"><label for="c-prenom">Prénom</label><input id="c-prenom" autocomplete="given-name"></div>
+      <div class="tn-champ"><label for="c-nom">Nom</label><input id="c-nom" autocomplete="family-name"></div>
+      <div class="tn-champ"><label for="c-email">E-mail <small>(vos accès y seront envoyés)</small></label><input id="c-email" type="email" autocomplete="email"></div>
+      <div class="tn-champ"><label for="c-email2">Confirmer l'e-mail</label><input id="c-email2" type="email" autocomplete="off"></div>
+      <div class="tn-champ large"><label for="c-ligne1">Adresse</label><input id="c-ligne1" autocomplete="address-line1"></div>
+      <div class="tn-champ large"><label for="c-ligne2">Complément <small>(facultatif)</small></label><input id="c-ligne2" autocomplete="address-line2"></div>
+      <div class="tn-champ"><label for="c-cp">Code postal</label><input id="c-cp" autocomplete="postal-code"></div>
+      <div class="tn-champ"><label for="c-ville">Ville</label><input id="c-ville" autocomplete="address-level2"></div>
+      <div class="tn-champ"><label for="c-pays">Pays</label><select id="c-pays" autocomplete="country"><option value="FR">France</option><option value="BE">Belgique</option><option value="CH">Suisse</option><option value="LU">Luxembourg</option><option value="MC">Monaco</option><option value="CA">Canada</option><option value="DE">Allemagne</option><option value="ES">Espagne</option><option value="IT">Italie</option><option value="NL">Pays-Bas</option><option value="PT">Portugal</option><option value="GB">Royaume-Uni</option><option value="US">États-Unis</option></select></div>
+      <div class="tn-champ"><label for="c-tel">Téléphone <small>(facultatif)</small></label><input id="c-tel" type="tel" autocomplete="tel"></div>
+    </div>
+    <p class="tn-err" id="err-2" role="alert"></p>
+    <div class="tn-nav"><button class="tn-retour" type="button" data-suivant="1">← Retour</button><button class="tn-btn" type="button" data-suivant="3">Vérifier ma commande</button></div>
+  </section>
+
+  <!-- 3. VÉRIFICATION -->
+  <section class="tn-carte" data-etape="3" hidden>
+    <h2>3. Vérification</h2><p class="tn-sous">Relisez votre commande : c'est exactement ce qui sera facturé.</p>
+    <table class="tn-ech" id="tn-recap"></table>
+    <label class="tn-case"><input type="checkbox" id="k-cgv"><span>J'ai lu et j'accepte les <a href="cgv.html" target="_blank" rel="noopener">conditions générales de vente</a> (version du 18 novembre 2026).</span></label>
+    <label class="tn-case"><input type="checkbox" id="k-retract"><span>Je demande l'accès immédiat à la formation et je reconnais perdre mon droit de rétractation de 14 jours dès cet accès (article L221-28, 13° du Code de la consommation).</span></label>
+    <label class="tn-case" id="case-3x" hidden><input type="checkbox" id="k-3x"><span id="txt-3x"></span></label>
+    <p class="tn-err" id="err-3" role="alert"></p>
+    <div class="tn-nav"><button class="tn-retour" type="button" data-suivant="2">← Modifier</button><button class="tn-btn" type="button" id="payer" disabled>Payer</button></div>
+    <p class="tn-securite" style="margin-top:14px"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10V8a6 6 0 0 1 12 0v2m-13 0h14v11H5z" fill="none" stroke="currentColor" stroke-width="2"/></svg>Paiement sécurisé par Stripe. Frenglais ne voit jamais vos données bancaires.</p>
+  </section>
+</div>
+
+<!-- APERÇU DE LA FACTURE -->
+<aside class="tn-sticky">
+  <div class="tn-fac" aria-label="Aperçu de votre facture">
+    <div class="ent"><div><b>Frenglais</b><br>Paul Moreaux, entrepreneur individuel<br>SIRET 995 037 850 00014</div><div style="text-align:right"><b>Facture</b><br><span style="color:#6B7590">numérotée par Stripe<br>au paiement</span></div></div>
+    <div class="blocs"><div><small>Facturé à</small><span id="f-client" class="tn-vide">vos informations</span></div><div><small>Envoyée à</small><span id="f-email" class="tn-vide">votre e-mail</span></div></div>
+    <table><tr><td id="f-ligne"></td><td id="f-montant"></td></tr><tr class="tot"><td>Total</td><td id="f-total"></td></tr></table>
+    <p class="mention" id="f-mention"></p>
+  </div>
+  <p class="tn-securite">Une question avant de payer ? <a href="index.html#devis">Écrivez-nous</a>, réponse sous 24 h.</p>
+</aside>
+</div>
+</main>
+<script>
+(function(){
+var API='https://courbe-classement.paulodubmx84.workers.dev',T=null,etape=1,$=function(i){return document.getElementById(i)};
+var q=new URLSearchParams(location.search),cle=null;try{cle=localStorage.getItem('frg-cle-tableau');try{cle=JSON.parse(cle);}catch(x){}}catch(e){}
+var euro=function(c){return (c/100).toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'};
+var dateDans=function(m){var d=new Date();d.setMonth(d.getMonth()+m);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})};
+var v=function(n){var x=document.querySelector('input[name="'+n+'"]:checked');return x?x.value:''};
+var val=function(i){return ($(i).value||'').trim()};
+function client(){return {type:v('type'),prenom:val('c-prenom'),nom:val('c-nom'),raison:val('c-raison'),siret:val('c-siret').replace(/\s/g,''),tva:val('c-tva').replace(/\s/g,''),email:val('c-email'),tel:val('c-tel'),adresse:{ligne1:val('c-ligne1'),ligne2:val('c-ligne2'),cp:val('c-cp'),ville:val('c-ville'),pays:$('c-pays').value}}}
+function maj(){
+  if(!T)return;var f=v('formule'),m=v('mode'),F=T.formules[f],c=client(),ent=c.type==='entreprise';
+  document.querySelectorAll('[data-px]').forEach(function(el){var X=T.formules[el.dataset.px];el.innerHTML=euro(X.montant)+(X.montant<X.public?'<s>'+euro(X.public)+'</s>':'');});
+  if(!F)return;
+  $('tn-contenu').innerHTML=F.contenu.map(function(x){return '<li>'+x+'</li>'}).join('');
+  $('tn-1x').textContent=euro(F.montant)+' aujourd’hui';$('tn-3x').textContent='3 × '+euro(F.echeances[0])+' · total '+euro(F.montant);
+  var ech=m==='3x'?F.echeances.map(function(x,i){return '<tr><td>'+(i?'Le '+dateDans(i):'Aujourd’hui')+'</td><td>'+euro(x)+'</td></tr>'}).join('')+'<tr><td><b>Total</b></td><td>'+euro(F.montant)+'</td></tr>':'<tr><td>Aujourd’hui</td><td>'+euro(F.montant)+'</td></tr>';
+  $('tn-ech').innerHTML=ech;
+  document.querySelectorAll('[data-ent]').forEach(function(el){el.hidden=!ent});
+  var nomF=ent?(c.raison||''):((c.prenom+' '+c.nom).trim());
+  var adr=[c.adresse.ligne1,c.adresse.ligne2,(c.adresse.cp+' '+c.adresse.ville).trim(),$('c-pays').selectedOptions[0].text].filter(Boolean);
+  var bloc=nomF?('<b>'+esc(nomF)+'</b>'+(ent&&(c.prenom||c.nom)?'<br>À l’attention de '+esc((c.prenom+' '+c.nom).trim()):'')+(c.adresse.ligne1?'<br>'+adr.map(esc).join('<br>'):'')+(ent&&c.siret?'<br>SIRET '+esc(c.siret):'')+(ent&&c.tva?'<br>TVA '+esc(c.tva):'')):'vos informations';
+  $('f-client').innerHTML=bloc;$('f-client').className=nomF?'':'tn-vide';
+  $('f-email').textContent=c.email||'votre e-mail';$('f-email').className=c.email?'':'tn-vide';
+  var lib=F.nom+(T.edition==='fondateurs'?' · édition Fondateurs':'')+' — formation en ligne, accès immédiat et à vie';
+  $('f-ligne').textContent=lib+(m==='3x'?' (1re mensualité sur 3)':'');
+  $('f-montant').textContent=euro(m==='3x'?F.echeances[0]:F.montant);$('f-total').textContent=euro(m==='3x'?F.echeances[0]:F.montant);
+  $('f-mention').textContent=T.tva+(m==='3x'?' Une facture est émise à chaque mensualité ('+F.echeances.map(euro).join(' + ')+').':'');
+  $('tn-recap').innerHTML='<tr><td>Formule</td><td>'+esc(F.nom)+(T.edition==='fondateurs'?' · édition Fondateurs':'')+'</td></tr>'+
+    '<tr><td>Prix</td><td>'+euro(F.montant)+(F.montant<F.public?' (au lieu de '+euro(F.public)+')':'')+'</td></tr>'+
+    '<tr><td>Règlement</td><td>'+(m==='3x'?F.echeances.map(function(x,i){return euro(x)+(i?' le '+dateDans(i):' aujourd’hui')}).join(', '):'en une fois, aujourd’hui')+'</td></tr>'+
+    '<tr><td>Facture au nom de</td><td>'+esc(nomF)+'</td></tr><tr><td>Accès envoyés à</td><td>'+esc(c.email)+'</td></tr><tr><td>TVA</td><td>non applicable (art. 293 B du CGI)</td></tr>';
+  $('case-3x').hidden=m!=='3x';
+  $('txt-3x').textContent='J’autorise le prélèvement automatique, sur la même carte, des deux mensualités suivantes : '+euro(F.echeances[1])+' le '+dateDans(1)+' et '+euro(F.echeances[2])+' le '+dateDans(2)+'. En cas d’échec, de nouvelles tentatives ont lieu pendant quelques jours ; sans régularisation, mon accès est suspendu jusqu’au paiement.';
+  $('payer').textContent=m==='3x'?'Payer la 1re mensualité · '+euro(F.echeances[0]):'Payer '+euro(F.montant);
+  verifCases();
+}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function verifCases(){$('payer').disabled=!($('k-cgv').checked&&$('k-retract').checked&&(v('mode')!=='3x'||$('k-3x').checked));}
+function erreurs2(){var c=client(),e=[];document.querySelectorAll('.tn-champ').forEach(function(x){x.classList.remove('err')});
+  var mq=function(id,msg){$(id).parentNode.classList.add('err');e.push(msg)};
+  if(c.type==='entreprise'&&!c.raison)mq('c-raison','la raison sociale');
+  if(c.type==='entreprise'&&c.siret&&!/^\d{14}$/.test(c.siret))mq('c-siret','un SIRET à 14 chiffres');
+  if(!c.prenom)mq('c-prenom','le prénom');if(!c.nom)mq('c-nom','le nom');
+  if(!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(c.email))mq('c-email','un e-mail valide');else if(c.email.toLowerCase()!==val('c-email2').toLowerCase())mq('c-email2','deux e-mails identiques');
+  if(!c.adresse.ligne1)mq('c-ligne1','l’adresse');if(!c.adresse.cp)mq('c-cp','le code postal');if(!c.adresse.ville)mq('c-ville','la ville');
+  return e.length?'À compléter : '+e.join(', ')+'.':'';}
+function aller(n){if(n===3){var e=erreurs2();$('err-2').textContent=e;if(e)return;}
+  if(n>=2&&!v('formule'))return;
+  etape=n;document.querySelectorAll('[data-etape]').forEach(function(s){s.hidden=+s.dataset.etape!==n});
+  document.querySelectorAll('#tn-etapes li').forEach(function(li,i){li.className=i+1===n?'on':(i+1<n?'fait':'')});
+  maj();try{sessionStorage.setItem('frg-tunnel',JSON.stringify({c:client(),f:v('formule'),m:v('mode')}));}catch(x){}
+  scrollTo({top:0,behavior:'smooth'});}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-suivant]');if(b)aller(+b.dataset.suivant);});
+document.addEventListener('input',maj);document.addEventListener('change',maj);
+['k-cgv','k-retract','k-3x'].forEach(function(i){$(i).addEventListener('change',verifCases)});
+$('payer').addEventListener('click',async function(){var b=this;b.disabled=true;b.textContent='Connexion à Stripe…';$('err-3').textContent='';
+  var F=T.formules[v('formule')];
+  try{var r=await fetch(API+'/paiement/session',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({formule:v('formule'),mode:v('mode'),client:client(),cgv:$('k-cgv').checked,renonciation:$('k-retract').checked,echeancier:$('k-3x').checked,montantVu:F.montant,cle:cle})});
+    var j=await r.json();if(j.url){$('tn-etapes').lastElementChild.className='on';location.href=j.url;return;}
+    $('err-3').textContent=j.erreur||'Erreur inattendue.';if(j.tarifChange)charger();}
+  catch(x){$('err-3').textContent='Connexion impossible. Vérifiez votre réseau et réessayez.';}
+  maj();});
+async function charger(){
+  try{T=await (await fetch(API+'/paiement/tarif',{cache:'no-store'})).json();}catch(e){$('tn-edition').textContent='Tarifs indisponibles pour le moment.';return;}
+  if(!T.ouvert&&!cle){$('tn-ferme').hidden=false;$('tn-grille').hidden=true;$('tn-etapes').hidden=true;return;}
+  $('tn-test').hidden=!T.test;
+  $('tn-edition').textContent=T.edition==='fondateurs'?'Édition Fondateurs : prix de lancement jusqu’au 31 décembre 2026, dans la limite des places.':'Prix publics.';
+  var s=null;try{s=JSON.parse(sessionStorage.getItem('frg-tunnel')||'null');}catch(e){}
+  var f=q.get('formule')||(s&&s.f)||'integral',m=q.get('mode')||(s&&s.m)||'1x';
+  var rf=document.querySelector('input[name="formule"][value="'+f+'"]');if(rf)rf.checked=true;
+  var rm=document.querySelector('input[name="mode"][value="'+m+'"]');if(rm)rm.checked=true;
+  if(s&&s.c){var c=s.c;var r=document.querySelector('input[name="type"][value="'+c.type+'"]');if(r)r.checked=true;
+    [['c-prenom',c.prenom],['c-nom',c.nom],['c-raison',c.raison],['c-siret',c.siret],['c-tva',c.tva],['c-email',c.email],['c-email2',c.email],['c-tel',c.tel],['c-ligne1',c.adresse.ligne1],['c-ligne2',c.adresse.ligne2],['c-cp',c.adresse.cp],['c-ville',c.adresse.ville]].forEach(function(p){if(p[1])$(p[0]).value=p[1]});
+    if(c.adresse.pays)$('c-pays').value=c.adresse.pays;}
+  if(q.get('annule'))$('tn-edition').textContent='Paiement annulé : rien n’a été prélevé. Vous pouvez reprendre ici.';
+  maj();}
+charger();
+})();
+</script>
+<footer><div class="in pied"><div><img src="logo.webp" class="logo-pied" alt="Frenglais" width="197" height="70"><small>© 2026 Frenglais · Paul Moreaux</small>
+    <div class="reseaux" aria-label="Réseaux sociaux">
+      <a href="https://www.youtube.com/@PaulowFrenglais" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.6 2.6 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.6 2.6 0 0 0 2.4 7.2 27 27 0 0 0 2 12a27 27 0 0 0 .4 4.8 2.6 2.6 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.6 2.6 0 0 0 1.8-1.8A27 27 0 0 0 22 12a27 27 0 0 0-.4-4.8ZM10 15V9l5.2 3Z"/></svg></a>
+      <a href="https://www.instagram.com/paulowfrenglais/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      <a href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.7 3.5 3.9 3.7v3.1a7 7 0 0 1-3.9-1.2v6.2A5.8 5.8 0 1 1 10.8 9v3.2a2.7 2.7 0 1 0 2.6 2.7V3Z"/></svg></a>
+    </div></div>
+<nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a></nav></div></footer>
+</body>
+</html>

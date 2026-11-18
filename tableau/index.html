@@ -643,7 +643,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       <ol class="petit">
         <li>Ouvrez <a href="https://api-console.zoho.eu/" target="_blank" rel="noopener">api-console.zoho.eu ↗</a> avec votre compte Zoho, cliquez « Add Client », puis « Self Client », puis « Create ».</li>
         <li>Onglet « Client Secret » : copiez le <b>Client ID</b> et le <b>Client Secret</b> dans les cases ci-dessous.</li>
-        <li>Onglet « Generate Code » : dans « Scope », collez <code id="zoho-scope">ZohoMail.accounts.READ,ZohoMail.folders.READ,ZohoMail.messages.READ</code> <button type="button" class="btn" id="zoho-copier">Copier</button>, choisissez 10 minutes, écrivez « Tableau de bord » en description, puis « Create ». Copiez le code obtenu ci-dessous.</li>
+        <li>Onglet « Generate Code » : dans « Scope », collez <code id="zoho-scope">ZohoMail.accounts.READ,ZohoMail.folders.READ,ZohoMail.messages.READ,ZohoMail.messages.CREATE</code> <button type="button" class="btn" id="zoho-copier">Copier</button>, choisissez 10 minutes, écrivez « Tableau de bord » en description, puis « Create ». Copiez le code obtenu ci-dessous.</li>
         <li>Cliquez « Connecter ». C'est fini : le nombre de mails non lus s'affichera sur le bouton « Mes mails ».</li>
       </ol>
       <div class="zoho-champs"><input id="zoho-id" placeholder="Client ID" autocomplete="off" spellcheck="false"><input id="zoho-secret" placeholder="Client Secret" autocomplete="off" spellcheck="false" type="password"><input id="zoho-code" placeholder="Code" autocomplete="off" spellcheck="false"><button type="button" class="btn" id="zoho-ok">Connecter</button></div>
@@ -714,6 +714,11 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <p class="vide" id="rang-vide">Le classement apparaîtra dès le premier rapport reçu.</p>
   </section>
 
+  <section data-onglet="pilotage" class="carte" id="ventes">
+    <div class="ligne" style="justify-content:space-between"><h2>Ventes</h2><span class="doux petit" id="ventes-etat"></span></div>
+    <div id="ventes-liste" class="doux petit">Chargement…</div>
+    <p class="doux petit" style="margin-top:10px">Factures, remboursements et avoirs : <a href="https://dashboard.stripe.com/invoices" target="_blank" rel="noopener">tableau de bord Stripe</a>. Un remboursement complet ferme automatiquement l'accès de l'élève.</p>
+  </section>
   <section data-onglet="pilotage" class="carte" id="jeu">
     <div class="ligne" style="justify-content:space-between"><h2>Courbe du jour</h2><span class="doux petit" id="jeu-etat"></span></div>
     <div id="jeu-cle" class="ligne">
@@ -1131,6 +1136,18 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     z.innerHTML = `<div class="rappel"><b>À faire : envoyer son code à ${esc(J.precedente.gagnant)}, gagnant de la saison ${Sg} de la Courbe du jour.</b> ${J.precedente.reclame ? 'Son mail est arrivé.' : 'Il n\'a pas encore laissé son mail.'}
       <span><a class="btn" href="#jeu-gagnant">Préparer le bon ↓</a> <button type="button" class="btn btn-sec" id="rappel-fait">C'est envoyé</button></span></div>`;
     document.getElementById('rappel-fait').addEventListener('click', () => { try { localStorage.setItem(cle, '1'); } catch (e) {} z.innerHTML = ''; }); }
+  /* ventes Stripe (L'Intégral, Signature) : lues sur votre serveur Cloudflare avec la clé du tableau de bord */
+  async function majVentes(){ const cle = FRG.lire('frg-cle-tableau', ''), z = document.getElementById('ventes-liste'), et = document.getElementById('ventes-etat'); if (!cle || !z) return;
+    let j; try { j = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle }) }).then(r => r.json()); } catch (e) { z.textContent = 'Serveur injoignable.'; return; }
+    if (j.erreur) { z.textContent = j.erreur; return; }
+    et.textContent = (j.test ? 'Mode test · ' : '') + (j.ouvert ? 'vente ouverte' : 'vente fermée au public') + ' · Fondateurs : ' + j.fondateursVendus + ' / ' + j.places;
+    if (!j.ventes.length) { z.textContent = 'Aucune vente pour le moment.'; return; }
+    const eur = c => (c / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €', nom = { integral: "L'Intégral", signature: 'Signature' };
+    z.innerHTML = '<table class="tab"><tr><th>Date</th><th>Élève</th><th>Formule</th><th>Montant</th><th>Statut</th><th>Mail d\'accès</th><th></th></tr>' + j.ventes.map(v => `<tr><td>${new Date(v.t).toLocaleDateString('fr-FR')}</td><td>${esc(v.facturation)}<br><span class="doux">${esc(v.email)} · ${esc(v.identifiant)}</span></td><td>${nom[v.formule] || v.formule}${v.edition === 'fondateurs' ? ' · Fondateurs' : ''}</td><td>${eur(v.total)}${v.mode === '3x' ? ' (3 fois)' : ''}</td><td>${esc(v.statut)}</td><td>${String(v.mail).startsWith('envoy') ? '✓' : '<span title="' + esc(v.mail) + '">échec</span>'}</td><td><button type="button" class="btn btn-sec" data-renvoyer="${esc(v.identifiant)}">Renvoyer les accès</button></td></tr>`).join('') + '</table>';
+    z.querySelectorAll('[data-renvoyer]').forEach(b => b.addEventListener('click', async () => { if (!confirm('Créer un nouveau code pour ' + b.dataset.renvoyer + ' et le lui envoyer par mail ? (l\'ancien code ne marchera plus)')) return;
+      b.disabled = true; const r = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle, renvoyer: b.dataset.renvoyer }) }).then(r => r.json()).catch(() => ({ erreur: 'réseau' }));
+      b.textContent = r.ok ? 'Envoyé ✓' : (r.code ? 'Mail en échec, code : ' + r.code : 'Erreur : ' + r.erreur); })); }
+  majVentes();
   /* mails non lus (Zoho), demandés à votre serveur Cloudflare avec la clé du tableau de bord ; mis à jour toutes les 2 minutes */
   const titre0 = document.title;
   async function majMails(){ const cle = FRG.lire('frg-cle-tableau', ''), p = document.getElementById('mail-n'), z = document.getElementById('zoho'); if (!cle || !p) return;

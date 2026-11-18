@@ -1442,14 +1442,12 @@ footer::after{opacity:.58}
 .tb-cta span{font-size:13px;color:var(--doux)}
 @media (max-width:640px){.fd-pastille{display:none}}
 
-/* vidéo de présentation : photo vivante sur la carte + visionneuse (jamais de son sans clic) */
-.pol-live{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease;pointer-events:none}
-.pol-cadre.vit .pol-live{opacity:1}
+/* vidéo de présentation : petit ▶ discret dans le coin de la photo de la carte + visionneuse */
 .polaroid .pol-cadre{cursor:pointer}
-.pol-lire{position:absolute;left:50%;top:50%;width:26%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.55);box-shadow:0 4px 14px rgba(0,0,0,.3);opacity:.92;transition:transform .25s ease,opacity .25s;pointer-events:none}
-.pol-lire svg{width:52%;height:52%;margin-left:8%}
-.polaroid .pol-cadre:hover .pol-lire{transform:translate(-50%,-50%) scale(1.12);opacity:1}
-.pol-grand .pol-lire,.pol-grand .pol-live{display:none}
+.pol-lire{position:absolute;right:6%;bottom:5%;width:22%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(14,27,61,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.6);transition:transform .25s ease;pointer-events:none}
+.pol-lire svg{width:50%;height:50%;margin-left:8%}
+.polaroid .pol-cadre:hover .pol-lire{transform:scale(1.12)}
+.pol-grand .pol-lire{display:none}
 .vl{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:20px;background:rgba(8,15,38,.86);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);opacity:0;transition:opacity .35s ease}
 .vl.on{opacity:1}.vl[hidden]{display:none}
 .vl-boite{position:relative;width:min(980px,100%);display:grid;gap:14px}
@@ -1459,4 +1457,4 @@ footer::after{opacity:.58}
 .vl-cta{color:#fff;font-weight:600;text-decoration:none;padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35)}
 .vl-cta:hover{background:rgba(255,255,255,.22)}
 @media (max-width:640px){.vl-fermer{top:-48px;right:0}}
-@media (prefers-reduced-motion:reduce){.vl{transition:none}.pol-live{display:none}}
+@media (prefers-reduced-motion:reduce){.vl{transition:none}}

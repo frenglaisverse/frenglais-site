@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611180100">
+<link rel="stylesheet" href="style.css?v=202611180945">
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -74,6 +74,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
       <div class="ctas">
         <a class="btn btn-blanc" href="#devis">Demander un devis</a>
         <a class="btn btn-contour" href="introduction.html">Essayer gratuitement <span class="btn-sous">· 10 min</span></a>
+        <button type="button" class="bulle-video" id="bulle-video" aria-label="Regarder la présentation de Paul (2 min 52)"><span class="bv-rond" aria-hidden="true"><video src="video/bulle.mp4" poster="video/bulle.jpg" muted loop playsinline autoplay preload="auto" disablepictureinpicture></video><span class="bv-lire"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span></span><span class="bv-txt"><b>Me découvrir</b><small>2 min 52</small></span></button>
       </div>
       <img class="banian banian-arriere" src="banian-arriere.webp?v=14" alt="" width="1640" height="700" aria-hidden="true" decoding="async">
       <img class="banian banian-avant" src="banian-avant.webp?v=13" alt="" width="1640" height="700" aria-hidden="true" decoding="async">
@@ -571,6 +572,28 @@ addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=2
 /* ouverture : la mousse « devant » n'apparaît que sous le logo, pour passer derrière lui puis tomber sur les drapeaux */
 (function(){var c=document.querySelector('#ouverture .ouv-mousse.devant'),sc=document.querySelector('#ouverture .ouv-scene');if(!c||!sc)return;
 function caler(){var y=sc.getBoundingClientRect().bottom-c.getBoundingClientRect().top;c.style.clipPath='inset('+Math.max(0,y-2)+'px 0 0 0)';}caler();addEventListener('resize',caler);})();
+</script>
+<div class="vl" id="vl" hidden role="dialog" aria-modal="true" aria-label="Présentation de Paul">
+  <div class="vl-boite">
+    <button type="button" class="vl-fermer" id="vl-fermer" aria-label="Fermer la vidéo">×</button>
+    <video id="vl-video" controls playsinline preload="none" poster="video/presentation.jpg">
+      <source src="video/presentation-720.mp4" type="video/mp4" media="(max-width: 900px)">
+      <source src="video/presentation-1080.mp4" type="video/mp4">
+    </video>
+    <div class="vl-pied"><span>Envie d'essayer après ça ?</span><a class="vl-cta" href="introduction.html">L'introduction offerte · 10 min →</a></div>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('bulle-video'),vl=document.getElementById('vl'),v=document.getElementById('vl-video'),f=document.getElementById('vl-fermer');if(!b||!vl)return;
+  var mini=b.querySelector('video'),calme=matchMedia('(prefers-reduced-motion: reduce)').matches||(navigator.connection&&navigator.connection.saveData);
+  if(calme&&mini){mini.removeAttribute('autoplay');mini.pause();}
+  function ouvrir(){vl.hidden=false;document.documentElement.style.overflow='hidden';requestAnimationFrame(function(){vl.classList.add('on');});try{localStorage.setItem('frg-video-presentation-vue','1');}catch(e){}var p=v.play();if(p&&p.catch)p.catch(function(){});f.focus({preventScroll:true});}
+  function fermer(){v.pause();vl.classList.remove('on');document.documentElement.style.overflow='';setTimeout(function(){vl.hidden=true;b.focus({preventScroll:true});},350);}
+  b.addEventListener('click',ouvrir);f.addEventListener('click',fermer);
+  vl.addEventListener('click',function(e){if(e.target===vl)fermer();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!vl.hidden)fermer();});
+})();
 </script>
 </body>
 </html>

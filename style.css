@@ -1444,6 +1444,9 @@ footer::after{opacity:.58}
 
 /* vidéo de présentation : petit ▶ discret dans le coin de la photo de la carte + visionneuse */
 .polaroid .pol-cadre{cursor:pointer}
+.pol-live{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease;pointer-events:none}
+.pol-cadre.vit .pol-live{opacity:1}
+.pol-grand .pol-live{display:none}
 .pol-lire{position:absolute;right:6%;bottom:5%;width:22%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(14,27,61,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.6);transition:transform .25s ease;pointer-events:none}
 .pol-lire svg{width:50%;height:50%;margin-left:8%}
 .polaroid .pol-cadre:hover .pol-lire{transform:scale(1.12)}
@@ -1458,3 +1461,19 @@ footer::after{opacity:.58}
 .vl-cta:hover{background:rgba(255,255,255,.22)}
 @media (max-width:640px){.vl-fermer{top:-48px;right:0}}
 @media (prefers-reduced-motion:reduce){.vl{transition:none}}
+
+/* liste « être prévenu(e) en premier » */
+.liste-form{display:grid;gap:8px;margin:0;background:none!important;border:0!important;padding:0!important;box-shadow:none!important;border-radius:0!important}
+.liste-titre{margin:0;font-size:15px;color:var(--encre);line-height:1.45}
+.liste-ligne{display:flex;gap:8px;flex-wrap:wrap}
+.liste-ligne input[type=email]{flex:1 1 220px;min-width:0;padding:12px 16px;border-radius:999px;border:1px solid var(--trait);background:var(--fond,#fff);color:var(--encre);font:inherit;font-size:15px}
+.liste-ligne input[type=email]:focus{outline:none;border-color:#1C49A5;box-shadow:0 0 0 3px rgba(28,73,165,.15)}
+.liste-ligne button{flex:none;min-height:46px;padding:0 22px;border-radius:999px;border:0;background:linear-gradient(180deg,#2457C4,#1C49A5);color:#fff;font:inherit;font-weight:600;font-size:15px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 20px -12px rgba(28,73,165,.8)}
+.liste-ligne button:disabled{opacity:.6}
+.liste-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.liste-msg{margin:0;font-size:14px;min-height:0}.liste-msg:empty{display:none}.liste-msg.ok{color:#1E7A4F;font-weight:600}.liste-msg.ko{color:#C0392B}
+.liste-legal{margin:0;font-size:12px;color:var(--doux)}.liste-legal a{color:inherit}
+.liste-form.fait .liste-ligne{display:none}
+.fondateurs .liste-fd{flex:1 1 100%;margin-top:6px;padding-top:12px;border-top:1px solid var(--trait)}
+.carte-fin+.liste-form,.liste-form+.sortie-intro{margin-top:18px}
+.tn-ferme .liste-form{max-width:520px;margin:14px auto 0;text-align:left}

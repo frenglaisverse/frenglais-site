@@ -358,6 +358,8 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
         <select id="f-duree" name="duree">
           <option value="">Je ne sais pas encore</option><option value="L’Intégral">L’Intégral</option><option value="Signature">Signature</option><option value="Boardroom">Boardroom (entreprises et équipes)</option><option value="Cours particuliers">Cours particuliers</option>
         </select></div>
+      <div class="champ champ-court" id="champ-heures" hidden><label for="f-heures">Heures de cours par semaine</label>
+        <select id="f-heures" name="heures"><option value="1 h">1 h</option><option value="2 h">2 h</option><option value="3 h">3 h</option><option value="4 h">4 h</option></select></div>
       <div class="ligne2" id="ligne-secteur" hidden>
         <div class="champ"><label for="f-secteur">Secteur</label>
           <select id="f-secteur" name="secteur">
@@ -455,7 +457,7 @@ document.querySelectorAll('.av-vitre').forEach(b=>b.addEventListener('click',()=
   b.setAttribute('aria-pressed',on);b.textContent=on?'FR':'EN';b.setAttribute('aria-label',on?'Revenir au français':'Traduire en anglais et montrer les codes');
   f.querySelector('.av-fr').hidden=on;f.querySelector('.av-en').hidden=!on;f.classList.toggle('en',on);}));
 </script>
-<script src="script.js?v=202611121610"></script>
+<script src="script.js?v=202611192230"></script>
 <script>
 /* ouverture : branche de jacaranda — tronc solide hors champ à gauche, écorce en plaques fissurées avec lichen, une fourche qui sort par le haut */
 (function(){var o=document.getElementById('ouverture');if(!o)return;var c=o.querySelector('.ouv-branche');if(!c||!c.getContext)return;
@@ -555,7 +557,7 @@ function x3(v){return v/3}
 function remplir(profil,formule,msg){var x=document.getElementById(profil);if(x){x.checked=true;x.dispatchEvent(new Event('change',{bubbles:true}));}
   var f=document.getElementById('f-duree');if(f){for(var o of f.options)if(o.value===formule)f.value=formule;}
   var m=document.getElementById('f-msg');if(m&&!m.value)m.value=msg;}
-var sc=document.querySelector('[data-offre="solo"]');if(sc){var nc='1',ts=sc.querySelector('.o-tarif-solo');var majs=function(){ts.innerHTML='<p class="o-prix-grand"><b>Sur devis</b><span>selon votre objectif et votre rythme</span></p>';};majs();sc.addEventListener('click',function(ev){var k=ev.target.closest('[data-k]');if(k){nc=k.dataset.k;sc.querySelectorAll('[data-k]').forEach(function(x){x.setAttribute('aria-checked',x===k)});majs();}});sc.querySelector('.o-cta').addEventListener('click',function(){remplir('p-part','Cours particuliers','Cours particuliers en visio, '+nc+' h par semaine. Mon objectif : ');});}
+var sc=document.querySelector('[data-offre="solo"]');if(sc){var nc='1',ts=sc.querySelector('.o-tarif-solo');var majs=function(){ts.innerHTML='<p class="o-prix-grand"><b>Sur devis</b><span>selon votre objectif et votre rythme</span></p>';};majs();sc.addEventListener('click',function(ev){var k=ev.target.closest('[data-k]');if(k){nc=k.dataset.k;sc.querySelectorAll('[data-k]').forEach(function(x){x.setAttribute('aria-checked',x===k)});majs();}});sc.querySelector('.o-cta').addEventListener('click',function(){var fm=document.getElementById('f-msg');if(fm&&/^Cours particuliers, \d h par semaine\. Mon objectif : $/.test(fm.value))fm.value='';remplir('p-part','Cours particuliers','Cours particuliers, '+nc+' h par semaine. Mon objectif : ');var fd=document.getElementById('f-duree');if(fd)fd.dispatchEvent(new Event('change',{bubbles:true}));var fh=document.getElementById('f-heures');if(fh){fh.value=nc+' h';fh.dispatchEvent(new Event('change',{bubbles:true}));}});}
 /* listes repliables : 4 éléments visibles, le reste derrière le bouton + */
 function replier(c){var L=c.querySelector('.o-liste');if(!L||c.dataset.offre==='solo')return;var b=c.querySelector('.o-plus');
   if(!b){b=document.createElement('button');b.type='button';b.className='o-plus';b.setAttribute('aria-expanded','false');L.after(b);

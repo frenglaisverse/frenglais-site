@@ -79,6 +79,7 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
     $('champ-effectif').hidden=!ent;
     $('champ-societe').hidden=!ent;
     $('champ-tel').hidden=!$('f-rappel').checked;
+    $('champ-heures').hidden=$('f-duree').value!=='Cours particuliers';
   }
   f.addEventListener('change',maj); maj();
   const dire=(txt,ok)=>{ etat.className='etat '+(ok?'ok':'ko'); etat.textContent=txt; };
@@ -90,11 +91,13 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('f-email').value.trim())){ dire('Cette adresse e-mail semble incomplète.'); $('f-email').focus(); return; }
     if(!$('f-accord').checked){ dire('Cochez la case d\'accord pour envoyer votre demande.'); return; }
     const d=Object.fromEntries([...new FormData(f).entries()].filter(([k,v])=>v!==''));
+    if(d.duree!=='Cours particuliers') delete d.heures;
+    const prio=d.heures==='3 h'||d.heures==='4 h';
     if(d.botcheck) return;
     btn.disabled=true; btn.textContent='Envoi…';
     try{
       const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-        body:JSON.stringify({access_key:WEB3FORMS_KEY,subject:`Demande de devis · ${d.profil} · ${d.name}`,from_name:'Site Frenglais',...d})});
+        body:JSON.stringify({access_key:WEB3FORMS_KEY,subject:`${prio?'★ PRIORITAIRE · '+d.heures+' par semaine · ':''}Demande de devis · ${d.duree||d.profil} · ${d.name}`,from_name:'Site Frenglais',...d})});
       const rep=await r.json().catch(()=>({}));
       if(!r.ok||rep.success===false) throw new Error();
       f.reset(); maj(); window.goatcounter&&goatcounter.count&&goatcounter.count({path:'devis-envoye',title:'devis envoyé',event:true}); dire('Demande envoyée. Votre devis personnalisé arrive très vite.',true);

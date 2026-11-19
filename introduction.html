@@ -434,7 +434,7 @@ const listeCourbe=`<ul class="liste-courbe">
   <li><strong>Un exemple sous chaque temps</strong>, si possible le vôtre.</li>
 </ul>`;
 const etagesCourbe=`<div class="etages" aria-label="Comment la Courbe s'enrichit">
-  ${[['Semaine 1',[['Module 1','Repères et codes',1],['Module 2','Les crochets&nbsp;[&nbsp;]',0]]],['Semaine 2',[['Module 3','BE + -ING',0],['Module 4','Rappel + aperçu',0]]],['Semaine 3',[['Module 5','HAVE + -EN',0],['Module 6','T+1 : la Courbe complète',0]]]].map(g=>`<div class="semaine" style="--n:${g[1].length}"><span class="semaine-lab">${g[0]}</span><div class="semaine-mods">${g[1].map(e=>`<div class="etage${e[2]?' actif':''}"><span>${e[0]}</span><strong>${e[1]}</strong></div>`).join('')}</div></div>`).join('')}
+  ${[['Semaine 1',[['Module 1','Repères et codes',1],['Module 2','T0, le présent',0]]],['Semaine 2',[['Module 3','T-1, le passé',0],['Module 4','BE + -ING',0]]],['Semaine 3',[['Module 5','HAVE + -EN',0],['Module 6','T-2',0]]]].map(g=>`<div class="semaine" style="--n:${g[1].length}"><span class="semaine-lab">${g[0]}</span><div class="semaine-mods">${g[1].map(e=>`<div class="etage${e[2]?' actif':''}"><span>${e[0]}</span><strong>${e[1]}</strong></div>`).join('')}</div></div>`).join('')}
 </div>`;
 const etagesIntro=etagesCourbe.replace(' actif','').replace('<div class="etage"><span>Module 1</span>','<div class="etage actif"><span>Module 1</span>');
 
@@ -718,7 +718,7 @@ const etapes=[
    <h1>La Courbe complète : votre boîte de vitesses.</h1>
    ${courbeComplete(5)}
    <p>Comme une boîte de vitesses : au début, on cale, on cherche la bonne vitesse, on regarde le levier. Puis un jour, on passe les vitesses sans y penser. La Courbe fonctionne pareil : vous la consultez, puis vous ne la voyez plus, elle travaille pour vous.</p>
-   <p>Voici votre future boîte de vitesses mentale. Tout part des deux mêmes points et des deux mêmes codes ; chaque module ajoute un étage, et en six modules la Courbe est complète.</p>
+   <p>Voici votre future boîte de vitesses mentale. Tout part des deux mêmes points et des deux mêmes codes ; chaque module ajoute un étage. Au module 7, la Courbe est complète ; les dix-sept suivants la font parler, jusqu'au réflexe.</p>
    ${etagesIntro}
    <p class="aide">Une fois la Courbe en tête, vous savez construire n'importe quelle phrase sur le papier. L'oral suit, avec la répétition.</p>`},
 

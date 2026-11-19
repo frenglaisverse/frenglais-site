@@ -490,6 +490,9 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .kpis div{border:1px solid var(--trait);border-radius:14px;padding:12px 14px}
 .kpis b{display:block;font:600 26px/1.1 var(--f-txt);letter-spacing:-.02em}
+.ventes-kpis{margin-top:12px;grid-template-columns:1fr 1fr}.ventes-kpis b{font-size:34px}.ventes-kpis span{display:block}.ventes-kpis small{display:block;margin-top:2px;font-size:13px}
+.ventes-detail{margin-top:12px}.ventes-detail summary{cursor:pointer;padding:4px 0}.ventes-detail>div{margin-top:8px;overflow-x:auto}
+.stripe-mode{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,#635BFF 15%,transparent);color:#8F89FF}.stripe-mode.live{background:color-mix(in srgb,#2E8B6E 18%,transparent);color:#4FC79F}
 .kpis span{font-size:13px;color:var(--doux)}
 .mini{width:100%;height:6px;border-radius:9px;background:var(--trait);overflow:hidden;display:block}.mini i{display:block;height:100%;background:var(--bleu)}
 .mini.bas i{background:var(--corail)}
@@ -716,9 +719,14 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
 
   <section data-onglet="pilotage" class="carte" id="ventes">
     <div class="ligne" style="justify-content:space-between"><h2>Ventes</h2><span class="doux petit" id="ventes-etat"></span></div>
-    <div id="ventes-liste" class="doux petit">Chargement…</div>
+    <div class="kpis ventes-kpis"><div><b id="v-jour">–</b><span>aujourd'hui</span><small class="doux" id="v-jour-e"></small></div><div><b id="v-mois">–</b><span>ce mois-ci</span><small class="doux" id="v-mois-e"></small></div></div>
+    <details class="ventes-detail"><summary class="doux petit">Détail des ventes</summary><div id="ventes-liste" class="doux petit">Chargement…</div></details>
     <div class="ligne" style="justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--trait,#e3e7f1)"><span><b>Liste « prévenez-moi »</b> <span class="doux petit" id="liste-n"></span></span><button type="button" class="btn btn-sec" id="liste-csv">Exporter (CSV)</button></div>
-    <p class="doux petit" style="margin-top:10px">Factures, remboursements et avoirs : <a href="https://dashboard.stripe.com/invoices" target="_blank" rel="noopener">tableau de bord Stripe</a>. Un remboursement complet ferme automatiquement l'accès de l'élève.</p>
+  </section>
+  <section data-onglet="pilotage" class="carte" id="stripe">
+    <div class="ligne" style="justify-content:space-between"><h2>Stripe</h2><span class="stripe-mode" id="stripe-mode">…</span></div>
+    <div class="acces-g" style="--c:#635BFF;margin-top:10px"><p>Raccourcis</p><div><a class="tuile" style="--c:#635BFF" data-stripe="payments" href="https://dashboard.stripe.com/payments" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><span>Paiements</span></a><a class="tuile" style="--c:#635BFF" data-stripe="subscriptions" href="https://dashboard.stripe.com/subscriptions" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2"/><path d="M20 4v5h-5M4 20v-5h5"/></svg><span>Abonnements (3 fois)</span></a><a class="tuile" style="--c:#635BFF" data-stripe="invoices" href="https://dashboard.stripe.com/invoices" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg><span>Factures</span></a><a class="tuile" style="--c:#635BFF" data-stripe="customers" href="https://dashboard.stripe.com/customers" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Clients</span></a><a class="tuile" style="--c:#635BFF" data-stripe="disputes" href="https://dashboard.stripe.com/disputes" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.5"/></svg><span>Litiges</span></a><a class="tuile" style="--c:#635BFF" data-stripe="payouts" href="https://dashboard.stripe.com/payouts" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6M5 10v8M19 10v8M9 10v8M15 10v8M3 20h18"/></svg><span>Virements reçus</span></a></div></div>
+    <p class="doux petit" style="margin-top:10px">Un remboursement fait dans Stripe ferme automatiquement l'accès de l'élève et apparaît dans les ventes. Chaque vente vous est aussi envoyée par mail.</p>
   </section>
   <section data-onglet="pilotage" class="carte" id="jeu">
     <div class="ligne" style="justify-content:space-between"><h2>Courbe du jour</h2><span class="doux petit" id="jeu-etat"></span></div>
@@ -1141,7 +1149,13 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   async function majVentes(){ const cle = FRG.lire('frg-cle-tableau', ''), z = document.getElementById('ventes-liste'), et = document.getElementById('ventes-etat'); if (!cle || !z) return;
     let j; try { j = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle }) }).then(r => r.json()); } catch (e) { z.textContent = 'Serveur injoignable.'; return; }
     if (j.erreur) { z.textContent = j.erreur; return; }
-    et.textContent = (j.test ? 'Mode test · ' : '') + (j.ouvert ? 'vente ouverte' : 'vente fermée au public') + ' · Fondateurs : ' + j.fondateursVendus + ' / ' + j.places;
+    et.textContent = (j.ouvert ? 'vente ouverte' : 'vente fermée au public') + ' · Fondateurs : ' + j.fondateursVendus + ' / ' + j.places;
+    { const jour = t => new Date(t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }), auj = jour(Date.now()), ok = j.ventes.filter(v => !String(v.statut).startsWith('rembours'));
+      const J = ok.filter(v => jour(v.t) === auj), M = ok.filter(v => jour(v.t).slice(0, 7) === auj.slice(0, 7)), som = X => (X.reduce((a, v) => a + v.total, 0) / 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' €';
+      document.getElementById('v-jour').textContent = J.length; document.getElementById('v-jour-e').textContent = som(J);
+      document.getElementById('v-mois').textContent = M.length; document.getElementById('v-mois-e').textContent = som(M);
+      const sm = document.getElementById('stripe-mode'); sm.textContent = j.test ? 'Mode test' : 'En direct'; sm.classList.toggle('live', !j.test);
+      document.querySelectorAll('[data-stripe]').forEach(a => a.href = 'https://dashboard.stripe.com/' + (j.test ? 'test/' : '') + a.dataset.stripe); }
     if (!j.ventes.length) { z.textContent = 'Aucune vente pour le moment.'; return; }
     const eur = c => (c / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €', nom = { integral: "L'Intégral", signature: 'Signature' };
     z.innerHTML = '<table class="tab"><tr><th>Date</th><th>Élève</th><th>Formule</th><th>Montant</th><th>Statut</th><th>Mail d\'accès</th><th>Appareils</th><th></th></tr>' + j.ventes.map(v => `<tr><td>${new Date(v.t).toLocaleDateString('fr-FR')}</td><td>${esc(v.facturation)}<br><span class="doux">${esc(v.email)} · ${esc(v.identifiant)}</span></td><td>${nom[v.formule] || v.formule}${v.edition === 'fondateurs' ? ' · Fondateurs' : ''}</td><td>${eur(v.total)}${v.mode === '3x' ? ' (3 fois)' : ''}</td><td>${esc(v.statut)}</td><td>${String(v.mail).startsWith('envoy') ? '✓' : '<span title="' + esc(v.mail) + '">échec</span>'}</td><td>${(v.appareils || []).length} / 2${(v.appareils || []).length ? '<br><span class="doux">' + v.appareils.map(x => esc(x.n) + ', vu le ' + new Date(x.v).toLocaleDateString('fr-FR')).join('<br>') + '</span><br><button type="button" class="btn btn-sec" data-appareils="' + esc(v.identifiant) + '">Libérer</button>' : ''}</td><td><button type="button" class="btn btn-sec" data-renvoyer="${esc(v.identifiant)}">Renvoyer les accès</button></td></tr>`).join('') + '</table>';

@@ -1155,11 +1155,11 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     const csv = 'email;inscrit_le;provenance\n' + L.map(x => [x.e, new Date(x.t).toLocaleString('fr-FR'), x.s.join('+')].join(';')).join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); a.download = 'frenglais-liste-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click(); });
   /* mails non lus (Zoho), demandés à votre serveur Cloudflare avec la clé du tableau de bord ; mis à jour toutes les 2 minutes */
-  const titre0 = document.title;
+  const titre0 = document.title, ZOHO_FORCE = location.hash === '#zoho';
   async function majMails(){ const cle = FRG.lire('frg-cle-tableau', ''), p = document.getElementById('mail-n'), z = document.getElementById('zoho'); if (!cle || !p) return;
     let j; try { j = await fetch(API + '/zoho/nonlus', { method: 'POST', body: JSON.stringify({ cle }) }).then(r => r.json()); } catch (e) { return; }
     if (j.connecte === false) { z.hidden = false; p.hidden = true; return; }
-    z.hidden = location.hash !== '#zoho'; if (!z.hidden) z.open = true; if (j.erreur) { p.hidden = false; p.textContent = '!'; p.title = j.erreur; return; }
+    z.hidden = !ZOHO_FORCE; if (!z.hidden) z.open = true; if (j.erreur) { p.hidden = false; p.textContent = '!'; p.title = j.erreur; return; }
     p.hidden = !j.n; p.textContent = j.plus ? '200+' : j.n; p.title = j.n + ' mail' + (j.n > 1 ? 's' : '') + ' non lu' + (j.n > 1 ? 's' : '');
     document.title = (j.n ? '(' + (j.plus ? '200+' : j.n) + ') ' : '') + titre0; }
   document.getElementById('zoho-copier').addEventListener('click', async () => { try { await navigator.clipboard.writeText(document.getElementById('zoho-scope').textContent); document.getElementById('zoho-copier').textContent = 'Copié'; } catch (e) {} });
@@ -1170,7 +1170,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       if (!j.ok) { msg.textContent = j.erreur || 'Connexion refusée.'; return; }
       ['zoho-id', 'zoho-secret', 'zoho-code'].forEach(i => document.getElementById(i).value = ''); msg.textContent = 'Connecté.'; majMails(); }
     catch (e) { msg.textContent = 'Serveur injoignable : ' + e.message; } });
-  function zohoAncre(){ if (location.hash === '#zoho') { const z = document.getElementById('zoho'); z.hidden = false; z.open = true; z.scrollIntoView({ block: 'center' }); } }
+  function zohoAncre(){ if (ZOHO_FORCE || location.hash === '#zoho') { const z = document.getElementById('zoho'); z.hidden = false; z.open = true; z.scrollIntoView({ block: 'center' }); } }
   zohoAncre(); addEventListener('hashchange', zohoAncre);
   setInterval(() => { if (!document.hidden) majMails(); }, 120000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) majMails(); });

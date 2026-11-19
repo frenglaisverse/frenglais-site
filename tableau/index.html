@@ -1371,10 +1371,10 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     mesure: { nom: 'Entreprises · sur mesure (plus de 20)', unite: 'par apprenant', equipe: true, formules: [['Accès Signature · par apprenant', 549]] },
     solo: { nom: 'Particuliers · cours individuels', unite: 'par personne', formules: [['1 h par semaine en visio · 4 h à 55 €', 220, '4 semaines'], ['2 h par semaine en visio · 8 h à 50 €', 400, '4 semaines'], ['3 h par semaine en visio · 12 h à 45 €', 540, '4 semaines'], ['4 h par semaine en visio · 16 h à 40 €', 640, '4 semaines']] }
   };
-  const OPTIONS0 = [['secteur', 'Adaptation au secteur : scénarios, vocabulaire et cas réels du métier', 0, false, true], ['eval', 'Évaluation orale supplémentaire (20 min)', 40, true], ['live', 'Séance individuelle avec Paul (1 h)', 90, true], ['lancement', 'Lancement sur site (frais de déplacement)', 0, false, true]];
+  const OPTIONS0 = [['secteur', 'Adaptation au secteur : scénarios, vocabulaire et cas réels du métier', 0, false, true], ['suivi', 'Option Suivi live : point à mi-parcours et évaluation finale en visio', 149, true], ['live', 'Séance individuelle avec Paul (1 h)', 90, true], ['lancement', 'Lancement sur site (frais de déplacement)', 0, false, true]];
   const DEG = n => n >= 50 ? 15 : n >= 30 ? 10 : 0;   // sur mesure : 30 à 49 apprenants -10 %, 50 et plus -15 %
   let GR; try { GR = Object.assign(JSON.parse(JSON.stringify(GRILLE0)), JSON.parse(localStorage.getItem('frg-grille-v2') || 'null') || {}); } catch (e) { GR = JSON.parse(JSON.stringify(GRILLE0)); }
-  let OPT; try { OPT = JSON.parse(localStorage.getItem('frg-options-v3') || 'null') || OPTIONS0; } catch (e) { OPT = OPTIONS0; }
+  let OPT; try { OPT = JSON.parse(localStorage.getItem('frg-options-v4') || 'null') || OPTIONS0; } catch (e) { OPT = OPTIONS0; }
   const eur = v => v.toLocaleString('fr-FR', { minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €';
   const $d = id => document.getElementById(id);
   function dvOffres(){ $d('dv-offre').innerHTML = Object.entries(GR).map(([k, o]) => `<option value="${k}">${esc(o.nom)}</option>`).join(''); dvFormules(); }
@@ -1428,7 +1428,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     const R = JSON.parse(localStorage.getItem('frg-entreprise') || '{}'); $d('ent-siret').value = R.siret || ''; $d('ent-tva').checked = R.tva !== false;
     z.addEventListener('change', ev => { const g = ev.target.dataset.g, op = ev.target.dataset.op;
       if (g) { const [k, i] = g.split(':'); GR[k].formules[+i][1] = +ev.target.value || 0; localStorage.setItem('frg-grille-v2', JSON.stringify(GR)); }
-      if (op) { OPT.find(o => o[0] === op)[2] = +ev.target.value || 0; localStorage.setItem('frg-options-v3', JSON.stringify(OPT)); }
+      if (op) { OPT.find(o => o[0] === op)[2] = +ev.target.value || 0; localStorage.setItem('frg-options-v4', JSON.stringify(OPT)); }
       localStorage.setItem('frg-entreprise', JSON.stringify({ siret: $d('ent-siret').value.trim(), tva: $d('ent-tva').checked }));
       dvFormules(); }); }
   dvInit(); grilleReglages();

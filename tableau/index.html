@@ -1170,6 +1170,8 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       if (!j.ok) { msg.textContent = j.erreur || 'Connexion refusée.'; return; }
       ['zoho-id', 'zoho-secret', 'zoho-code'].forEach(i => document.getElementById(i).value = ''); msg.textContent = 'Connecté.'; majMails(); }
     catch (e) { msg.textContent = 'Serveur injoignable : ' + e.message; } });
+  function zohoAncre(){ if (location.hash === '#zoho') { const z = document.getElementById('zoho'); z.hidden = false; z.open = true; z.scrollIntoView({ block: 'center' }); } }
+  zohoAncre(); addEventListener('hashchange', zohoAncre);
   setInterval(() => { if (!document.hidden) majMails(); }, 120000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) majMails(); });
   /* démos prospects : codes invités créés et vérifiés par le serveur Cloudflare */

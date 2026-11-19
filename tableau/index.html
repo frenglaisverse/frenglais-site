@@ -725,7 +725,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
 
   <section data-onglet="pilotage" class="carte" id="ventes">
     <div class="ligne" style="justify-content:space-between"><h2>Ventes</h2><span class="doux petit" id="ventes-etat"></span></div>
-    <div class="vg-tete"><div class="vg-tot"><div class="vg-hero"><small class="doux" id="v-mois-nom">Ce mois-ci</small><strong id="v-mois-e">–</strong><span class="doux"><span id="v-mois">–</span> · <span id="v-comp"></span></span></div><div class="vg-auj"><small class="doux">Aujourd'hui</small><b id="v-jour-e">–</b><span class="doux" id="v-jour"></span></div></div>
+    <div class="vg-tete"><div class="vg-tot"><div class="vg-hero"><small class="doux" id="v-mois-nom"></small><strong id="v-mois-e">–</strong><span class="doux"><span id="v-mois">–</span> · <span id="v-comp"></span></span></div><div class="vg-auj"><small class="doux">Aujourd'hui</small><b id="v-jour-e">–</b><span class="doux" id="v-jour"></span></div></div>
     <div class="vg-choix" role="tablist"><button type="button" data-vg="jours" aria-selected="true">30 jours</button><button type="button" data-vg="mois" aria-selected="false">12 mois</button></div></div>
     <div class="vg" id="vg" aria-label="Ventes"></div>
     <details class="ventes-detail"><summary class="doux petit">Détail des ventes</summary><div id="ventes-liste" class="doux petit">Chargement…</div></details>
@@ -1173,7 +1173,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       const J = ok.filter(v => jour(v.t) === auj), M = ok.filter(v => jour(v.t).slice(0, 7) === auj.slice(0, 7)), som = X => (X.reduce((a, v) => a + v.total, 0) / 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' €';
       const pl = n => n + ' vente' + (n > 1 ? 's' : ''), moisP = new Date(); moisP.setDate(1); moisP.setMonth(moisP.getMonth() - 1);
       const cP = moisP.toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }).slice(0, 7), P = ok.filter(v => jour(v.t).slice(0, 7) === cP && jour(v.t).slice(8) <= auj.slice(8)), tot = X => X.reduce((a, v) => a + v.total, 0);
-      document.getElementById('v-mois-nom').textContent = 'Gagné en ' + new Date().toLocaleDateString('fr-FR', { month: 'long', timeZone: 'Europe/Paris' });
+      document.getElementById('v-mois-nom').textContent = new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric', timeZone: 'Europe/Paris' });
       document.getElementById('v-mois-e').textContent = som(M); document.getElementById('v-mois').textContent = pl(M.length);
       const cp = document.getElementById('v-comp'), mp = moisP.toLocaleDateString('fr-FR', { month: 'long' });
       if (tot(P)) { const d = Math.round((tot(M) / tot(P) - 1) * 100); cp.textContent = (d >= 0 ? '+' : '') + d + ' % vs ' + mp + ' à la même date'; cp.className = d >= 0 ? 'vg-up' : 'vg-down'; } else { cp.textContent = som(P) + ' en ' + mp + ' à la même date'; cp.className = ''; }

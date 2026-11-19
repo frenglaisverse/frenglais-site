@@ -641,7 +641,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <div id="vue-rappel"></div>
     <details class="zoho" id="zoho" hidden><summary><b>Afficher mes mails non lus ici</b> · à faire une seule fois, 3 minutes</summary>
       <ol class="petit">
-        <li>Ouvrez <a href="https://api-console.zoho.eu/" target="_blank" rel="noopener">api-console.zoho.eu ↗</a> avec votre compte Zoho, cliquez « Add Client », puis « Self Client », puis « Create ».</li>
+        <li>Ouvrez <a href="https://api-console.zoho.eu/" target="_blank" rel="noopener">api-console.zoho.eu ↗</a> avec votre compte Zoho, cliquez « Add Client », puis « Self Client », puis « Create » (si un « Self Client » existe déjà, ouvrez-le simplement).</li>
         <li>Onglet « Client Secret » : copiez le <b>Client ID</b> et le <b>Client Secret</b> dans les cases ci-dessous.</li>
         <li>Onglet « Generate Code » : dans « Scope », collez <code id="zoho-scope">ZohoMail.accounts.READ,ZohoMail.folders.READ,ZohoMail.messages.READ,ZohoMail.messages.CREATE</code> <button type="button" class="btn" id="zoho-copier">Copier</button>, choisissez 10 minutes, écrivez « Tableau de bord » en description, puis « Create ». Copiez le code obtenu ci-dessous.</li>
         <li>Cliquez « Connecter ». C'est fini : le nombre de mails non lus s'affichera sur le bouton « Mes mails ».</li>
@@ -1159,7 +1159,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   async function majMails(){ const cle = FRG.lire('frg-cle-tableau', ''), p = document.getElementById('mail-n'), z = document.getElementById('zoho'); if (!cle || !p) return;
     let j; try { j = await fetch(API + '/zoho/nonlus', { method: 'POST', body: JSON.stringify({ cle }) }).then(r => r.json()); } catch (e) { return; }
     if (j.connecte === false) { z.hidden = false; p.hidden = true; return; }
-    z.hidden = true; if (j.erreur) { p.hidden = false; p.textContent = '!'; p.title = j.erreur; return; }
+    z.hidden = location.hash !== '#zoho'; if (!z.hidden) z.open = true; if (j.erreur) { p.hidden = false; p.textContent = '!'; p.title = j.erreur; return; }
     p.hidden = !j.n; p.textContent = j.plus ? '200+' : j.n; p.title = j.n + ' mail' + (j.n > 1 ? 's' : '') + ' non lu' + (j.n > 1 ? 's' : '');
     document.title = (j.n ? '(' + (j.plus ? '200+' : j.n) + ') ' : '') + titre0; }
   document.getElementById('zoho-copier').addEventListener('click', async () => { try { await navigator.clipboard.writeText(document.getElementById('zoho-scope').textContent); document.getElementById('zoho-copier').textContent = 'Copié'; } catch (e) {} });

@@ -715,7 +715,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       <label>Prénom <input id="ae-prenom" maxlength="40" autocomplete="off"></label>
       <label>Nom <input id="ae-nom" maxlength="60" autocomplete="off"></label>
       <label style="grid-column:1/-1">E-mail <input id="ae-email" type="email" autocomplete="off"></label>
-      <label>Formule <select id="ae-formule"><option value="integral">L'Intégral</option><option value="signature">Signature</option><option value="particulier">Cours particuliers (accès complet)</option></select></label>
+      <label>Formule <select id="ae-formule"><option value="integral">L'Intégral</option><option value="signature">Signature</option><option value="particulier">Cours particuliers (24 modules)</option></select></label>
       <label>Option <select id="ae-option"><option value="">Sans</option><option value="1">+ Suivi live</option></select></label>
     </div>
     <p class="ligne" style="margin-top:10px"><label class="petit" style="display:flex;flex-direction:row;gap:8px;align-items:center;font-size:14px"><input type="checkbox" id="ae-envoyer" checked style="width:auto;padding:0;margin:0"> Envoyer ses accès par mail</label></p>
@@ -1255,7 +1255,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     $a('ae-formule').addEventListener('change', () => { const p = $a('ae-formule').value === 'particulier'; $a('ae-option').disabled = p; if (p) $a('ae-option').value = ''; });
     $a('ae-creer').addEventListener('click', async () => { const x = { prenom: $a('ae-prenom').value.trim(), nom: $a('ae-nom').value.trim(), email: $a('ae-email').value.trim(), formule: $a('ae-formule').value, option: !!$a('ae-option').value, envoyer: $a('ae-envoyer').checked };
       if (!x.prenom || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(x.email)) { msg.textContent = 'Prénom et e-mail, au minimum.'; return; }
-      if (!confirm('Créer un accès ' + ({ signature: 'Signature', particulier: 'Cours particuliers, accès complet' }[x.formule] || "L'Intégral") + (x.option ? ' + Suivi live' : '') + ' pour ' + x.prenom + ' (' + x.email + ') ?')) return;
+      if (!confirm('Créer un accès ' + ({ signature: 'Signature', particulier: 'Cours particuliers, 24 modules' }[x.formule] || "L'Intégral") + (x.option ? ' + Suivi live' : '') + ' pour ' + x.prenom + ' (' + x.email + ') ?')) return;
       const b = $a('ae-creer'); b.disabled = true; msg.textContent = 'Création…';
       const r = await fetch(API + '/admin/eleve', { method: 'POST', body: JSON.stringify({ cle: FRG.lire('frg-cle-tableau', ''), ...x }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
       b.disabled = false; if (!r.ok) { msg.textContent = 'Erreur : ' + r.erreur; return; } msg.textContent = '';

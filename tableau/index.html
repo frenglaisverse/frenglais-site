@@ -700,7 +700,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <div id="visio">
     <div class="titre-ic" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--trait)"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span><div><h2>Sessions Google Meet</h2><p class="doux petit">Le bouton « Lancer » apparaît ici 10 minutes avant.</p></div></div>
     <div id="vz-liste" class="doux petit" style="margin-top:12px">Aucune session planifiée.</div>
-    <p style="margin-top:12px"><a class="btn plein" href="#agenda" id="vz-ouvrir">Planifier dans l'agenda ↓</a></p>
+    <p class="ligne" style="margin-top:12px"><a class="btn plein" href="#agenda" id="vz-ouvrir">Planifier dans l'agenda ↓</a><button type="button" class="btn btn-sec" id="vz-notif">Tester la notif téléphone</button><span class="petit" id="vz-notif-msg"></span></p>
     </div>
   </section>
   <section class="carte" id="devis">
@@ -1282,6 +1282,9 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     $v('ag-auj').addEventListener('click', () => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); lundi = d; grille(); });
     let lw = innerWidth; addEventListener('resize', () => { if ((lw < 700) !== (innerWidth < 700)) grille(); lw = innerWidth; });
     grille(); charger(); setInterval(tout, 30000); setInterval(charger, 300000);
+    $v('vz-notif').addEventListener('click', async () => { const m = $v('vz-notif-msg'); m.textContent = 'Envoi…';
+      const r = await fetch(API + '/admin/notif', { method: 'POST', body: JSON.stringify({ cle: FRG.lire('frg-cle-tableau', '') }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
+      m.textContent = r.ok ? 'Envoyée : regardez votre téléphone ✓' : 'Erreur : ' + r.erreur; });
     window.FRGEleves = V => { $v('vz-eleves').innerHTML = V.filter(v => v.identifiant).map(v => `<option value="${esc(v.identifiant)} · ${esc(v.facturation || v.email)}">`).join(''); }; }
   /* mails non lus (Zoho), demandés à votre serveur Cloudflare avec la clé du tableau de bord ; mis à jour toutes les 2 minutes */
   const titre0 = document.title, ZOHO_FORCE = location.hash === '#zoho';

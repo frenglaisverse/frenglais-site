@@ -106,7 +106,7 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
   const f=document.getElementById('acces'); if(!f) return;
   const ident=document.getElementById('acces-id'), code=document.getElementById('acces-code'), etat=document.getElementById('acces-etat');
   const valide=v=>/^[A-Za-z]{3,20}\d{1,6}$/.test(v.trim());
-  const API='https://courbe-classement.paulodubmx84.workers.dev', NOMF={integral:"L'Intégral",signature:'Signature'};
+  const API='https://courbe-classement.paulodubmx84.workers.dev', NOMF={integral:"L'Intégral",signature:'Signature',particulier:'Cours particuliers · accès complet'};
   const lireS=()=>{ try{ return JSON.parse(localStorage.getItem('frg-session')||'null'); }catch(e){ return null; } };
   const appareil=()=>{ let a=null; try{ a=localStorage.getItem('frg-appareil'); if(!a){ a=crypto.randomUUID(); localStorage.setItem('frg-appareil',a); } }catch(e){ a=a||crypto.randomUUID(); } return a; };
   const nomAppareil=()=>{ const u=navigator.userAgent; return (/iPhone/.test(u)?'iPhone':/iPad/.test(u)?'iPad':/Android/.test(u)?'Android':/Mac/.test(u)?'Mac':/Windows/.test(u)?'PC Windows':'Appareil')+' · '+(/Edg\//.test(u)?'Edge':/Firefox/.test(u)?'Firefox':/Chrome/.test(u)?'Chrome':/Safari/.test(u)?'Safari':'navigateur'); };

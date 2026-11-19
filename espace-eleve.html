@@ -8,6 +8,36 @@
 <meta name="description" content="L'espace en ligne des élèves Frenglais : modules, progression et suivi.">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css?v=202611180010">
+<style>
+.pc-tete{display:flex;align-items:center;gap:12px;margin:34px 0 12px}.pc-tete h2{margin:0;font-size:22px;letter-spacing:-.01em}.pc-compte{color:var(--doux,#4A5578);font-size:14px}
+.pc-fleches{margin-left:auto;display:flex;gap:6px}.pc-fleches button{width:38px;height:38px;border-radius:50%;border:1px solid var(--trait,#E2E6F0);background:var(--carte,#fff);color:inherit;font-size:20px;cursor:pointer}
+.tb-modules{position:relative;display:flex!important;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:14px 4px 18px;margin:0 -4px;scrollbar-width:none;grid-template-columns:none!important}.tb-modules::-webkit-scrollbar{display:none}
+.tb-modules{-webkit-mask-image:linear-gradient(90deg,#000 92%,transparent);mask-image:linear-gradient(90deg,#000 92%,transparent)}.pc-ok .tb-mini i{background:#2E8B6E!important}
+.tb-modules>.tb-module{flex:0 0 172px;min-height:196px;scroll-snap-align:center}
+.pc-tuile{text-align:left;font:inherit;color:inherit;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,opacity .25s}
+.pc-tuile:hover{transform:translateY(-3px)}.pc-tuile.pc-choisi{transform:translateY(-6px) scale(1.04);box-shadow:0 18px 36px -18px rgba(28,73,165,.55);outline:2px solid #1C49A5;outline-offset:2px}
+.pc-tuile .pc-etat{display:block;margin-top:6px;font-size:12px}.pc-ok{border-color:color-mix(in srgb,#2E8B6E 45%,transparent)!important}.pc-ok .pc-etat{color:#1E7A4F;font-weight:600}
+.pc-ouvert{border-color:color-mix(in srgb,#1C49A5 40%,transparent)!important;background:linear-gradient(180deg,#fff,#EEF3FF)!important}.pc-ouvert .pc-etat{color:#1C49A5;font-weight:600}
+.pc-date,.pc-avant,.pc-sig,.pc-visiteur{opacity:.62}.pc-avance .tb-num{color:#7B61C9}
+.pc-curseur{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;margin:4px 0 0;background:linear-gradient(90deg,#1C49A5 var(--p,0%),#E2E6F0 var(--p,0%));cursor:pointer}
+.pc-curseur::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid #1C49A5;box-shadow:0 4px 10px rgba(28,73,165,.35)}.pc-curseur::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid #1C49A5}
+.pc-detail{margin-top:18px;padding:22px 24px;border-radius:22px;background:var(--carte,#fff);border:1px solid var(--trait,#E2E6F0);box-shadow:0 10px 30px -22px rgba(14,27,61,.4)}
+.pc-d-tete{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}.pc-d-num{margin:0;font:600 12px var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;color:#C9746E}
+.pc-detail h3{margin:4px 0 2px;font-size:24px;letter-spacing:-.015em}.pc-d-etat{margin:0;font-size:14px;color:var(--doux,#4A5578)}.pc-e-ok{color:#1E7A4F!important}.pc-e-ouvert{color:#1C49A5!important}
+.pc-d-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.pc-d-verrou{display:inline-flex;gap:6px;align-items:center;font-size:14px;color:var(--doux,#4A5578)}
+.pc-plus{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px;border-radius:99px;border:1.5px solid #1C49A5;background:transparent;color:#1C49A5;font:600 15px inherit;font-family:inherit;cursor:pointer}.pc-plus:disabled{opacity:.4;cursor:not-allowed}.pc-plus.on{background:#1C49A5;color:#fff}
+.pc-entr{margin-top:18px;border-top:1px solid var(--trait,#E2E6F0);padding-top:16px}.pc-entr-sous{margin:0 0 12px;font-size:14px;color:var(--doux,#4A5578)}
+.pc-entr-grille{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.pc-entr-c{text-align:left;padding:14px;border-radius:16px;border:1px solid var(--trait,#E2E6F0);background:var(--fond,#F5F6FA);font:inherit;color:inherit;cursor:pointer;transition:border-color .2s,transform .2s}.pc-entr-c:hover{border-color:#1C49A5;transform:translateY(-2px)}
+.pc-entr-c b{display:block;font-size:15px}.pc-entr-c b i{color:#1E7A4F;font-style:normal}.pc-entr-c span{font-size:12.5px;color:var(--doux,#4A5578)}
+.pc-ex{margin-top:14px}.pc-ex:empty{display:none}.pc-ex-titre{margin:0;font:600 12px var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;color:#1C49A5}.pc-ex-q{font-size:17px;margin:6px 0 12px}
+.pc-ex-ch{display:flex;flex-wrap:wrap;gap:8px}.pc-ex-ch button{padding:10px 16px;border-radius:12px;border:1.5px solid var(--trait,#E2E6F0);background:var(--carte,#fff);font:inherit;color:inherit;cursor:pointer}.pc-ex-ch button.ok{border-color:#1E7A4F;background:#E7F4EC}.pc-ex-ch button.ko{border-color:#C9746E;background:#F7ECEA}
+.pc-ex-r{min-height:1.4em;font-size:14px}.pc-ex-msg{color:var(--doux,#4A5578)}.pc-ex-fin{font-size:16px;margin:6px 0 10px}.pc-ex-fin b{font-size:22px;margin-right:6px}
+.pc-lien{background:none;border:0;padding:0 6px;color:#1C49A5;text-decoration:underline;cursor:pointer;font:inherit}
+.pc-oral{display:flex;align-items:center;gap:16px}.pc-chrono{font:600 34px var(--f-mono,monospace);min-width:64px;color:#1C49A5}
+.pc-texte{max-height:240px;overflow:auto;padding:12px 14px;border-radius:12px;background:var(--fond,#F5F6FA);font-size:15px;margin-bottom:12px}.pc-texte p{margin:0 0 6px}
+@media (max-width:640px){.tb-modules>.tb-module{flex-basis:148px;min-height:180px}.pc-entr-grille{grid-template-columns:1fr 1fr}.pc-detail{padding:18px}}
+</style>
+
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -37,7 +67,8 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
   <button class="tb-fermer" type="button" id="fermer-video" aria-label="Fermer la vidéo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 </div></div>
 
-<div class="tb-modules">
+<div class="pc-tete"><h2>Les modules</h2><span class="pc-compte" id="pc-compte"></span><span class="pc-fleches"><button type="button" id="pc-g" aria-label="Défiler à gauche">‹</button><button type="button" id="pc-d" aria-label="Défiler à droite">›</button></span></div>
+<div class="tb-modules" role="list">
   <button class="tb-module tb-video" type="button" id="tuile-video" aria-controls="video" aria-expanded="false"><span class="tb-face"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" fill="currentColor" stroke="none"/></svg><small>Vidéo</small></span><span class="tb-face tb-dos"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" fill="currentColor" stroke="none"/></svg><small>Lecture</small></span></button>
   <a class="tb-module ouvert" href="introduction.html" id="carte-intro">
     <span class="tb-etiq">Offert</span>
@@ -46,11 +77,9 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
       <div class="tb-mini"><i id="barre-intro"></i></div></div>
     <span class="tb-action" id="action-intro" aria-label="Commencer"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M8 5v14l11-7Z" fill="currentColor"/></svg></span>
   </a>
-  <div class="tb-module verrou"><div class="tb-num">Test</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>Test de niveau</strong><span>Votre point de départ</span></div></div>
-  <div class="tb-module verrou"><div class="tb-num">01</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>Repères et codes</strong><span>1/24</span></div></div>
-  <div class="tb-module verrou"><div class="tb-num">02</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>T0, le temps le plus simple</strong><span>2/24</span></div></div>
-  <div class="tb-module verrou"><span class="tb-etiq sig">Signature</span><div class="tb-num">25–32</div><span class="tb-cadenas" aria-label="Verrouillé"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><div class="tb-corps"><strong>8 modules avancés à l'oral</strong><span>Vous parlez, sur un modèle audio</span></div></div>
 </div>
+<input type="range" class="pc-curseur" id="pc-curseur" min="1" max="32" value="1" aria-label="Parcourir les modules">
+<div class="pc-detail" id="pc-detail" aria-live="polite"></div>
 
 <p class="tb-aussi">Et aussi : 24 fiches mémo, 24 défis dans la vraie vie, le livre <i>Tu n'as rien compris à l'anglais</i> en numérique. Accès à vie.</p>
 
@@ -121,11 +150,11 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
       const b=document.createElement(actif?'a':'button'); b.className='btn btn-bleu';
       if(actif){ b.href=x.lien; b.target='_blank'; b.rel='noopener'; b.textContent='Rejoindre la session'; } else { b.type='button'; b.disabled=true; b.style.opacity='.55'; b.textContent='Rejoindre · le bouton s\'active à '+new Date(x.debut-10*60000).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
       z.append(b); }).catch(()=>{}); };
-  const connecte=r=>{ f.querySelector('.tb-acces-champs').hidden=true; etat.className='tb-acces-etat ok';
+  const connecte=r=>{ if(window.FRGParcours) FRGParcours.maj(r); f.querySelector('.tb-acces-champs').hidden=true; etat.className='tb-acces-etat ok';
     etat.innerHTML=''; etat.append('Connecté : '+(r.prenom?r.prenom+' · ':'')+r.identifiant+' · '+(NOMF[r.formule]||r.formule)+'. Vos modules s\'ouvrent ici dès leur mise en ligne. ');
     const d=document.createElement('button'); d.type='button'; d.style.cssText='background:none;border:0;padding:0;min-height:0;box-shadow:none;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;font-weight:500'; d.textContent='Se déconnecter'; etat.append(d);
     rdv(); clearInterval(rdvT); rdvT=setInterval(rdv,30000);
-    d.addEventListener('click',()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); rdv(); f.querySelector('.tb-acces-champs').hidden=false; etat.className='tb-acces-etat'; etat.textContent=''; }); };
+    d.addEventListener('click',()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); rdv(); f.querySelector('.tb-acces-champs').hidden=false; etat.className='tb-acces-etat'; etat.textContent=''; if(window.FRGParcours) FRGParcours.maj(null); }); };
   { const s=lireS(); if(s&&s.jeton) fetch(API+'/eleve/session',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).then(r=>r.json()).then(r=>{ if(r.ok) connecte(r); else { try{ localStorage.removeItem('frg-session'); }catch(e){} etat.className='tb-acces-etat ko'; etat.textContent=r.erreur||''; } }).catch(()=>{}); }
   { const q=new URLSearchParams(location.search).get('code'); if(q) code.value=q.toUpperCase(); }
   code.addEventListener('input',()=>{ let v=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); if(v.startsWith('FRG')) v=v.slice(3);
@@ -153,6 +182,7 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
       <a href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.7 3.5 3.9 3.7v3.1a7 7 0 0 1-3.9-1.2v6.2A5.8 5.8 0 1 1 10.8 9v3.2a2.7 2.7 0 1 0 2.6 2.7V3Z"/></svg></a>
     </div></div>
 <nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a></nav></div></footer>
+<script src="parcours.js?v=1"></script>
 <script src="mousse.js?v=202611131900"></script>
 </body>
 </html>

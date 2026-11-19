@@ -619,7 +619,7 @@ body[data-vue="pilotage"] [data-onglet="eleves"],body[data-vue="eleves"] [data-o
 .defile thead th{background:var(--carte)!important}
 #demos input{border-color:var(--trait)!important;background:var(--carte)!important;color:var(--encre)!important}
 
-body[data-vue] [data-onglet="offres"]{display:none!important}body[data-vue="offres"] [data-onglet="offres"]{display:flex!important}
+body[data-vue] [data-onglet="offres"]{display:none!important}body[data-vue]:not([data-vue="ventes"]) [data-onglet="ventes"],body[data-vue]:not([data-vue="stripe"]) [data-onglet="stripe"],body[data-vue="ventes"] [data-onglet="pilotage"],body[data-vue="ventes"] [data-onglet="eleves"],body[data-vue="stripe"] [data-onglet="pilotage"],body[data-vue="stripe"] [data-onglet="eleves"]{display:none!important}body[data-vue="offres"] [data-onglet="offres"]{display:flex!important}
 body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-onglet="eleves"]{display:none!important}
 .f-groupe{margin-top:6px}.f-groupe>h3{margin:14px 0 10px;font:600 11.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--doux)}
 .f-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
@@ -644,7 +644,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   <span class="actions-bandeau"><a class="btn btn-mail" href="https://github.com/frenglaisverse/frenglais-site" target="_blank" rel="noopener" aria-label="Le code du site sur GitHub, nouvel onglet"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub ↗</a> <a class="btn btn-mail" href="https://mail.zoho.eu/zm/#mail/views/all" target="_blank" rel="noopener" aria-label="Mes mails (Zoho), nouvel onglet">✉︎ Mes mails <b class="pastille" id="mail-n" hidden></b> ↗</a></span>
 </div></header>
 <div class="wrap">
-  <nav class="onglets-tb" role="tablist" aria-label="Sections du tableau de bord"><button type="button" role="tab" data-vers="pilotage">Pilotage</button><button type="button" role="tab" data-vers="eleves">Mes élèves <b class="pastille-n" id="nb-eleves"></b></button><button type="button" role="tab" data-vers="offres">Offres</button></nav>
+  <nav class="onglets-tb" role="tablist" aria-label="Sections du tableau de bord"><button type="button" role="tab" data-vers="pilotage">Pilotage</button><button type="button" role="tab" data-vers="ventes">Ventes</button><button type="button" role="tab" data-vers="stripe">Stripe</button><button type="button" role="tab" data-vers="eleves">Mes élèves <b class="pastille-n" id="nb-eleves"></b></button><button type="button" role="tab" data-vers="offres">Offres</button></nav>
   <section data-onglet="pilotage" class="carte">
     <div class="ligne" style="justify-content:space-between"><h2>Vue d'ensemble</h2><span class="doux petit" id="vue-date"></span></div>
     <div id="vue-rappel"></div>
@@ -723,7 +723,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <p class="vide" id="rang-vide">Le classement apparaîtra dès le premier rapport reçu.</p>
   </section>
 
-  <section data-onglet="pilotage" class="carte" id="ventes">
+  <section data-onglet="ventes" class="carte" id="ventes">
     <div class="ligne" style="justify-content:space-between"><h2>Ventes</h2><span class="doux petit" id="ventes-etat"></span></div>
     <div class="vg-tete"><div class="vg-tot"><div class="vg-hero"><small class="doux" id="v-mois-nom"></small><strong id="v-mois-e">–</strong><span class="doux"><span id="v-mois">–</span> · <span id="v-comp"></span></span></div><div class="vg-auj"><small class="doux">Aujourd'hui</small><b id="v-jour-e">–</b><span class="doux" id="v-jour"></span></div></div>
     <div class="vg-choix" role="tablist"><button type="button" data-vg="jours" aria-selected="true">30 jours</button><button type="button" data-vg="mois" aria-selected="false">12 mois</button></div></div>
@@ -731,7 +731,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <details class="ventes-detail"><summary class="doux petit">Détail des ventes</summary><div id="ventes-liste" class="doux petit">Chargement…</div><p id="purge-box" hidden style="margin-top:10px"><button type="button" class="btn btn-sec" id="purge">Effacer les ventes de test</button> <span class="doux petit">Mode test uniquement : supprime ces ventes, leurs accès et remet le compteur Fondateurs à zéro.</span></p></details>
     <div class="ligne" style="justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--trait,#e3e7f1)"><span><b>Liste « prévenez-moi »</b> <span class="doux petit" id="liste-n"></span></span><button type="button" class="btn btn-sec" id="liste-csv">Exporter (CSV)</button></div>
   </section>
-  <section data-onglet="pilotage" class="carte" id="stripe">
+  <section data-onglet="stripe" class="carte" id="stripe">
     <div class="ligne" style="justify-content:space-between"><h2>Stripe</h2><span class="stripe-mode" id="stripe-mode">…</span></div>
     <div class="acces-g" style="--c:#635BFF;margin-top:10px"><p>Raccourcis</p><div><a class="tuile" style="--c:#635BFF" data-stripe="payments" href="https://dashboard.stripe.com/payments" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><span>Paiements</span></a><a class="tuile" style="--c:#635BFF" data-stripe="subscriptions" href="https://dashboard.stripe.com/subscriptions" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2"/><path d="M20 4v5h-5M4 20v-5h5"/></svg><span>Abonnements (3 fois)</span></a><a class="tuile" style="--c:#635BFF" data-stripe="invoices" href="https://dashboard.stripe.com/invoices" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg><span>Factures</span></a><a class="tuile" style="--c:#635BFF" data-stripe="customers" href="https://dashboard.stripe.com/customers" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Clients</span></a><a class="tuile" style="--c:#635BFF" data-stripe="disputes" href="https://dashboard.stripe.com/disputes" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.5"/></svg><span>Litiges</span></a><a class="tuile" style="--c:#635BFF" data-stripe="payouts" href="https://dashboard.stripe.com/payouts" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10 12 4l9 6M5 10v8M19 10v8M9 10v8M15 10v8M3 20h18"/></svg><span>Virements reçus</span></a></div></div>
     <p class="doux petit" style="margin-top:10px">Un remboursement fait dans Stripe ferme automatiquement l'accès de l'élève et apparaît dans les ventes. Chaque vente vous est aussi envoyée par mail.</p>
@@ -1336,7 +1336,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     const montrer = v => { bts.forEach(b => b.setAttribute('aria-selected', b.dataset.vers === v)); document.body.dataset.vue = v;
       try { localStorage.setItem('frg-onglet-tb', v); } catch (e) {} history.replaceState(null, '', v === 'pilotage' ? location.pathname : '#' + v); };
     bts.forEach(b => b.addEventListener('click', () => montrer(b.dataset.vers)));
-    let v = location.hash === '#eleves' ? 'eleves' : location.hash === '#offres' ? 'offres' : 'pilotage'; try { if (!location.hash) v = localStorage.getItem('frg-onglet-tb') || 'pilotage'; } catch (e) {}
+    let v = ['#eleves', '#offres', '#ventes', '#stripe'].includes(location.hash) ? location.hash.slice(1) : 'pilotage'; try { if (!location.hash) v = localStorage.getItem('frg-onglet-tb') || 'pilotage'; } catch (e) {}
     montrer(v); window.FRGOnglet = montrer; })();
 
   /* classements : flèche pour faire défiler, masquée quand tout est visible ou en bas */

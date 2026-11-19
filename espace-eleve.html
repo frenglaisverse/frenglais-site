@@ -105,7 +105,16 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
 (function(){
   const f=document.getElementById('acces'); if(!f) return;
   const ident=document.getElementById('acces-id'), code=document.getElementById('acces-code'), etat=document.getElementById('acces-etat');
-  const valide=v=>{ const m=/^([A-Za-z]+)([1-6])$/.exec(v.trim()); return m && NOMS_FLORIDE.some(n=>n.toLowerCase()===m[1].toLowerCase()); };
+  const valide=v=>/^[A-Za-z]{3,20}\d{1,6}$/.test(v.trim());
+  const API='https://courbe-classement.paulodubmx84.workers.dev', NOMF={integral:"L'Intégral",signature:'Signature'};
+  const lireS=()=>{ try{ return JSON.parse(localStorage.getItem('frg-session')||'null'); }catch(e){ return null; } };
+  const appareil=()=>{ let a=null; try{ a=localStorage.getItem('frg-appareil'); if(!a){ a=crypto.randomUUID(); localStorage.setItem('frg-appareil',a); } }catch(e){ a=a||crypto.randomUUID(); } return a; };
+  const nomAppareil=()=>{ const u=navigator.userAgent; return (/iPhone/.test(u)?'iPhone':/iPad/.test(u)?'iPad':/Android/.test(u)?'Android':/Mac/.test(u)?'Mac':/Windows/.test(u)?'PC Windows':'Appareil')+' · '+(/Edg\//.test(u)?'Edge':/Firefox/.test(u)?'Firefox':/Chrome/.test(u)?'Chrome':/Safari/.test(u)?'Safari':'navigateur'); };
+  const connecte=r=>{ f.querySelector('.tb-acces-champs').hidden=true; etat.className='tb-acces-etat ok';
+    etat.innerHTML=''; etat.append('Connecté : '+(r.prenom?r.prenom+' · ':'')+r.identifiant+' · '+(NOMF[r.formule]||r.formule)+'. Vos modules s\'ouvrent ici dès leur mise en ligne. ');
+    const d=document.createElement('button'); d.type='button'; d.style.cssText='background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit'; d.textContent='Se déconnecter'; etat.append(d);
+    d.addEventListener('click',()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); f.querySelector('.tb-acces-champs').hidden=false; etat.className='tb-acces-etat'; etat.textContent=''; }); };
+  { const s=lireS(); if(s&&s.jeton) fetch(API+'/eleve/session',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).then(r=>r.json()).then(r=>{ if(r.ok) connecte(r); else { try{ localStorage.removeItem('frg-session'); }catch(e){} etat.className='tb-acces-etat ko'; etat.textContent=r.erreur||''; } }).catch(()=>{}); }
   { const q=new URLSearchParams(location.search).get('code'); if(q) code.value=q.toUpperCase(); }
   code.addEventListener('input',()=>{ let v=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); if(v.startsWith('FRG')) v=v.slice(3);
     v=v.slice(0,8); code.value=v?'FRG-'+v.slice(0,4)+(v.length>4?'-'+v.slice(4):''):''; });
@@ -115,10 +124,14 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
       FRG.demoVerifier(code.value).then(r=>{ if(r.ok){ etat.classList.add('ok'); etat.textContent='Bienvenue '+r.nom+' : votre démo s\'ouvre…'; setTimeout(()=>location.href='modules.html',700); } else { etat.textContent=''; f.requestSubmit(); } delete f.dataset.demo; })
         .catch(()=>{ etat.textContent=''; f.requestSubmit(); delete f.dataset.demo; });
       return; }
-    if(!valide(ident.value)){ etat.classList.add('ko'); etat.textContent='Identifiant introuvable : un nom de Floride suivi d\'un chiffre, par exemple Manatee3.'; ident.focus(); return; }
+    if(!valide(ident.value)){ etat.classList.add('ko'); etat.textContent='Identifiant introuvable : un nom de Floride suivi d\'un nombre, par exemple Manatee34.'; ident.focus(); return; }
     if(!/^FRG-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.value)){ etat.classList.add('ko'); etat.textContent='Le code a la forme FRG-XXXX-XXXX.'; code.focus(); return; }
-    if(PLATEFORME_URL){ location.href=PLATEFORME_URL; return; }
-    etat.classList.add('ok'); const m=/^([A-Za-z]+)([1-6])$/.exec(ident.value.trim()); ident.value=NOMS_FLORIDE.find(n=>n.toLowerCase()===m[1].toLowerCase())+m[2]; etat.textContent='Merci '+ident.value+'. Votre espace ouvre avec les premières sessions : le lien de connexion vous sera communiqué.'; });
+    etat.textContent='Vérification…'; const btn=f.querySelector('button[type=submit]'); btn.disabled=true;
+    fetch(API+'/eleve/verifier',{method:'POST',body:JSON.stringify({identifiant:ident.value.trim(),code:code.value,appareil:appareil(),nom:nomAppareil()})}).then(r=>r.json()).then(r=>{ btn.disabled=false;
+      if(!r.ok){ etat.className='tb-acces-etat ko'; etat.textContent=r.erreur||'Accès refusé.'; return; }
+      try{ localStorage.setItem('frg-session',JSON.stringify({jeton:r.jeton,identifiant:r.identifiant})); }catch(e){}
+      code.value=''; if(PLATEFORME_URL){ location.href=PLATEFORME_URL; return; } connecte(r); })
+      .catch(()=>{ btn.disabled=false; etat.className='tb-acces-etat ko'; etat.textContent='Serveur injoignable. Vérifiez votre connexion et réessayez.'; }); });
 })();
 </script>
 <footer><div class="in pied"><div><img src="logo.webp" class="logo-pied" alt="Frenglais" width="197" height="70"><small>© 2026 Frenglais · Paul Moreaux</small>

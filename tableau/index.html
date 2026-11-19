@@ -490,7 +490,7 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .kpis div{border:1px solid var(--trait);border-radius:14px;padding:12px 14px}
 .kpis b{display:block;font:600 26px/1.1 var(--f-txt);letter-spacing:-.02em}
-.vg-tete{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:10px}.vg-tot{display:flex;gap:22px;flex-wrap:wrap}.vg-tot b{font:600 28px/1 var(--f-txt);letter-spacing:-.02em;margin-right:4px}
+.vg-tete{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:10px}.vg-tot{display:flex;gap:34px;flex-wrap:wrap;align-items:flex-end}.vg-hero small,.vg-auj small{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}.vg-hero strong{display:block;font:700 54px/1 var(--f-txt);letter-spacing:-.035em;color:#4FC79F;text-shadow:0 0 28px #4FC79F33}.vg-hero>span{display:block;margin-top:6px;font-size:14px}.vg-auj b{display:block;font:600 24px/1 var(--f-txt);letter-spacing:-.02em}.vg-auj>span{display:block;margin-top:4px;font-size:13px}.vg-up{color:#4FC79F}.vg-down{color:#E8836F}
 .vg-choix{display:flex;border:1px solid var(--trait);border-radius:99px;padding:3px}.vg-choix button{background:none;border:0;color:inherit;font:inherit;font-size:13px;padding:5px 12px;border-radius:99px;cursor:pointer;opacity:.65}.vg-choix button[aria-selected=true]{background:color-mix(in srgb,#2E8B6E 22%,transparent);opacity:1}
 .vg{position:relative;display:grid;grid-template-columns:28px 1fr;grid-template-rows:170px auto;margin-top:16px}.vg-y{position:relative;font-size:11px;opacity:.55}.vg-y span{position:absolute;right:6px;transform:translateY(50%)}
 .vg-zone{position:relative;display:flex;align-items:flex-end;gap:3px;border-bottom:1px solid var(--trait);padding-bottom:0}.vg-zone .vg-l{position:absolute;left:0;right:0;border-top:1px dashed color-mix(in srgb,var(--trait) 70%,transparent)}
@@ -725,7 +725,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
 
   <section data-onglet="pilotage" class="carte" id="ventes">
     <div class="ligne" style="justify-content:space-between"><h2>Ventes</h2><span class="doux petit" id="ventes-etat"></span></div>
-    <div class="vg-tete"><div class="vg-tot"><span><b id="v-jour">–</b> aujourd'hui <small class="doux" id="v-jour-e"></small></span><span><b id="v-mois">–</b> ce mois-ci <small class="doux" id="v-mois-e"></small></span></div>
+    <div class="vg-tete"><div class="vg-tot"><div class="vg-hero"><small class="doux" id="v-mois-nom">Ce mois-ci</small><strong id="v-mois-e">–</strong><span class="doux"><span id="v-mois">–</span> · <span id="v-comp"></span></span></div><div class="vg-auj"><small class="doux">Aujourd'hui</small><b id="v-jour-e">–</b><span class="doux" id="v-jour"></span></div></div>
     <div class="vg-choix" role="tablist"><button type="button" data-vg="jours" aria-selected="true">30 jours</button><button type="button" data-vg="mois" aria-selected="false">12 mois</button></div></div>
     <div class="vg" id="vg" aria-label="Ventes"></div>
     <details class="ventes-detail"><summary class="doux petit">Détail des ventes</summary><div id="ventes-liste" class="doux petit">Chargement…</div></details>
@@ -1171,8 +1171,13 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     et.textContent = (j.ouvert ? 'vente ouverte' : 'vente fermée au public') + ' · Fondateurs : ' + j.fondateursVendus + ' / ' + j.places;
     { const jour = t => new Date(t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }), auj = jour(Date.now()), ok = j.ventes.filter(v => !String(v.statut).startsWith('rembours'));
       const J = ok.filter(v => jour(v.t) === auj), M = ok.filter(v => jour(v.t).slice(0, 7) === auj.slice(0, 7)), som = X => (X.reduce((a, v) => a + v.total, 0) / 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' €';
-      document.getElementById('v-jour').textContent = J.length; document.getElementById('v-jour-e').textContent = som(J);
-      document.getElementById('v-mois').textContent = M.length; document.getElementById('v-mois-e').textContent = som(M);
+      const pl = n => n + ' vente' + (n > 1 ? 's' : ''), moisP = new Date(); moisP.setDate(1); moisP.setMonth(moisP.getMonth() - 1);
+      const cP = moisP.toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }).slice(0, 7), P = ok.filter(v => jour(v.t).slice(0, 7) === cP && jour(v.t).slice(8) <= auj.slice(8)), tot = X => X.reduce((a, v) => a + v.total, 0);
+      document.getElementById('v-mois-nom').textContent = 'Gagné en ' + new Date().toLocaleDateString('fr-FR', { month: 'long', timeZone: 'Europe/Paris' });
+      document.getElementById('v-mois-e').textContent = som(M); document.getElementById('v-mois').textContent = pl(M.length);
+      const cp = document.getElementById('v-comp'), mp = moisP.toLocaleDateString('fr-FR', { month: 'long' });
+      if (tot(P)) { const d = Math.round((tot(M) / tot(P) - 1) * 100); cp.textContent = (d >= 0 ? '+' : '') + d + ' % vs ' + mp + ' à la même date'; cp.className = d >= 0 ? 'vg-up' : 'vg-down'; } else { cp.textContent = som(P) + ' en ' + mp + ' à la même date'; cp.className = ''; }
+      document.getElementById('v-jour-e').textContent = som(J); document.getElementById('v-jour').textContent = pl(J.length);
       vgDonnees = ok; vgDessiner();
       const sm = document.getElementById('stripe-mode'); sm.textContent = j.test ? 'Mode test' : 'En direct'; sm.classList.toggle('live', !j.test);
       document.querySelectorAll('[data-stripe]').forEach(a => a.href = 'https://dashboard.stripe.com/' + (j.test ? 'test/' : '') + a.dataset.stripe); }

@@ -1369,11 +1369,11 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     integral: { nom: 'Particuliers et professionnels', unite: 'par personne', formules: [["L'Intégral · prix Fondateurs, jusqu'au 31/12/2026", 290], ["L'Intégral · prix public", 490], ["Signature · prix Fondateurs, jusqu'au 31/12/2026", 490], ['Signature · prix public', 890]] },
     equipe: { nom: 'Entreprises · packs Boardroom', unite: 'par pack', formules: [["Boardroom 3 · tarif pionnier, jusqu'au 31/01/2027", 1590], ['Boardroom 3 · prix public', 2290], ["Boardroom 5 · tarif pionnier, jusqu'au 31/01/2027", 2490], ['Boardroom 5 · prix public', 3490], ["Boardroom 10 · tarif pionnier, jusqu'au 31/01/2027", 4190], ['Boardroom 10 · prix public', 5990], ["Boardroom 20 · tarif pionnier, jusqu'au 31/01/2027", 7690], ['Boardroom 20 · prix public', 10990]] },
     mesure: { nom: 'Entreprises · sur mesure (plus de 20)', unite: 'par apprenant', equipe: true, formules: [['Accès Signature · par apprenant', 549]] },
-    solo: { nom: 'Particuliers · cours individuels', unite: 'par personne', formules: [['1 h par semaine en visio · 4 h à 55 €', 220, '4 semaines'], ['2 h par semaine en visio · 8 h à 50 €', 400, '4 semaines'], ['3 h par semaine en visio · 12 h à 45 €', 540, '4 semaines'], ['4 h par semaine en visio · 16 h à 40 €', 640, '4 semaines']] }
+    solo: { nom: 'Particuliers · cours individuels', unite: 'par personne', formules: [['1 h par semaine en visio · 4 h à 75 €', 300, '4 semaines'], ['2 h par semaine en visio · 8 h à 70 €', 560, '4 semaines'], ['3 h par semaine en visio · 12 h à 65 €', 780, '4 semaines'], ['4 h par semaine en visio · 16 h à 60 €', 960, '4 semaines']] }
   };
   const OPTIONS0 = [['secteur', 'Adaptation au secteur : scénarios, vocabulaire et cas réels du métier', 0, false, true], ['suivi', 'Option Suivi live : point à mi-parcours et évaluation finale en visio', 149, true], ['live', 'Séance individuelle avec Paul (1 h)', 90, true], ['lancement', 'Lancement sur site (frais de déplacement)', 0, false, true]];
   const DEG = n => n >= 50 ? 15 : n >= 30 ? 10 : 0;   // sur mesure : 30 à 49 apprenants -10 %, 50 et plus -15 %
-  let GR; try { GR = Object.assign(JSON.parse(JSON.stringify(GRILLE0)), JSON.parse(localStorage.getItem('frg-grille-v2') || 'null') || {}); } catch (e) { GR = JSON.parse(JSON.stringify(GRILLE0)); }
+  let GR; try { GR = Object.assign(JSON.parse(JSON.stringify(GRILLE0)), JSON.parse(localStorage.getItem('frg-grille-v3') || 'null') || {}); } catch (e) { GR = JSON.parse(JSON.stringify(GRILLE0)); }
   let OPT; try { OPT = JSON.parse(localStorage.getItem('frg-options-v4') || 'null') || OPTIONS0; } catch (e) { OPT = OPTIONS0; }
   const eur = v => v.toLocaleString('fr-FR', { minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €';
   const $d = id => document.getElementById(id);
@@ -1427,7 +1427,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       + `<p class="petit" style="margin:8px 0 4px"><b>Mentions du devis</b></p><label class="petit">SIRET <input id="ent-siret" style="width:200px"></label> <label class="petit"><input type="checkbox" id="ent-tva" checked> TVA non applicable (micro-entreprise, art. 293 B)</label>`;
     const R = JSON.parse(localStorage.getItem('frg-entreprise') || '{}'); $d('ent-siret').value = R.siret || ''; $d('ent-tva').checked = R.tva !== false;
     z.addEventListener('change', ev => { const g = ev.target.dataset.g, op = ev.target.dataset.op;
-      if (g) { const [k, i] = g.split(':'); GR[k].formules[+i][1] = +ev.target.value || 0; localStorage.setItem('frg-grille-v2', JSON.stringify(GR)); }
+      if (g) { const [k, i] = g.split(':'); GR[k].formules[+i][1] = +ev.target.value || 0; localStorage.setItem('frg-grille-v3', JSON.stringify(GR)); }
       if (op) { OPT.find(o => o[0] === op)[2] = +ev.target.value || 0; localStorage.setItem('frg-options-v4', JSON.stringify(OPT)); }
       localStorage.setItem('frg-entreprise', JSON.stringify({ siret: $d('ent-siret').value.trim(), tva: $d('ent-tva').checked }));
       dvFormules(); }); }

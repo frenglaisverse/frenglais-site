@@ -508,6 +508,11 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 .ag-dlg label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--doux);margin-top:12px}.ag-dlg input,.ag-dlg select{padding:9px 11px;border:1.5px solid var(--trait);border-radius:10px;font:14px var(--f-txt);color:var(--encre);background:var(--carte);width:100%;box-sizing:border-box}
 .ag-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ag-lien{display:flex;gap:8px}.ag-lien .btn{min-height:38px;padding:6px 12px;white-space:nowrap}.ag-dlg .ag-case{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--encre)}.ag-dlg .ag-case input{width:auto}
 .ag-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.col-d{display:flex;flex-direction:column;gap:18px;min-width:0}.duo .col-d .carte{height:auto}
+#devis .titre-ic{position:relative}.dv-plus{margin-left:auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--trait);background:var(--carte);color:var(--encre);font-size:22px;line-height:1;cursor:pointer;flex:none;transition:transform .2s}.dv-plus[aria-expanded="true"]{transform:rotate(45deg)}
+#devis.replie>:not(.titre-ic){display:none!important}#devis.replie .titre-ic{margin-bottom:0}
+#acces-eleve input,#acces-eleve select{padding:9px 11px;border:1.5px solid var(--trait);border-radius:10px;font:14px var(--f-txt);color:var(--encre);background:var(--carte);width:100%;box-sizing:border-box}#acces-eleve label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--doux)}
+.ae-carte{margin-top:12px;padding:14px 16px;border-radius:14px;border:1px dashed var(--trait);font-size:14px}.ae-carte code{font:600 16px var(--f-mono)}
 .ventes-detail{margin-top:12px}.ventes-detail summary{cursor:pointer;padding:4px 0}.ventes-detail>div{margin-top:8px;overflow-x:auto}
 .stripe-mode{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,#635BFF 15%,transparent);color:#8F89FF}.stripe-mode.live{background:color-mix(in srgb,#2E8B6E 18%,transparent);color:#4FC79F}
 .kpis span{font-size:13px;color:var(--doux)}
@@ -703,8 +708,22 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <p class="ligne" style="margin-top:12px"><a class="btn plein" href="#agenda" id="vz-ouvrir">Planifier dans l'agenda ↓</a><button type="button" class="btn btn-sec" id="vz-notif">Tester la notif téléphone</button><span class="petit" id="vz-notif-msg"></span></p>
     </div>
   </section>
-  <section class="carte" id="devis">
-    <div class="titre-ic"><span class="ic" style="--c:#E0685F"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></span><div><h2>Générateur de devis</h2><p class="doux petit">Cochez, vérifiez le total, créez le PDF.</p></div></div>
+  <div class="col-d">
+  <section class="carte" id="acces-eleve">
+    <div class="titre-ic"><span class="ic" style="--c:#1C49A5"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M19 8v6M16 11h6"/></svg></span><div><h2>Accès élève</h2><p class="doux petit">Pour vos élèves actuels : identifiant et code, sans paiement en ligne.</p></div></div>
+    <div class="dv-grille" style="margin-top:12px">
+      <label>Prénom <input id="ae-prenom" maxlength="40" autocomplete="off"></label>
+      <label>Nom <input id="ae-nom" maxlength="60" autocomplete="off"></label>
+      <label style="grid-column:1/-1">E-mail <input id="ae-email" type="email" autocomplete="off"></label>
+      <label>Formule <select id="ae-formule"><option value="integral">L'Intégral</option><option value="signature">Signature</option></select></label>
+      <label>Option <select id="ae-option"><option value="">Sans</option><option value="1">+ Suivi live</option></select></label>
+    </div>
+    <p class="ligne" style="margin-top:10px"><label class="petit" style="display:flex;flex-direction:row;gap:8px;align-items:center;font-size:14px"><input type="checkbox" id="ae-envoyer" checked style="width:auto;padding:0;margin:0"> Envoyer ses accès par mail</label></p>
+    <p class="ligne"><button class="btn plein" id="ae-creer" type="button">Créer l'accès</button><span class="petit" id="ae-msg"></span></p>
+    <div id="ae-res"></div>
+  </section>
+  <section class="carte replie" id="devis">
+    <div class="titre-ic"><span class="ic" style="--c:#E0685F"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></span><div><h2>Générateur de devis</h2><p class="doux petit">Cochez, vérifiez le total, créez le PDF.</p></div><button type="button" class="dv-plus" id="dv-plus" aria-expanded="false" aria-label="Déplier le générateur de devis">+</button></div>
     <div class="dv-grille">
       <label>Client <input id="dv-client" placeholder="Nom ou société" maxlength="80"></label>
       <label>Contact <input id="dv-contact" placeholder="E-mail ou adresse (facultatif)" maxlength="120"></label>
@@ -718,6 +737,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <div class="dv-total"><div><span class="doux petit">Total</span><b id="dv-total">—</b><small class="doux" id="dv-detail"></small></div><button class="btn plein" type="button" id="dv-pdf">Créer le devis (PDF)</button></div>
     <p class="petit doux" style="margin:0">Prix modifiables dans « Réglages et sauvegarde ». Grille validée le 13 novembre 2026.</p>
   </section>
+  </div>
   </div>
 
   <section data-onglet="eleves" class="carte">
@@ -1197,7 +1217,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     let j; try { j = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle }) }).then(r => r.json()); } catch (e) { z.textContent = 'Serveur injoignable.'; return; }
     if (j.erreur || !j.ventes) { z.textContent = j.erreur || 'Ventes indisponibles.'; return; }
     et.textContent = (j.ouvert ? 'vente ouverte' : 'vente fermée au public') + ' · Fondateurs : ' + j.fondateursVendus + ' / ' + j.places;
-    { const jour = t => new Date(t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }), auj = jour(Date.now()), ok = j.ventes.filter(v => !String(v.statut).startsWith('rembours'));
+    { const jour = t => new Date(t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }), auj = jour(Date.now()), ok = j.ventes.filter(v => !v.manuel && !String(v.statut).startsWith('rembours'));
       const J = ok.filter(v => jour(v.t) === auj), M = ok.filter(v => jour(v.t).slice(0, 7) === auj.slice(0, 7)), som = X => (X.reduce((a, v) => a + v.total, 0) / 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' €';
       const pl = n => n + ' vente' + (n > 1 ? 's' : ''), moisP = new Date(); moisP.setDate(1); moisP.setMonth(moisP.getMonth() - 1);
       const cP = moisP.toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }).slice(0, 7), P = ok.filter(v => jour(v.t).slice(0, 7) === cP && jour(v.t).slice(8) <= auj.slice(8)), tot = X => X.reduce((a, v) => a + v.total, 0);
@@ -1215,7 +1235,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     if (window.FRGEleves) FRGEleves(j.ventes);
     if (!j.ventes.length) { z.textContent = 'Aucune vente pour le moment.'; return; }
     const eur = c => (c / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €', nom = { integral: "L'Intégral", signature: 'Signature' };
-    z.innerHTML = '<table class="tab"><tr><th>Date</th><th>Élève</th><th>Formule</th><th>Montant</th><th>Statut</th><th>Mail d\'accès</th><th>Appareils</th><th>Modules</th><th></th></tr>' + j.ventes.map(v => `<tr><td>${new Date(v.t).toLocaleDateString('fr-FR')}</td><td>${esc(v.facturation)}<br><span class="doux">${esc(v.email)} · ${esc(v.identifiant)}</span></td><td>${nom[v.formule] || v.formule}${v.edition === 'fondateurs' ? ' · Fondateurs' : ''}</td><td>${eur(v.total)}${v.mode === '3x' ? ' (3 fois)' : ''}</td><td>${esc(v.statut)}</td><td>${String(v.mail).startsWith('envoy') ? '✓' : '<span title="' + esc(v.mail) + '">échec</span>'}</td><td>${(v.appareils || []).length} / 2${(v.appareils || []).length ? '<br><span class="doux">' + v.appareils.map(x => esc(x.n) + ', vu le ' + new Date(x.v).toLocaleDateString('fr-FR')).join('<br>') + '</span><br><button type="button" class="btn btn-sec" data-appareils="' + esc(v.identifiant) + '">Libérer</button>' : ''}</td><td>${Object.values(v.prog || {}).filter(x => x.v).length} validé${Object.values(v.prog || {}).filter(x => x.v).length > 1 ? 's' : ''}${Object.keys(v.prog || {}).length ? '<br><span class="doux">' + Object.entries(v.prog).map(([m, x]) => 'M' + m + ' · ' + x.s + ' %').join('<br>') + '</span>' : ''}</td><td><button type="button" class="btn btn-sec" data-renvoyer="${esc(v.identifiant)}">Renvoyer les accès</button></td></tr>`).join('') + '</table>';
+    z.innerHTML = '<table class="tab"><tr><th>Date</th><th>Élève</th><th>Formule</th><th>Montant</th><th>Statut</th><th>Mail d\'accès</th><th>Appareils</th><th>Modules</th><th></th></tr>' + j.ventes.map(v => `<tr><td>${new Date(v.t).toLocaleDateString('fr-FR')}</td><td>${esc(v.facturation)}<br><span class="doux">${esc(v.email)} · ${esc(v.identifiant)}</span></td><td>${nom[v.formule] || v.formule}${v.edition === 'fondateurs' ? ' · Fondateurs' : ''}</td><td>${v.manuel ? 'Accès manuel' : eur(v.total)}${v.mode === '3x' ? ' (3 fois)' : ''}</td><td>${esc(v.statut)}</td><td>${String(v.mail).startsWith('envoy') ? '✓' : '<span title="' + esc(v.mail) + '">échec</span>'}</td><td>${(v.appareils || []).length} / 2${(v.appareils || []).length ? '<br><span class="doux">' + v.appareils.map(x => esc(x.n) + ', vu le ' + new Date(x.v).toLocaleDateString('fr-FR')).join('<br>') + '</span><br><button type="button" class="btn btn-sec" data-appareils="' + esc(v.identifiant) + '">Libérer</button>' : ''}</td><td>${Object.values(v.prog || {}).filter(x => x.v).length} validé${Object.values(v.prog || {}).filter(x => x.v).length > 1 ? 's' : ''}${Object.keys(v.prog || {}).length ? '<br><span class="doux">' + Object.entries(v.prog).map(([m, x]) => 'M' + m + ' · ' + x.s + ' %').join('<br>') + '</span>' : ''}</td><td><button type="button" class="btn btn-sec" data-renvoyer="${esc(v.identifiant)}">Renvoyer les accès</button></td></tr>`).join('') + '</table>';
     z.querySelectorAll('[data-appareils]').forEach(b => b.addEventListener('click', async () => { if (!confirm('Déconnecter tous les appareils de ' + b.dataset.appareils + ' ? Il pourra se reconnecter sur deux nouveaux appareils.')) return;
       b.disabled = true; const r = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle, appareils: b.dataset.appareils }) }).then(r => r.json()).catch(() => ({ erreur: 'réseau' }));
       b.textContent = r.ok ? 'Libéré ✓' : 'Erreur : ' + r.erreur; }));
@@ -1228,6 +1248,19 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   document.getElementById('liste-csv').addEventListener('click', async () => { const L = await liste(); if (!L) return alert('Liste indisponible.');
     const csv = 'email;inscrit_le;provenance\n' + L.map(x => [x.e, new Date(x.t).toLocaleString('fr-FR'), x.s.join('+')].join(';')).join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); a.download = 'frenglais-liste-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click(); });
+  /* devis repliable */
+  { const b = document.getElementById('dv-plus'), d = document.getElementById('devis'); b.addEventListener('click', () => { const o = d.classList.toggle('replie'); b.setAttribute('aria-expanded', !o); }); }
+  /* accès élève créés à la main */
+  { const $a = id => document.getElementById(id), msg = $a('ae-msg');
+    $a('ae-creer').addEventListener('click', async () => { const x = { prenom: $a('ae-prenom').value.trim(), nom: $a('ae-nom').value.trim(), email: $a('ae-email').value.trim(), formule: $a('ae-formule').value, option: !!$a('ae-option').value, envoyer: $a('ae-envoyer').checked };
+      if (!x.prenom || !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(x.email)) { msg.textContent = 'Prénom et e-mail, au minimum.'; return; }
+      if (!confirm('Créer un accès ' + (x.formule === 'signature' ? 'Signature' : "L'Intégral") + (x.option ? ' + Suivi live' : '') + ' pour ' + x.prenom + ' (' + x.email + ') ?')) return;
+      const b = $a('ae-creer'); b.disabled = true; msg.textContent = 'Création…';
+      const r = await fetch(API + '/admin/eleve', { method: 'POST', body: JSON.stringify({ cle: FRG.lire('frg-cle-tableau', ''), ...x }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
+      b.disabled = false; if (!r.ok) { msg.textContent = 'Erreur : ' + r.erreur; return; } msg.textContent = '';
+      $a('ae-res').innerHTML = `<div class="ae-carte"><b>${esc(x.prenom)}</b> · ${r.mail === 'envoyé' ? 'mail envoyé ✓' : r.mail === 'non envoyé' ? 'à transmettre vous-même' : esc(r.mail)}<br>Identifiant <code>${esc(r.identifiant)}</code> · code <code>${esc(r.code)}</code><br><span class="doux petit">Le code ne s'affiche qu'ici, une seule fois. Plus tard : « Renvoyer les accès » dans Ventes en crée un nouveau.</span><p class="ligne" style="margin-top:8px"><button type="button" class="btn btn-sec" id="ae-copier">Copier le message</button></p></div>`;
+      $a('ae-copier').addEventListener('click', async () => { try { await navigator.clipboard.writeText(`Bonjour ${x.prenom},\n\nVoici vos accès Frenglais :\nIdentifiant : ${r.identifiant}\nCode : ${r.code}\n\nÀ entrer sur https://frenglais.co/espace-eleve.html\n\nPaul`); $a('ae-copier').textContent = 'Copié ✓'; } catch (e) {} });
+      ['ae-prenom', 'ae-nom', 'ae-email'].forEach(i => $a(i).value = ''); if (typeof majVentes === 'function') majVentes(); }); }
   /* agenda des sessions Google Meet : semaine façon Google Agenda ; clic sur un créneau = nouvelle session ; bouton « Lancer » 10 min avant */
   { const $v = id => document.getElementById(id), H0 = 7, H1 = 24, HH = 38; let RDV = [], lundi = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d; })(), choix = null, vu = null;
     const okLien = l => /^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/.test(l), net = l => String(l || '').trim().replace(/[?#].*$/, '');

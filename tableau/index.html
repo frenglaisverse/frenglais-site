@@ -497,6 +497,17 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 .vg-b{position:relative;flex:1;height:100%;display:flex;align-items:flex-end;cursor:default}.vg-b i{display:block;width:100%;height:0;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#4FC79F,#2E8B6E);transition:height .9s cubic-bezier(.2,.8,.2,1)}.vg-b.auj i{box-shadow:0 0 10px #4FC79F80}.vg-b:hover i{filter:brightness(1.2)}
 .vg-b em{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);white-space:nowrap;font-style:normal;font-size:12px;background:var(--fond-carte,#1a2340);border:1px solid var(--trait);padding:3px 8px;border-radius:8px;opacity:0;pointer-events:none;z-index:2}.vg-b:hover em{opacity:1}
 .vg-x{grid-column:2;display:flex;gap:3px;font-size:11px;opacity:.55;margin-top:4px}.vg-x span{flex:1;text-align:center;white-space:nowrap;overflow:visible}
+.ag-tete{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}.ag-nav{display:flex;align-items:center;gap:6px}.ag-nav .btn{min-height:34px;padding:6px 12px}.ag-nav b{margin-left:8px;font-size:15px}
+.ag{margin-top:14px;overflow-x:auto}.ag-grille{display:grid;grid-template-columns:44px repeat(var(--j),minmax(96px,1fr));min-width:calc(44px + var(--j) * 96px)}
+.ag-jour{text-align:center;font-size:12px;padding:6px 0;color:var(--doux);border-bottom:1px solid var(--trait)}.ag-jour b{display:block;font-size:18px;color:var(--encre);font-weight:600}.ag-jour.auj b{color:#fff;background:var(--bleu);border-radius:99px;width:32px;height:32px;line-height:32px;margin:2px auto 0}
+.ag-h{position:relative}.ag-h span{position:absolute;right:6px;transform:translateY(-50%);font-size:11px;color:var(--doux)}
+.ag-col{position:relative;border-left:1px solid var(--trait);cursor:copy;background-image:repeating-linear-gradient(to bottom,var(--trait) 0 1px,transparent 1px var(--hh));background-size:100% var(--hh)}.ag-col.passe{background-color:color-mix(in srgb,var(--trait) 25%,transparent);cursor:default}
+.ag-ev{position:absolute;left:3px;right:3px;border-radius:8px;padding:4px 7px;font-size:12px;line-height:1.25;color:#fff;background:linear-gradient(180deg,#3BA27F,#2E8B6E);box-shadow:0 4px 12px -6px rgba(0,0,0,.5);overflow:hidden;cursor:pointer;border:0;text-align:left;font-family:inherit}.ag-ev b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ag-ev.fini{opacity:.45}.ag-ev.live{background:linear-gradient(180deg,#4A78E8,#1C49A5);outline:2px solid #9DBBFA}
+.ag-now{position:absolute;left:0;right:0;height:2px;background:#E5484D;z-index:2}.ag-now:before{content:"";position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:#E5484D}
+.ag-dlg{border:1px solid var(--trait);border-radius:20px;padding:22px;background:var(--carte);color:var(--encre);width:min(420px,92vw)}.ag-dlg::backdrop{background:rgba(5,10,25,.55)}.ag-dlg h3{margin:0 0 2px}
+.ag-dlg label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--doux);margin-top:12px}.ag-dlg input,.ag-dlg select{padding:9px 11px;border:1.5px solid var(--trait);border-radius:10px;font:14px var(--f-txt);color:var(--encre);background:var(--carte);width:100%;box-sizing:border-box}
+.ag-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ag-lien{display:flex;gap:8px}.ag-lien .btn{min-height:38px;padding:6px 12px;white-space:nowrap}.ag-dlg .ag-case{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--encre)}.ag-dlg .ag-case input{width:auto}
+.ag-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 .ventes-detail{margin-top:12px}.ventes-detail summary{cursor:pointer;padding:4px 0}.ventes-detail>div{margin-top:8px;overflow-x:auto}
 .stripe-mode{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,#635BFF 15%,transparent);color:#8F89FF}.stripe-mode.live{background:color-mix(in srgb,#2E8B6E 18%,transparent);color:#4FC79F}
 .kpis span{font-size:13px;color:var(--doux)}
@@ -687,17 +698,9 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <table class="tab"><thead><tr><th>Prospect</th><th>Code</th><th class="cache-m">Modules</th><th>Expire</th><th>Ouvertures</th><th></th></tr></thead><tbody id="dm-liste"></tbody></table>
     <p class="vide" id="dm-vide">Aucun code invité actif.</p>
     <div id="visio">
-    <div class="titre-ic" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--trait)"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span><div><h2>Sessions Google Meet</h2><p class="doux petit">Planifiez : le bouton « Rejoindre » s'allume chez l'élève 10 minutes avant.</p></div></div>
-    <div class="dv-grille" style="margin-top:14px">
-      <label>Élève <input id="vz-eleve" list="vz-eleves" placeholder="Identifiant ou e-mail" autocomplete="off" spellcheck="false"><datalist id="vz-eleves"></datalist></label>
-      <label>Durée <select id="vz-duree"><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1 h</option><option value="90">1 h 30</option></select></label>
-      <label>Date <input id="vz-date" type="date"></label>
-      <label>Heure (Paris) <input id="vz-heure" type="time" step="300" value="18:00"></label>
-      <label style="grid-column:1/-1">Lien Meet <span class="ligne" style="gap:8px;flex-wrap:nowrap"><input id="vz-lien" placeholder="https://meet.google.com/abc-defg-hij" autocomplete="off" spellcheck="false" style="flex:1"><a class="btn btn-sec" href="https://meet.google.com/new" target="_blank" rel="noopener" style="white-space:nowrap">Créer ↗</a></span></label>
-    </div>
-    <p class="ligne" style="margin-top:10px"><label class="petit" style="display:flex;flex-direction:row;gap:8px;align-items:center;font-size:14px"><input type="checkbox" id="vz-prevenir" checked style="width:auto;padding:0;margin:0"> Prévenir l'élève par mail</label></p>
-    <p class="ligne"><button class="btn plein" id="vz-planifier" type="button">Planifier la session</button><button class="btn btn-sec" id="vz-envoyer" type="button">Envoyer le lien maintenant</button><span class="petit" id="vz-msg"></span></p>
-    <h3 style="margin:16px 0 6px;font-size:15px">Sessions à venir</h3><div id="vz-liste" class="doux petit">Aucune session planifiée.</div>
+    <div class="titre-ic" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--trait)"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span><div><h2>Sessions Google Meet</h2><p class="doux petit">Le bouton « Lancer » apparaît ici 10 minutes avant.</p></div></div>
+    <div id="vz-liste" class="doux petit" style="margin-top:12px">Aucune session planifiée.</div>
+    <p style="margin-top:12px"><a class="btn plein" href="#agenda" id="vz-ouvrir">Planifier dans l'agenda ↓</a></p>
     </div>
   </section>
   <section class="carte" id="devis">
@@ -743,6 +746,23 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <div class="vg" id="vg" aria-label="Ventes"></div>
     <details class="ventes-detail"><summary class="doux petit">Détail des ventes</summary><div id="ventes-liste" class="doux petit">Chargement…</div><p id="purge-box" hidden style="margin-top:10px"><button type="button" class="btn btn-sec" id="purge">Effacer les ventes de test</button> <span class="doux petit">Mode test uniquement : supprime ces ventes, leurs accès et remet le compteur Fondateurs à zéro.</span></p></details>
     <div class="ligne" style="justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--trait,#e3e7f1)"><span><b>Liste « prévenez-moi »</b> <span class="doux petit" id="liste-n"></span></span><button type="button" class="btn btn-sec" id="liste-csv">Exporter (CSV)</button></div>
+  </section>
+  <section data-onglet="pilotage" class="carte" id="agenda">
+    <div class="ag-tete"><h2>Agenda</h2><div class="ag-nav"><button type="button" class="btn btn-sec" id="ag-auj">Aujourd'hui</button><button type="button" class="btn btn-sec" id="ag-prec" aria-label="Semaine précédente">‹</button><button type="button" class="btn btn-sec" id="ag-suiv" aria-label="Semaine suivante">›</button><b id="ag-titre"></b></div><span class="doux petit">Cliquez sur un créneau pour planifier.</span></div>
+    <div class="ag" id="ag"></div>
+    <dialog class="ag-dlg" id="ag-dlg"><form method="dialog" id="ag-form">
+      <h3 id="ag-dlg-titre">Nouvelle session</h3><p class="doux petit" id="ag-dlg-quand"></p>
+      <div id="ag-creer">
+        <label>Élève <input id="ag-eleve" list="vz-eleves" placeholder="Identifiant ou e-mail" autocomplete="off" spellcheck="false"><datalist id="vz-eleves"></datalist></label>
+        <div class="ag-2"><label>Heure <input id="ag-heure" type="time" step="900"></label><label>Durée <select id="ag-duree"><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1 h</option><option value="90">1 h 30</option></select></label></div>
+        <label>Lien Meet <span class="ag-lien"><input id="ag-lien" placeholder="Se remplit tout seul après « Créer »" autocomplete="off" spellcheck="false"><a class="btn btn-sec" href="https://meet.google.com/new" target="_blank" rel="noopener" id="ag-meet">Créer ↗</a></span></label>
+        <p class="doux petit" style="margin:0">« Créer » ouvre Google Meet : copiez le lien de la réunion, revenez ici, il se colle tout seul.</p>
+        <label class="ag-case"><input type="checkbox" id="ag-prevenir" checked> Prévenir l'élève par mail</label>
+      </div>
+      <div id="ag-voir" hidden></div>
+      <p class="petit" id="ag-msg"></p>
+      <div class="ag-actions"><button type="button" class="btn btn-sec" id="ag-fermer">Fermer</button><button type="button" class="btn plein" id="ag-ok">Planifier</button></div>
+    </form></dialog>
   </section>
   <section data-onglet="pilotage" class="carte" id="jeu">
     <div class="ligne" style="justify-content:space-between"><h2>Courbe du jour</h2><span class="doux petit" id="jeu-etat"></span></div>
@@ -1208,28 +1228,60 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   document.getElementById('liste-csv').addEventListener('click', async () => { const L = await liste(); if (!L) return alert('Liste indisponible.');
     const csv = 'email;inscrit_le;provenance\n' + L.map(x => [x.e, new Date(x.t).toLocaleString('fr-FR'), x.s.join('+')].join(';')).join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); a.download = 'frenglais-liste-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click(); });
-  /* sessions Google Meet : planifiées ici, bouton « Lancer » à l'heure dite ; l'élève voit « Rejoindre » dans son espace */
-  { const $v = id => document.getElementById(id), msg = $v('vz-msg'); let RDV = [];
-    try { $v('vz-date').value = new Date(Date.now() + 864e5).toLocaleDateString('fr-CA'); $v('vz-lien').value = FRG.lire('frg-meet', ''); } catch (e) {}
-    const lien = () => $v('vz-lien').value.trim().replace(/[?#].*$/, ''), okLien = l => /^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/.test(l);
+  /* agenda des sessions Google Meet : semaine façon Google Agenda ; clic sur un créneau = nouvelle session ; bouton « Lancer » 10 min avant */
+  { const $v = id => document.getElementById(id), H0 = 7, H1 = 24, HH = 38; let RDV = [], lundi = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d; })(), choix = null, vu = null;
+    const okLien = l => /^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/.test(l), net = l => String(l || '').trim().replace(/[?#].*$/, '');
+    const hm = d => d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }), prenom = r => esc(String(r.nom || '').split(/[ @]/)[0]);
     const appel = async b => fetch(API + '/admin/rdv', { method: 'POST', body: JSON.stringify({ cle: FRG.lire('frg-cle-tableau', ''), ...b }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
-    const dessiner = () => { const z = $v('vz-liste'), now = Date.now(), A = RDV.filter(r => r.debut + r.duree * 60000 > now);
+    const nbJours = () => innerWidth < 700 ? 3 : 7;
+    function liste(){ const z = $v('vz-liste'), now = Date.now(), A = RDV.filter(r => r.debut + r.duree * 60000 > now).slice(0, 4);
       if (!A.length) { z.textContent = 'Aucune session planifiée.'; return; }
-      z.innerHTML = '<table class="tab">' + A.map(r => { const actif = r.debut - now < 10 * 60000, q = new Date(r.debut).toLocaleString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-        return `<tr><td><b>${esc(r.nom)}</b><br>${q} · ${r.duree} min</td><td style="text-align:right;white-space:nowrap">${actif ? `<a class="btn plein" href="${esc(r.lien)}" target="_blank" rel="noopener">Lancer la session · ${esc(r.nom.split(' ')[0])}</a>` : `<span class="doux">bouton à ${new Date(r.debut - 10 * 60000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>`} <button type="button" class="btn btn-sec" data-suppr="${r.id}" aria-label="Annuler">✕</button></td></tr>`; }).join('') + '</table>';
-      z.querySelectorAll('[data-suppr]').forEach(b => b.addEventListener('click', async () => { if (!confirm('Annuler cette session ? (l\'élève n\'est pas prévenu automatiquement)')) return; const r = await appel({ supprimer: b.dataset.suppr }); if (r.rdv) { RDV = r.rdv; dessiner(); } })); };
-    const charger = async () => { if (!FRG.lire('frg-cle-tableau', '')) return; const r = await appel({}); if (r.rdv) { RDV = r.rdv; dessiner(); } };
-    charger(); setInterval(dessiner, 30000); setInterval(charger, 300000);
-    $v('vz-planifier').addEventListener('click', async () => { const l = lien(), qui = $v('vz-eleve').value.trim().split(' · ')[0];
-      if (!qui) { msg.textContent = 'Choisissez l\'élève.'; return; } if (!okLien(l)) { msg.textContent = 'Collez un lien Meet complet.'; return; }
-      if (!$v('vz-date').value || !$v('vz-heure').value) { msg.textContent = 'Date et heure ?'; return; }
-      const b = $v('vz-planifier'); b.disabled = true; msg.textContent = 'Planification…'; try { localStorage.setItem('frg-meet', JSON.stringify(l)); } catch (e) {}
-      const r = await appel({ creer: { eleve: qui, lien: l, duree: +$v('vz-duree').value, debut: new Date($v('vz-date').value + 'T' + $v('vz-heure').value).toISOString(), prevenir: $v('vz-prevenir').checked } });
-      b.disabled = false; if (r.rdv) { RDV = r.rdv; dessiner(); $v('vz-eleve').value = ''; msg.textContent = 'Session planifiée ✓' + (r.mail === 'envoyé' ? ' · mail envoyé' : r.mail.startsWith('échec') ? ' · ' + r.mail : ''); } else msg.textContent = 'Erreur : ' + r.erreur; });
-    $v('vz-envoyer').addEventListener('click', async () => { const l = lien(), qui = $v('vz-eleve').value.trim().split(' · ')[0];
-      if (!okLien(l)) { msg.textContent = 'Collez un lien Meet complet.'; return; } if (!/@/.test(qui)) { msg.textContent = 'Pour un envoi immédiat, indiquez l\'e-mail.'; return; }
-      const r = await fetch(API + '/admin/visio', { method: 'POST', body: JSON.stringify({ cle: FRG.lire('frg-cle-tableau', ''), lien: l, email: qui }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
-      msg.textContent = r.ok ? 'Lien envoyé à ' + qui + ' ✓' : 'Erreur : ' + r.erreur; });
+      z.innerHTML = '<table class="tab">' + A.map(r => { const actif = r.debut - now < 10 * 60000, d = new Date(r.debut);
+        return `<tr><td><b>${esc(r.nom)}</b><br>${d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })} · ${hm(d)}</td><td style="text-align:right">${actif ? `<a class="btn plein" href="${esc(r.lien)}" target="_blank" rel="noopener">Lancer · ${prenom(r)}</a>` : `<span class="doux">bouton à ${hm(new Date(r.debut - 6e5))}</span>`}</td></tr>`; }).join('') + '</table>'; }
+    function grille(){ const g = $v('ag'), n = nbJours(), now = Date.now(); let deb = new Date(lundi);
+      if (n === 3) { const t = new Date(); t.setHours(0, 0, 0, 0); if (t >= lundi && t < new Date(lundi.getTime() + 7 * 864e5)) deb = t; }
+      const jours = [...Array(n)].map((_, k) => new Date(deb.getFullYear(), deb.getMonth(), deb.getDate() + k)), fin = new Date(jours[n - 1].getTime() + 864e5);
+      $v('ag-titre').textContent = jours[0].toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) + ' – ' + jours[n - 1].toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+      const auj = new Date().toDateString(); let h = `<div class="ag-grille" style="--j:${n};--hh:${HH}px"><div></div>` + jours.map(d => `<div class="ag-jour${d.toDateString() === auj ? ' auj' : ''}">${d.toLocaleDateString('fr-FR', { weekday: 'short' })}<b>${d.getDate()}</b></div>`).join('');
+      h += `<div class="ag-h" style="height:${(H1 - H0) * HH}px">` + [...Array(H1 - H0)].map((_, k) => k ? `<span style="top:${k * HH}px">${H0 + k}h</span>` : '').join('') + '</div>';
+      h += jours.map(d => { const t0 = d.getTime(), passe = t0 + 864e5 < now;
+        const ev = RDV.filter(r => r.debut >= t0 && r.debut < t0 + 864e5).map(r => { const x = new Date(r.debut), top = ((x.getHours() + x.getMinutes() / 60) - H0) * HH, ht = Math.max(22, r.duree / 60 * HH - 2), live = r.debut - now < 6e5 && r.debut + r.duree * 60000 > now, fini = r.debut + r.duree * 60000 <= now;
+          return `<button type="button" class="ag-ev${live ? ' live' : ''}${fini ? ' fini' : ''}" data-id="${r.id}" style="top:${Math.max(0, top)}px;height:${ht}px">${r.duree < 45 ? `<b>${hm(x)} · ${esc(r.nom)}</b>` : `<b>${esc(r.nom)}</b>${hm(x)} · ${r.duree} min`}</button>`; }).join('');
+        const ligne = d.toDateString() === auj ? (() => { const x = new Date(), y = ((x.getHours() + x.getMinutes() / 60) - H0) * HH; return y > 0 && y < (H1 - H0) * HH ? `<i class="ag-now" style="top:${y}px"></i>` : ''; })() : '';
+        return `<div class="ag-col${passe ? ' passe' : ''}" data-t="${t0}" style="height:${(H1 - H0) * HH}px">${ev}${ligne}</div>`; }).join('') + '</div>';
+      g.innerHTML = h; const sc = g.querySelector('.ag-col'); if (sc && !g.dataset.vu) { g.dataset.vu = 1; } }
+    const tout = () => { liste(); grille(); };
+    const charger = async () => { if (!FRG.lire('frg-cle-tableau', '')) return; const r = await appel({}); if (r.rdv) { RDV = r.rdv; tout(); } };
+    const dlg = $v('ag-dlg'), msg = $v('ag-msg');
+    function ouvrirCreer(t){ choix = t; vu = null; const d = new Date(t); $v('ag-dlg-titre').textContent = 'Nouvelle session'; $v('ag-dlg-quand').textContent = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+      $v('ag-heure').value = hm(d); $v('ag-creer').hidden = false; $v('ag-voir').hidden = true; $v('ag-ok').hidden = false; $v('ag-ok').textContent = 'Planifier'; $v('ag-lien').value = ''; msg.textContent = '';
+      dlg.showModal(); setTimeout(() => $v('ag-eleve').focus(), 50); }
+    function ouvrirVoir(r){ vu = r; const d = new Date(r.debut), actif = r.debut - Date.now() < 6e5 && r.debut + r.duree * 60000 > Date.now();
+      $v('ag-dlg-titre').textContent = r.nom; $v('ag-dlg-quand').textContent = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) + ' · ' + hm(d) + ' · ' + r.duree + ' min';
+      $v('ag-creer').hidden = true; $v('ag-voir').hidden = false; msg.textContent = '';
+      $v('ag-voir').innerHTML = `<p class="petit" style="word-break:break-all"><a href="${esc(r.lien)}" target="_blank" rel="noopener">${esc(r.lien)}</a> · ${esc(r.email)}</p><p style="margin-top:12px">${actif ? `<a class="btn plein" href="${esc(r.lien)}" target="_blank" rel="noopener">Lancer la session</a>` : `<span class="doux petit">Le bouton « Lancer » apparaît à ${hm(new Date(r.debut - 6e5))}.</span>`}</p>`;
+      $v('ag-ok').hidden = false; $v('ag-ok').textContent = 'Annuler la session'; dlg.showModal(); }
+    $v('ag').addEventListener('click', e => { const ev = e.target.closest('.ag-ev'); if (ev) { const r = RDV.find(x => x.id === ev.dataset.id); if (r) ouvrirVoir(r); return; }
+      const col = e.target.closest('.ag-col'); if (!col || col.classList.contains('passe')) return;
+      const y = e.clientY - col.getBoundingClientRect().top, m = Math.round(((y / HH) * 60) / 30) * 30; const t = +col.dataset.t + (H0 * 60 + Math.max(0, m)) * 60000;
+      if (t < Date.now() - 6e5) return; ouvrirCreer(t); });
+    $v('ag-fermer').addEventListener('click', () => dlg.close());
+    $v('ag-ok').addEventListener('click', async () => {
+      if (vu) { if (!confirm('Annuler la session avec ' + vu.nom + ' ? L\'élève n\'est pas prévenu automatiquement.')) return; const r = await appel({ supprimer: vu.id }); if (r.rdv) { RDV = r.rdv; tout(); dlg.close(); } else msg.textContent = 'Erreur : ' + r.erreur; return; }
+      const qui = $v('ag-eleve').value.trim().split(' · ')[0], l = net($v('ag-lien').value), [hh, mm] = ($v('ag-heure').value || '').split(':').map(Number);
+      if (!qui) { msg.textContent = 'Choisissez l\'élève.'; return; } if (!okLien(l)) { msg.textContent = 'Il manque le lien Meet : cliquez « Créer », copiez le lien, revenez.'; return; }
+      const d = new Date(choix); d.setHours(hh, mm, 0, 0); const b = $v('ag-ok'); b.disabled = true; msg.textContent = 'Planification…';
+      const r = await appel({ creer: { eleve: qui, lien: l, duree: +$v('ag-duree').value, debut: d.toISOString(), prevenir: $v('ag-prevenir').checked } }); b.disabled = false;
+      if (r.rdv) { RDV = r.rdv; tout(); $v('ag-eleve').value = ''; dlg.close(); } else msg.textContent = 'Erreur : ' + r.erreur; });
+    /* retour depuis Google Meet : le lien copié se colle tout seul */
+    const coller = async () => { if (!dlg.open || $v('ag-creer').hidden || okLien(net($v('ag-lien').value))) return; try { const t = net(await navigator.clipboard.readText()); if (okLien(t)) { $v('ag-lien').value = t; msg.textContent = 'Lien Meet collé ✓'; } } catch (e) {} };
+    addEventListener('focus', coller); document.addEventListener('visibilitychange', () => { if (!document.hidden) coller(); });
+    $v('ag-lien').addEventListener('paste', () => setTimeout(() => { $v('ag-lien').value = net($v('ag-lien').value); }, 0));
+    $v('ag-prec').addEventListener('click', () => { lundi = new Date(lundi.getFullYear(), lundi.getMonth(), lundi.getDate() - 7); grille(); });
+    $v('ag-suiv').addEventListener('click', () => { lundi = new Date(lundi.getFullYear(), lundi.getMonth(), lundi.getDate() + 7); grille(); });
+    $v('ag-auj').addEventListener('click', () => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); lundi = d; grille(); });
+    let lw = innerWidth; addEventListener('resize', () => { if ((lw < 700) !== (innerWidth < 700)) grille(); lw = innerWidth; });
+    grille(); charger(); setInterval(tout, 30000); setInterval(charger, 300000);
     window.FRGEleves = V => { $v('vz-eleves').innerHTML = V.filter(v => v.identifiant).map(v => `<option value="${esc(v.identifiant)} · ${esc(v.facturation || v.email)}">`).join(''); }; }
   /* mails non lus (Zoho), demandés à votre serveur Cloudflare avec la clé du tableau de bord ; mis à jour toutes les 2 minutes */
   const titre0 = document.title, ZOHO_FORCE = location.hash === '#zoho';

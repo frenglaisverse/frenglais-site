@@ -687,13 +687,17 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <table class="tab"><thead><tr><th>Prospect</th><th>Code</th><th class="cache-m">Modules</th><th>Expire</th><th>Ouvertures</th><th></th></tr></thead><tbody id="dm-liste"></tbody></table>
     <p class="vide" id="dm-vide">Aucun code invité actif.</p>
     <div id="visio">
-    <div class="titre-ic" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--trait)"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span><div><h2>Visio Google Meet</h2><p class="doux petit">L'élève reçoit « Session Frenglais » depuis contact@.</p></div></div>
-    <div style="margin:18px 0 8px"><a class="btn plein" href="https://meet.google.com/new" target="_blank" rel="noopener">1. Créer un lien Meet ↗</a></div><p class="doux petit">Copiez l'adresse de la réunion et collez-la ci-dessous.</p>
-    <div class="dv-grille" style="margin-top:10px">
-      <label>Lien Meet <input id="vz-lien" placeholder="https://meet.google.com/abc-defg-hij" autocomplete="off" spellcheck="false"></label>
-      <label>E-mail de l'élève <input id="vz-email" type="email" placeholder="eleve@exemple.fr" autocomplete="off"></label>
+    <div class="titre-ic" style="margin-top:22px;padding-top:18px;border-top:1px solid var(--trait)"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span><div><h2>Sessions Google Meet</h2><p class="doux petit">Planifiez : le bouton « Rejoindre » s'allume chez l'élève 10 minutes avant.</p></div></div>
+    <div class="dv-grille" style="margin-top:14px">
+      <label>Élève <input id="vz-eleve" list="vz-eleves" placeholder="Identifiant ou e-mail" autocomplete="off" spellcheck="false"><datalist id="vz-eleves"></datalist></label>
+      <label>Durée <select id="vz-duree"><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1 h</option><option value="90">1 h 30</option></select></label>
+      <label>Date <input id="vz-date" type="date"></label>
+      <label>Heure (Paris) <input id="vz-heure" type="time" step="300" value="18:00"></label>
+      <label style="grid-column:1/-1">Lien Meet <span class="ligne" style="gap:8px;flex-wrap:nowrap"><input id="vz-lien" placeholder="https://meet.google.com/abc-defg-hij" autocomplete="off" spellcheck="false" style="flex:1"><a class="btn btn-sec" href="https://meet.google.com/new" target="_blank" rel="noopener" style="white-space:nowrap">Créer ↗</a></span></label>
     </div>
-    <p class="ligne" style="margin-top:10px"><button class="btn plein" id="vz-envoyer" type="button">2. Envoyer par mail</button><button class="btn btn-sec" id="vz-copier" type="button">Copier le message</button><span class="petit" id="vz-msg"></span></p>
+    <p class="ligne" style="margin-top:10px"><label class="petit" style="display:flex;flex-direction:row;gap:8px;align-items:center;font-size:14px"><input type="checkbox" id="vz-prevenir" checked style="width:auto;padding:0;margin:0"> Prévenir l'élève par mail</label></p>
+    <p class="ligne"><button class="btn plein" id="vz-planifier" type="button">Planifier la session</button><button class="btn btn-sec" id="vz-envoyer" type="button">Envoyer le lien maintenant</button><span class="petit" id="vz-msg"></span></p>
+    <h3 style="margin:16px 0 6px;font-size:15px">Sessions à venir</h3><div id="vz-liste" class="doux petit">Aucune session planifiée.</div>
     </div>
   </section>
   <section class="carte" id="devis">
@@ -1188,6 +1192,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       bt.onclick = async () => { if (!confirm('Effacer les ' + j.ventes.length + ' ventes de test et leurs accès ?')) return; bt.disabled = true;
         const r = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle, purgerTest: 1 }) }).then(r => r.json()).catch(() => ({ erreur: 'réseau' }));
         if (r.ok) majVentes(); else { bt.disabled = false; alert('Erreur : ' + r.erreur); } }; }
+    if (window.FRGEleves) FRGEleves(j.ventes);
     if (!j.ventes.length) { z.textContent = 'Aucune vente pour le moment.'; return; }
     const eur = c => (c / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €', nom = { integral: "L'Intégral", signature: 'Signature' };
     z.innerHTML = '<table class="tab"><tr><th>Date</th><th>Élève</th><th>Formule</th><th>Montant</th><th>Statut</th><th>Mail d\'accès</th><th>Appareils</th><th>Modules</th><th></th></tr>' + j.ventes.map(v => `<tr><td>${new Date(v.t).toLocaleDateString('fr-FR')}</td><td>${esc(v.facturation)}<br><span class="doux">${esc(v.email)} · ${esc(v.identifiant)}</span></td><td>${nom[v.formule] || v.formule}${v.edition === 'fondateurs' ? ' · Fondateurs' : ''}</td><td>${eur(v.total)}${v.mode === '3x' ? ' (3 fois)' : ''}</td><td>${esc(v.statut)}</td><td>${String(v.mail).startsWith('envoy') ? '✓' : '<span title="' + esc(v.mail) + '">échec</span>'}</td><td>${(v.appareils || []).length} / 2${(v.appareils || []).length ? '<br><span class="doux">' + v.appareils.map(x => esc(x.n) + ', vu le ' + new Date(x.v).toLocaleDateString('fr-FR')).join('<br>') + '</span><br><button type="button" class="btn btn-sec" data-appareils="' + esc(v.identifiant) + '">Libérer</button>' : ''}</td><td>${Object.values(v.prog || {}).filter(x => x.v).length} validé${Object.values(v.prog || {}).filter(x => x.v).length > 1 ? 's' : ''}${Object.keys(v.prog || {}).length ? '<br><span class="doux">' + Object.entries(v.prog).map(([m, x]) => 'M' + m + ' · ' + x.s + ' %').join('<br>') + '</span>' : ''}</td><td><button type="button" class="btn btn-sec" data-renvoyer="${esc(v.identifiant)}">Renvoyer les accès</button></td></tr>`).join('') + '</table>';
@@ -1203,17 +1208,29 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   document.getElementById('liste-csv').addEventListener('click', async () => { const L = await liste(); if (!L) return alert('Liste indisponible.');
     const csv = 'email;inscrit_le;provenance\n' + L.map(x => [x.e, new Date(x.t).toLocaleString('fr-FR'), x.s.join('+')].join(';')).join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); a.download = 'frenglais-liste-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click(); });
-  /* visio Google Meet : invitation « Session Frenglais » envoyée par le serveur, depuis contact@ */
-  { const $v = id => document.getElementById(id), msg = $v('vz-msg');
-    const lire = () => ({ lien: $v('vz-lien').value.trim().replace(/[?#].*$/, ''), email: $v('vz-email').value.trim() });
-    $v('vz-copier').addEventListener('click', async () => { const x = lire(); if (!x.lien) { msg.textContent = 'Collez d\'abord le lien Meet.'; return; }
-      try { await navigator.clipboard.writeText('Bonjour,\n\nVotre session Frenglais : ' + x.lien + '\n\nÀ tout de suite,\nPaul'); msg.textContent = 'Message copié.'; } catch (e) { msg.textContent = 'Copie impossible ici.'; } });
-    $v('vz-envoyer').addEventListener('click', async () => { const x = lire(), cle = FRG.lire('frg-cle-tableau', '');
-      if (!/^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/.test(x.lien)) { msg.textContent = 'Collez un lien Meet complet (https://meet.google.com/abc-defg-hij).'; return; }
-      if (!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(x.email)) { msg.textContent = 'Adresse e-mail incomplète.'; return; }
-      const b = $v('vz-envoyer'); b.disabled = true; msg.textContent = 'Envoi…';
-      const r = await fetch(API + '/admin/visio', { method: 'POST', body: JSON.stringify({ cle, ...x }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
-      b.disabled = false; msg.textContent = r.ok ? 'Envoyé à ' + x.email + ' ✓' : 'Erreur : ' + r.erreur; if (r.ok) $v('vz-email').value = ''; }); }
+  /* sessions Google Meet : planifiées ici, bouton « Lancer » à l'heure dite ; l'élève voit « Rejoindre » dans son espace */
+  { const $v = id => document.getElementById(id), msg = $v('vz-msg'); let RDV = [];
+    try { $v('vz-date').value = new Date(Date.now() + 864e5).toLocaleDateString('fr-CA'); $v('vz-lien').value = FRG.lire('frg-meet', ''); } catch (e) {}
+    const lien = () => $v('vz-lien').value.trim().replace(/[?#].*$/, ''), okLien = l => /^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/.test(l);
+    const appel = async b => fetch(API + '/admin/rdv', { method: 'POST', body: JSON.stringify({ cle: FRG.lire('frg-cle-tableau', ''), ...b }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
+    const dessiner = () => { const z = $v('vz-liste'), now = Date.now(), A = RDV.filter(r => r.debut + r.duree * 60000 > now);
+      if (!A.length) { z.textContent = 'Aucune session planifiée.'; return; }
+      z.innerHTML = '<table class="tab">' + A.map(r => { const actif = r.debut - now < 10 * 60000, q = new Date(r.debut).toLocaleString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        return `<tr><td><b>${esc(r.nom)}</b><br>${q} · ${r.duree} min</td><td style="text-align:right;white-space:nowrap">${actif ? `<a class="btn plein" href="${esc(r.lien)}" target="_blank" rel="noopener">Lancer la session · ${esc(r.nom.split(' ')[0])}</a>` : `<span class="doux">bouton à ${new Date(r.debut - 10 * 60000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>`} <button type="button" class="btn btn-sec" data-suppr="${r.id}" aria-label="Annuler">✕</button></td></tr>`; }).join('') + '</table>';
+      z.querySelectorAll('[data-suppr]').forEach(b => b.addEventListener('click', async () => { if (!confirm('Annuler cette session ? (l\'élève n\'est pas prévenu automatiquement)')) return; const r = await appel({ supprimer: b.dataset.suppr }); if (r.rdv) { RDV = r.rdv; dessiner(); } })); };
+    const charger = async () => { if (!FRG.lire('frg-cle-tableau', '')) return; const r = await appel({}); if (r.rdv) { RDV = r.rdv; dessiner(); } };
+    charger(); setInterval(dessiner, 30000); setInterval(charger, 300000);
+    $v('vz-planifier').addEventListener('click', async () => { const l = lien(), qui = $v('vz-eleve').value.trim().split(' · ')[0];
+      if (!qui) { msg.textContent = 'Choisissez l\'élève.'; return; } if (!okLien(l)) { msg.textContent = 'Collez un lien Meet complet.'; return; }
+      if (!$v('vz-date').value || !$v('vz-heure').value) { msg.textContent = 'Date et heure ?'; return; }
+      const b = $v('vz-planifier'); b.disabled = true; msg.textContent = 'Planification…'; try { localStorage.setItem('frg-meet', JSON.stringify(l)); } catch (e) {}
+      const r = await appel({ creer: { eleve: qui, lien: l, duree: +$v('vz-duree').value, debut: new Date($v('vz-date').value + 'T' + $v('vz-heure').value).toISOString(), prevenir: $v('vz-prevenir').checked } });
+      b.disabled = false; if (r.rdv) { RDV = r.rdv; dessiner(); $v('vz-eleve').value = ''; msg.textContent = 'Session planifiée ✓' + (r.mail === 'envoyé' ? ' · mail envoyé' : r.mail.startsWith('échec') ? ' · ' + r.mail : ''); } else msg.textContent = 'Erreur : ' + r.erreur; });
+    $v('vz-envoyer').addEventListener('click', async () => { const l = lien(), qui = $v('vz-eleve').value.trim().split(' · ')[0];
+      if (!okLien(l)) { msg.textContent = 'Collez un lien Meet complet.'; return; } if (!/@/.test(qui)) { msg.textContent = 'Pour un envoi immédiat, indiquez l\'e-mail.'; return; }
+      const r = await fetch(API + '/admin/visio', { method: 'POST', body: JSON.stringify({ cle: FRG.lire('frg-cle-tableau', ''), lien: l, email: qui }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
+      msg.textContent = r.ok ? 'Lien envoyé à ' + qui + ' ✓' : 'Erreur : ' + r.erreur; });
+    window.FRGEleves = V => { $v('vz-eleves').innerHTML = V.filter(v => v.identifiant).map(v => `<option value="${esc(v.identifiant)} · ${esc(v.facturation || v.email)}">`).join(''); }; }
   /* mails non lus (Zoho), demandés à votre serveur Cloudflare avec la clé du tableau de bord ; mis à jour toutes les 2 minutes */
   const titre0 = document.title, ZOHO_FORCE = location.hash === '#zoho';
   async function majMails(){ const cle = FRG.lire('frg-cle-tableau', ''), p = document.getElementById('mail-n'), z = document.getElementById('zoho'); if (!cle || !p) return;

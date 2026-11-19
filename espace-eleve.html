@@ -59,11 +59,11 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 <form class="tb-acces" id="acces" novalidate>
   <div class="tb-acces-tete">
     <span class="tb-acces-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/></svg></span>
-    <div><strong>Déjà inscrit ?</strong><span>Entrez votre identifiant (par exemple <b>Manatee3</b>) et le code d'accès reçus à l'inscription.</span></div>
+    <div><strong>Déjà inscrit ?</strong><span>Entrez votre identifiant (par exemple <b>Manatee34</b>) et le code d'accès reçus à l'inscription.</span></div>
   </div>
   <div class="tb-acces-champs">
     <label class="sr" for="acces-id">Identifiant</label>
-    <input id="acces-id" type="text" autocomplete="username" placeholder="Identifiant (ex. Manatee3)" spellcheck="false" autocapitalize="off">
+    <input id="acces-id" type="text" autocomplete="username" placeholder="Identifiant (ex. Manatee34)" spellcheck="false" autocapitalize="off">
     <label class="sr" for="acces-code">Code d'accès</label>
     <input id="acces-code" type="text" autocomplete="one-time-code" placeholder="FRG-XXXX-XXXX" maxlength="13" spellcheck="false">
     <button type="submit">Accéder</button>
@@ -110,10 +110,22 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
   const lireS=()=>{ try{ return JSON.parse(localStorage.getItem('frg-session')||'null'); }catch(e){ return null; } };
   const appareil=()=>{ let a=null; try{ a=localStorage.getItem('frg-appareil'); if(!a){ a=crypto.randomUUID(); localStorage.setItem('frg-appareil',a); } }catch(e){ a=a||crypto.randomUUID(); } return a; };
   const nomAppareil=()=>{ const u=navigator.userAgent; return (/iPhone/.test(u)?'iPhone':/iPad/.test(u)?'iPad':/Android/.test(u)?'Android':/Mac/.test(u)?'Mac':/Windows/.test(u)?'PC Windows':'Appareil')+' · '+(/Edg\//.test(u)?'Edge':/Firefox/.test(u)?'Firefox':/Chrome/.test(u)?'Chrome':/Safari/.test(u)?'Safari':'navigateur'); };
+  let rdvT=null;
+  const rdv=()=>{ const s=lireS(); let z=document.getElementById('rdv-eleve'); if(!s||!s.jeton){ if(z) z.remove(); clearInterval(rdvT); return; }
+    fetch(API+'/eleve/rdv',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).then(r=>r.json()).then(r=>{ const R=(r&&r.rdv)||[];
+      if(!R.length){ if(z) z.remove(); return; }
+      if(!z){ z=document.createElement('div'); z.id='rdv-eleve'; z.style.cssText='margin-top:14px;padding:16px 18px;border-radius:18px;border:1px solid color-mix(in srgb,#2E8B6E 40%,transparent);background:color-mix(in srgb,#2E8B6E 9%,transparent)'; f.after(z); }
+      const x=R[0], d=new Date(x.debut), q=d.toLocaleString('fr-FR',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}), actif=x.lien&&Date.now()>=x.debut-10*60000;
+      z.innerHTML='<p style="margin:0 0 4px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.75">Votre prochaine session</p><p style="margin:0 0 12px;font-size:18px;font-weight:600"></p>';
+      z.children[1].textContent=q.charAt(0).toUpperCase()+q.slice(1)+' · '+x.duree+' min';
+      const b=document.createElement(actif?'a':'button'); b.className='btn btn-bleu';
+      if(actif){ b.href=x.lien; b.target='_blank'; b.rel='noopener'; b.textContent='Rejoindre la session'; } else { b.type='button'; b.disabled=true; b.style.opacity='.55'; b.textContent='Rejoindre · le bouton s\'active à '+new Date(x.debut-10*60000).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
+      z.append(b); }).catch(()=>{}); };
   const connecte=r=>{ f.querySelector('.tb-acces-champs').hidden=true; etat.className='tb-acces-etat ok';
     etat.innerHTML=''; etat.append('Connecté : '+(r.prenom?r.prenom+' · ':'')+r.identifiant+' · '+(NOMF[r.formule]||r.formule)+'. Vos modules s\'ouvrent ici dès leur mise en ligne. ');
-    const d=document.createElement('button'); d.type='button'; d.style.cssText='background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit'; d.textContent='Se déconnecter'; etat.append(d);
-    d.addEventListener('click',()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); f.querySelector('.tb-acces-champs').hidden=false; etat.className='tb-acces-etat'; etat.textContent=''; }); };
+    const d=document.createElement('button'); d.type='button'; d.style.cssText='background:none;border:0;padding:0;min-height:0;box-shadow:none;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;font-weight:500'; d.textContent='Se déconnecter'; etat.append(d);
+    rdv(); clearInterval(rdvT); rdvT=setInterval(rdv,30000);
+    d.addEventListener('click',()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); rdv(); f.querySelector('.tb-acces-champs').hidden=false; etat.className='tb-acces-etat'; etat.textContent=''; }); };
   { const s=lireS(); if(s&&s.jeton) fetch(API+'/eleve/session',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).then(r=>r.json()).then(r=>{ if(r.ok) connecte(r); else { try{ localStorage.removeItem('frg-session'); }catch(e){} etat.className='tb-acces-etat ko'; etat.textContent=r.erreur||''; } }).catch(()=>{}); }
   { const q=new URLSearchParams(location.search).get('code'); if(q) code.value=q.toUpperCase(); }
   code.addEventListener('input',()=>{ let v=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); if(v.startsWith('FRG')) v=v.slice(3);

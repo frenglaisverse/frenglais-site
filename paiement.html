@@ -98,6 +98,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
       <label class="tn-opt"><input type="radio" name="formule" value="signature"><b>Signature</b><span>L'Intégral, plus l'oral</span><div class="tn-px" data-px="signature"></div></label>
     </div>
     <h3>Ce qui est inclus</h3><ul class="tn-liste" id="tn-contenu"></ul>
+    <label class="tn-case tn-option" id="tn-option" hidden><input type="checkbox" id="k-opt"><span><b>Ajouter l'option Suivi live · <span id="opt-px"></span></b><br><span id="opt-detail"></span></span></label>
     <h3>Règlement</h3>
     <div class="tn-choix" role="radiogroup" aria-label="Mode de paiement">
       <label class="tn-opt"><input type="radio" name="mode" value="1x" checked><b>En une fois</b><span id="tn-1x"></span></label>
@@ -143,7 +144,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
   <section class="tn-carte" data-etape="3" hidden>
     <h2>3. Vérification</h2><p class="tn-sous">Relisez votre commande : c'est exactement ce qui sera facturé.</p>
     <table class="tn-ech" id="tn-recap"></table>
-    <label class="tn-case"><input type="checkbox" id="k-cgv"><span>J'ai lu et j'accepte les <a href="cgv.html" target="_blank" rel="noopener">conditions générales de vente</a> (version du 18 novembre 2026).</span></label>
+    <label class="tn-case"><input type="checkbox" id="k-cgv"><span>J'ai lu et j'accepte les <a href="cgv.html" target="_blank" rel="noopener">conditions générales de vente</a> (version du 19 novembre 2026).</span></label>
     <label class="tn-case"><input type="checkbox" id="k-retract"><span>Je demande l'accès immédiat à la formation et je reconnais perdre mon droit de rétractation de 14 jours dès cet accès (article L221-28, 13° du Code de la consommation).</span></label>
     <label class="tn-case" id="case-3x" hidden><input type="checkbox" id="k-3x"><span id="txt-3x"></span></label>
     <p class="tn-err" id="err-3" role="alert"></p>
@@ -160,7 +161,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
     <table><tr><td id="f-ligne"></td><td id="f-montant"></td></tr><tr class="tot"><td>Total</td><td id="f-total"></td></tr></table>
     <p class="mention" id="f-mention"></p>
   </div>
-  <p class="tn-securite">Une question avant de payer ? <a href="index.html#devis">Écrivez-nous</a>, réponse sous 24 h.</p>
+  <p class="tn-securite">Une question avant de payer ? <a href="index.html#devis">Écrivez-nous</a> : contact@frenglais.co.</p>
 </aside>
 </div>
 </main>
@@ -173,10 +174,14 @@ var dateDans=function(m){var d=new Date();d.setMonth(d.getMonth()+m);return d.to
 var v=function(n){var x=document.querySelector('input[name="'+n+'"]:checked');return x?x.value:''};
 var val=function(i){return ($(i).value||'').trim()};
 function client(){return {type:v('type'),prenom:val('c-prenom'),nom:val('c-nom'),raison:val('c-raison'),siret:val('c-siret').replace(/\s/g,''),tva:val('c-tva').replace(/\s/g,''),email:val('c-email'),tel:val('c-tel'),adresse:{ligne1:val('c-ligne1'),ligne2:val('c-ligne2'),cp:val('c-cp'),ville:val('c-ville'),pays:$('c-pays').value}}}
+function ech3(t){var a=Math.floor(t/3),r=t-3*a;return [0,1,2].map(function(i){return a+(i<r?1:0)})}
+function eff(){var F=T&&T.formules[v('formule')];if(!F)return F;var o=T.option&&$('k-opt').checked?T.option:null;if(!o)return F;
+  return {nom:F.nom+' + Suivi live',montant:F.montant+o.montant,public:F.public+o.montant,echeances:ech3(F.montant+o.montant),contenu:F.contenu.concat([o.nom+' : '+o.detail])};}
 function maj(){
-  if(!T)return;var f=v('formule'),m=v('mode'),F=T.formules[f],c=client(),ent=c.type==='entreprise';
+  if(!T)return;var f=v('formule'),m=v('mode'),F=eff(),c=client(),ent=c.type==='entreprise';
   document.querySelectorAll('[data-px]').forEach(function(el){var X=T.formules[el.dataset.px];el.innerHTML=euro(X.montant)+(X.montant<X.public?'<s>'+euro(X.public)+'</s>':'');});
   if(!F)return;
+  if(T.option){$('tn-option').hidden=false;$('opt-px').textContent='+ '+euro(T.option.montant);$('opt-detail').textContent=T.option.detail;}
   $('tn-contenu').innerHTML=F.contenu.map(function(x){return '<li>'+x+'</li>'}).join('');
   $('tn-1x').textContent=euro(F.montant)+' aujourd’hui';$('tn-3x').textContent='3 × '+euro(F.echeances[0])+' · total '+euro(F.montant);
   var ech=m==='3x'?F.echeances.map(function(x,i){return '<tr><td>'+(i?'Le '+dateDans(i):'Aujourd’hui')+'</td><td>'+euro(x)+'</td></tr>'}).join('')+'<tr><td><b>Total</b></td><td>'+euro(F.montant)+'</td></tr>':'<tr><td>Aujourd’hui</td><td>'+euro(F.montant)+'</td></tr>';
@@ -214,14 +219,14 @@ function aller(n){if(n===3){var e=erreurs2();$('err-2').textContent=e;if(e)retur
   if(n>=2&&!v('formule'))return;
   etape=n;document.querySelectorAll('[data-etape]').forEach(function(s){s.hidden=+s.dataset.etape!==n});
   document.querySelectorAll('#tn-etapes li').forEach(function(li,i){li.className=i+1===n?'on':(i+1<n?'fait':'')});
-  maj();try{sessionStorage.setItem('frg-tunnel',JSON.stringify({c:client(),f:v('formule'),m:v('mode')}));}catch(x){}
+  maj();try{sessionStorage.setItem('frg-tunnel',JSON.stringify({c:client(),f:v('formule'),m:v('mode'),o:$('k-opt').checked}));}catch(x){}
   scrollTo({top:0,behavior:'smooth'});}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-suivant]');if(b)aller(+b.dataset.suivant);});
 document.addEventListener('input',maj);document.addEventListener('change',maj);
 ['k-cgv','k-retract','k-3x'].forEach(function(i){$(i).addEventListener('change',verifCases)});
 $('payer').addEventListener('click',async function(){var b=this;b.disabled=true;b.textContent='Connexion à Stripe…';$('err-3').textContent='';
-  var F=T.formules[v('formule')];
-  try{var r=await fetch(API+'/paiement/session',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({formule:v('formule'),mode:v('mode'),client:client(),cgv:$('k-cgv').checked,renonciation:$('k-retract').checked,echeancier:$('k-3x').checked,montantVu:F.montant,cle:cle})});
+  var F=eff();
+  try{var r=await fetch(API+'/paiement/session',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({formule:v('formule'),mode:v('mode'),client:client(),cgv:$('k-cgv').checked,renonciation:$('k-retract').checked,echeancier:$('k-3x').checked,option:$('k-opt').checked,montantVu:F.montant,cle:cle})});
     var j=await r.json();if(j.url){$('tn-etapes').lastElementChild.className='on';location.href=j.url;return;}
     $('err-3').textContent=j.erreur||'Erreur inattendue.';if(j.tarifChange)charger();}
   catch(x){$('err-3').textContent='Connexion impossible. Vérifiez votre réseau et réessayez.';}
@@ -235,6 +240,7 @@ async function charger(){
   var f=q.get('formule')||(s&&s.f)||'integral',m=q.get('mode')||(s&&s.m)||'1x';
   var rf=document.querySelector('input[name="formule"][value="'+f+'"]');if(rf)rf.checked=true;
   var rm=document.querySelector('input[name="mode"][value="'+m+'"]');if(rm)rm.checked=true;
+  if(s&&s.o||q.get('option')==='live')$('k-opt').checked=true;
   if(s&&s.c){var c=s.c;var r=document.querySelector('input[name="type"][value="'+c.type+'"]');if(r)r.checked=true;
     [['c-prenom',c.prenom],['c-nom',c.nom],['c-raison',c.raison],['c-siret',c.siret],['c-tva',c.tva],['c-email',c.email],['c-email2',c.email],['c-tel',c.tel],['c-ligne1',c.adresse.ligne1],['c-ligne2',c.adresse.ligne2],['c-cp',c.adresse.cp],['c-ville',c.adresse.ville]].forEach(function(p){if(p[1])$(p[0]).value=p[1]});
     if(c.adresse.pays)$('c-pays').value=c.adresse.pays;}

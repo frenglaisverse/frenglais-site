@@ -566,8 +566,8 @@ a.btn{text-decoration:none}
 .duo{align-items:start}.duo>*{min-width:0}#devis select,#devis input{max-width:100%;min-width:0}.dv-grille>*{min-width:0}.duo .carte{height:100%;box-sizing:border-box}
 .duo #demos .ligne{flex-wrap:wrap}.duo #demos #dm-nom{width:100%!important}
 .dv-grille{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.dv-grille label,#devis>label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:#5B6785}
-#devis input,#devis select,#devis textarea{padding:9px 11px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt);color:#10245C;background:#fff}
+.dv-grille label,#devis>label,#visio label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:#5B6785}
+#devis input,#devis select,#devis textarea,#visio input,#visio select,#visio textarea{padding:9px 11px;border:1.5px solid #C9D3EE;border-radius:10px;font:14px var(--f-txt);color:#10245C;background:#fff}
 .dv-options{display:flex;flex-wrap:wrap;gap:8px}
 .dv-options label{display:flex;align-items:center;gap:6px;padding:7px 11px;border:1.5px solid #C9D3EE;border-radius:99px;font-size:13px;cursor:pointer}
 .dv-options label:has(input:checked){border-color:#1C49A5;background:#EEF3FF}
@@ -613,7 +613,7 @@ a.btn{text-decoration:none}
 body[data-vue="pilotage"] [data-onglet="eleves"],body[data-vue="eleves"] [data-onglet="pilotage"]{display:none!important}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tuile svg{stroke:color-mix(in srgb,var(--c) 50%,#fff)}:root:not([data-theme="light"]) .acces-g p{color:color-mix(in srgb,var(--c) 50%,#fff)}}
 .carte{box-shadow:0 1px 0 var(--vh) inset,0 10px 30px -22px var(--vs)}
-#devis input,#devis select,#devis textarea{border-color:var(--trait)!important;background:var(--carte)!important;color:var(--encre)!important}
+#devis input,#devis select,#devis textarea,#visio input,#visio select,#visio textarea{border-color:var(--trait)!important;background:var(--carte)!important;color:var(--encre)!important}
 .dv-options label{border-color:var(--trait)!important}.dv-options label:has(input:checked){border-color:var(--bleu)!important;background:var(--verre,#EEF3FF)!important}
 .dv-total{background:var(--verre,#F2F5FD)!important}.dv-total b{color:var(--encre)!important}
 .defile thead th{background:var(--carte)!important}
@@ -730,6 +730,21 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <div class="vg" id="vg" aria-label="Ventes"></div>
     <details class="ventes-detail"><summary class="doux petit">Détail des ventes</summary><div id="ventes-liste" class="doux petit">Chargement…</div><p id="purge-box" hidden style="margin-top:10px"><button type="button" class="btn btn-sec" id="purge">Effacer les ventes de test</button> <span class="doux petit">Mode test uniquement : supprime ces ventes, leurs accès et remet le compteur Fondateurs à zéro.</span></p></details>
     <div class="ligne" style="justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--trait,#e3e7f1)"><span><b>Liste « prévenez-moi »</b> <span class="doux petit" id="liste-n"></span></span><button type="button" class="btn btn-sec" id="liste-csv">Exporter (CSV)</button></div>
+  </section>
+  <section data-onglet="pilotage" class="carte" id="visio">
+    <div class="titre-ic"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span><div><h2>Visio Google Meet</h2><p class="doux petit">Créez le lien, puis envoyez l'invitation depuis contact@.</p></div></div>
+    <p><a class="btn plein" href="https://meet.google.com/new" target="_blank" rel="noopener">1. Créer un lien Meet ↗</a> <span class="doux petit">Google ouvre une réunion : copiez son adresse et collez-la ci-dessous.</span></p>
+    <div class="dv-grille" style="margin-top:10px">
+      <label style="grid-column:1/-1">Lien Meet <input id="vz-lien" placeholder="https://meet.google.com/abc-defg-hij" autocomplete="off" spellcheck="false"></label>
+      <label>E-mail de l'élève <input id="vz-email" type="email" placeholder="eleve@exemple.fr" autocomplete="off"></label>
+      <label>Prénom <input id="vz-prenom" placeholder="Julie" maxlength="40"></label>
+      <label>Objet <select id="vz-objet"><option>Suivi live · point à mi-parcours</option><option>Suivi live · évaluation orale finale</option><option>Cours particulier</option><option>Échange découverte</option><option>Rendez-vous Frenglais</option></select></label>
+      <label>Durée <select id="vz-duree"><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1 h</option><option value="90">1 h 30</option></select></label>
+      <label>Date <input id="vz-date" type="date"></label>
+      <label>Heure (Paris) <input id="vz-heure" type="time" step="300" value="18:00"></label>
+      <label style="grid-column:1/-1">Petit mot (facultatif) <textarea id="vz-mot" rows="2" maxlength="600" placeholder="Préparez votre fiche mémo du module 12."></textarea></label>
+    </div>
+    <p class="ligne" style="margin-top:10px"><button class="btn plein" id="vz-envoyer" type="button">2. Envoyer l'invitation par mail</button><button class="btn btn-sec" id="vz-copier" type="button">Copier le message</button><span class="petit" id="vz-msg"></span></p>
   </section>
   <section data-onglet="pilotage" class="carte" id="stripe">
     <div class="ligne" style="justify-content:space-between"><h2>Stripe</h2><span class="stripe-mode" id="stripe-mode">…</span></div>
@@ -1167,7 +1182,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   document.querySelectorAll('[data-vg]').forEach(b => b.addEventListener('click', () => { vgVue = b.dataset.vg; document.querySelectorAll('[data-vg]').forEach(x => x.setAttribute('aria-selected', x === b)); vgDessiner(); }));
   async function majVentes(){ const cle = FRG.lire('frg-cle-tableau', ''), z = document.getElementById('ventes-liste'), et = document.getElementById('ventes-etat'); if (!cle || !z) return;
     let j; try { j = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle }) }).then(r => r.json()); } catch (e) { z.textContent = 'Serveur injoignable.'; return; }
-    if (j.erreur) { z.textContent = j.erreur; return; }
+    if (j.erreur || !j.ventes) { z.textContent = j.erreur || 'Ventes indisponibles.'; return; }
     et.textContent = (j.ouvert ? 'vente ouverte' : 'vente fermée au public') + ' · Fondateurs : ' + j.fondateursVendus + ' / ' + j.places;
     { const jour = t => new Date(t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }), auj = jour(Date.now()), ok = j.ventes.filter(v => !String(v.statut).startsWith('rembours'));
       const J = ok.filter(v => jour(v.t) === auj), M = ok.filter(v => jour(v.t).slice(0, 7) === auj.slice(0, 7)), som = X => (X.reduce((a, v) => a + v.total, 0) / 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' €';
@@ -1200,6 +1215,22 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   document.getElementById('liste-csv').addEventListener('click', async () => { const L = await liste(); if (!L) return alert('Liste indisponible.');
     const csv = 'email;inscrit_le;provenance\n' + L.map(x => [x.e, new Date(x.t).toLocaleString('fr-FR'), x.s.join('+')].join(';')).join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })); a.download = 'frenglais-liste-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click(); });
+  /* visio Google Meet : invitation envoyée par le serveur, depuis contact@ */
+  { const $v = id => document.getElementById(id), msg = $v('vz-msg');
+    try { $v('vz-date').value = new Date(Date.now() + 864e5).toLocaleDateString('fr-CA'); } catch (e) {}
+    const lire = () => ({ lien: $v('vz-lien').value.trim().replace(/[?#].*$/, ''), email: $v('vz-email').value.trim(), prenom: $v('vz-prenom').value.trim(), objet: $v('vz-objet').value, duree: +$v('vz-duree').value, mot: $v('vz-mot').value.trim(),
+      debut: $v('vz-date').value && $v('vz-heure').value ? new Date($v('vz-date').value + 'T' + $v('vz-heure').value).toISOString() : '' });
+    $v('vz-copier').addEventListener('click', async () => { const x = lire(); if (!x.lien || !x.debut) { msg.textContent = 'Lien, date et heure d\'abord.'; return; }
+      const q = new Date(x.debut).toLocaleString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+      const t = (x.prenom ? 'Bonjour ' + x.prenom + ',' : 'Bonjour,') + '\n\nVotre visio Frenglais (' + x.objet + ') : ' + q + ', ' + x.duree + ' minutes, heure de Paris.\n' + (x.mot ? x.mot + '\n' : '') + 'Le lien : ' + x.lien + '\n\nÀ très vite,\nPaul';
+      try { await navigator.clipboard.writeText(t); msg.textContent = 'Message copié.'; } catch (e) { msg.textContent = 'Copie impossible ici.'; } });
+    $v('vz-envoyer').addEventListener('click', async () => { const x = lire(), cle = FRG.lire('frg-cle-tableau', '');
+      if (!/^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/.test(x.lien)) { msg.textContent = 'Collez un lien Meet complet (https://meet.google.com/abc-defg-hij).'; return; }
+      if (!x.email || !x.debut) { msg.textContent = 'Il manque l\'e-mail, la date ou l\'heure.'; return; }
+      if (!confirm('Envoyer l\'invitation à ' + x.email + ' ?')) return;
+      const b = $v('vz-envoyer'); b.disabled = true; msg.textContent = 'Envoi…';
+      const r = await fetch(API + '/admin/visio', { method: 'POST', body: JSON.stringify({ cle, ...x }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
+      b.disabled = false; msg.textContent = r.ok ? 'Invitation envoyée à ' + x.email + ' ✓' : 'Erreur : ' + r.erreur; }); }
   /* mails non lus (Zoho), demandés à votre serveur Cloudflare avec la clé du tableau de bord ; mis à jour toutes les 2 minutes */
   const titre0 = document.title, ZOHO_FORCE = location.hash === '#zoho';
   async function majMails(){ const cle = FRG.lire('frg-cle-tableau', ''), p = document.getElementById('mail-n'), z = document.getElementById('zoho'); if (!cle || !p) return;

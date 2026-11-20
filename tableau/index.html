@@ -512,6 +512,7 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 #devis .titre-ic{position:relative}.dv-plus{margin-left:auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--trait);background:var(--carte);color:var(--encre);font-size:22px;line-height:1;cursor:pointer;flex:none;transition:transform .2s}.dv-plus[aria-expanded="true"]{transform:rotate(45deg)}
 #devis.replie>:not(.titre-ic){display:none!important}#devis.replie .titre-ic{margin-bottom:0}
 #acces-eleve input,#acces-eleve select{padding:9px 11px;border:1.5px solid var(--trait);border-radius:10px;font:14px var(--f-txt);color:var(--encre);background:var(--carte);width:100%;box-sizing:border-box}#acces-eleve label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--doux)}
+.ia-texte{line-height:1.9;margin:0 0 10px}.ia-faute{background:color-mix(in srgb,#F0766F 22%,transparent);color:inherit;border-bottom:2px solid #F0766F;border-radius:3px;padding:1px 2px}.ia-faute sup{font:700 10px var(--f-mono);color:#F0766F;margin-right:2px}.ia-liste{margin:0;padding-left:20px}.ia-liste li{margin:6px 0}.ia-liste s{color:var(--doux)}
 .ae-carte{margin-top:12px;padding:14px 16px;border-radius:14px;border:1px dashed var(--trait);font-size:14px}.ae-carte code{font:600 16px var(--f-mono)}
 .ventes-detail{margin-top:12px}.ventes-detail summary{cursor:pointer;padding:4px 0}.ventes-detail>div{margin-top:8px;overflow-x:auto}
 .stripe-mode{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,#635BFF 15%,transparent);color:#8F89FF}.stripe-mode.live{background:color-mix(in srgb,#2E8B6E 18%,transparent);color:#4FC79F}
@@ -723,7 +724,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <div id="ae-res"></div>
   </section>
   <section class="carte" id="ia-test">
-    <div class="titre-ic"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/></svg></span><div><h2>Tester le lamantin IA</h2><p class="doux petit">Collez un texte d'élève : la relecture que verront les élèves au module 1.</p></div></div>
+    <div class="titre-ic"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/></svg></span><div><h2>Tester le lamantin IA</h2><p class="doux petit">Collez un texte d'élève : chaque faute est surlignée et corrigée, comme le verra l'élève.</p></div></div>
     <textarea id="ia-texte" rows="4" style="margin-top:12px;width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--trait);border-radius:10px;font:14px var(--f-txt);color:var(--encre);background:var(--carte);resize:vertical">My name is Paul. I am teacher of English in Avignon. My sister works in a hotel. I love the sea. Yesterday I watched a film with my friends.</textarea>
     <p class="ligne"><button class="btn plein" id="ia-go" type="button">Faire relire</button><span class="petit" id="ia-msg"></span></p>
     <div id="ia-res"></div>
@@ -1524,18 +1525,17 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
 })();
 </script>
 <script>
-/* Test du lamantin IA : utilise la session de l'espace élève ouverte dans ce navigateur (compte de test), comme un vrai élève */
+/* Test du lamantin IA (mode Paul : clé du tableau, sans compte élève ni quota). Les fautes sont surlignées dans le texte, numérotées, avec leur correction. */
 (function(){var go=document.getElementById('ia-go');if(!go)return;var msg=document.getElementById('ia-msg'),res=document.getElementById('ia-res');
 function esc(t){return String(t||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-go.addEventListener('click',async function(){var S=null;try{S=JSON.parse(localStorage.getItem('frg-session')||'null')}catch(e){}
- if(!S||!S.jeton){msg.innerHTML='Connectez-vous d\'abord à l\'<a href="../espace-eleve.html" target="_blank">espace élève</a> avec votre compte de test, puis revenez ici.';return;}
- var t=document.getElementById('ia-texte').value.trim();if(t.length<8){msg.textContent='Texte trop court.';return;}
- go.disabled=true;msg.textContent='Le lamantin relit…';res.innerHTML='';var t0=Date.now();
- try{var r=await fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/corriger',{method:'POST',body:JSON.stringify({jeton:S.jeton,module:1,texte:t,consigne:'Se présenter en 4 à 5 phrases : qui, son travail (T0), une chose aimée, une chose faite hier (T-1).'})});var j=await r.json();
+function surligner(txt,E){var h='',k=0;E.forEach(function(e,i){h+=esc(txt.slice(k,e.debut))+'<mark class="ia-faute"><sup>'+(i+1)+'</sup>'+esc(txt.slice(e.debut,e.fin))+'</mark>';k=e.fin;});return h+esc(txt.slice(k));}
+go.addEventListener('click',async function(){var cle=FRG.lire('frg-cle-tableau','');var t=document.getElementById('ia-texte').value.trim();if(t.length<8){msg.textContent='Texte trop court.';return;}
+ go.disabled=true;msg.textContent='Le lamantin relit, puis vérifie…';res.innerHTML='';var t0=Date.now();
+ try{var r=await fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/corriger',{method:'POST',body:JSON.stringify({cle:cle,module:1,texte:t,consigne:'Se présenter en 4 à 5 phrases : qui, son travail (T0), une chose aimée, une chose faite hier (T-1).'})});var j=await r.json();
   var sec=((Date.now()-t0)/1000).toFixed(1)+' s';
-  if(!j.ok){msg.textContent={session:'Session expirée : reconnectez-vous à l\'espace élève.',quota:'Quota du jour atteint (15 par élève).',indisponible:'IA non branchée dans Cloudflare.',court:'Texte trop court.'}[j.raison]||('Pas de réponse lisible ('+sec+').');return;}
-  msg.textContent='Répondu en '+sec;
-  res.innerHTML='<div class="ae-carte">'+(j.bravo?'<p><b>Bravo :</b> '+esc(j.bravo)+'</p>':'')+(j.corrections.length?j.corrections.map(function(c){return '<p>« '+esc(c.avant)+' » → <b>'+esc(c.apres)+'</b><br><span class="doux petit">'+esc(c.pourquoi)+'</span></p>'}).join(''):'<p>Aucune correction.</p>')+(j.bilan?'<p class="doux petit">'+esc(j.bilan)+'</p>':'')+'</div>';
+  if(!j.ok){msg.textContent={quota:'Quota du jour atteint.',indisponible:'IA non branchée dans Cloudflare.',court:'Texte trop court.',session:'Clé du tableau absente : reconnectez le tableau.'}[j.raison]||('Pas de réponse lisible ('+sec+').');if(j.trace)console.log(j.trace);return;}
+  msg.textContent=(j.erreurs.length?j.erreurs.length+' faute'+(j.erreurs.length>1?'s':''):'Aucune faute')+' · '+sec+(j.modele?' · '+j.modele.split('/').pop():'');
+  res.innerHTML='<div class="ae-carte"><p class="ia-texte">'+surligner(j.texte,j.erreurs)+'</p>'+(j.erreurs.length?'<ol class="ia-liste">'+j.erreurs.map(function(e){return '<li><s>'+esc(e.extrait)+'</s> → <b>'+esc(e.correction)+'</b><br><span class="doux petit">'+esc(e.pourquoi)+'</span></li>'}).join('')+'</ol>':'<p>Rien à reprendre.</p>')+'</div>';
  }catch(e){msg.textContent='Connexion impossible.';}finally{go.disabled=false;}});})();
 </script>
 </body>

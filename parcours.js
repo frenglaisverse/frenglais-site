@@ -3,10 +3,13 @@
 (function(){
   'use strict';
   const TITRES = ['Repères et codes',"T0, le temps le plus simple","T-1, toujours simple","BE + -ING","HAVE + -EN","T-2, le passé dans le passé","T+1, l'éléphant dans la pièce","Les modaux","Empiler les briques","Poser des questions","Spit it : dites-le","Toute la Courbe","Les quatre couteaux suisses","Les verbes à particule","Le verbe choisit sa préposition","Ne plus bloquer","Se présenter pour de vrai","Écrire un e-mail","Téléphone et visio","Chiffres, dates, heures, prix","Comparer et décrire","Relier ses idées","Si…","L'anglais réel","Le passif","Les habitudes passées","Les regrets","Rapporter des paroles","Convaincre","Prendre la parole","Continuer seul","Le grand oral"];
-  /* calendrier de sortie : modules 1 et 2 au lancement, puis deux par semaine ; les 8 modules avancés ensuite. À régler au lancement. */
+  /* calendrier propre à chaque élève : à partir de sa première connexion (jamais avant le lancement), les 4 premiers modules la semaine 1, puis deux par semaine */
   const AP = window.FRG_APERCU || null;
   const LANCEMENT = AP ? Date.now() - 864e5 * 21 : Date.parse('2026-12-01T00:00:00+01:00');
-  const sortie = n => LANCEMENT + Math.floor((n - 1) / 2) * 7 * 864e5 + (n > 24 ? 14 * 864e5 : 0);
+  const JOUR = 864e5, minuit = t => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
+  let DEBUT = null;   /* première connexion de l'élève (serveur), sinon aujourd'hui */
+  const depart = () => minuit(Math.max(LANCEMENT, DEBUT || Date.now()));
+  const sortie = n => depart() + (n <= 4 ? 0 : Math.ceil((n - 4) / 2) * 7 * JOUR);
   const MODULES_EN_LIGNE = !!AP;   /* passe à true quand les pages des modules sont publiées */
   const $ = s => document.querySelector(s), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const lire = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
@@ -201,6 +204,6 @@
   }
 
   /* l'espace élève appelle FRGParcours.maj(session) à la connexion et à la déconnexion */
-  window.FRGParcours = { maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {} }; choisi = null; dessiner(); } };
+  window.FRGParcours = { maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {} }; DEBUT = r && r.debut ? +r.debut : null; choisi = null; dessiner(); } };
   dessiner();
 })();

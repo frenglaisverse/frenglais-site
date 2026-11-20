@@ -54,6 +54,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 .tn-champ input,.tn-champ select{width:100%;box-sizing:border-box;padding:12px 13px;border-radius:12px;border:1px solid var(--trait);background:var(--fond,#fff);color:var(--encre);font:inherit;font-size:15px}
 .tn-champ input:focus,.tn-champ select:focus{outline:none;border-color:#1C49A5;box-shadow:0 0 0 3px rgba(28,73,165,.15)}
 .tn-champ.err input{border-color:#C0392B}
+.tn-kdo{border-color:color-mix(in srgb,#C9746E 45%,transparent);background:color-mix(in srgb,#F0766F 6%,transparent)}.tn-kdo-champs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.tn-kdo-champs .tn-plein{grid-column:1/-1}@media(max-width:560px){.tn-kdo-champs{grid-template-columns:1fr}}
 .tn-case{display:flex;gap:11px;align-items:flex-start;padding:13px 14px;border-radius:14px;border:1px solid var(--trait);margin-top:10px;font-size:14.5px;line-height:1.45;cursor:pointer}
 .tn-case input{flex:none;width:19px;height:19px;margin-top:1px;accent-color:#1C49A5}
 .tn-case:has(input:checked){border-color:#1C49A5;background:rgba(28,73,165,.04)}
@@ -99,6 +100,12 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
     </div>
     <h3>Ce qui est inclus</h3><ul class="tn-liste" id="tn-contenu"></ul>
     <label class="tn-case tn-option" id="tn-option" hidden><input type="checkbox" id="k-opt"><span><b>Ajouter l'option Suivi live · <span id="opt-px"></span></b><br><span id="opt-detail"></span></span></label>
+    <label class="tn-case tn-kdo"><input type="checkbox" id="k-kdo"><span><b>🎁 C'est un cadeau</b><br>Vous recevez un bon à imprimer, avec un code. La personne active sa formation quand elle le souhaite, dans les 12 mois.</span></label>
+    <div class="tn-kdo-champs" id="kdo-champs" hidden>
+      <div class="tn-champ"><label for="kdo-pour">Prénom de la personne</label><input id="kdo-pour" maxlength="40" placeholder="Julie" autocomplete="off"></div>
+      <div class="tn-champ"><label for="kdo-de">De la part de</label><input id="kdo-de" maxlength="60" placeholder="Papa, Marc, toute l'équipe…" autocomplete="off"></div>
+      <div class="tn-champ tn-plein"><label for="kdo-msg">Votre message <small>(facultatif, imprimé sur le bon)</small></label><input id="kdo-msg" maxlength="240" placeholder="Pour qu'enfin tu parles anglais sans stress. Joyeux Noël !"></div>
+    </div>
     <h3>Règlement</h3>
     <div class="tn-choix" role="radiogroup" aria-label="Mode de paiement">
       <label class="tn-opt"><input type="radio" name="mode" value="1x" checked><b>En une fois</b><span id="tn-1x"></span></label>
@@ -106,7 +113,8 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
     </div>
     <table class="tn-ech" id="tn-ech"></table>
     <h3>Après le paiement</h3>
-    <ul class="tn-liste">
+    <ul class="tn-liste" id="apres-kdo" hidden><li>Votre bon cadeau arrive par e-mail dans la minute, prêt à imprimer, et votre facture séparément.</li><li>La personne l'active sur frenglais.co/cadeau, quand elle veut dans les 12 mois : l'accès à vie démarre à ce moment-là.</li><li>Le prix Fondateurs est acquis, même si le bon est activé en 2027.</li></ul>
+    <ul class="tn-liste" id="apres-normal">
       <li>Vos identifiants arrivent par e-mail dans la minute, et votre facture séparément.</li>
       <li>Accès immédiat aux premiers modules, puis deux nouveaux chaque semaine jusqu'à la mi-février 2027.</li>
       <li>Accès à vie : vous gardez la formation et ses mises à jour.</li>
@@ -144,8 +152,9 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
   <section class="tn-carte" data-etape="3" hidden>
     <h2>3. Vérification</h2><p class="tn-sous">Relisez votre commande : c'est exactement ce qui sera facturé.</p>
     <table class="tn-ech" id="tn-recap"></table>
-    <label class="tn-case"><input type="checkbox" id="k-cgv"><span>J'ai lu et j'accepte les <a href="cgv.html" target="_blank" rel="noopener">conditions générales de vente</a> (version du 19 novembre 2026).</span></label>
-    <label class="tn-case"><input type="checkbox" id="k-retract"><span>Je demande l'accès immédiat à la formation et je reconnais perdre mon droit de rétractation de 14 jours dès cet accès (article L221-28, 13° du Code de la consommation).</span></label>
+    <label class="tn-case"><input type="checkbox" id="k-cgv"><span>J'ai lu et j'accepte les <a href="cgv.html" target="_blank" rel="noopener">conditions générales de vente</a> (version du 20 novembre 2026).</span></label>
+    <p class="tn-sous" id="retract-kdo" hidden>Bon cadeau : vous pouvez vous rétracter pendant 14 jours après l'achat, tant que le bon n'a pas été activé (article L221-18 du Code de la consommation).</p>
+    <label class="tn-case" id="case-retract"><input type="checkbox" id="k-retract"><span>Je demande l'accès immédiat à la formation et je reconnais perdre mon droit de rétractation de 14 jours dès cet accès (article L221-28, 13° du Code de la consommation).</span></label>
     <label class="tn-case" id="case-3x" hidden><input type="checkbox" id="k-3x"><span id="txt-3x"></span></label>
     <p class="tn-err" id="err-3" role="alert"></p>
     <div class="tn-nav"><button class="tn-retour" type="button" data-suivant="2">← Modifier</button><button class="tn-btn" type="button" id="payer" disabled>Payer</button></div>
@@ -177,8 +186,12 @@ function client(){return {type:v('type'),prenom:val('c-prenom'),nom:val('c-nom')
 function ech3(t){var a=Math.floor(t/3),r=t-3*a;return [0,1,2].map(function(i){return a+(i<r?1:0)})}
 function eff(){var F=T&&T.formules[v('formule')];if(!F)return F;var o=T.option&&$('k-opt').checked?T.option:null;if(!o)return F;
   return {nom:F.nom+' + Suivi live',montant:F.montant+o.montant,public:F.public+o.montant,echeances:ech3(F.montant+o.montant),contenu:F.contenu.concat([o.nom+' : '+o.detail])};}
+function kdo(){return $('k-kdo').checked}
 function maj(){
-  if(!T)return;var f=v('formule'),m=v('mode'),F=eff(),c=client(),ent=c.type==='entreprise';
+  if(!T)return;var K=kdo();$('kdo-champs').hidden=!K;$('apres-kdo').hidden=!K;$('apres-normal').hidden=K;$('retract-kdo').hidden=!K;$('case-retract').hidden=K;
+  var r3=document.querySelector('input[name="mode"][value="3x"]');r3.disabled=K;r3.parentNode.style.opacity=K?.45:1;if(K&&r3.checked)document.querySelector('input[name="mode"][value="1x"]').checked=true;
+  if(K&&!$('kdo-de').value&&val('c-prenom'))$('kdo-de').placeholder=val('c-prenom');
+  var f=v('formule'),m=v('mode'),F=eff(),c=client(),ent=c.type==='entreprise';
   document.querySelectorAll('[data-px]').forEach(function(el){var X=T.formules[el.dataset.px];el.innerHTML=euro(X.montant)+(X.montant<X.public?'<s>'+euro(X.public)+'</s>':'');});
   if(!F)return;
   if(T.option){$('tn-option').hidden=false;$('opt-px').textContent='+ '+euro(T.option.montant);$('opt-detail').textContent=T.option.detail;}
@@ -192,21 +205,21 @@ function maj(){
   var bloc=nomF?('<b>'+esc(nomF)+'</b>'+(ent&&(c.prenom||c.nom)?'<br>À l’attention de '+esc((c.prenom+' '+c.nom).trim()):'')+(c.adresse.ligne1?'<br>'+adr.map(esc).join('<br>'):'')+(ent&&c.siret?'<br>SIRET '+esc(c.siret):'')+(ent&&c.tva?'<br>TVA '+esc(c.tva):'')):'vos informations';
   $('f-client').innerHTML=bloc;$('f-client').className=nomF?'':'tn-vide';
   $('f-email').textContent=c.email||'votre e-mail';$('f-email').className=c.email?'':'tn-vide';
-  var lib=F.nom+(T.edition==='fondateurs'?' · édition Fondateurs':'')+' — formation en ligne, accès immédiat et à vie';
+  var lib=(K?'Bon cadeau · ':'')+F.nom+(T.edition==='fondateurs'?' · édition Fondateurs':'')+(K?' — bon valable 12 mois, accès à vie dès l’activation':' — formation en ligne, accès immédiat et à vie');
   $('f-ligne').textContent=lib+(m==='3x'?' (1re mensualité sur 3)':'');
   $('f-montant').textContent=euro(m==='3x'?F.echeances[0]:F.montant);$('f-total').textContent=euro(m==='3x'?F.echeances[0]:F.montant);
   $('f-mention').textContent=T.tva+(m==='3x'?' Une facture est émise à chaque mensualité ('+F.echeances.map(euro).join(' + ')+').':'');
-  $('tn-recap').innerHTML='<tr><td>Formule</td><td>'+esc(F.nom)+(T.edition==='fondateurs'?' · édition Fondateurs':'')+'</td></tr>'+
+  $('tn-recap').innerHTML=(K?'<tr><td>Bon cadeau pour</td><td>'+esc(val('kdo-pour')||'…')+(val('kdo-de')?' · de la part de '+esc(val('kdo-de')):'')+'</td></tr>':'')+'<tr><td>Formule</td><td>'+esc(F.nom)+(T.edition==='fondateurs'?' · édition Fondateurs':'')+'</td></tr>'+
     '<tr><td>Prix</td><td>'+euro(F.montant)+(F.montant<F.public?' (au lieu de '+euro(F.public)+')':'')+'</td></tr>'+
     '<tr><td>Règlement</td><td>'+(m==='3x'?F.echeances.map(function(x,i){return euro(x)+(i?' le '+dateDans(i):' aujourd’hui')}).join(', '):'en une fois, aujourd’hui')+'</td></tr>'+
-    '<tr><td>Facture au nom de</td><td>'+esc(nomF)+'</td></tr><tr><td>Accès envoyés à</td><td>'+esc(c.email)+'</td></tr><tr><td>TVA</td><td>non applicable (art. 293 B du CGI)</td></tr>';
+    '<tr><td>Facture au nom de</td><td>'+esc(nomF)+'</td></tr><tr><td>'+(K?'Bon cadeau envoyé à':'Accès envoyés à')+'</td><td>'+esc(c.email)+'</td></tr><tr><td>TVA</td><td>non applicable (art. 293 B du CGI)</td></tr>';
   $('case-3x').hidden=m!=='3x';
   $('txt-3x').textContent='J’autorise le prélèvement automatique, sur la même carte, des deux mensualités suivantes : '+euro(F.echeances[1])+' le '+dateDans(1)+' et '+euro(F.echeances[2])+' le '+dateDans(2)+'. En cas d’échec, de nouvelles tentatives ont lieu pendant quelques jours ; sans régularisation, mon accès est suspendu jusqu’au paiement.';
   $('payer').textContent=m==='3x'?'Payer la 1re mensualité · '+euro(F.echeances[0]):'Payer '+euro(F.montant);
   verifCases();
 }
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function verifCases(){$('payer').disabled=!($('k-cgv').checked&&$('k-retract').checked&&(v('mode')!=='3x'||$('k-3x').checked));}
+function verifCases(){$('payer').disabled=!($('k-cgv').checked&&(kdo()||$('k-retract').checked)&&(v('mode')!=='3x'||$('k-3x').checked));}
 function erreurs2(){var c=client(),e=[];document.querySelectorAll('.tn-champ').forEach(function(x){x.classList.remove('err')});
   var mq=function(id,msg){$(id).parentNode.classList.add('err');e.push(msg)};
   if(c.type==='entreprise'&&!c.raison)mq('c-raison','la raison sociale');
@@ -215,18 +228,19 @@ function erreurs2(){var c=client(),e=[];document.querySelectorAll('.tn-champ').f
   if(!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(c.email))mq('c-email','un e-mail valide');else if(c.email.toLowerCase()!==val('c-email2').toLowerCase())mq('c-email2','deux e-mails identiques');
   if(!c.adresse.ligne1)mq('c-ligne1','l’adresse');if(!c.adresse.cp)mq('c-cp','le code postal');if(!c.adresse.ville)mq('c-ville','la ville');
   return e.length?'À compléter : '+e.join(', ')+'.':'';}
-function aller(n){if(n===3){var e=erreurs2();$('err-2').textContent=e;if(e)return;}
+function aller(n){if(n===2&&kdo()&&!val('kdo-pour')){$('kdo-pour').parentNode.classList.add('err');$('kdo-pour').focus();return;}
+  if(n===3){var e=erreurs2();$('err-2').textContent=e;if(e)return;}
   if(n>=2&&!v('formule'))return;
   etape=n;document.querySelectorAll('[data-etape]').forEach(function(s){s.hidden=+s.dataset.etape!==n});
   document.querySelectorAll('#tn-etapes li').forEach(function(li,i){li.className=i+1===n?'on':(i+1<n?'fait':'')});
-  maj();try{sessionStorage.setItem('frg-tunnel',JSON.stringify({c:client(),f:v('formule'),m:v('mode'),o:$('k-opt').checked}));}catch(x){}
+  maj();try{sessionStorage.setItem('frg-tunnel',JSON.stringify({c:client(),f:v('formule'),m:v('mode'),o:$('k-opt').checked,k:kdo(),kp:val('kdo-pour'),kd:val('kdo-de'),km:val('kdo-msg')}));}catch(x){}
   scrollTo({top:0,behavior:'smooth'});}
 document.addEventListener('click',function(e){var b=e.target.closest('[data-suivant]');if(b)aller(+b.dataset.suivant);});
 document.addEventListener('input',maj);document.addEventListener('change',maj);
 ['k-cgv','k-retract','k-3x'].forEach(function(i){$(i).addEventListener('change',verifCases)});
 $('payer').addEventListener('click',async function(){var b=this;b.disabled=true;b.textContent='Connexion à Stripe…';$('err-3').textContent='';
   var F=eff();
-  try{var r=await fetch(API+'/paiement/session',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({formule:v('formule'),mode:v('mode'),client:client(),cgv:$('k-cgv').checked,renonciation:$('k-retract').checked,echeancier:$('k-3x').checked,option:$('k-opt').checked,montantVu:F.montant,cle:cle})});
+  try{var r=await fetch(API+'/paiement/session',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({formule:v('formule'),mode:v('mode'),client:client(),cgv:$('k-cgv').checked,renonciation:$('k-retract').checked,cadeau:kdo(),pour:val('kdo-pour'),de:val('kdo-de')||val('c-prenom'),message:val('kdo-msg'),echeancier:$('k-3x').checked,option:$('k-opt').checked,montantVu:F.montant,cle:cle})});
     var j=await r.json();if(j.url){$('tn-etapes').lastElementChild.className='on';location.href=j.url;return;}
     $('err-3').textContent=j.erreur||'Erreur inattendue.';if(j.tarifChange)charger();}
   catch(x){$('err-3').textContent='Connexion impossible. Vérifiez votre réseau et réessayez.';}
@@ -241,6 +255,7 @@ async function charger(){
   var rf=document.querySelector('input[name="formule"][value="'+f+'"]');if(rf)rf.checked=true;
   var rm=document.querySelector('input[name="mode"][value="'+m+'"]');if(rm)rm.checked=true;
   if(s&&s.o||q.get('option')==='live')$('k-opt').checked=true;
+  if(s&&s.k||q.get('cadeau')==='1')$('k-kdo').checked=true;if(s){if(s.kp)$('kdo-pour').value=s.kp;if(s.kd)$('kdo-de').value=s.kd;if(s.km)$('kdo-msg').value=s.km;}
   if(s&&s.c){var c=s.c;var r=document.querySelector('input[name="type"][value="'+c.type+'"]');if(r)r.checked=true;
     [['c-prenom',c.prenom],['c-nom',c.nom],['c-raison',c.raison],['c-siret',c.siret],['c-tva',c.tva],['c-email',c.email],['c-email2',c.email],['c-tel',c.tel],['c-ligne1',c.adresse.ligne1],['c-ligne2',c.adresse.ligne2],['c-cp',c.adresse.cp],['c-ville',c.adresse.ville]].forEach(function(p){if(p[1])$(p[0]).value=p[1]});
     if(c.adresse.pays)$('c-pays').value=c.adresse.pays;}

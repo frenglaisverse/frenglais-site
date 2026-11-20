@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bon cadeau · Frenglais</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<style>
+@font-face{font-family:Geist;src:url(fonts/geist.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url(fonts/geist-mono-500.woff2) format("woff2");font-weight:500;font-display:swap}
+:root{--bleu:#1C49A5;--corail:#F0766F;--encre:#0E1B3D;--doux:#5B6683;--trait:#E2E6F0}
+*{box-sizing:border-box}
+body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-system,"Segoe UI",sans-serif}
+.barre{max-width:560px;margin:28px auto 0;padding:0 16px;display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.barre p{margin:0;color:var(--doux);font-size:14px}
+.barre button{min-height:44px;padding:0 20px;border:0;border-radius:99px;background:linear-gradient(180deg,#2457C4,#1C49A5);color:#fff;font:600 15px Geist,sans-serif;cursor:pointer}
+.bon{width:148mm;max-width:calc(100vw - 32px);aspect-ratio:148/210;margin:18px auto 40px;background:#fff;border-radius:18px;box-shadow:0 30px 60px -30px rgba(14,27,61,.45);overflow:hidden;display:flex;flex-direction:column;position:relative}
+.haut{background:var(--bleu);color:#fff;padding:9% 9% 7%;position:relative}
+.haut img{height:42px;display:block}
+.haut .eyebrow{margin:18px 0 0;font:500 11px "Geist Mono",monospace;letter-spacing:.2em;text-transform:uppercase;opacity:.85}
+.haut h1{margin:6px 0 0;font-size:clamp(26px,7.4vw,40px);line-height:1.05;letter-spacing:-.025em;font-weight:700}
+.ruban{position:absolute;right:8%;top:-4px;width:46px;height:74px;background:var(--corail);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%)}
+.corps{padding:7% 9% 0;flex:1;display:flex;flex-direction:column}
+.formule{margin:0;font-size:clamp(18px,4.8vw,24px);font-weight:700;letter-spacing:-.01em}
+.formule small{display:block;font-size:13px;font-weight:500;color:var(--doux);letter-spacing:0;margin-top:2px}
+.courbe{margin:6% -2% 4%;color:var(--encre)}
+.courbe svg{width:100%;height:auto;display:block;overflow:visible}
+.courbe text{font:500 11px "Geist Mono",monospace}
+.message{margin:0 0 4%;font-size:clamp(15px,3.8vw,17px);font-style:italic;line-height:1.45}
+.de{margin:0;color:var(--doux);font-size:14px}
+.code{margin-top:auto;padding:5% 0 4%;border-top:1px dashed var(--trait);display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.code small{display:block;font-size:11px;color:var(--doux);text-transform:uppercase;letter-spacing:.12em}
+.code b{font:500 clamp(17px,4.6vw,22px) "Geist Mono",monospace;letter-spacing:.06em;color:var(--bleu)}
+.code .ou{text-align:right;font-size:12.5px;color:var(--doux);line-height:1.35}
+.code .ou strong{color:var(--encre)}
+.pied{padding:0 9% 6%;font-size:10.5px;color:var(--doux);line-height:1.4}
+.etat{max-width:560px;margin:60px auto;padding:0 16px;text-align:center;color:var(--doux)}
+.utilise{position:absolute;inset:0;display:grid;place-items:center;background:rgba(255,255,255,.7);font:700 28px Geist,sans-serif;color:#1E7A4F;transform:rotate(-12deg)}
+@page{size:A5 portrait;margin:0}
+@media print{body{background:#fff}.barre{display:none}.bon{width:148mm;height:210mm;max-width:none;margin:0;border-radius:0;box-shadow:none;aspect-ratio:auto}.haut{-webkit-print-color-adjust:exact;print-color-adjust:exact}.ruban{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="barre" id="barre" hidden><p>Format A5. Choisissez « Enregistrer en PDF » pour le garder ou l'envoyer.</p><button type="button" onclick="print()">Imprimer le bon</button></div>
+<div id="zone"><p class="etat">Chargement du bon…</p></div>
+<script src="courbe-main.js?v=1"></script>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search), API='https://courbe-classement.paulodubmx84.workers.dev', z=document.getElementById('zone');
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  fetch(API+'/cadeau/bon?c='+encodeURIComponent(q.get('c')||'')+'&k='+encodeURIComponent(q.get('k')||'')).then(function(r){return r.json()}).then(function(b){
+    if(b.erreur){z.innerHTML='<p class="etat">Ce bon est introuvable. Vérifiez le lien reçu par e-mail, ou écrivez à contact@frenglais.co.</p>';return;}
+    var xs=[60,165,290,445], c=window.FRGcourbe?FRGcourbe({xs:xs,x0:10,x1:510,y:40,k:.3}).svg:'';
+    var lab=['T-2','T-1','T0','T+1'].map(function(t,i){return '<text x="'+xs[i]+'" y="16" text-anchor="middle" fill="'+(i===1||i===2?'#0E1B3D':'#e3191f')+'">'+t+'</text>'}).join('');
+    var codes='<text x="165" y="88" text-anchor="middle" fill="#F0766F">-ed</text><text x="290" y="88" text-anchor="middle" fill="#1C49A5">-s</text>';
+    var fin=new Date(b.expire).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+    z.innerHTML='<article class="bon" aria-label="Bon cadeau Frenglais">'+
+      '<div class="haut"><span class="ruban" aria-hidden="true"></span><img src="logo-nav.webp" alt="Frenglais"><p class="eyebrow">Bon cadeau</p><h1>Pour '+esc(b.pour)+'</h1></div>'+
+      '<div class="corps"><p class="formule">'+esc(b.formule)+'<small>La formation d’anglais Frenglais, accès à vie</small></p>'+
+      '<div class="courbe" aria-hidden="true"><svg viewBox="0 0 520 94">'+lab+c+codes+'</svg></div>'+
+      (b.message?'<p class="message">« '+esc(b.message)+' »</p>':'')+(b.de?'<p class="de">De la part de '+esc(b.de)+'</p>':'')+
+      '<div class="code"><div><small>Code cadeau</small><b>'+esc(b.code)+'</b></div><div class="ou">À activer sur<br><strong>frenglais.co/cadeau</strong></div></div></div>'+
+      '<p class="pied">Valable jusqu’au '+fin+'. L’accès à vie démarre à l’activation. L’anglais n’a que deux temps : -ed et -s. Le reste se construit dessus.</p>'+
+      (b.statut==='active'?'<div class="utilise">Bon activé ✓</div>':'')+'</article>';
+    document.getElementById('barre').hidden=false;
+  }).catch(function(){z.innerHTML='<p class="etat">Connexion impossible. Réessayez dans un instant.</p>';});
+})();
+</script>
+</body>
+</html>

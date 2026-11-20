@@ -78,7 +78,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';else if(h.indexOf('courbe/')==
         <a class="btn btn-blanc" href="#devis">Demander un devis</a>
         <a class="btn btn-contour" href="introduction.html">Essayer gratuitement <span class="btn-sous">· 10 min</span></a>
       </div>
-      <img class="banian banian-arriere" src="banian-arriere.webp?v=14" alt="" width="1640" height="700" aria-hidden="true" decoding="async">
+      <img class="banian banian-arriere" src="banian-arriere.webp?v=14" srcset="banian-arriere-1640.webp?v=14 1640w, banian-arriere.webp?v=14 3280w" sizes="100vw" alt="" width="1640" height="700" aria-hidden="true" decoding="async">
       <img class="banian banian-avant" src="banian-avant.webp?v=13" alt="" width="1640" height="700" aria-hidden="true" decoding="async">
       <figure class="polaroid" id="polaroid">
         <button type="button" class="sr" id="pol-video-clavier">Voir la vidéo de présentation de Paul (2 min 52)</button>
@@ -585,7 +585,9 @@ var band=document.getElementById('fondateurs');if(!fd){band.hidden=true;}else{
 })();</script>
 <script src="mousse.js?v=202611201500"></script>
 <script>/* lamantin 3D chargé après la page, pour un affichage plus rapide */
-addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611201500")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
+addEventListener("load",function(){var fait=0,go=function(){if(fait)return;fait=1;import("./lamantin3d.js?v=202611201500")},el=document.getElementById("lamantin");
+/* le moteur 3D (700 Ko) ne se charge que quand le lamantin approche de l'écran */
+if(el&&"IntersectionObserver" in window){var io=new IntersectionObserver(function(x){if(x.some(function(e){return e.isIntersecting})){io.disconnect();"requestIdleCallback" in window?requestIdleCallback(go,{timeout:1500}):setTimeout(go,300)}},{rootMargin:"600px 0px"});io.observe(el)}else{setTimeout(go,800)}});</script>
 <script>
 /* ouverture : la mousse « devant » n'apparaît que sous le logo, pour passer derrière lui puis tomber sur les drapeaux */
 (function(){var c=document.querySelector('#ouverture .ouv-mousse.devant'),sc=document.querySelector('#ouverture .ouv-scene');if(!c||!sc)return;

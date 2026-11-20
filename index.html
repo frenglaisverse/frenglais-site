@@ -19,7 +19,9 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611181020">
+<link rel="stylesheet" href="style.css?v=202611201500">
+<script>/* téléphone : la barre d'adresse change la hauteur de l'écran à chaque défilement ; les recalculs ne se font que si la largeur change */
+(function(){if(!matchMedia('(hover: none)').matches)return;var a=window.addEventListener;window.addEventListener=function(t,f,o){if(t==='resize'&&typeof f==='function'){var w=innerWidth,g=f;f=function(e){if(innerWidth===w)return;w=innerWidth;return g.call(this,e);};}return a.call(this,t,f,o);};})();</script>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>/* mesure d'audience sans cookies (GoatCounter) : clics importants */
 document.addEventListener('click',function(e){var g=window.goatcounter;if(!g||!g.count)return;var a=e.target.closest&&e.target.closest('a,button');if(!a)return;var h=a.getAttribute('href')||'',n='';
@@ -453,7 +455,7 @@ function essuyer(x,y){g.globalCompositeOperation='destination-out';var rr=W*.17,
 var carte=c.closest('.pol-carte');
 carte.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();essuyer((e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height);});
 carte.addEventListener('pointerleave',function(){prec=null;});carte.addEventListener('pointerup',function(){prec=null;});
-(function boucle(){if(actif&&W){buee(.0025);}requestAnimationFrame(boucle);})();
+var vu=0,tourne=false;function boucle(){if(actif&&W&&vu<1200){buee(.0025);vu++;requestAnimationFrame(boucle);}else{tourne=false;}}function relancer(){vu=0;if(!tourne){tourne=true;requestAnimationFrame(boucle);}}carte.addEventListener('pointermove',relancer);
 if(img.complete)init();else img.addEventListener('load',init);addEventListener('resize',init);if(document.fonts)document.fonts.ready.then(init);})();
 </script>
 <script>
@@ -581,9 +583,9 @@ var band=document.getElementById('fondateurs');if(!fd){band.hidden=true;}else{
     band.querySelector('[data-cpt="j"]').textContent=j;band.querySelector('[data-cpt="h"]').textContent=String(h).padStart(2,'0');band.querySelector('[data-cpt="m"]').textContent=String(m).padStart(2,'0');
     if(d<=0)location.reload();};tick();setInterval(tick,30000);}
 })();</script>
-<script src="mousse.js?v=202611131900"></script>
+<script src="mousse.js?v=202611201500"></script>
 <script>/* lamantin 3D chargé après la page, pour un affichage plus rapide */
-addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611162200")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
+addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611201500")};"requestIdleCallback" in window?requestIdleCallback(go,{timeout:2500}):setTimeout(go,800)});</script>
 <script>
 /* ouverture : la mousse « devant » n'apparaît que sous le logo, pour passer derrière lui puis tomber sur les drapeaux */
 (function(){var c=document.querySelector('#ouverture .ouv-mousse.devant'),sc=document.querySelector('#ouverture .ouv-scene');if(!c||!sc)return;

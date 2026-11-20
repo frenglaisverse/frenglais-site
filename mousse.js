@@ -53,7 +53,7 @@ function FRGmousse(cv){
     }
   }
   const init=()=>{ creer(); for(let i=0;i<140;i++) pas(0); dessiner(); };
-  init(); addEventListener('resize',init);
+  init(); let largeur=innerWidth; addEventListener('resize',()=>{ if(innerWidth===largeur) return; largeur=innerWidth; init(); });   // sur téléphone, la barre d'adresse change la hauteur à chaque défilement : on ignore
   if(calme) return;
   let dernierY=scrollY;
   addEventListener('scroll',()=>{ const dy=scrollY-dernierY; dernierY=scrollY; const k=Math.max(-14,Math.min(14,dy));
@@ -70,7 +70,7 @@ function FRGmousse(cv){
   addEventListener('touchmove',e=>{ const t=e.touches[0]; pousser(t.clientX,t.clientY); },{passive:true});
   addEventListener('touchend',lacher,{passive:true}); addEventListener('touchcancel',lacher,{passive:true});
   document.addEventListener('mouseleave',lacher);
-  let dern=-1e9; const intervalle=innerWidth<700?1000/24:1000/30; // la mousse bouge lentement : 24 à 30 images/s suffisent
+  let dern=-1e9; const intervalle=innerWidth<700?1000/20:1000/30; // la mousse bouge lentement : 24 à 30 images/s suffisent
   let visible=true; new IntersectionObserver(es=>{ visible=es[0].isIntersecting; if(visible) requestAnimationFrame(boucle); }).observe(cv);
   function boucle(t){ if(!cv.isConnected){ visible=false; return; } if(!visible||document.hidden) return; requestAnimationFrame(boucle); if(t-dern<intervalle) return; const n=Math.min(3,Math.max(1,Math.round((t-dern)/16.7))); dern=t; for(let i=0;i<n;i++) pas(t); dessiner(); }
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&visible&&cv.isConnected) requestAnimationFrame(boucle); });

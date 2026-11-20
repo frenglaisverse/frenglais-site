@@ -31,10 +31,11 @@
   function dessiner(){
     piste.querySelectorAll('.pc-tuile').forEach(x => x.remove());
     for (let n = 1; n <= 32; n++) { const s = statut(n), t = document.createElement('button'); t.type = 'button';
-      t.className = 'tb-module pc-tuile pc-' + s.k + (n > 24 ? ' pc-avance' : ''); t.dataset.n = n; t.setAttribute('role', 'listitem');
+      const flou = s.k === 'visiteur' && n > 4;   // visiteur : les 4 premiers modules lisibles, la suite floutée
+      t.className = 'tb-module pc-tuile pc-' + s.k + (n > 24 ? ' pc-avance' : '') + (flou ? ' pc-flou' : ''); t.dataset.n = n; t.setAttribute('role', 'listitem'); if (flou) t.setAttribute('aria-label', 'Module ' + n + ', réservé aux élèves');
       const pct = s.k === 'ouvert' ? lire('frg-m' + n + '-pct', 0) : s.k === 'ok' ? 100 : 0;
       t.innerHTML = `${n > 24 ? '<span class="tb-etiq sig">Signature</span>' : ''}<div class="tb-num">${String(n).padStart(2, '0')}</div>${['ok', 'ouvert'].includes(s.k) ? '' : `<span class="tb-cadenas" aria-label="Verrouillé">${CADENAS}</span>`}
-        <div class="tb-corps"><strong>${esc(TITRES[n - 1])}</strong><span class="pc-etat">${s.k === 'ok' ? '✓ ' : ''}${esc(s.txt)}</span>${pct ? `<div class="tb-mini"><i style="width:${pct}%"></i></div>` : ''}</div>`;
+        <div class="tb-corps"><strong${flou ? ' aria-hidden="true"' : ''}>${esc(TITRES[n - 1])}</strong><span class="pc-etat">${s.k === 'ok' ? '✓ ' : ''}${flou ? 'Réservé aux élèves' : esc(s.txt)}</span>${pct ? `<div class="tb-mini"><i style="width:${pct}%"></i></div>` : ''}</div>`;
       piste.append(t); }
     const nb = Array.from({ length: maxModule() }, (_, i) => i + 1).filter(valide).length;
     const r = $('#pc-compte'); if (r) r.textContent = ETAT.formule ? nb + ' / ' + maxModule() + ' validés' : '24 modules · 32 avec Signature';
@@ -44,11 +45,11 @@
   function selectionner(n, defiler = true){
     choisi = n; piste.querySelectorAll('.pc-tuile').forEach(t => t.classList.toggle('pc-choisi', +t.dataset.n === n));
     const t = piste.querySelector(`.pc-tuile[data-n="${n}"]`); if (t) requestAnimationFrame(() => piste.scrollTo({ left: t.offsetLeft - (piste.clientWidth - t.offsetWidth) / 2, behavior: defiler ? 'smooth' : 'auto' }));
-    const s = statut(n), o = ouvert(n), d = $('#pc-detail'); if (!d) return;
+    const s = statut(n), o = ouvert(n), d = $('#pc-detail'), flou = s.k === 'visiteur' && n > 4; if (!d) return;
     const fait = lire('frg-entr', {})[n] || {};
-    d.innerHTML = `<div class="pc-d-tete"><div><p class="pc-d-num">${n > 24 ? 'Module avancé · Signature' : 'Module ' + n + ' / 24'}</p><h3>${esc(TITRES[n - 1])}</h3><p class="pc-d-etat pc-e-${s.k}">${s.k === 'ok' ? '✓ ' : ''}${esc(s.txt)}</p></div>
-      <div class="pc-d-actions">${o && MODULES_EN_LIGNE ? `<a class="btn btn-bleu" href="${lien(n)}">${s.k === 'ok' ? 'Revoir le module' : s.txt === 'Reprendre' ? 'Reprendre' : 'Commencer'}</a>` : `<span class="pc-d-verrou">${CADENAS} ${o ? 'Ouverture à la mise en ligne' : esc(s.txt)}</span>`}
-      <button type="button" class="pc-plus" aria-expanded="false" aria-controls="pc-entr" ${o ? '' : 'disabled'} title="${o ? 'Micro-entraînements' : 'Disponible quand le module est ouvert'}">+ <span>S'entraîner</span></button></div></div>
+    d.innerHTML = `<div class="pc-d-tete"><div><p class="pc-d-num">${n > 24 ? 'Module avancé · Signature' : 'Module ' + n + ' / 24'}</p><h3${flou ? ' class="pc-flou-t" aria-hidden="true"' : ''}>${esc(TITRES[n - 1])}</h3><p class="pc-d-etat pc-e-${s.k}">${flou ? 'Réservé aux élèves de la formation' : (s.k === 'ok' ? '✓ ' : '') + esc(s.txt)}</p></div>
+      <div class="pc-d-actions">${flou ? '<a class="btn btn-bleu" href="index.html#formations">Voir les formules</a>' : o && MODULES_EN_LIGNE ? `<a class="btn btn-bleu" href="${lien(n)}">${s.k === 'ok' ? 'Revoir le module' : s.txt === 'Reprendre' ? 'Reprendre' : 'Commencer'}</a>` : `<span class="pc-d-verrou">${CADENAS} ${o ? 'Ouverture à la mise en ligne' : esc(s.txt)}</span>`}
+      <button type="button" class="pc-plus" aria-expanded="false" aria-controls="pc-entr" ${o ? '' : 'disabled'}${flou ? ' hidden' : ''} title="${o ? 'Micro-entraînements' : 'Disponible quand le module est ouvert'}">+ <span>S'entraîner</span></button></div></div>
       <div class="pc-entr" id="pc-entr" hidden>
         <p class="pc-entr-sous">Facultatif, 2 à 3 minutes chacun. Les questions changent à chaque fois, et la difficulté monte : vocabulaire, nuances, pièges.</p>
         <div class="pc-entr-grille">${[['ecrit', 'Écrit', 'Codes, vocabulaire, nuances'], ['ecoute', 'Écoute', 'Le dialogue, puis les questions'], ['oral', 'Oral', 'À voix haute, au chrono'], ['lecture', 'Lecture', 'Lisez, comprenez, trouvez les codes']].map(([k, l, s2]) =>

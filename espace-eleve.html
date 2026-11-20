@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <meta name="description" content="L'espace en ligne des élèves Frenglais : modules, progression et suivi.">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=202611180010">
+<link rel="stylesheet" href="style.css?v=202611201500">
 <style>
 .pc-tete{display:flex;align-items:center;gap:12px;margin:34px 0 12px}.pc-tete h2{margin:0;font-size:22px;letter-spacing:-.01em}.pc-compte{color:var(--doux,#4A5578);font-size:14px}
 .pc-fleches{margin-left:auto;display:flex;gap:6px}.pc-fleches button{width:38px;height:38px;border-radius:50%;border:1px solid var(--trait,#E2E6F0);background:var(--carte,#fff);color:inherit;font-size:20px;cursor:pointer}
@@ -18,7 +18,9 @@
 .pc-tuile:hover{transform:translateY(-3px)}.pc-tuile.pc-choisi{transform:translateY(-6px) scale(1.04);box-shadow:0 18px 36px -18px rgba(28,73,165,.55);outline:2px solid #1C49A5;outline-offset:2px}
 .pc-tuile .pc-etat{display:block;margin-top:6px;font-size:12px}.pc-ok{border-color:color-mix(in srgb,#2E8B6E 45%,transparent)!important}.pc-ok .pc-etat{color:#1E7A4F;font-weight:600}
 .pc-ouvert{border-color:color-mix(in srgb,#1C49A5 40%,transparent)!important;background:linear-gradient(180deg,#fff,#EEF3FF)!important}.pc-ouvert .pc-etat{color:#1C49A5;font-weight:600}
-.pc-date,.pc-avant,.pc-sig,.pc-visiteur{opacity:.62}.pc-avance .tb-num{color:#7B61C9}
+.pc-date,.pc-avant,.pc-sig,.pc-visiteur{opacity:.62}
+.pc-flou{opacity:1!important}.pc-flou .tb-corps strong,.pc-flou-t{filter:blur(6px);-webkit-user-select:none;user-select:none;pointer-events:none}.pc-flou .pc-etat{color:#C9574F;font-weight:600}
+@media (hover:none){.tb-modules{-webkit-mask-image:none;mask-image:none}}.pc-avance .tb-num{color:#7B61C9}
 .pc-curseur{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;margin:4px 0 0;background:linear-gradient(90deg,#1C49A5 var(--p,0%),#E2E6F0 var(--p,0%));cursor:pointer}
 .pc-curseur::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid #1C49A5;box-shadow:0 4px 10px rgba(28,73,165,.35)}.pc-curseur::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid #1C49A5}
 .pc-detail{margin-top:18px;padding:22px 24px;border-radius:22px;background:var(--carte,#fff);border:1px solid var(--trait,#E2E6F0);box-shadow:0 10px 30px -22px rgba(14,27,61,.4)}
@@ -183,7 +185,7 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
       <a href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.7 3.5 3.9 3.7v3.1a7 7 0 0 1-3.9-1.2v6.2A5.8 5.8 0 1 1 10.8 9v3.2a2.7 2.7 0 1 0 2.6 2.7V3Z"/></svg></a>
     </div></div>
 <nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a></nav></div></footer>
-<script src="parcours.js?v=2"></script>
-<script src="mousse.js?v=202611131900"></script>
+<script src="parcours.js?v=3"></script>
+<script src="mousse.js?v=202611201500"></script>
 </body>
 </html>

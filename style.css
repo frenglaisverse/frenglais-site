@@ -1477,3 +1477,18 @@ footer::after{opacity:.58}
 .fondateurs .liste-fd{flex:1 1 100%;margin-top:6px;padding-top:12px;border-top:1px solid var(--trait)}
 .carte-fin+.liste-form,.liste-form+.sortie-intro{margin-top:18px}
 .tn-ferme .liste-form{max-width:520px;margin:14px auto 0;text-align:left}
+
+/* ===== Téléphone et tablette : pas de flou de verre sur les éléments de la page =====
+   Le flou d'arrière-plan (backdrop-filter) est recalculé à chaque image pendant le défilement :
+   c'est ce qui faisait ramer sur téléphone. On garde le même verre, un peu plus dense, sans flou. */
+@media (hover:none),(max-width:820px){
+  .btn-contour,.verbes button,.plus,.surtitre,.secteurs button,.segments,.demo,.vitre,
+  .bandeau .nav-liens,.bandeau .nav-liens .nav-eleve,.ouv-scene,.ouv-verre,
+  :is(.polaroid,.pol-grand) .pol-recto,.pol-grand .pol-verso,.pol-lire,.pol-buee,.vl-fermer{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .offre{-webkit-backdrop-filter:none;backdrop-filter:none;--fond:linear-gradient(160deg,rgba(255,255,255,.93),rgba(240,245,255,.86))}
+  :is(.polaroid,.pol-grand) .pol-recto{background:linear-gradient(135deg,rgba(255,255,255,.42) 0%,rgba(255,255,255,.2) 45%,rgba(255,255,255,.14) 100%)!important}
+  .ouv-scene{background:linear-gradient(150deg,rgba(78,108,180,.82),rgba(30,52,120,.9) 55%,rgba(14,28,72,.94))}
+  .ouv-verre{background:linear-gradient(160deg,rgba(84,114,186,.8),rgba(34,58,128,.88) 55%,rgba(14,28,72,.92))}
+  .pol-lire{background:rgba(14,27,61,.62)}
+}
+@media (hover:none) and (prefers-color-scheme:dark),(max-width:820px) and (prefers-color-scheme:dark){:root:not([data-theme="light"]) .offre{--fond:linear-gradient(160deg,rgba(40,56,100,.94),rgba(22,32,64,.92))}}

@@ -31,6 +31,7 @@ function lancer(){
   try { const gl = rendu.getContext(), ext = gl.getExtension('WEBGL_debug_renderer_info');
     const nom = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
     if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(nom)) niveau = 2; } catch (e) {}
+  if (niveau < 1 && matchMedia('(hover: none)').matches) niveau = 1;   // téléphone : pas de souris à suivre, 30 i/s suffisent et rien ne se dessine pendant le défilement
   const appliquer = () => { if (niveau === 1) rendu.setPixelRatio(Math.min(devicePixelRatio || 1, 1)); if (niveau === 2) rendu.setPixelRatio(Math.min((devicePixelRatio || 1) * (innerWidth <= 640 ? 1 : 1.8), 2));   /* niveau 2 dessine rarement : il peut rester net */ cadence = niveau === 1 ? 30 : niveau === 2 ? 12 : 0; };
   appliquer();
 

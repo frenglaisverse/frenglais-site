@@ -22,8 +22,9 @@ body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-s
 .haut h1{margin:6px 0 0;font-size:clamp(26px,7.4vw,40px);line-height:1.05;letter-spacing:-.025em;font-weight:700}
 .ruban{position:absolute;z-index:2;right:8%;top:-4px;width:46px;height:74px;background:var(--corail);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%)}
 .corps{padding:7% 9% 0;flex:1;display:flex;flex-direction:column;position:relative;isolation:isolate}
-.banian{position:absolute;right:12%;bottom:-2%;width:44%;height:108%;background:url(deco-banian.webp) no-repeat center bottom/contain;opacity:.85;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 48% 55% at 50% 58%,#000 42%,transparent 100%);mask-image:radial-gradient(ellipse 48% 55% at 50% 58%,#000 42%,transparent 100%)}
-.haut>*:not(.banian):not(.ruban){position:relative}
+.haut>*:not(.kdo-mousse):not(.ruban){position:relative}
+.kdo-mousse{position:absolute;left:0;top:0;width:62%;height:100%;z-index:1;pointer-events:none;opacity:.9}
+.haut img{position:relative;z-index:0}
 .formule{margin:0;font-size:clamp(18px,4.8vw,24px);font-weight:700;letter-spacing:-.01em}
 .formule small{display:block;font-size:13px;font-weight:500;color:var(--doux);letter-spacing:0;margin-top:2px}
 .courbe{margin:6% -2% 4%;color:var(--encre)}
@@ -47,6 +48,7 @@ body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-s
 <div class="barre" id="barre" hidden><p>Format A5. Choisissez « Enregistrer en PDF » pour le garder ou l'envoyer.</p><button type="button" onclick="print()">Imprimer le bon</button></div>
 <div id="zone"><p class="etat">Chargement du bon…</p></div>
 <script src="courbe-main.js?v=1"></script>
+<script src="mousse.js?v=202611131900"></script>
 <script>
 (function(){
   var q=new URLSearchParams(location.search), API='https://courbe-classement.paulodubmx84.workers.dev', z=document.getElementById('zone');
@@ -58,7 +60,7 @@ body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-s
     var codes='<text x="165" y="88" text-anchor="middle" fill="#F0766F">-ed</text><text x="290" y="88" text-anchor="middle" fill="#1C49A5">-s</text>';
     var fin=new Date(b.expire).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
     z.innerHTML='<article class="bon" aria-label="Bon cadeau Frenglais">'+
-      '<div class="haut"><span class="banian" aria-hidden="true"></span><span class="ruban" aria-hidden="true"></span><img src="logo-nav.webp" alt="Frenglais"><p class="eyebrow">Bon cadeau</p><h1>Pour '+esc(b.pour)+'</h1></div>'+
+      '<div class="haut"><canvas class="mousse kdo-mousse" data-relatif="1" data-pash="0.07" data-vent=".05" data-modele=\'[[0.02,8],[0.06,12],[0.12,6],[0.2,9],[0.29,6],[0.37,8],[0.47,5],[0.58,3]]\' aria-hidden="true"></canvas><span class="ruban" aria-hidden="true"></span><img src="logo-nav.webp" alt="Frenglais"><p class="eyebrow">Bon cadeau</p><h1>Pour '+esc(b.pour)+'</h1></div>'+
       '<div class="corps"><p class="formule">'+esc(b.formule)+'<small>La formation d’anglais Frenglais, accès à vie</small></p>'+
       '<div class="courbe" aria-hidden="true"><svg viewBox="0 0 520 94">'+lab+c+codes+'</svg></div>'+
       (b.message?'<p class="message">« '+esc(b.message)+' »</p>':'')+(b.de?'<p class="de">De la part de '+esc(b.de)+'</p>':'')+
@@ -66,6 +68,7 @@ body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-s
       '<p class="pied">Valable jusqu’au '+fin+'. L’accès à vie démarre à l’activation. L’anglais n’a que deux temps : -ed et -s. Le reste se construit dessus.</p>'+
       (b.statut==='active'?'<div class="utilise">Bon activé ✓</div>':'')+'</article>';
     document.getElementById('barre').hidden=false;
+    var cv=z.querySelector('canvas.mousse');if(cv&&window.FRGmousse)FRGmousse(cv);
   }).catch(function(){z.innerHTML='<p class="etat">Connexion impossible. Réessayez dans un instant.</p>';});
 })();
 </script>

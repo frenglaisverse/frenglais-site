@@ -21,7 +21,8 @@ body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-s
 .haut .eyebrow{margin:18px 0 0;font:500 11px "Geist Mono",monospace;letter-spacing:.2em;text-transform:uppercase;opacity:.85}
 .haut h1{margin:6px 0 0;font-size:clamp(26px,7.4vw,40px);line-height:1.05;letter-spacing:-.025em;font-weight:700}
 .ruban{position:absolute;right:8%;top:-4px;width:46px;height:74px;background:var(--corail);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%)}
-.corps{padding:7% 9% 0;flex:1;display:flex;flex-direction:column}
+.corps{padding:7% 9% 0;flex:1;display:flex;flex-direction:column;position:relative;isolation:isolate}
+.banian{position:absolute;right:-2%;bottom:14%;width:44%;height:50%;background:url(deco-banian.webp) no-repeat center bottom/contain;opacity:.26;z-index:-1;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 55%,#000 45%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 55%,#000 45%,transparent 100%)}
 .formule{margin:0;font-size:clamp(18px,4.8vw,24px);font-weight:700;letter-spacing:-.01em}
 .formule small{display:block;font-size:13px;font-weight:500;color:var(--doux);letter-spacing:0;margin-top:2px}
 .courbe{margin:6% -2% 4%;color:var(--encre)}
@@ -38,7 +39,7 @@ body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-s
 .etat{max-width:560px;margin:60px auto;padding:0 16px;text-align:center;color:var(--doux)}
 .utilise{position:absolute;inset:0;display:grid;place-items:center;background:rgba(255,255,255,.7);font:700 28px Geist,sans-serif;color:#1E7A4F;transform:rotate(-12deg)}
 @page{size:A5 portrait;margin:0}
-@media print{body{background:#fff}.barre{display:none}.bon{width:148mm;height:210mm;max-width:none;margin:0;border-radius:0;box-shadow:none;aspect-ratio:auto}.haut{-webkit-print-color-adjust:exact;print-color-adjust:exact}.ruban{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media print{.banian{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:#fff}.barre{display:none}.bon{width:148mm;height:210mm;max-width:none;margin:0;border-radius:0;box-shadow:none;aspect-ratio:auto}.haut{-webkit-print-color-adjust:exact;print-color-adjust:exact}.ruban{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body>
@@ -57,7 +58,7 @@ body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-s
     var fin=new Date(b.expire).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
     z.innerHTML='<article class="bon" aria-label="Bon cadeau Frenglais">'+
       '<div class="haut"><span class="ruban" aria-hidden="true"></span><img src="logo-nav.webp" alt="Frenglais"><p class="eyebrow">Bon cadeau</p><h1>Pour '+esc(b.pour)+'</h1></div>'+
-      '<div class="corps"><p class="formule">'+esc(b.formule)+'<small>La formation d’anglais Frenglais, accès à vie</small></p>'+
+      '<div class="corps"><span class="banian" aria-hidden="true"></span><p class="formule">'+esc(b.formule)+'<small>La formation d’anglais Frenglais, accès à vie</small></p>'+
       '<div class="courbe" aria-hidden="true"><svg viewBox="0 0 520 94">'+lab+c+codes+'</svg></div>'+
       (b.message?'<p class="message">« '+esc(b.message)+' »</p>':'')+(b.de?'<p class="de">De la part de '+esc(b.de)+'</p>':'')+
       '<div class="code"><div><small>Code cadeau</small><b>'+esc(b.code)+'</b></div><div class="ou">À activer sur<br><strong>frenglais.co/cadeau</strong></div></div></div>'+

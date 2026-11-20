@@ -722,6 +722,12 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <p class="ligne"><button class="btn plein" id="ae-creer" type="button">Créer l'accès</button><span class="petit" id="ae-msg"></span></p>
     <div id="ae-res"></div>
   </section>
+  <section class="carte" id="ia-test">
+    <div class="titre-ic"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/></svg></span><div><h2>Tester le lamantin IA</h2><p class="doux petit">Collez un texte d'élève : la relecture que verront les élèves au module 1.</p></div></div>
+    <textarea id="ia-texte" rows="4" style="margin-top:12px;width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--trait);border-radius:10px;font:14px var(--f-txt);color:var(--encre);background:var(--carte);resize:vertical">My name is Paul. I am teacher of English in Avignon. My sister works in a hotel. I love the sea. Yesterday I watched a film with my friends.</textarea>
+    <p class="ligne"><button class="btn plein" id="ia-go" type="button">Faire relire</button><span class="petit" id="ia-msg"></span></p>
+    <div id="ia-res"></div>
+  </section>
   <section class="carte replie" id="devis">
     <div class="titre-ic"><span class="ic" style="--c:#E0685F"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></span><div><h2>Générateur de devis</h2><p class="doux petit">Cochez, vérifiez le total, créez le PDF.</p></div><button type="button" class="dv-plus" id="dv-plus" aria-expanded="false" aria-label="Déplier le générateur de devis">+</button></div>
     <div class="dv-grille">
@@ -1516,6 +1522,21 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       const pos = [...document.querySelectorAll('.defile')].map(d => d.scrollTop); J = j; jeuRendu(); document.querySelectorAll('.defile').forEach((d, i) => d.scrollTop = pos[i] || 0); } catch (e) {} }
   setInterval(jeuRafraichir, 60000);   /* 1 min : chaque lecture coûte ~25 lectures sur le quota gratuit Cloudflare */ document.addEventListener('visibilitychange', jeuRafraichir);
 })();
+</script>
+<script>
+/* Test du lamantin IA : utilise la session de l'espace élève ouverte dans ce navigateur (compte de test), comme un vrai élève */
+(function(){var go=document.getElementById('ia-go');if(!go)return;var msg=document.getElementById('ia-msg'),res=document.getElementById('ia-res');
+function esc(t){return String(t||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+go.addEventListener('click',async function(){var S=null;try{S=JSON.parse(localStorage.getItem('frg-session')||'null')}catch(e){}
+ if(!S||!S.jeton){msg.innerHTML='Connectez-vous d\'abord à l\'<a href="../espace-eleve.html" target="_blank">espace élève</a> avec votre compte de test, puis revenez ici.';return;}
+ var t=document.getElementById('ia-texte').value.trim();if(t.length<8){msg.textContent='Texte trop court.';return;}
+ go.disabled=true;msg.textContent='Le lamantin relit…';res.innerHTML='';var t0=Date.now();
+ try{var r=await fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/corriger',{method:'POST',body:JSON.stringify({jeton:S.jeton,module:1,texte:t,consigne:'Se présenter en 4 à 5 phrases : qui, son travail (T0), une chose aimée, une chose faite hier (T-1).'})});var j=await r.json();
+  var sec=((Date.now()-t0)/1000).toFixed(1)+' s';
+  if(!j.ok){msg.textContent={session:'Session expirée : reconnectez-vous à l\'espace élève.',quota:'Quota du jour atteint (15 par élève).',indisponible:'IA non branchée dans Cloudflare.',court:'Texte trop court.'}[j.raison]||('Pas de réponse lisible ('+sec+').');return;}
+  msg.textContent='Répondu en '+sec;
+  res.innerHTML='<div class="ae-carte">'+(j.bravo?'<p><b>Bravo :</b> '+esc(j.bravo)+'</p>':'')+(j.corrections.length?j.corrections.map(function(c){return '<p>« '+esc(c.avant)+' » → <b>'+esc(c.apres)+'</b><br><span class="doux petit">'+esc(c.pourquoi)+'</span></p>'}).join(''):'<p>Aucune correction.</p>')+(j.bilan?'<p class="doux petit">'+esc(j.bilan)+'</p>':'')+'</div>';
+ }catch(e){msg.textContent='Connexion impossible.';}finally{go.disabled=false;}});})();
 </script>
 </body>
 </html>

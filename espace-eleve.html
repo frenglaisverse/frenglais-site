@@ -155,7 +155,9 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
       z.append(b); }).catch(()=>{}); };
   /* accueil personnalisé : la salutation change avec l'heure, comme une vraie personne qui vous voit arriver */
   const H1=document.querySelector('.tb-tete h1'), SUR=document.querySelector('.tb-tete .tb-sur');
-  const saluer=r=>{ if(!r){ H1.textContent='Espace élève'; SUR.textContent='Votre espace'; document.title='Espace élève · Frenglais'; return; }
+  const CTA=document.querySelector('.tb-cta'), AUSSI=document.querySelector('.tb-aussi');
+  const saluer=r=>{ if(CTA) CTA.style.display=r?'none':''; if(AUSSI) AUSSI.style.display=r?'none':'';   /* élève inscrit : plus d'appel à l'achat */
+    if(!r){ H1.textContent='Espace élève'; SUR.textContent='Votre espace'; document.title='Espace élève · Frenglais'; return; }
     const p=String(r.prenom||'').replace(/\(.*?\)/g,'').trim().split(/\s+/)[0]||'';
     const h=new Date().getHours()   /* heure de l'élève, où qu'il soit */;
     const n=p?', '+p:'', jour=[x=>'Hello'+x+'!',x=>'Hey'+x+'!',x=>'Hi'+x+'!',x=>'Welcome back'+x+'!'][new Date().getDate()%4];

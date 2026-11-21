@@ -512,6 +512,7 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 #devis .titre-ic{position:relative}.dv-plus{margin-left:auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--trait);background:var(--carte);color:var(--encre);font-size:22px;line-height:1;cursor:pointer;flex:none;transition:transform .2s}.dv-plus[aria-expanded="true"]{transform:rotate(45deg)}
 #devis.replie>:not(.titre-ic){display:none!important}#devis.replie .titre-ic{margin-bottom:0}
 #acces-eleve input,#acces-eleve select{padding:9px 11px;border:1.5px solid var(--trait);border-radius:10px;font:14px var(--f-txt);color:var(--encre);background:var(--carte);width:100%;box-sizing:border-box}#acces-eleve label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--doux)}
+.pres-l{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--trait)}.pres-l.lu{opacity:.65}.pres-a{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pres-a audio{height:34px;max-width:260px}.pres-tx{margin:4px 0 0;color:var(--doux);max-width:560px}
 .ia-texte{line-height:1.9;margin:0 0 10px}.ia-faute{background:color-mix(in srgb,#F0766F 22%,transparent);color:inherit;border-bottom:2px solid #F0766F;border-radius:3px;padding:1px 2px}.ia-faute sup{font:700 10px var(--f-mono);color:#F0766F;margin-right:2px}.ia-liste{margin:0;padding-left:20px}.ia-liste li{margin:6px 0}.ia-liste s{color:var(--doux)}
 .ae-carte{margin-top:12px;padding:14px 16px;border-radius:14px;border:1px dashed var(--trait);font-size:14px}.ae-carte code{font:600 16px var(--f-mono)}
 .ventes-detail{margin-top:12px}.ventes-detail summary{cursor:pointer;padding:4px 0}.ventes-detail>div{margin-top:8px;overflow-x:auto}
@@ -747,6 +748,11 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   </div>
   </div>
 
+  <section data-onglet="eleves" class="carte" id="presentations">
+    <div class="ligne" style="justify-content:space-between"><h2>🎙 Présentations orales</h2><span class="doux petit" id="pres-res"></span></div>
+    <p class="doux petit">Une par élève, envoyée à la fin du module 1. Écoutez, puis marquez « écoutée ».</p>
+    <div id="pres-liste"><p class="doux petit">Chargement…</p></div>
+  </section>
   <section data-onglet="eleves" class="carte">
     <div class="ligne" style="justify-content:space-between"><h2>Vos élèves</h2><span class="doux petit" id="resume"></span></div>
     <table class="tab"><thead><tr><th>Élève</th><th class="cache-m">Secteur</th><th>Semaine</th><th>Modules</th><th>Volume tenu</th><th class="cache-m">Niveau</th><th class="cache-m">Rapport reçu</th></tr></thead><tbody id="liste"></tbody></table>
@@ -1537,6 +1543,22 @@ go.addEventListener('click',async function(){var cle=FRG.lire('frg-cle-tableau',
   msg.textContent=(j.erreurs.length?j.erreurs.length+' faute'+(j.erreurs.length>1?'s':''):'Aucune faute')+' · '+sec+(j.modele?' · '+j.modele.split('/').pop():'');
   res.innerHTML='<div class="ae-carte"><p class="ia-texte">'+surligner(j.texte,j.erreurs)+'</p>'+(j.erreurs.length?'<ol class="ia-liste">'+j.erreurs.map(function(e){return '<li><s>'+esc(e.extrait)+'</s> → <b>'+esc(e.correction)+'</b><br><span class="doux petit">'+esc(e.pourquoi)+'</span></li>'}).join('')+'</ol>':'<p>Rien à reprendre.</p>')+'</div>';
  }catch(e){msg.textContent='Connexion impossible.';}finally{go.disabled=false;}});})();
+</script>
+<script>
+/* présentations orales des élèves (module 1) : liste, écoute, « écoutée » */
+(function(){var box=document.getElementById('pres-liste');if(!box)return;var API='https://courbe-classement.paulodubmx84.workers.dev';
+function esc(t){return String(t||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function post(b){return fetch(API+'/admin/presentations',{method:'POST',body:JSON.stringify(Object.assign({cle:FRG.lire('frg-cle-tableau','')},b))}).then(function(r){return r.json()})}
+function charger(){post({}).then(function(j){if(!j.ok){box.innerHTML='<p class="doux petit">Indisponible pour le moment.</p>';return;}
+ var L=j.liste||[],nv=L.filter(function(x){return!x.ecoute}).length;document.getElementById('pres-res').textContent=L.length?(nv?nv+' à écouter · ':'')+L.length+' au total':'';
+ if(!L.length){box.innerHTML='<p class="doux petit">Aucune présentation pour l’instant.</p>';return;}
+ box.innerHTML=L.map(function(x){var d=new Date(x.t).toLocaleDateString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  return '<div class="pres-l'+(x.ecoute?' lu':'')+'" data-id="'+esc(x.id)+'"><div><b>'+esc((x.prenom+' '+(x.nom||'')).trim()||x.id)+'</b> <span class="doux petit">'+esc(x.id)+' · '+d+(x.duree?' · '+x.duree+' s':'')+'</span>'+(x.texte?'<p class="petit pres-tx">« '+esc(x.texte)+' »</p>':'')+'</div><div class="pres-a"><button class="btn btn-sec" type="button" data-ecouter>Écouter</button>'+(x.ecoute?'<span class="doux petit">✓ écoutée</span>':'<button class="btn btn-sec" type="button" data-lu>Marquer écoutée</button>')+'</div></div>';}).join('');
+}).catch(function(){box.innerHTML='<p class="doux petit">Serveur injoignable.</p>';});}
+box.addEventListener('click',function(e){var l=e.target.closest('.pres-l');if(!l)return;var id=l.dataset.id;
+ if(e.target.matches('[data-ecouter]')){var b=e.target;b.disabled=true;b.textContent='Chargement…';post({id:id}).then(function(j){if(!j.ok){b.textContent='Erreur';return;}var a=document.createElement('audio');a.controls=true;a.autoplay=true;a.src='data:'+(j.type||'audio/webm')+';base64,'+j.audio;b.replaceWith(a);});}
+ if(e.target.matches('[data-lu]')){post({id:id,ecoute:true}).then(charger);}});
+charger();})();
 </script>
 </body>
 </html>

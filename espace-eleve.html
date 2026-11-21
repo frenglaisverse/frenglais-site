@@ -165,7 +165,8 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
     const n=p?', '+p:'', jour=[x=>'Hello'+x+'!',x=>'Hey'+x+'!',x=>'Hi'+x+'!',x=>'Welcome back'+x+'!'][new Date().getDate()%4];
     H1.textContent = h>=5&&h<12 ? 'Good morning'+n+'!' : h>=18&&h<23 ? 'Good evening'+n+'!' : h>=23||h<5 ? 'Still up'+n+'?' : jour(n);
     SUR.textContent='Votre espace · '+(NOMF[r.formule]||r.formule||''); document.title=(p?p+' · ':'')+'Espace élève · Frenglais'; };
-  const connecte=r=>{ if(window.FRGParcours) FRGParcours.maj(r); saluer(r); f.querySelector('.tb-acces-champs').hidden=true; etat.className='tb-acces-etat ok';
+  const connecte=r=>{ try{ localStorage.setItem('frg-eleve',JSON.stringify({prenom:r.prenom||'',identifiant:r.identifiant||'',formule:r.formule||''})); }catch(e){}   /* le module 1 reprend le prénom */
+    if(window.FRGParcours) FRGParcours.maj(r); saluer(r); f.querySelector('.tb-acces-champs').hidden=true; etat.className='tb-acces-etat ok';
     etat.innerHTML=''; etat.append('Connecté : '+(r.prenom?r.prenom+' · ':'')+r.identifiant+' · '+(NOMF[r.formule]||r.formule)+'. Vos modules s\'ouvrent ici dès leur mise en ligne. ');
     const d=document.createElement('button'); d.type='button'; d.style.cssText='background:none;border:0;padding:0;min-height:0;box-shadow:none;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;font-weight:500'; d.textContent='Se déconnecter'; etat.append(d);
     rdv(); clearInterval(rdvT); rdvT=setInterval(rdv,30000);

@@ -1275,6 +1275,10 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       $a('ae-res').innerHTML = `<div class="ae-carte"><b>${esc(x.prenom)}</b> · ${r.mail === 'envoyé' ? 'mail envoyé ✓' : r.mail === 'non envoyé' ? 'à transmettre vous-même' : esc(r.mail)}<br>Identifiant <code>${esc(r.identifiant)}</code> · code <code>${esc(r.code)}</code><br><span class="doux petit">Le code ne s'affiche qu'ici, une seule fois. Plus tard : « Renvoyer les accès » dans Ventes en crée un nouveau.</span><p class="ligne" style="margin-top:8px"><button type="button" class="btn btn-sec" id="ae-copier">Copier le message</button></p></div>`;
       $a('ae-copier').addEventListener('click', async () => { try { await navigator.clipboard.writeText(`Bonjour ${x.prenom},\n\nVoici vos accès Frenglais :\nIdentifiant : ${r.identifiant}\nCode : ${r.code}\n\nÀ entrer sur https://frenglais.co/espace-eleve.html\n\nPaul`); $a('ae-copier').textContent = 'Copié ✓'; } catch (e) {} });
       ['ae-prenom', 'ae-nom', 'ae-email'].forEach(i => $a(i).value = ''); if (typeof majVentes === 'function') majVentes(); }); }
+  /* toute réunion s'ouvre sur le compte Frenglais : le sélecteur Google bascule sur contact@frenglais.co (connexion demandée s'il n'est pas encore ajouté) */
+  const MEET_COMPTE = 'contact@frenglais.co';
+  const lienPro = u => { if (!/^https:\/\/meet\.google\.com\//.test(u || '')) return u; const v = u + (u.includes('?') ? '&' : '?') + 'authuser=' + encodeURIComponent(MEET_COMPTE);
+    return 'https://accounts.google.com/AccountChooser?Email=' + encodeURIComponent(MEET_COMPTE) + '&continue=' + encodeURIComponent(v); };
   /* agenda des sessions Google Meet : semaine façon Google Agenda ; clic sur un créneau = nouvelle session ; bouton « Lancer » 10 min avant */
   { const $v = id => document.getElementById(id), H0 = 7, H1 = 24, HH = 38; let RDV = [], lundi = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d; })(), choix = null, vu = null;
     const okLien = l => /^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/.test(l), net = l => String(l || '').trim().replace(/[?#].*$/, '');
@@ -1284,7 +1288,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     function liste(){ const z = $v('vz-liste'), now = Date.now(), A = RDV.filter(r => r.debut + r.duree * 60000 > now).slice(0, 4);
       if (!A.length) { z.textContent = 'Aucune session planifiée.'; return; }
       z.innerHTML = '<table class="tab">' + A.map(r => { const actif = r.debut - now < 10 * 60000, d = new Date(r.debut);
-        return `<tr><td><b>${esc(r.nom)}</b><br>${d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })} · ${hm(d)}</td><td style="text-align:right">${actif ? `<a class="btn plein" href="${esc(r.lien)}" target="_blank" rel="noopener">Lancer · ${prenom(r)}</a>` : `<span class="doux">bouton à ${hm(new Date(r.debut - 6e5))}</span>`}</td></tr>`; }).join('') + '</table>'; }
+        return `<tr><td><b>${esc(r.nom)}</b><br>${d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })} · ${hm(d)}</td><td style="text-align:right">${actif ? `<a class="btn plein" href="${esc(lienPro(r.lien))}" target="_blank" rel="noopener">Lancer · ${prenom(r)}</a>` : `<span class="doux">bouton à ${hm(new Date(r.debut - 6e5))}</span>`}</td></tr>`; }).join('') + '</table>'; }
     function grille(){ const g = $v('ag'), n = nbJours(), now = Date.now(); let deb = new Date(lundi);
       if (n === 3) { const t = new Date(); t.setHours(0, 0, 0, 0); if (t >= lundi && t < new Date(lundi.getTime() + 7 * 864e5)) deb = t; }
       const jours = [...Array(n)].map((_, k) => new Date(deb.getFullYear(), deb.getMonth(), deb.getDate() + k)), fin = new Date(jours[n - 1].getTime() + 864e5);
@@ -1306,7 +1310,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     function ouvrirVoir(r){ vu = r; const d = new Date(r.debut), actif = r.debut - Date.now() < 6e5 && r.debut + r.duree * 60000 > Date.now();
       $v('ag-dlg-titre').textContent = r.nom; $v('ag-dlg-quand').textContent = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) + ' · ' + hm(d) + ' · ' + r.duree + ' min';
       $v('ag-creer').hidden = true; $v('ag-voir').hidden = false; msg.textContent = '';
-      $v('ag-voir').innerHTML = `<p class="petit" style="word-break:break-all"><a href="${esc(r.lien)}" target="_blank" rel="noopener">${esc(r.lien)}</a> · ${esc(r.email)}</p><p style="margin-top:12px">${actif ? `<a class="btn plein" href="${esc(r.lien)}" target="_blank" rel="noopener">Lancer la session</a>` : `<span class="doux petit">Le bouton « Lancer » apparaît à ${hm(new Date(r.debut - 6e5))}.</span>`}</p>`;
+      $v('ag-voir').innerHTML = `<p class="petit" style="word-break:break-all"><a href="${esc(lienPro(r.lien))}" target="_blank" rel="noopener">${esc(r.lien)}</a> · ${esc(r.email)}</p><p style="margin-top:12px">${actif ? `<a class="btn plein" href="${esc(lienPro(r.lien))}" target="_blank" rel="noopener">Lancer la session</a>` : `<span class="doux petit">Le bouton « Lancer » apparaît à ${hm(new Date(r.debut - 6e5))}.</span>`}</p>`;
       $v('ag-ok').hidden = false; $v('ag-ok').textContent = 'Annuler la session'; dlg.showModal(); }
     $v('ag').addEventListener('click', e => { const ev = e.target.closest('.ag-ev'); if (ev) { const r = RDV.find(x => x.id === ev.dataset.id); if (r) ouvrirVoir(r); return; }
       const col = e.target.closest('.ag-col'); if (!col || col.classList.contains('passe')) return;

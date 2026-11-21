@@ -788,8 +788,9 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       <div id="ag-creer">
         <label>Élève <input id="ag-eleve" list="vz-eleves" placeholder="Identifiant ou e-mail" autocomplete="off" spellcheck="false"><datalist id="vz-eleves"></datalist></label>
         <div class="ag-2"><label>Heure <input id="ag-heure" type="time" step="900"></label><label>Durée <select id="ag-duree"><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">1 h</option><option value="90">1 h 30</option></select></label></div>
-        <label>Lien Meet <span class="ag-lien"><input id="ag-lien" placeholder="Se remplit tout seul après « Créer »" autocomplete="off" spellcheck="false"><a class="btn btn-sec" href="https://accounts.google.com/AccountChooser?Email=contact%40frenglais.co&amp;continue=https%3A%2F%2Fmeet.google.com%2Fnew%3Fauthuser%3Dcontact%2540frenglais.co" target="_blank" rel="noopener" id="ag-meet">Créer ↗</a></span></label>
-        <p class="doux petit" style="margin:0">« Créer » ouvre Google Meet sur le compte <b>contact@frenglais.co</b> : copiez le lien de la réunion, revenez ici, il se colle tout seul.</p>
+        <label>Lien Meet <span class="ag-lien"><input id="ag-lien" placeholder="Se remplit tout seul après « Créer »" autocomplete="off" spellcheck="false"><a class="btn btn-sec" href="#" target="_blank" rel="noopener" id="ag-meet">Créer</a></span></label>
+        <p class="doux petit" style="margin:0">« Créer » ouvre <b>Google Agenda</b> sur contact@frenglais.co, avec la session déjà remplie et les invités ajoutés. Cliquez « Ajouter une visioconférence Google Meet », enregistrez, envoyez les invitations, puis copiez le lien Meet de l'événement : il se colle tout seul ici.</p>
+        <label>Votre adresse Google perso <input id="ag-perso" type="email" placeholder="ex. paul.moreaux@gmail.com" autocomplete="email" spellcheck="false"><small class="doux">Invitée à chaque session : quel que soit le compte avec lequel vous ouvrez Meet, vous entrez sans attendre.</small></label>
         <label class="ag-case"><input type="checkbox" id="ag-prevenir" checked> Prévenir l'élève par mail</label>
       </div>
       <div id="ag-voir" hidden></div>
@@ -1324,6 +1325,15 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       const d = new Date(choix); d.setHours(hh, mm, 0, 0); const b = $v('ag-ok'); b.disabled = true; msg.textContent = 'Planification…';
       const r = await appel({ creer: { eleve: qui, lien: l, duree: +$v('ag-duree').value, debut: d.toISOString(), prevenir: $v('ag-prevenir').checked } }); b.disabled = false;
       if (r.rdv) { RDV = r.rdv; tout(); $v('ag-eleve').value = ''; dlg.close(); } else msg.textContent = 'Erreur : ' + r.erreur; });
+    /* « Créer » : un événement Google Agenda sur contact@frenglais.co (organisateur), avec l'élève et votre compte perso invités : personne n'attend dans la salle d'attente */
+    const perso = $v('ag-perso'); perso.value = FRG.lire('frg-meet-perso', ''); perso.addEventListener('change', () => FRG.ecrire('frg-meet-perso', perso.value.trim()));
+    const gcal = t => new Date(t).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    $v('ag-meet').addEventListener('click', e => { const [hh, mm] = ($v('ag-heure').value || '').split(':').map(Number); const d = new Date(choix); if (!isNaN(hh)) d.setHours(hh, mm || 0, 0, 0);
+      const fin = new Date(+d + (+$v('ag-duree').value || 30) * 60000), qui = $v('ag-eleve').value.trim().split(' · ');
+      const invites = [perso.value.trim(), ...qui.filter(x => /@/.test(x))].filter(Boolean).join(',');
+      const ev = 'https://calendar.google.com/calendar/r/eventedit?authuser=contact%40frenglais.co&text=' + encodeURIComponent('Session Frenglais' + (qui[0] ? ' · ' + qui[0] : '')) +
+        '&dates=' + gcal(d) + '/' + gcal(fin) + '&details=' + encodeURIComponent('Session d\'anglais avec Paul (Frenglais). Le lien Meet est dans cet événement.') + (invites ? '&add=' + encodeURIComponent(invites) : '');
+      e.currentTarget.href = 'https://accounts.google.com/AccountChooser?Email=contact%40frenglais.co&continue=' + encodeURIComponent(ev); });
     /* retour depuis Google Meet : le lien copié se colle tout seul */
     const coller = async () => { if (!dlg.open || $v('ag-creer').hidden || okLien(net($v('ag-lien').value))) return; try { const t = net(await navigator.clipboard.readText()); if (okLien(t)) { $v('ag-lien').value = t; msg.textContent = 'Lien Meet collé ✓'; } } catch (e) {} };
     addEventListener('focus', coller); document.addEventListener('visibilitychange', () => { if (!document.hidden) coller(); });

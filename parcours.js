@@ -61,7 +61,7 @@
     const plus = d.querySelector('.pc-plus'), box = d.querySelector('#pc-entr');
     plus.addEventListener('click', () => { const ouvre = box.hidden; box.hidden = !ouvre; plus.setAttribute('aria-expanded', ouvre); plus.classList.toggle('on', ouvre); });
     d.querySelectorAll('[data-e]').forEach(b => b.addEventListener('click', () => entrainer(n, b.dataset.e)));
-    rangEntr(n, s, o, flou); majCurseur();
+    rangEntr(n, s, o, flou); tuileEntr(); majCurseur();
   }
   /* ---------- rangée « Entraînement » sous les modules : 5 exercices par module + le lamantin en libre accès ---------- */
   const EXOS = [['sprint', '⚡', 'Sprint des codes', '60 s chrono, les séries comptent double'], ['dictee', '🎧', 'Dictée trouée', 'Le message vocal, verbe par verbe'], ['chasse', '🔎', 'Chasse aux erreurs', 'Trouvez le mot faux, réparez-le'], ['chantier', '🧱', 'Le chantier', 'Reconstruisez les phrases'], ['cartes', '🃏', 'Cartes mémoire', 'Règles et nuances à retourner']];
@@ -75,6 +75,22 @@
         ? `<a class="en-c" href="entrainement.html?n=${n}&x=${k}"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${x ? (k === 'sprint' ? 'Record ' + x.best + ' pts' : k === 'cartes' ? x.best + ' cartes maîtrisées' : 'Meilleur ' + x.best + ' %') : 'Nouveau'}</em></a>`
         : `<span class="en-c en-off${flou ? ' pc-flou-t' : ''}" aria-disabled="true"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${CADENAS} ${bloque}</em></span>`; }).join('');
     const c = $('#en-compte'); if (c) { const tot = Object.values(lire('frg-entr2', {})).reduce((a, m) => a + Object.values(m).reduce((b, e) => b + (e.n || 0), 0), 0); c.textContent = tot ? tot + ' partie' + (tot > 1 ? 's' : '') + ' jouée' + (tot > 1 ? 's' : '') : '5 exercices par module'; }
+  }
+  /* ---------- tuile « Entraînement », à part des modules : une bulle compte les exercices à faire en attendant la suite ---------- */
+  function tuileEntr(){
+    const t = $('#en-tuile'); if (!t) return;
+    if (!ETAT.formule || !MODULES_EN_LIGNE) { t.hidden = true; return; }
+    const S = lire('frg-entr2', {}), ouverts = []; for (let n = 1; n <= maxModule(); n++) if (ouvert(n)) ouverts.push(n);
+    const reste = n => EXOS.filter(([k]) => !(S[n] && S[n][k])).length, total = ouverts.reduce((a, n) => a + reste(n), 0);
+    const cible = ouverts.find(n => reste(n)) || ouverts[ouverts.length - 1] || 1;
+    let prochain = null; for (let n = 1; n <= maxModule(); n++) if (statut(n).k === 'date') { prochain = n; break; }
+    t.hidden = false; t.href = 'entrainement.html?n=' + cible;
+    t.querySelector('.en-bulle').textContent = total > 99 ? '99+' : total; t.querySelector('.en-bulle').hidden = !total;
+    t.classList.toggle('en-tout-fait', !total);
+    t.querySelector('.en-t-sous').textContent = total
+      ? total + ' exercice' + (total > 1 ? 's' : '') + ' à faire' + (prochain ? ' en attendant le module ' + prochain + ' (' + new Date(sortie(prochain)).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) + ')' : '') + '. On commence par le module ' + cible + '.'
+      : 'Tout est fait. Battez vos records, ou écrivez au lamantin.';
+    t.setAttribute('aria-label', 'Entraînement : ' + t.querySelector('.en-t-sous').textContent);
   }
   /* curseur sous les tuiles */
   const cur = $('#pc-curseur');

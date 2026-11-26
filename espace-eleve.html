@@ -24,6 +24,16 @@
 @media (hover:none){.tb-modules{-webkit-mask-image:none;mask-image:none}}.pc-avance .tb-num{color:#7B61C9}
 .pc-curseur{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;margin:4px 0 0;background:linear-gradient(90deg,#1C49A5 var(--p,0%),#E2E6F0 var(--p,0%));cursor:pointer}
 .pc-curseur::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid #1C49A5;box-shadow:0 4px 10px rgba(28,73,165,.35)}.pc-curseur::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid #1C49A5}
+.en-rang{margin-top:34px}.en-sous{margin:-4px 0 12px;font-size:14px;color:var(--doux,#4A5578)}
+.en-piste{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;scrollbar-width:thin}
+.en-c{flex:0 0 210px;scroll-snap-align:start;display:flex;flex-direction:column;gap:6px;min-height:170px;padding:16px;border-radius:20px;background:var(--carte,#fff);border:1px solid var(--trait,#E2E6F0);color:inherit;text-decoration:none;box-shadow:0 10px 30px -24px rgba(14,27,61,.5);transition:transform .15s,border-color .15s}
+a.en-c:hover{transform:translateY(-3px);border-color:#1C49A5}
+.en-c .en-i{font-size:28px;line-height:1}.en-c b{font-size:16.5px}.en-c>span:not(.en-i){font-size:13.5px;line-height:1.45;color:var(--doux,#4A5578)}
+.en-c em{margin-top:auto;font:500 12px var(--f-mono,ui-monospace,monospace);font-style:normal;color:#1C49A5;display:flex;gap:5px;align-items:center}
+.en-c.en-lam{background:#0E1B3D;color:#fff;border-color:#0E1B3D}.en-c.en-lam>span:not(.en-i){color:rgba(255,255,255,.8)}.en-c.en-lam em{color:#9DBBFA}
+.en-c.en-off{opacity:.6}.en-c.en-off em{color:var(--doux,#4A5578)}
+@media (prefers-reduced-motion:reduce){.en-c{transition:none}}
+@media (max-width:640px){.en-c{flex-basis:168px;min-height:160px}}
 .pc-detail{margin-top:18px;padding:22px 24px;border-radius:22px;background:var(--carte,#fff);border:1px solid var(--trait,#E2E6F0);box-shadow:0 10px 30px -22px rgba(14,27,61,.4)}
 .pc-d-tete{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}.pc-d-num{margin:0;font:600 12px var(--f-mono,monospace);letter-spacing:.12em;text-transform:uppercase;color:#C9746E}
 .pc-detail h3{margin:4px 0 2px;font-size:24px;letter-spacing:-.015em}.pc-d-etat{margin:0;font-size:14px;color:var(--doux,#4A5578)}.pc-e-ok{color:#1E7A4F!important}.pc-e-ouvert{color:#1C49A5!important}
@@ -84,8 +94,13 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 </div>
 <input type="range" class="pc-curseur" id="pc-curseur" min="1" max="32" value="1" aria-label="Parcourir les modules">
 <div class="pc-detail" id="pc-detail" aria-live="polite"></div>
+<section class="en-rang" aria-labelledby="en-h">
+  <div class="pc-tete"><h2 id="en-h">Entraînement</h2><span class="pc-compte" id="en-compte"></span><span class="pc-fleches"><button type="button" id="en-g" aria-label="Défiler à gauche">‹</button><button type="button" id="en-d" aria-label="Défiler à droite">›</button></span></div>
+  <p class="en-sous" id="en-titre"></p>
+  <div class="en-piste" id="en-piste" role="list"></div>
+</section>
 
-<p class="tb-aussi">Et aussi : 24 fiches mémo, 24 défis dans la vraie vie, le livre <i>Tu n'as rien compris à l'anglais</i> en numérique. Accès à vie.</p>
+<p class="tb-aussi">Et aussi : 5 exercices d'entraînement par module, le lamantin pour relire tout ce que vous écrivez, 24 résumés à imprimer, 24 défis dans la vraie vie, le livre <i>Tu n'as rien compris à l'anglais</i> en numérique. Accès à vie.</p>
 
 <div class="tb-cta"><a class="tb-debloquer" href="index.html#formations">Débloquer la formation<svg class="tb-fleche" viewBox="0 0 64 20" aria-hidden="true"><path d="M2 11 C 14 7, 24 14, 36 10 S 52 8, 60 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M54 5 L61 10 L54 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 6 v9" stroke="#F0766F" stroke-width="2.4" stroke-linecap="round"/><path d="M40 5 v9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a><span>L'Intégral · Signature · Boardroom · Cours particuliers</span></div>
 
@@ -198,7 +213,8 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
       <a href="https://www.tiktok.com/@paulowfrenglais" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.7 3.5 3.9 3.7v3.1a7 7 0 0 1-3.9-1.2v6.2A5.8 5.8 0 1 1 10.8 9v3.2a2.7 2.7 0 1 0 2.6 2.7V3Z"/></svg></a>
     </div></div>
 <nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a><a href="cadeau.html">Bon cadeau</a></nav></div></footer>
-<script src="parcours.js?v=4"></script>
+<script>document.addEventListener("click",function(e){var b=e.target.closest("#en-g,#en-d");if(!b)return;var p=document.getElementById("en-piste");p.scrollBy({left:(b.id==="en-d"?1:-1)*p.clientWidth*.8,behavior:"smooth"});});</script>
+<script src="parcours.js?v=5"></script>
 <script src="mousse.js?v=202611201500"></script>
 </body>
 </html>

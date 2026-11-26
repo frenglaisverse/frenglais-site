@@ -52,7 +52,7 @@
     const fait = lire('frg-entr', {})[n] || {};
     d.innerHTML = `<div class="pc-d-tete"><div><p class="pc-d-num">${n > 24 ? 'Module avancé · Signature' : 'Module ' + n + ' / 24'}</p><h3${flou ? ' class="pc-flou-t" aria-hidden="true"' : ''}>${esc(TITRES[n - 1])}</h3><p class="pc-d-etat pc-e-${s.k}">${flou ? 'Réservé aux élèves de la formation' : (s.k === 'ok' ? '✓ ' : '') + esc(s.txt)}</p></div>
       <div class="pc-d-actions">${flou ? '<a class="btn btn-bleu" href="index.html#formations">Voir les formules</a>' : o && MODULES_EN_LIGNE ? `<a class="btn btn-bleu" href="${lien(n)}">${s.k === 'ok' ? 'Revoir le module' : s.txt === 'Reprendre' ? 'Reprendre' : 'Commencer'}</a>` : `<span class="pc-d-verrou">${CADENAS} ${o ? 'Ouverture à la mise en ligne' : esc(s.txt)}</span>`}
-      <button type="button" class="pc-plus" aria-expanded="false" aria-controls="pc-entr" ${o ? '' : 'disabled'}${flou ? ' hidden' : ''} title="${o ? 'Micro-entraînements' : 'Disponible quand le module est ouvert'}">+ <span>S'entraîner</span></button></div></div>
+      <button type="button" class="pc-plus" aria-expanded="false" aria-controls="pc-entr" ${o ? '' : 'disabled'} hidden title="${o ? 'Micro-entraînements' : 'Disponible quand le module est ouvert'}">+ <span>S'entraîner</span></button></div></div>
       <div class="pc-entr" id="pc-entr" hidden>
         <p class="pc-entr-sous">Facultatif, 2 à 3 minutes chacun. Les questions changent à chaque fois, et la difficulté monte : vocabulaire, nuances, pièges.</p>
         <div class="pc-entr-grille">${[['ecrit', 'Écrit', 'Codes, vocabulaire, nuances'], ['ecoute', 'Écoute', 'Le dialogue, puis les questions'], ['oral', 'Oral', 'À voix haute, au chrono'], ['lecture', 'Lecture', 'Lisez, comprenez, trouvez les codes']].map(([k, l, s2]) =>
@@ -61,7 +61,20 @@
     const plus = d.querySelector('.pc-plus'), box = d.querySelector('#pc-entr');
     plus.addEventListener('click', () => { const ouvre = box.hidden; box.hidden = !ouvre; plus.setAttribute('aria-expanded', ouvre); plus.classList.toggle('on', ouvre); });
     d.querySelectorAll('[data-e]').forEach(b => b.addEventListener('click', () => entrainer(n, b.dataset.e)));
-    majCurseur();
+    rangEntr(n, s, o, flou); majCurseur();
+  }
+  /* ---------- rangée « Entraînement » sous les modules : 5 exercices par module + le lamantin en libre accès ---------- */
+  const EXOS = [['sprint', '⚡', 'Sprint des codes', '60 s chrono, les séries comptent double'], ['dictee', '🎧', 'Dictée trouée', 'Le message vocal, verbe par verbe'], ['chasse', '🔎', 'Chasse aux erreurs', 'Trouvez le mot faux, réparez-le'], ['chantier', '🧱', 'Le chantier', 'Reconstruisez les phrases'], ['cartes', '🃏', 'Cartes mémoire', 'Règles et nuances à retourner']];
+  function rangEntr(n, s, o, flou){
+    const r = $('#en-piste'), t = $('#en-titre'); if (!r) return;
+    const dispo = o && MODULES_EN_LIGNE, S = (lire('frg-entr2', {})[n]) || {}, F = ETAT.formule;
+    if (t) t.textContent = 'Module ' + n + ' · ' + TITRES[n - 1];
+    const bloque = flou ? 'Réservé aux élèves' : !F ? 'Avec la formation' : !o ? esc(s.txt) : 'À la mise en ligne';
+    r.innerHTML = `<a class="en-c en-lam ${F ? '' : 'en-off'}" href="${F && MODULES_EN_LIGNE ? 'lamantin.html?n=' + n : 'index.html#formations'}"><span class="en-i" aria-hidden="true">🦭</span><b>Le lamantin</b><span>Écrivez ce que vous voulez : il relit et explique chaque faute.</span><em>${!F ? 'Avec la formation' : F === 'signature' ? 'Libre accès' : '3 relectures par jour'}</em></a>`
+      + EXOS.map(([k, i, nom, d]) => { const x = S[k]; return dispo
+        ? `<a class="en-c" href="entrainement.html?n=${n}&x=${k}"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${x ? (k === 'sprint' ? 'Record ' + x.best + ' pts' : k === 'cartes' ? x.best + ' cartes maîtrisées' : 'Meilleur ' + x.best + ' %') : 'Nouveau'}</em></a>`
+        : `<span class="en-c en-off${flou ? ' pc-flou-t' : ''}" aria-disabled="true"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${CADENAS} ${bloque}</em></span>`; }).join('');
+    const c = $('#en-compte'); if (c) { const tot = Object.values(lire('frg-entr2', {})).reduce((a, m) => a + Object.values(m).reduce((b, e) => b + (e.n || 0), 0), 0); c.textContent = tot ? tot + ' partie' + (tot > 1 ? 's' : '') + ' jouée' + (tot > 1 ? 's' : '') : '5 exercices par module'; }
   }
   /* curseur sous les tuiles */
   const cur = $('#pc-curseur');

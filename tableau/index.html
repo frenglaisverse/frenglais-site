@@ -730,6 +730,17 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <p class="ligne"><button class="btn plein" id="ia-go" type="button">Faire relire</button><span class="petit" id="ia-msg"></span></p>
     <div id="ia-res"></div>
   </section>
+  <section class="carte" id="ia-entrainement">
+    <div class="titre-ic"><span class="ic" style="--c:#2E8B6E"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2 8 12.7 4 8.8l5.5-.8z"/></svg></span><div><h2>Entraîner le lamantin</h2><p class="doux petit">Chaque nuit à 4 h, il relit des phrases d'élèves types et apprend de ses erreurs. Ajoutez vos propres leçons : elles passent avant tout le reste, dès la correction suivante.</p></div></div>
+    <div class="dv-grille" style="margin-top:12px">
+      <label>Phrase fausse <input id="ie-faux" placeholder="She work in a bank." maxlength="160"></label>
+      <label>Correction <input id="ie-correct" placeholder="She works in a bank." maxlength="200"></label>
+      <label style="grid-column:1/-1">Pourquoi (avec les mots de la méthode) <input id="ie-pourquoi" placeholder="T0 avec she : le code -s." maxlength="240"></label>
+    </div>
+    <p class="ligne"><button class="btn plein" id="ie-ajouter" type="button">Ajouter la leçon</button><button class="btn" id="ie-juste" type="button">C'est une phrase juste</button><button class="btn" id="ie-lancer" type="button">Entraîner maintenant</button><span class="petit" id="ie-msg"></span></p>
+    <div id="ie-rapport"></div>
+    <details><summary class="petit"><b id="ie-n">Leçons apprises</b></summary><ol class="ia-liste" id="ie-liste"></ol></details>
+  </section>
   <section class="carte replie" id="devis">
     <div class="titre-ic"><span class="ic" style="--c:#E0685F"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></span><div><h2>Générateur de devis</h2><p class="doux petit">Cochez, vérifiez le total, créez le PDF.</p></div><button type="button" class="dv-plus" id="dv-plus" aria-expanded="false" aria-label="Déplier le générateur de devis">+</button></div>
     <div class="dv-grille">
@@ -1563,6 +1574,23 @@ box.addEventListener('click',function(e){var l=e.target.closest('.pres-l');if(!l
  if(e.target.matches('[data-ecouter]')){var b=e.target;b.disabled=true;b.textContent='Chargement…';post({id:id}).then(function(j){if(!j.ok){b.textContent='Erreur';return;}var a=document.createElement('audio');a.controls=true;a.autoplay=true;a.src='data:'+(j.type||'audio/webm')+';base64,'+j.audio;b.replaceWith(a);});}
  if(e.target.matches('[data-lu]')){post({id:id,ecoute:true}).then(charger);}});
 charger();})();
+</script>
+<script>
+/* Entraîner le lamantin : leçons de Paul (prioritaires) + rapport de l'entraînement de la nuit */
+(function(){var z=document.getElementById('ia-entrainement');if(!z)return;var API='https://courbe-classement.paulodubmx84.workers.dev',msg=document.getElementById('ie-msg');
+function esc(t){return String(t||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function v(id){return document.getElementById(id).value.trim();}
+async function appel(b){var cle=FRG.lire('frg-cle-tableau','');if(!cle){msg.textContent='Entrez d\'abord votre clé dans le bloc « Courbe du jour ».';return null;}
+ try{return await fetch(API+'/admin/ia-savoir',{method:'POST',body:JSON.stringify(Object.assign({cle:cle},b))}).then(function(r){return r.json()});}catch(e){msg.textContent='Connexion impossible.';return null;}}
+function rendre(j){if(!j||!j.savoir)return;var L=j.savoir.lecons,J=j.savoir.justes,R=j.rapports||[];
+ document.getElementById('ie-n').textContent=L.length+' leçon'+(L.length>1?'s':'')+' · '+J.length+' phrase'+(J.length>1?'s':'')+' protégée'+(J.length>1?'s':'')+' · banc de '+j.banc+' phrases';
+ document.getElementById('ie-liste').innerHTML=L.map(function(l){return '<li><s>'+esc(l.faux)+'</s> → <b>'+esc(l.correct)+'</b> <span class="doux petit">'+(l.source==='paul'?'vous':'entraînement')+'</span><br><span class="doux petit">'+esc(l.pourquoi)+'</span> <button class="btn" type="button" data-x="'+esc(l.faux)+'" style="padding:2px 8px;font-size:12px">Retirer</button></li>'}).join('')+J.map(function(t){return '<li><span class="doux petit">juste :</span> '+esc(t)+' <button class="btn" type="button" data-x="'+esc(t)+'" style="padding:2px 8px;font-size:12px">Retirer</button></li>'}).join('');
+ var r=R[0];document.getElementById('ie-rapport').innerHTML=r?'<div class="ae-carte"><p><b>Dernier entraînement</b> · '+new Date(r.date).toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'short'})+' · <b>'+r.bons+' / '+r.total+'</b> justes</p>'+(r.appris.length?'<p class="petit">Appris : '+r.appris.map(esc).join(' · ')+'</p>':'')+(r.protege.length?'<p class="petit">Protégé : '+r.protege.map(esc).join(' · ')+'</p>':'')+(R.length>1?'<p class="doux petit">7 derniers jours : '+R.slice(0,7).map(function(x){return x.bons+'/'+x.total}).join(' · ')+'</p>':'')+'</div>':'<p class="doux petit">Pas encore d\'entraînement : le premier a lieu cette nuit, ou touchez « Entraîner maintenant ».</p>';}
+z.addEventListener('click',async function(e){var x=e.target.closest('[data-x]');if(!x)return;rendre(await appel({action:'retirer',faux:x.dataset.x}));});
+document.getElementById('ie-ajouter').addEventListener('click',async function(){if(!v('ie-faux')||!v('ie-correct')){msg.textContent='Il faut la phrase fausse et la correction.';return;}var j=await appel({action:'ajouter',faux:v('ie-faux'),correct:v('ie-correct'),pourquoi:v('ie-pourquoi')});if(j&&j.ok){msg.textContent='Leçon ajoutée : le lamantin l\'applique dès maintenant.';['ie-faux','ie-correct','ie-pourquoi'].forEach(function(i){document.getElementById(i).value=''});rendre(j);}else if(j)msg.textContent=j.erreur||'Erreur.';});
+document.getElementById('ie-juste').addEventListener('click',async function(){if(!v('ie-faux')){msg.textContent='Écrivez la phrase juste dans le premier champ.';return;}var j=await appel({action:'juste',phrase:v('ie-faux')});if(j&&j.ok){msg.textContent='Phrase protégée : il ne la corrigera plus.';document.getElementById('ie-faux').value='';rendre(j);}});
+document.getElementById('ie-lancer').addEventListener('click',async function(){var b=this;b.disabled=true;msg.textContent='Entraînement en cours (environ une minute)…';var j=await appel({action:'entrainer'});b.disabled=false;if(j&&j.rapport){msg.textContent='Terminé : '+j.rapport.bons+' / '+j.rapport.total+'.';rendre(await appel({}));}else if(j)msg.textContent=j.erreur||'Pas de réponse.';});
+if(FRG.lire('frg-cle-tableau',''))appel({}).then(rendre);})();
 </script>
 </body>
 </html>

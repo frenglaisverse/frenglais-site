@@ -532,6 +532,18 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 .pres-l{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--trait)}.pres-l.lu{opacity:.65}.pres-a{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pres-a audio{height:34px;max-width:260px}.pres-tx{margin:4px 0 0;color:var(--doux);max-width:560px}
 .ia-texte{line-height:1.9;margin:0 0 10px}.ia-faute{background:color-mix(in srgb,#F0766F 22%,transparent);color:inherit;border-bottom:2px solid #F0766F;border-radius:3px;padding:1px 2px}.ia-faute sup{font:700 10px var(--f-mono);color:#F0766F;margin-right:2px}.ia-liste{margin:0;padding-left:20px}.ia-liste li{margin:6px 0}.ia-liste s{color:var(--doux)}
 .ae-carte{margin-top:12px;padding:14px 16px;border-radius:14px;border:1px dashed var(--trait);font-size:14px}.ae-carte code{font:600 16px var(--f-mono)}
+.pf-tete{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.pf-titre{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.pf-titre h2{margin:0}
+.pf-nav{display:flex;align-items:center;gap:6px}.pf-nav b{font:600 14px var(--f-txt);min-width:120px;text-align:center;text-transform:capitalize}.pf-nav button{width:30px;height:30px;border-radius:50%;border:1px solid var(--trait);background:var(--carte);color:var(--encre);font-size:17px;line-height:1;cursor:pointer}.pf-nav button:disabled{opacity:.3;cursor:default}
+.pf-coin{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font:500 12px var(--f-mono);color:var(--doux);letter-spacing:.02em}.pf-coin b{color:var(--encre);font-weight:700}.pf-coin span:last-child b{color:#4FC79F}
+.pf-src{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;flex-wrap:wrap}.pf-lab{font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--doux)}
+.pf-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--trait)}
+.pf-c{border:1px solid var(--trait);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}.pf-c header{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:24px}
+.pf-v{font:700 28px/1.1 var(--f-txt);letter-spacing:-.025em}.pf-l{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0;font-size:13px}.pf-l b{font-weight:600}.pf-reste b{color:#E8836F}.pf-maj{font:500 10.5px var(--f-mono);color:var(--doux)}
+.pf-in{width:64px;padding:4px 6px;border:1px solid var(--trait);border-radius:8px;font:600 13px var(--f-mono);color:var(--encre);background:var(--carte)}select.pf-in{width:auto}
+.pf-paye{position:relative;cursor:pointer;display:inline-flex}.pf-paye input{position:absolute;opacity:0;width:1px;height:1px}.pf-paye i{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--trait);display:grid;place-items:center;transition:.15s}
+.pf-paye input:checked+i{background:#2E8B6E;border-color:#2E8B6E}.pf-paye input:checked+i::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}.pf-paye input:focus-visible+i{outline:2px solid var(--bleu);outline-offset:2px}
+.pf-c.paye .pf-v{color:#4FC79F}.pf-absents{margin-top:4px;font-size:12.5px;display:flex;flex-direction:column;gap:3px}.pf-absents button{all:unset;cursor:pointer;opacity:.45;margin-left:6px}.pf-absents button:hover{opacity:1}.pf-absents .muet{opacity:.45}
+.pf-etat{margin:10px 0;display:grid;gap:4px}.pf-etat .ko{color:#E8836F}
 .ventes-detail{margin-top:12px}.ventes-detail summary{cursor:pointer;padding:4px 0}.ventes-detail>div{margin-top:8px;overflow-x:auto}
 .stripe-mode{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,#635BFF 15%,transparent);color:#8F89FF}.stripe-mode.live{background:color-mix(in srgb,#2E8B6E 18%,transparent);color:#4FC79F}
 .kpis span{font-size:13px;color:var(--doux)}
@@ -679,7 +691,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   <span class="actions-bandeau"><a class="btn btn-mail" href="https://github.com/frenglaisverse/frenglais-site" target="_blank" rel="noopener" aria-label="Le code du site sur GitHub, nouvel onglet"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" style="vertical-align:-2px;margin-right:5px;fill:currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub ↗</a> <a class="btn btn-mail" href="https://mail.zoho.eu/zm/#mail/views/all" target="_blank" rel="noopener" aria-label="Mes mails (Zoho), nouvel onglet">✉︎ Mes mails <b class="pastille" id="mail-n" hidden></b> ↗</a></span>
 </div></header>
 <div class="wrap">
-  <nav class="onglets-tb" role="tablist" aria-label="Sections du tableau de bord"><button type="button" role="tab" data-vers="pilotage">Pilotage</button><button type="button" role="tab" data-vers="ventes">Ventes</button><button type="button" role="tab" data-vers="eleves">Mes élèves <b class="pastille-n" id="nb-eleves"></b></button><button type="button" role="tab" data-vers="offres">Offres</button></nav>
+  <nav class="onglets-tb" role="tablist" aria-label="Sections du tableau de bord"><button type="button" role="tab" data-vers="pilotage">Pilotage</button><button type="button" role="tab" data-vers="ventes">Profit</button><button type="button" role="tab" data-vers="eleves">Mes élèves <b class="pastille-n" id="nb-eleves"></b></button><button type="button" role="tab" data-vers="offres">Offres</button></nav>
   <section data-onglet="pilotage" class="carte">
     <div class="ligne" style="justify-content:space-between"><h2>Vue d'ensemble</h2><span class="doux petit" id="vue-date"></span></div>
     <div id="vue-rappel"></div>
@@ -802,11 +814,30 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   </section>
 
   <section data-onglet="ventes" class="carte" id="ventes">
-    <div class="ligne" style="justify-content:space-between"><h2>Ventes</h2><span class="doux petit" id="ventes-etat"></span></div>
+    <div class="pf-tete"><div class="pf-titre"><h2>Profit</h2><div class="pf-nav"><button type="button" id="pf-av" aria-label="Mois précédent">‹</button><b id="pf-mois">–</b><button type="button" id="pf-ap" aria-label="Mois suivant">›</button></div></div><div class="pf-coin"><span>brut : <b id="pf-brut">–</b></span><span>net : <b id="pf-net">–</b></span></div></div>
+    <div class="pf-src"><span class="pf-lab">Frenglais</span><span class="doux petit" id="ventes-etat"></span></div>
     <div class="vg-tete"><div class="vg-tot"><div class="vg-hero"><small class="doux" id="v-mois-nom"></small><strong id="v-mois-e">–</strong><span class="doux"><span id="v-mois">–</span> · <span id="v-comp"></span></span></div><div class="vg-auj"><small class="doux">Aujourd'hui</small><b id="v-jour-e">–</b><span class="doux" id="v-jour"></span></div></div>
     <div class="vg-choix" role="tablist"><button type="button" data-vg="jours" aria-selected="true">30 jours</button><button type="button" data-vg="mois" aria-selected="false">12 mois</button></div></div>
     <div class="vg" id="vg" aria-label="Ventes"></div>
     <details class="ventes-detail"><summary class="doux petit">Détail des ventes</summary><div id="ventes-liste" class="doux petit">Chargement…</div><p id="purge-box" hidden style="margin-top:10px"><button type="button" class="btn btn-sec" id="purge">Effacer les ventes de test</button> <span class="doux petit">Mode test uniquement : supprime ces ventes, leurs accès et remet le compteur Fondateurs à zéro.</span></p></details>
+    <div class="pf-grille">
+      <article class="pf-c" id="pf-cours"><header><span class="pf-lab">Cours particuliers</span><small class="pf-maj" id="pf-cours-maj"></small></header><strong class="pf-v" id="pf-cours-v">–</strong>
+        <p class="pf-l"><span>Payé à ce jour</span><b id="pf-cours-paye">–</b></p><p class="pf-l"><span>Total dû</span><b id="pf-cours-du">–</b></p><p class="pf-l pf-reste"><span>Reste à encaisser</span><b id="pf-cours-reste">–</b></p>
+        <div class="pf-absents" id="pf-absents"></div></article>
+      <article class="pf-c" id="pf-barb"><header><span class="pf-lab">TalkWithBarb</span><label class="pf-paye" title="Payé"><input type="checkbox" id="pf-barb-paye"><i></i></label></header><strong class="pf-v" id="pf-barb-v">–</strong><p class="pf-l"><span id="pf-barb-info" class="doux">–</span></p></article>
+      <article class="pf-c" id="pf-imm"><header><span class="pf-lab">Immersion</span><label class="pf-paye" title="Payé"><input type="checkbox" id="pf-imm-paye"><i></i></label></header><strong class="pf-v" id="pf-imm-v">–</strong>
+        <p class="pf-l"><span><input type="number" min="0" step="1" id="pf-imm-n" class="pf-in" aria-label="Vidéos du mois"> vidéos × 25 $</span><b id="pf-imm-usd">–</b></p><p class="pf-l"><span class="doux" id="pf-fx">–</span></p></article>
+      <article class="pf-c" id="pf-ling"><header><span class="pf-lab">Lingolus</span></header><strong class="pf-v" id="pf-ling-v">–</strong>
+        <p class="pf-l"><span><input type="number" min="0" step="0.25" id="pf-ling-h" class="pf-in" aria-label="Heures du mois" placeholder="0"> h × <input type="number" min="0" step="0.5" id="pf-ling-t" class="pf-in" aria-label="Taux horaire brut"> €/h</span></p></article>
+    </div>
+    <details class="ventes-detail" id="pf-reglages"><summary class="doux petit">Brancher les Google Sheets · réglages</summary><div>
+      <p class="petit"><b>Une seule fois :</b> ouvrez le Sheet « Cours particuliers » → <b>Extensions › Apps Script</b> → effacez tout, collez le script ci-dessous → 💾 → choisissez <code>installer</code> en haut → <b>Exécuter</b> → acceptez les autorisations Google. Il lit aussi TalkWithBarb et Immersion.</p>
+      <p class="ligne"><button type="button" class="btn" id="pf-copier">Copier le script</button> <button type="button" class="btn btn-sec" id="pf-jeton">Changer le jeton</button> <span class="doux petit" id="pf-copie-etat"></span></p>
+      <div id="pf-etat" class="petit pf-etat"></div>
+      <p class="pf-l" style="max-width:420px"><span>Taux de cotisations (net)</span><span><input type="number" min="0" max="60" step="0.1" id="pf-taux" class="pf-in" style="width:76px"> %</span></p>
+      <p class="pf-l" style="max-width:420px"><span>TalkWithBarb payé en</span><select id="pf-barb-dev" class="pf-in"><option value="EUR">€</option><option value="USD">$</option></select></p>
+      <p class="doux petit">Net = brut − cotisations URSSAF (micro‑entreprise, prestations libérales BNC : 25,6 % + 0,2 % de formation professionnelle). Sans versement libératoire de l'impôt ; ajoutez 2,2 % si vous l'avez choisi.</p>
+    </div></details>
     <div class="ligne" style="justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--trait,#e3e7f1)"><span><b>Liste « prévenez-moi »</b> <span class="doux petit" id="liste-n"></span></span><button type="button" class="btn btn-sec" id="liste-csv">Exporter (CSV)</button></div>
   </section>
   <section data-onglet="pilotage" class="carte" id="agenda">
@@ -1244,7 +1275,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       <span><a class="btn" href="#jeu-gagnant">Préparer le bon ↓</a> <button type="button" class="btn btn-sec" id="rappel-fait">C'est envoyé</button></span></div>`;
     document.getElementById('rappel-fait').addEventListener('click', () => { try { localStorage.setItem(cle, '1'); } catch (e) {} z.innerHTML = ''; }); }
   /* ventes Stripe (L'Intégral, Signature) : lues sur votre serveur Cloudflare avec la clé du tableau de bord */
-  let vgDonnees = [], vgVue = 'jours';
+  let vgDonnees = [], vgVue = 'jours'; window.vgDonneesProfit = () => vgDonnees;
   function vgDessiner(){ const g = document.getElementById('vg'); if (!g) return;
     const cle = t => new Date(t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }), auj = cle(Date.now()), C = [];
     if (vgVue === 'jours') for (let k = 29; k >= 0; k--) { const d = new Date(Date.now() - k * 864e5), c = cle(d); C.push({ c, lab: d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'Europe/Paris' }), x: k % 5 === 0 ? d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', timeZone: 'Europe/Paris' }) : '', auj: c === auj, f: v => cle(v.t) === c }); }
@@ -1268,7 +1299,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       const cp = document.getElementById('v-comp'), mp = moisP.toLocaleDateString('fr-FR', { month: 'long' });
       if (tot(P)) { const d = Math.round((tot(M) / tot(P) - 1) * 100); cp.textContent = (d >= 0 ? '+' : '') + d + ' % vs ' + mp + ' à la même date'; cp.className = d >= 0 ? 'vg-up' : 'vg-down'; } else { cp.textContent = som(P) + ' en ' + mp + ' à la même date'; cp.className = ''; }
       document.getElementById('v-jour-e').textContent = som(J); document.getElementById('v-jour').textContent = pl(J.length);
-      vgDonnees = ok; vgDessiner();
+      vgDonnees = ok; vgDessiner(); if (window.pfRendre) pfRendre();
       document.querySelectorAll('[data-stripe]').forEach(a => a.href = 'https://dashboard.stripe.com/' + (j.test ? 'test/' : '') + a.dataset.stripe); }
     { const pb = document.getElementById('purge-box'); pb.hidden = !(j.test && j.ventes.length); const bt = document.getElementById('purge');
       bt.onclick = async () => { if (!confirm('Effacer les ' + j.ventes.length + ' ventes de test et leurs accès ?')) return; bt.disabled = true;
@@ -1285,6 +1316,60 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       b.disabled = true; const r = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle, renvoyer: b.dataset.renvoyer }) }).then(r => r.json()).catch(() => ({ erreur: 'réseau' }));
       b.textContent = r.ok ? 'Envoyé ✓' : (r.code ? 'Mail en échec, code : ' + r.code : 'Erreur : ' + r.erreur); })); }
   majVentes();
+  /* onglet Profit : Frenglais (Stripe) + cours particuliers, TalkWithBarb, Immersion (Google Sheets via le script) + Lingolus (saisi à la main) */
+  (() => { const $ = id => document.getElementById(id), cle = () => FRG.lire('frg-cle-tableau', '');
+    const auj = new Date().toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }).slice(0, 7); let mois = auj, D = null;
+    const eur = v => v == null || isNaN(v) ? '–' : v.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: Math.abs(v % 1) > .004 ? 2 : 0, maximumFractionDigits: 2 });
+    const decale = (m, k) => { const [y, mo] = m.split('-').map(Number), d = new Date(y, mo - 1 + k, 1); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+    const ilya = t => { if (!t) return ''; const m = Math.round((Date.now() - t) / 6e4); return m < 1 ? 'à l’instant' : m < 60 ? 'il y a ' + m + ' min' : m < 1440 ? 'il y a ' + Math.round(m / 60) + ' h' : 'il y a ' + Math.round(m / 1440) + ' j'; };
+    async function appel(x) { const r = await fetch(API + '/admin/profit', { method: 'POST', body: JSON.stringify({ cle: cle(), ...(x || {}) }) }).then(r => r.json()); if (r.erreur) throw new Error(r.erreur); D = r; rendre(); return r; }
+    const enr = (set) => appel({ mois, set }).catch(e => alert('Erreur : ' + e.message));
+    function rendre() { const [y, mo] = mois.split('-').map(Number);
+      $('pf-mois').textContent = new Date(y, mo - 1, 15).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }); $('pf-ap').disabled = mois >= auj;
+      const fren = (window.vgDonneesProfit ? window.vgDonneesProfit() : []).filter(v => new Date(v.t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }).slice(0, 7) === mois).reduce((a, v) => a + v.total, 0) / 100;
+      if (!D) { $('pf-brut').textContent = eur(fren); $('pf-net').textContent = eur(fren * (1 - .258)); return; }
+      const M = D.manuel.mois[mois] || {}, R = D.manuel.reglages || {}, taux = R.tauxNet ?? 25.8, fx = (mois === auj ? D.fx && D.fx.taux : D.fxMois[mois]) || (D.fx && D.fx.taux) || null;
+      const enEur = usd => fx ? usd / fx : null;
+      /* cours particuliers */
+      const C = D.cours || {}, cv = C.owed ? C.owed[mois] : null, du = C.totalOwed, pa = C.totalPaid;
+      $('pf-cours-v').textContent = eur(cv); $('pf-cours-paye').textContent = eur(pa); $('pf-cours-du').textContent = eur(du); $('pf-cours-reste').textContent = du != null && pa != null ? eur(Math.max(0, du - pa)) : '–';
+      $('pf-cours-maj').textContent = D.cours ? ilya(D.cours.recu) : 'Sheet non branché';
+      const muets = R.muets || [], E = Object.entries(C.eleves || {}).map(([n, t]) => [n, Math.floor((Date.now() - t) / 864e5)]).filter(([, j]) => j >= 4).sort((a, b) => b[1] - a[1]);
+      $('pf-absents').innerHTML = mois === auj && E.length ? '<span class="doux">Sans cours depuis :</span>' + E.map(([n, j]) => `<span class="${muets.includes(n) ? 'muet' : ''}">${esc(n)} · ${j} j<button type="button" data-muet="${esc(n)}" title="${muets.includes(n) ? 'Réactiver le rappel Telegram' : 'Couper le rappel Telegram (pause, vacances…)'}">${muets.includes(n) ? '🔕' : '🔔'}</button></span>`).join('') : '';
+      /* TalkWithBarb */
+      const B = D.barb || {}, bv0 = B.mois ? B.mois[mois] : null, bUsd = R.deviseBarb === 'USD', bv = bv0 == null ? null : bUsd ? enEur(bv0) : bv0;
+      $('pf-barb-v').textContent = eur(bv); $('pf-barb-paye').checked = !!M.barbPaye; $('pf-barb').classList.toggle('paye', !!M.barbPaye);
+      $('pf-barb-info').textContent = !D.barb ? 'Sheet non branché' : B.erreur ? B.erreur : bv0 == null ? 'rien ce mois-ci' : (bUsd ? bv0.toLocaleString('fr-FR') + ' $ · ' : '') + 'lu en ' + (B.ou[mois] || B.ou.journal || '?') + ' · ' + ilya(B.recu);
+      /* Immersion */
+      const I = D.imm || {}, nAuto = I.mois ? I.mois[mois] || 0 : 0, n = M.immN ?? nAuto, iv = enEur(n * 25);
+      const inN = $('pf-imm-n'); if (document.activeElement !== inN) { inN.value = n; inN.title = M.immN != null ? 'Corrigé à la main (Sheet : ' + nAuto + ') · videz pour revenir au Sheet' : 'Lu dans le Sheet'; }
+      $('pf-imm-usd').textContent = (n * 25).toLocaleString('fr-FR') + ' $'; $('pf-imm-v').textContent = eur(iv); $('pf-imm-paye').checked = !!M.immPaye; $('pf-imm').classList.toggle('paye', !!M.immPaye);
+      $('pf-fx').textContent = fx ? '1 € = ' + fx.toLocaleString('fr-FR', { maximumFractionDigits: 4 }) + ' $ · BCE' + (mois === auj && D.fx.jour ? ' du ' + new Date(D.fx.jour).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '') : 'taux BCE indisponible';
+      /* Lingolus */
+      const h = M.lingH || 0, t = M.lingTaux ?? R.tauxLing ?? 35, lv = h * t;
+      if (document.activeElement !== $('pf-ling-h')) $('pf-ling-h').value = h || ''; if (document.activeElement !== $('pf-ling-t')) $('pf-ling-t').value = t; $('pf-ling-v').textContent = eur(lv);
+      /* totaux */
+      const brut = fren + (cv || 0) + (bv || 0) + (iv || 0) + lv; $('pf-brut').textContent = eur(brut); $('pf-net').textContent = eur(brut * (1 - taux / 100));
+      $('pf-net').parentNode.title = 'brut − ' + String(taux).replace('.', ',') + ' % de cotisations';
+      if (document.activeElement !== $('pf-taux')) $('pf-taux').value = taux; $('pf-barb-dev').value = R.deviseBarb || 'EUR';
+      const ligne = (nom, x) => !x ? `<span class="ko">✗ ${nom} : rien reçu pour l’instant</span>` : x.erreur ? `<span class="ko">⚠ ${nom} : ${esc(x.erreur)}</span>` : `<span>✓ ${nom} · ${ilya(x.recu)}${x.methode ? ' · ' + esc(x.methode) : ''}${x.feuille ? ' · onglet ' + esc(x.feuille) : ''}${x.eleves ? ' · ' + Object.keys(x.eleves).length + ' élèves repérés : ' + Object.keys(x.eleves).map(esc).join(', ') : ''}</span>`;
+      $('pf-etat').innerHTML = ligne('Cours particuliers', D.cours) + ligne('TalkWithBarb', D.barb) + ligne('Immersion', D.imm); }
+    window.pfRendre = rendre;
+    $('pf-av').onclick = () => { mois = decale(mois, -1); rendre(); }; $('pf-ap').onclick = () => { if (mois < auj) { mois = decale(mois, 1); rendre(); } };
+    $('pf-barb-paye').onchange = e => enr({ barbPaye: e.target.checked }); $('pf-imm-paye').onchange = e => enr({ immPaye: e.target.checked });
+    $('pf-imm-n').onchange = e => enr({ immN: e.target.value === '' ? null : +e.target.value });
+    $('pf-ling-h').onchange = e => enr({ lingH: e.target.value === '' ? null : +e.target.value });
+    $('pf-ling-t').onchange = e => { const v = +e.target.value; appel({ mois, set: { lingTaux: v }, reglages: { tauxLing: v } }).catch(x => alert(x.message)); };
+    $('pf-taux').onchange = e => appel({ reglages: { tauxNet: +e.target.value } }).catch(x => alert(x.message));
+    $('pf-barb-dev').onchange = e => appel({ reglages: { deviseBarb: e.target.value } }).catch(x => alert(x.message));
+    $('pf-absents').onclick = e => { const b = e.target.closest('[data-muet]'); if (!b || !D) return; const n = b.dataset.muet, L = (D.manuel.reglages.muets || []).slice(), i = L.indexOf(n);
+      if (i >= 0) L.splice(i, 1); else L.push(n); appel({ reglages: { muets: L } }).catch(x => alert(x.message)); };
+    $('pf-copier').onclick = async () => { const et = $('pf-copie-etat'); try { if (!D) await appel(); const t = (await fetch('profit-sheets.gs?v=' + Date.now()).then(r => r.text())).replace('__JETON__', D.jeton);
+        await navigator.clipboard.writeText(t); et.textContent = 'Copié ✓ — collez-le dans Apps Script.'; } catch (e) { et.textContent = 'Copie impossible : ' + e.message; } };
+    $('pf-jeton').onclick = async () => { if (!confirm('Créer un nouveau jeton ? L’ancien script cessera d’envoyer : il faudra recoller le script.')) return; try { await appel({ nouveauJeton: 1 }); $('pf-copie-etat').textContent = 'Nouveau jeton : recopiez le script.'; } catch (e) { alert(e.message); } };
+    const maj = () => { if (cle() && document.body.dataset.vue === 'ventes' && !document.hidden) appel().catch(e => { $('pf-cours-maj').textContent = e.message; }); };
+    if (cle()) appel().catch(() => {}); setInterval(maj, 60000); document.addEventListener('visibilitychange', maj);
+    document.querySelectorAll('.onglets-tb [data-vers="ventes"]').forEach(b => b.addEventListener('click', maj)); rendre(); })();
   async function liste(){ const cle = FRG.lire('frg-cle-tableau', ''); if (!cle) return null; try { return (await fetch(API + '/liste/export', { method: 'POST', body: JSON.stringify({ cle }) }).then(r => r.json())).liste || []; } catch (e) { return null; } }
   liste().then(L => { const z = document.getElementById('liste-n'); if (z && L) { const src = {}; L.forEach(x => x.s.forEach(s => src[s] = (src[s] || 0) + 1)); z.textContent = L.length + ' inscrit' + (L.length > 1 ? 's' : '') + (L.length ? ' · ' + Object.entries(src).map(([k, v]) => k + ' ' + v).join(' · ') : ''); } });
   document.getElementById('liste-csv').addEventListener('click', async () => { const L = await liste(); if (!L) return alert('Liste indisponible.');

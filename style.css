@@ -1451,8 +1451,11 @@ footer::after{opacity:.58}
 .pol-lire svg{width:50%;height:50%;margin-left:8%}
 .polaroid .pol-cadre:hover .pol-lire{transform:scale(1.12)}
 .pol-grand .pol-lire{display:none}
-.vl{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:20px;background:rgba(8,15,38,.86);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);opacity:0;transition:opacity .35s ease}
+.vl{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:20px;background:rgba(8,15,38,.62);isolation:isolate;overflow:hidden;-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);opacity:0;transition:opacity .35s ease}
 .vl.on{opacity:1}.vl[hidden]{display:none}
+/* derrière la vidéo : le banian, flou */
+.vl::before{content:"";position:absolute;inset:-40px;z-index:-1;background:url(banian-avant.webp) center 60%/cover no-repeat,url(banian-arriere-1640.webp) center 60%/cover no-repeat,linear-gradient(180deg,#2E62C4,#16357E);filter:blur(14px) saturate(1.1) brightness(.8);transform:scale(1.08)}
+.vl::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(8,15,38,.25),rgba(8,15,38,.55))}
 .vl-boite{position:relative;width:min(980px,100%);display:grid;gap:14px}
 .vl video{width:100%;aspect-ratio:16/9;border-radius:18px;background:#000;box-shadow:0 30px 80px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.12)}
 .vl-fermer{position:absolute;top:-14px;right:-14px;z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;font-size:24px;line-height:1;cursor:pointer}

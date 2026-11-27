@@ -2,7 +2,7 @@
    et quatre micro-entraînements optionnels par module (écrit, écoute, oral, lecture), derrière le bouton +. */
 (function(){
   'use strict';
-  const TITRES = ['Repères et codes',"T0, le temps le plus simple","T-1, toujours simple","BE + -ING","HAVE + -EN","T-2, le passé dans le passé","T+1, l'éléphant dans la pièce","Les modaux","Empiler les briques","Poser des questions","Spit it : dites-le","Toute la Courbe","Les quatre couteaux suisses","Les verbes à particule","Le verbe choisit sa préposition","Ne plus bloquer","Se présenter pour de vrai","Écrire un e-mail","Téléphone et visio","Chiffres, dates, heures, prix","Comparer et décrire","Relier ses idées","Si…","L'anglais réel","Le passif","Les habitudes passées","Les regrets","Rapporter des paroles","Convaincre","Prendre la parole","Continuer seul","Le grand oral"];
+  const TITRES = ['Repères et codes',"T0, le temps le plus simple","T-1, toujours simple","BE + -ING","HAVE + -EN","T-2, le passé dans le passé","T+1, l'éléphant dans la pièce","Les modaux","HAVE BEEN + -ING","Poser des questions","Spit it : dites-le","Toute la Courbe","Les quatre couteaux suisses","Les verbes à particule","Le verbe choisit sa préposition","Ne plus bloquer","Se présenter pour de vrai","Écrire un e-mail","Téléphone et visio","Chiffres, dates, heures, prix","Comparer et décrire","Relier ses idées","Si…","L'anglais réel","Le passif","Les habitudes passées","Les regrets","Rapporter des paroles","Convaincre","Prendre la parole","Continuer seul","Le grand oral"];
   /* calendrier propre à chaque élève : à partir de sa première connexion (jamais avant le lancement), les 4 premiers modules la semaine 1, puis deux par semaine */
   const AP = window.FRG_APERCU || null;
   const LANCEMENT = AP ? Date.now() - 864e5 * 21 : Date.parse('2026-12-01T00:00:00+01:00');
@@ -64,7 +64,25 @@
     rangEntr(n, s, o, flou); tuileEntr(); majCurseur();
   }
   /* ---------- rangée « Entraînement » sous les modules : 5 exercices par module + le lamantin en libre accès ---------- */
-  const EXOS = [['sprint', '🌴', 'Sprint des codes', 'Miami Beach · 60 s chrono, combos x2'], ['dictee', '📻', 'Radio Key West', 'Key West · le message vocal, verbe par verbe'], ['chasse', '🐊', 'Chasse aux alligators', 'Everglades · trouvez le mot faux, réparez-le'], ['chantier', '🚀', 'Assemblez la fusée', 'Cap Canaveral · une phrase, un étage'], ['cartes', '🎆', 'Nuit des cartes', 'Orlando · les règles en cartes']];
+  /* icônes pixel 10 × 10, la même famille partout (entraînement, jeux, scores) */
+  const PIX = {
+    soleil: ['....yy....', '..yyyyyy..', '.yyyyyyyy.', 'yyyyyyyyyy', 'oooooooooo', '..........', 'bbbbbbbbbb', '.bbbbbbbb.', 'ssssssssss', 'ssssssssss'],
+    radio: ['.......w..', '......w...', '.nnnnnnnnn', 'nkkknyyknn', 'nkbknnnknn', 'nkkkn.kkkn', 'nnnnnnnnnn', '..........', '..........', '..........'],
+    gator: ['..........', '..........', '.g........', 'gGg.......', 'gyGgggggg.', 'gGGGGGGGGg', 'gwGwGGGGGg', '.ggggggggg', '.vvvvvvvvv', 'vvvvvvvvvv'],
+    fusee: ['....rr....', '...rrrr...', '...wwww...', '...wbbw...', '...wwww...', '...wwww...', '..rwwwwr..', '..r.yy.r..', '....oo....', '....y.....'],
+    feu: ['.y...p..g.', '..y.p..g..', 'y..ypg.g..', '.yy.p.gg..', '...ypg....', '..g.p.y...', '.g..p..y..', '....p.....', '....p.....', '....p.....'],
+    courbe: ['..........', '..........', '.......rr.', '......r..r', 'bb...r....', '..b.r.....', '...rr.....', '..........', 'kkkkkkkkkk', '..........'],
+    vol: ['..........', '...mmmm...', '..mMMMMm..', '.mMkMMMMm.', '.mMMMMMMmm', '..mMMMMm.m', '...m..m...', 'bbbbbbbbbb', '.bb.bb.bb.', '..........'],
+    quiz: ['.wwwwww...', '.wkkkkw...', '.wwwwwwyy.', '.wkkkkwyy.', '.wwwwwwyy.', '.wkkwwwyy.', '.wwwwwwyy.', '...yyyyyy.', '...yyyyyy.', '..........'],
+    accent: ['...nnnn...', '..nwwwwn..', '..nwwwwn..', '..nwwwwn..', '..nwwwwn..', '.n.nnnn.n.', '.n......n.', '..nn..nn..', '....nn....', '...nnnn...'],
+    final: ['kk.ww.kk.w', 'kk.ww.kk.w', 'ww.kk.ww.k', 'ww.kk.ww.k', 'kk.ww.kk.w', 'kk.ww.kk.w', 'n.........', 'n.........', 'n.........', 'n.........'],
+    trophee: ['.yyyyyyyy.', 'yyyyyyyyyy', 'y.yyyyyy.y', '.yyyyyyyy.', '..yyyyyy..', '...yyyy...', '....yy....', '....yy....', '..oooooo..', '..oooooo..'],
+    pdf: ['.wwwww....', '.wwwwwr...', '.wkkkwrr..', '.wwwwwww..', '.wkkkkkw..', '.wwwwwww..', '.rrrrrrw..', '.rwrwrrw..', '.rrrrrrw..', '.wwwwwww..']
+  };
+  const PIXC = { y: '#FFD25A', o: '#E0A526', b: '#2F7FBF', s: '#F2D7A0', w: '#F4EEDC', n: '#2A3F73', k: '#0A1330', g: '#2F5D2A', G: '#4F8A4B', v: '#4E7344', r: '#E3191F', p: '#F0766F', m: '#6B7F8E', M: '#9DB0BD' };
+  const pix = (nom, t = 28) => `<svg class="pix" viewBox="0 0 10 10" width="${t}" height="${t}" shape-rendering="crispEdges" aria-hidden="true">${(PIX[nom] || PIX.quiz).map((l, j) => [...l].map((c, i) => c !== '.' && PIXC[c] ? `<rect x="${i}" y="${j}" width="1" height="1" fill="${PIXC[c]}"/>` : '').join('')).join('')}</svg>`;
+  const EXOS = [['sprint', 'soleil', 'Sprint des codes', 'Miami Beach · 60 s chrono, combos x2'], ['dictee', 'radio', 'Radio Key West', 'Key West · le message vocal, verbe par verbe'], ['chasse', 'gator', 'Chasse aux alligators', 'Everglades · trouvez le mot faux, réparez-le'], ['chantier', 'fusee', 'Assemblez la fusée', 'Cap Canaveral · une phrase, un étage'], ['cartes', 'feu', 'Nuit des cartes', 'Orlando · les règles en cartes']];
+  const score = (k, x) => x ? `${pix('trophee', 14)} ${x.best}${k === 'sprint' ? ' pts' : k === 'cartes' ? ' cartes' : ' %'}` : 'Nouveau';
   function rangEntr(n, s, o, flou){
     const r = $('#en-piste'), t = $('#en-titre'); if (!r) return;
     const dispo = o && MODULES_EN_LIGNE, S = (lire('frg-entr2', {})[n]) || {}, F = ETAT.formule;
@@ -72,10 +90,10 @@
     const bloque = flou ? 'Réservé aux élèves' : !F ? 'Avec la formation' : !o ? esc(s.txt) : 'À la mise en ligne';
     r.innerHTML = `<a class="en-c en-lam ${F ? '' : 'en-off'}" href="${F && MODULES_EN_LIGNE ? 'lamantin.html?n=' + n : 'index.html#formations'}"><img class="en-lam-img" src="lamantin-pixel.png" alt="" width="44" height="44" loading="lazy"><b>Le lamantin IA</b><span>Pratique : il vous corrige.</span><em>${!F ? 'Réservé aux élèves de la formation' : F === 'integral' ? '3 relectures par jour, à vie' : 'Libre accès, à vie'}</em></a>`
       + EXOS.map(([k, i, nom, d]) => { const x = S[k]; return dispo
-        ? `<a class="en-c" href="entrainement.html?n=${n}&x=${k}"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${x ? (k === 'sprint' ? 'Record ' + x.best + ' pts' : k === 'cartes' ? x.best + ' cartes maîtrisées' : 'Meilleur ' + x.best + ' %') : 'Nouveau'}</em></a>`
-        : `<span class="en-c en-off${flou ? ' pc-flou-t' : ''}" aria-disabled="true"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${CADENAS} ${bloque}</em></span>`; }).join('')
-      + [['courbe/', '📈', 'La Courbe du jour', 'Le défi quotidien', true], ['vol.html', '🦭', 'Le lamantin volant', 'Vocabulaire sans fin'], ['quiz.html', '🃏', 'Le quiz', 'Définitions, traductions'], ['accent.html', '🎙', 'Le pont des sons', 'Th, i, r, h, -ed, w']]
-        .map(([h, i, nom, d, libre]) => (libre || (F && MODULES_EN_LIGNE)) ? `<a class="en-c en-jeu" href="${h}"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>Jeu</em></a>` : `<span class="en-c en-jeu en-off" aria-disabled="true"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${CADENAS} ${!F ? 'Avec la formation' : 'À la mise en ligne'}</em></span>`).join('');
+        ? `<a class="en-c" href="entrainement.html?n=${n}&x=${k}"><span class="en-i" aria-hidden="true">${pix(i)}</span><b>${nom}</b><span>${d}</span><em>${score(k, x)}</em></a>`
+        : `<span class="en-c en-off${flou ? ' pc-flou-t' : ''}" aria-disabled="true"><span class="en-i" aria-hidden="true">${pix(i)}</span><b>${nom}</b><span>${d}</span><em>${CADENAS} ${bloque}</em></span>`; }).join('')
+      + [['courbe/', 'courbe', 'La Courbe du jour', 'Le défi quotidien', true], ['vol.html', 'vol', 'Le lamantin volant', 'Vocabulaire sans fin'], ['quiz.html', 'quiz', 'Le quiz', 'Définitions, traductions'], ['accent.html', 'accent', 'Le pont des sons', 'Th, i, r, h, -ed, w'], ['frenglais.html', 'final', 'Frenglais', 'Le niveau final · après les 32 modules']]
+        .map(([h, i, nom, d, libre]) => (libre || (F && MODULES_EN_LIGNE)) ? `<a class="en-c en-jeu" href="${h}"><span class="en-i" aria-hidden="true">${pix(i)}</span><b>${nom}</b><span>${d}</span><em>Jeu</em></a>` : `<span class="en-c en-jeu en-off" aria-disabled="true"><span class="en-i" aria-hidden="true">${pix(i)}</span><b>${nom}</b><span>${d}</span><em>${CADENAS} ${!F ? 'Avec la formation' : 'À la mise en ligne'}</em></span>`).join('');
     const c = $('#en-compte'); if (c) { const tot = Object.values(lire('frg-entr2', {})).reduce((a, m) => a + Object.values(m).reduce((b, e) => b + (e.n || 0), 0), 0); c.textContent = tot ? tot + ' partie' + (tot > 1 ? 's' : '') + ' jouée' + (tot > 1 ? 's' : '') : '5 exercices par module'; }
   }
   /* ---------- tuile « Entraînement », à part des modules : une bulle compte les exercices à faire en attendant la suite ---------- */
@@ -235,6 +253,7 @@
   }
 
   /* l'espace élève appelle FRGParcours.maj(session) à la connexion et à la déconnexion */
-  window.FRGParcours = { maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {} }; DEBUT = r && r.debut ? +r.debut : null; choisi = null; dessiner(); } };
+  window.FRGParcours = { pix, EXOS, valides: () => Array.from({ length: 32 }, (_, i) => i + 1).filter(valide),
+    maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {} }; DEBUT = r && r.debut ? +r.debut : null; choisi = null; dessiner(); document.dispatchEvent(new CustomEvent('frg-parcours', { detail: r })); } };
   dessiner();
 })();

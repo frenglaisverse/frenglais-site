@@ -39,7 +39,7 @@ a.en-c:hover{transform:translateY(-3px);border-color:#1C49A5}
 .en-c .en-i{font-size:28px;line-height:1}.en-c b{font-size:16.5px}.en-c>span:not(.en-i){font-size:13.5px;line-height:1.45;color:var(--doux,#4A5578)}
 .en-c em{margin-top:auto;font:500 12px var(--f-mono,ui-monospace,monospace);font-style:normal;color:#1C49A5;display:flex;gap:5px;align-items:center}
 .en-c.en-lam{background:#0E1B3D;color:#fff;border-color:#0E1B3D}.en-c.en-lam>span:not(.en-i){color:rgba(255,255,255,.8)}.en-c.en-lam em{color:#9DBBFA}
-.en-lam-img{width:44px;height:44px;object-fit:cover;image-rendering:pixelated;box-shadow:0 -2px 0 #2A3F73,0 2px 0 #2A3F73,-2px 0 0 #2A3F73,2px 0 0 #2A3F73}
+.en-lam-img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated}
 .en-c.en-jeu{background:#0A1330;color:#F4EEDC;border-radius:0;border-color:#2A3F73;box-shadow:0 -3px 0 #2A3F73,0 3px 0 #2A3F73,-3px 0 0 #2A3F73,3px 0 0 #2A3F73}.en-c.en-jeu b{font:10px/1.6 "Press Start 2P",monospace;color:#FFD25A}.en-c.en-jeu>span:not(.en-i){color:#9AA8CC}.en-c.en-jeu em{color:#5FD39A;font-family:"VT323",monospace;font-size:16px}
 @font-face{font-family:"Press Start 2P";src:url("fonts/press-start-2p.woff2") format("woff2");font-display:swap}@font-face{font-family:"VT323";src:url("fonts/vt323.woff2") format("woff2");font-display:swap}
 .en-c.en-off{opacity:.6}.en-c.en-off em{color:var(--doux,#4A5578)}
@@ -61,6 +61,26 @@ a.en-c:hover{transform:translateY(-3px);border-color:#1C49A5}
 .pc-oral{display:flex;align-items:center;gap:16px}.pc-chrono{font:600 34px var(--f-mono,monospace);min-width:64px;color:#1C49A5}
 .pc-texte{max-height:240px;overflow:auto;padding:12px 14px;border-radius:12px;background:var(--fond,#F5F6FA);font-size:15px;margin-bottom:12px}.pc-texte p{margin:0 0 6px}
 @media (max-width:640px){.tb-modules>.tb-module{flex-basis:148px;min-height:180px}.pc-entr-grille{grid-template-columns:1fr 1fr}.pc-detail{padding:18px}}
+
+/* Votre parcours : une Courbe des Temps qui se remplit */
+.tb-courbe{display:block;width:100%;height:auto;margin:8px 0 2px;overflow:visible}
+.tb-courbe .c-fond{fill:none;stroke:var(--trait,#E3E7F0);stroke-width:7;stroke-linecap:round}
+.tb-courbe .c-plein{fill:none;stroke:url(#c-grad);stroke:#E3191F;stroke-width:7;stroke-linecap:round;stroke-dasharray:100 100;stroke-dashoffset:100;transition:stroke-dashoffset 1.2s cubic-bezier(.3,.8,.3,1)}
+.tb-courbe circle{fill:#fff;stroke:#1a1a1a;stroke-width:3.5;transition:cx 1.2s,cy 1.2s}
+.tb-courbe .c-reps text{font:600 11px var(--f-mono,ui-monospace,monospace);fill:var(--doux,#4A5578);text-anchor:middle}
+.tb-bilan{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--trait,#E3E7F0)}
+.tb-b{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.tb-b-ico{display:grid;place-items:center;margin-right:2px}
+.tb-puce{font:600 12px var(--f-mono,ui-monospace,monospace);padding:4px 8px;border-radius:8px;background:#EEF3FF;color:#1C49A5;text-decoration:none}
+.tb-puce:hover{background:#1C49A5;color:#fff}
+.tb-vide{font-size:13px;color:var(--doux,#4A5578)}
+.tb-score{display:inline-flex;align-items:center;gap:5px;padding:3px 8px 3px 4px;border-radius:8px;background:#0A1330;color:#FFD25A;font:600 12px var(--f-mono,ui-monospace,monospace)}
+.tb-score b{font-weight:600}
+.tb-power{margin-left:auto;width:42px;height:42px;border-radius:50%;border:0;background:#E3191F;color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 16px -8px rgba(227,25,31,.8);transition:transform .15s}
+.tb-power:hover{transform:scale(1.06)}
+.pix{image-rendering:pixelated;display:block}
+.en-c .en-i .pix{width:32px;height:32px}
+.tb-acces{margin:0 0 22px}
 </style>
 
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
@@ -80,12 +100,33 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 <div class="tb-tete">
   <p class="tb-sur">Votre espace</p>
   <h1>Espace élève</h1>
-  <div class="tb-progression" aria-live="polite">
+<div class="tb-progression" aria-live="polite">
     <canvas class="mousse mousse-pct" data-modele="[[214,5],[244,3],[268,6]]" aria-hidden="true"></canvas>
     <div class="tb-chiffres"><span>Votre parcours</span><b id="pct-global">0 %</b></div>
-    <div class="tb-barre"><i id="barre-global"></i></div>
+    <svg class="tb-courbe" viewBox="0 0 600 84" aria-hidden="true"><path class="c-fond" d="M14 58 C 90 58, 118 24, 196 24 S 292 62, 372 52 S 488 18, 586 22"/><path class="c-plein" id="courbe-plein" d="M14 58 C 90 58, 118 24, 196 24 S 292 62, 372 52 S 488 18, 586 22" pathLength="100"/><g class="c-reps"><text x="40" y="80">T-2</text><text x="196" y="80">T-1</text><text x="372" y="80">T0</text><text x="560" y="80">T+1</text></g><circle id="courbe-pt" cx="14" cy="58" r="8"/></svg>
+    <div class="tb-barre" hidden><i id="barre-global"></i></div>
+    <div class="tb-bilan" id="tb-bilan">
+      <div class="tb-b" id="tb-resumes"></div>
+      <div class="tb-b" id="tb-scores"></div>
+      <button class="tb-power" id="tb-power" type="button" aria-label="Se déconnecter" title="Se déconnecter" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3v8"/><path d="M6.3 6.6a8 8 0 1 0 11.4 0"/></svg></button>
+    </div>
   </div>
 </div>
+<form class="tb-acces" id="acces" novalidate>
+  <div class="tb-acces-tete">
+    <span class="tb-acces-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/></svg></span>
+    <div><strong>Déjà inscrit ?</strong><span>Entrez votre identifiant (par exemple <b>Manatee34</b>) et le code d'accès reçus à l'inscription.</span></div>
+  </div>
+  <div class="tb-acces-champs">
+    <label class="sr" for="acces-id">Identifiant</label>
+    <input id="acces-id" type="text" autocomplete="username" placeholder="Identifiant (ex. Manatee34)" spellcheck="false" autocapitalize="off">
+    <label class="sr" for="acces-code">Code d'accès</label>
+    <input id="acces-code" type="text" autocomplete="one-time-code" placeholder="FRG-XXXX-XXXX" maxlength="13" spellcheck="false">
+    <button type="submit">Accéder</button>
+  </div>
+  <p class="tb-kdo">🎁 Vous avez reçu un bon cadeau ? <a href="cadeau.html">Activez-le ici</a> : vos identifiants arrivent par e-mail.</p>
+  <p class="tb-acces-etat" id="acces-etat" role="status" aria-live="polite"></p>
+</form>
 
 <div class="tb-lecteur" id="video" aria-hidden="true"><div class="tb-lecteur-in">
   <div class="tb-ecran" id="ecran-video"><p class="tb-attente"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" fill="currentColor" stroke="none"/></svg><strong>Présentation</strong><span>Trois minutes avec Paul.</span></p></div>
@@ -120,29 +161,24 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 
 <div class="tb-cta"><a class="tb-debloquer" href="index.html#formations">Débloquer la formation<svg class="tb-fleche" viewBox="0 0 64 20" aria-hidden="true"><path d="M2 11 C 14 7, 24 14, 36 10 S 52 8, 60 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M54 5 L61 10 L54 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 6 v9" stroke="#F0766F" stroke-width="2.4" stroke-linecap="round"/><path d="M40 5 v9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a><span>L'Intégral · Signature · Boardroom · Cours particuliers</span></div>
 
-<form class="tb-acces" id="acces" novalidate>
-  <div class="tb-acces-tete">
-    <span class="tb-acces-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/></svg></span>
-    <div><strong>Déjà inscrit ?</strong><span>Entrez votre identifiant (par exemple <b>Manatee34</b>) et le code d'accès reçus à l'inscription.</span></div>
-  </div>
-  <div class="tb-acces-champs">
-    <label class="sr" for="acces-id">Identifiant</label>
-    <input id="acces-id" type="text" autocomplete="username" placeholder="Identifiant (ex. Manatee34)" spellcheck="false" autocapitalize="off">
-    <label class="sr" for="acces-code">Code d'accès</label>
-    <input id="acces-code" type="text" autocomplete="one-time-code" placeholder="FRG-XXXX-XXXX" maxlength="13" spellcheck="false">
-    <button type="submit">Accéder</button>
-  </div>
-  <p class="tb-kdo">🎁 Vous avez reçu un bon cadeau ? <a href="cadeau.html">Activez-le ici</a> : vos identifiants arrivent par e-mail.</p>
-  <p class="tb-acces-etat" id="acces-etat" role="status" aria-live="polite"></p>
-</form>
+
 </main>
 <script>
 (function(){
   let fini=false,pct=0; try{ fini=localStorage.getItem('frg-intro')==='fini'; pct=+(localStorage.getItem('frg-intro-pct')||0); }catch(e){}
   if(fini) pct=100;
-  const global=pct>=100?1:0;   // introduction terminée = 1 % du parcours
-  document.getElementById('pct-global').textContent=global+' %';
-  document.getElementById('barre-global').style.width=Math.max(global,1)+'%';
+  const lireJ=(k,d)=>{ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } };
+  /* Votre parcours : l'introduction compte pour 1 %, chaque module validé pour le reste ; la Courbe se remplit */
+  const bilan=()=>{ const P=window.FRGParcours, V=P&&P.valides?P.valides():[], g=Math.min(100,Math.round((pct>=100?1:0)+V.length/32*99));
+    document.getElementById('pct-global').textContent=g+' %'; document.getElementById('barre-global').style.width=Math.max(g,1)+'%';
+    const pl=document.getElementById('courbe-plein'), pt=document.getElementById('courbe-pt'); if(pl){ pl.style.strokeDashoffset=100-g; try{ const L=pl.getTotalLength(), q=pl.getPointAtLength(L*g/100); pt.setAttribute('cx',q.x); pt.setAttribute('cy',q.y); }catch(e){} }
+    const ico=(n,t)=>P&&P.pix?P.pix(n,t):'';
+    document.getElementById('tb-resumes').innerHTML=`<span class="tb-b-ico" title="Vos résumés PDF">${ico('pdf',22)}</span>`+(V.length?V.map(n=>`<a class="tb-puce" href="fiche.html?n=${n}" title="Résumé du module ${n}">M${n}</a>`).join(''):'<span class="tb-vide">Vos résumés PDF arrivent ici, module par module.</span>');
+    const S=lireJ('frg-entr2',{}), best={}; Object.values(S).forEach(m=>Object.entries(m).forEach(([k,o])=>{ best[k]=Math.max(best[k]||0,o.best||0); }));
+    const rf=+lireJ('frg-frenglais-record',0)||0, ex=P&&P.EXOS?P.EXOS:[];
+    const sc=ex.map(([k,i,nom])=>`<span class="tb-score" title="${nom}">${ico(i,20)}<b>${best[k]?best[k]+(k==='sprint'?'':k==='cartes'?'':' %'):'–'}</b></span>`).join('')+(rf?`<span class="tb-score" title="Frenglais">${ico('final',20)}<b>${rf}</b></span>`:'');
+    document.getElementById('tb-scores').innerHTML=`<span class="tb-b-ico" title="Vos records">${ico('trophee',22)}</span>`+sc; };
+  bilan(); document.addEventListener('frg-parcours',bilan); window.addEventListener('pageshow',bilan);
   document.getElementById('barre-intro').style.width=pct+'%';
   const act=document.getElementById('action-intro');
   if(fini){ act.innerHTML='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 10 17 19 7"/></svg>'; act.setAttribute('aria-label','Terminée'); document.getElementById('carte-intro').classList.add('fini'); }
@@ -197,11 +233,10 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
     H1.textContent = h>=5&&h<12 ? 'Good morning'+n+'!' : h>=18&&h<23 ? 'Good evening'+n+'!' : h>=23||h<5 ? 'Still up'+n+'?' : jour(n);
     SUR.textContent='Votre espace · '+(NOMF[r.formule]||r.formule||''); document.title=(p?p+' · ':'')+'Espace élève · Frenglais'; };
   const connecte=r=>{ try{ localStorage.setItem('frg-eleve',JSON.stringify({prenom:r.prenom||'',identifiant:r.identifiant||'',formule:r.formule||''})); }catch(e){}   /* le module 1 reprend le prénom */
-    if(window.FRGParcours) FRGParcours.maj(r); saluer(r); f.querySelector('.tb-acces-champs').hidden=true; etat.className='tb-acces-etat ok';
-    etat.innerHTML=''; etat.append('Connecté : '+(r.prenom?r.prenom+' · ':'')+r.identifiant+' · '+(NOMF[r.formule]||r.formule)+'. Vos modules s\'ouvrent ici dès leur mise en ligne. ');
-    const d=document.createElement('button'); d.type='button'; d.style.cssText='background:none;border:0;padding:0;min-height:0;box-shadow:none;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;font-weight:500'; d.textContent='Se déconnecter'; etat.append(d);
+    if(window.FRGParcours) FRGParcours.maj(r); saluer(r); f.hidden=true; etat.className='tb-acces-etat'; etat.textContent='';
+    const d=document.getElementById('tb-power'); d.hidden=false; d.onclick=null;
     rdv(); clearInterval(rdvT); rdvT=setInterval(rdv,30000);
-    d.addEventListener('click',()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); rdv(); f.querySelector('.tb-acces-champs').hidden=false; etat.className='tb-acces-etat'; etat.textContent=''; if(window.FRGParcours) FRGParcours.maj(null); saluer(null); }); };
+    d.onclick=()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); rdv(); f.hidden=false; f.querySelector('.tb-acces-champs').hidden=false; d.hidden=true; etat.className='tb-acces-etat'; etat.textContent=''; if(window.FRGParcours) FRGParcours.maj(null); saluer(null); }; };
   { const s=lireS(); if(s&&s.jeton) fetch(API+'/eleve/session',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).then(r=>r.json()).then(r=>{ if(r.ok) connecte(r); else { try{ localStorage.removeItem('frg-session'); }catch(e){} etat.className='tb-acces-etat ko'; etat.textContent=r.erreur||''; } }).catch(()=>{}); }
   { const q=new URLSearchParams(location.search).get('code'); if(q) code.value=q.toUpperCase(); }
   code.addEventListener('input',()=>{ let v=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); if(v.startsWith('FRG')) v=v.slice(3);
@@ -231,7 +266,7 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
     </div></div>
 <nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a><a href="cadeau.html">Bon cadeau</a></nav></div></footer>
 <script>document.addEventListener("click",function(e){var b=e.target.closest("#en-g,#en-d");if(!b)return;var p=document.getElementById("en-piste");p.scrollBy({left:(b.id==="en-d"?1:-1)*p.clientWidth*.8,behavior:"smooth"});});</script>
-<script src="parcours.js?v=8"></script>
+<script src="parcours.js?v=9"></script>
 <script src="mousse.js?v=202611201500"></script>
 </body>
 </html>

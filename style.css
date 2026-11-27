@@ -1495,3 +1495,7 @@ footer::after{opacity:.58}
   .pol-lire{background:rgba(14,27,61,.62)}
 }
 @media (hover:none) and (prefers-color-scheme:dark),(max-width:820px) and (prefers-color-scheme:dark){:root:not([data-theme="light"]) .offre{--fond:linear-gradient(160deg,rgba(40,56,100,.94),rgba(22,32,64,.92))}}
+/* crédit de l'auteur : lisible sur la photo, sans crier */
+.hero .credits{display:inline-block;max-width:min(760px,100%);font-size:16.5px;line-height:1.45;font-weight:500;color:#fff;background:rgba(10,19,48,.58);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:10px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.2);text-shadow:none;width:fit-content}
+.hero .credits .insec{color:#FFD25A;font-style:italic}
+@media (max-width:640px){.hero .credits{border-radius:16px;font-size:15.5px;padding:10px 14px}.hero .credits .insec{white-space:normal}}

@@ -70,7 +70,7 @@
     const dispo = o && MODULES_EN_LIGNE, S = (lire('frg-entr2', {})[n]) || {}, F = ETAT.formule;
     if (t) t.textContent = 'Module ' + n + ' · ' + TITRES[n - 1];
     const bloque = flou ? 'Réservé aux élèves' : !F ? 'Avec la formation' : !o ? esc(s.txt) : 'À la mise en ligne';
-    r.innerHTML = `<a class="en-c en-lam ${F ? '' : 'en-off'}" href="${F && MODULES_EN_LIGNE ? 'lamantin.html?n=' + n : 'index.html#formations'}"><img class="en-lam-img" src="lamantin-face.webp" alt="" width="44" height="44" loading="lazy"><b>Le lamantin</b><span>Écrivez ce que vous voulez : il relit et explique chaque faute.</span><em>${!F ? 'Avec la formation' : F === 'signature' ? 'Libre accès' : '3 relectures par jour'}</em></a>`
+    r.innerHTML = `<a class="en-c en-lam ${F ? '' : 'en-off'}" href="${F && MODULES_EN_LIGNE ? 'lamantin.html?n=' + n : 'index.html#formations'}"><img class="en-lam-img" src="lamantin-pixel.png" alt="" width="44" height="44" loading="lazy"><b>Le lamantin</b><span>Écrivez ce que vous voulez : il relit et explique chaque faute.</span><em>${!F ? 'Avec la formation' : F === 'signature' ? 'Libre accès' : '3 relectures par jour'}</em></a>`
       + EXOS.map(([k, i, nom, d]) => { const x = S[k]; return dispo
         ? `<a class="en-c" href="entrainement.html?n=${n}&x=${k}"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${x ? (k === 'sprint' ? 'Record ' + x.best + ' pts' : k === 'cartes' ? x.best + ' cartes maîtrisées' : 'Meilleur ' + x.best + ' %') : 'Nouveau'}</em></a>`
         : `<span class="en-c en-off${flou ? ' pc-flou-t' : ''}" aria-disabled="true"><span class="en-i" aria-hidden="true">${i}</span><b>${nom}</b><span>${d}</span><em>${CADENAS} ${bloque}</em></span>`; }).join('')

@@ -839,8 +839,8 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     <div class="pf-valide" id="pf-valide" hidden><span id="pf-valide-txt">Modifications non enregistrées</span><button type="button" class="btn" id="pf-enr">Valider</button></div>
     <article class="pf-c pf-dep" id="pf-dep"><header><span class="pf-lab">Dépenses du mois</span><small class="pf-maj" id="pf-dep-part"></small></header><strong class="pf-v" id="pf-dep-v">–</strong>
       <p class="pf-l pf-apd-l"><span>Brut − dépenses</span><b id="pf-apd">–</b></p>
-      <ul class="pf-dep-l" id="pf-dep-l"></ul>
-      <form class="pf-dep-f" id="pf-dep-f"><input type="text" id="pf-dep-lib" class="pf-in" placeholder="Libellé (ex. Canva, micro, train…)" maxlength="60" aria-label="Libellé de la dépense"><input type="number" id="pf-dep-m" class="pf-in" min="0" step="0.01" placeholder="€" aria-label="Montant"><button type="submit" class="btn btn-sec">Ajouter</button></form></article>
+      <form class="pf-dep-f" id="pf-dep-f"><input type="text" id="pf-dep-lib" class="pf-in" placeholder="Libellé (ex. Canva, micro, train…)" maxlength="60" aria-label="Libellé de la dépense"><input type="number" id="pf-dep-m" class="pf-in" min="0" step="0.01" placeholder="€" aria-label="Montant"><button type="submit" class="btn btn-sec">Ajouter</button></form>
+      <ul class="pf-dep-l" id="pf-dep-l"></ul></article>
     <p class="ligne" style="justify-content:flex-end;margin-top:10px"><button type="button" class="btn btn-sec" id="pf-pdf">PDF du mois</button></p>
     <details class="ventes-detail" id="pf-reglages"><summary class="doux petit">Brancher les Google Sheets · réglages</summary><div>
       <p class="petit"><b>Une seule fois :</b> ouvrez le Sheet « Cours particuliers » → <b>Extensions › Apps Script</b> → effacez tout, collez le script ci-dessous → 💾 → choisissez <code>installer</code> en haut → <b>Exécuter</b> → acceptez les autorisations Google. Il lit aussi TalkWithBarb et Immersion.</p>
@@ -1389,7 +1389,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     $('pf-av').onclick = () => { if (!quitter()) return; sale.clear(); document.querySelectorAll('.pf-in.sale').forEach(x => x.classList.remove('sale')); etatV(); mois = decale(mois, -1); rendre(); }; $('pf-ap').onclick = () => { if (mois < auj && quitter()) { sale.clear(); document.querySelectorAll('.pf-in.sale').forEach(x => x.classList.remove('sale')); etatV(); mois = decale(mois, 1); rendre(); } };
     ['barb', 'imm', 'mast', 'ling', 'kdp'].forEach(k => $('pf-' + k + '-paye').onchange = e => enr({ [k + 'Paye']: e.target.checked }));
     $('pf-dep-f').onsubmit = e => { e.preventDefault(); const l = $('pf-dep-lib').value.trim(), m = +$('pf-dep-m').value; if (!l || !(m > 0) || !D) return;
-      const L = ((D.manuel.mois[mois] || {}).dep || []).concat([{ l, m }]); appel({ mois, set: { dep: L } }).then(() => { $('pf-dep-lib').value = ''; $('pf-dep-m').value = ''; $('pf-dep-lib').focus(); }).catch(x => alert('Erreur : ' + x.message)); };
+      const L = ((D.manuel.mois[mois] || {}).dep || []).concat([{ l, m }]); appel({ mois, set: { dep: L } }).then(() => { if (!((D.manuel.mois[mois] || {}).dep || []).length) return alert('Le serveur n’a pas gardé la dépense. Recollez le dernier worker dans Cloudflare.'); $('pf-dep-lib').value = ''; $('pf-dep-m').value = ''; $('pf-dep-lib').focus(); }).catch(x => alert('Erreur : ' + x.message)); };
     $('pf-dep-l').onclick = e => { const b = e.target.closest('[data-dep]'); if (!b || !D) return; const L = ((D.manuel.mois[mois] || {}).dep || []).slice(), x = L[+b.dataset.dep];
       if (!b.classList.contains('sur')) { b.classList.add('sur'); b.textContent = 'Confirmer ?'; setTimeout(() => { if (b.isConnected) { b.classList.remove('sur'); b.textContent = 'Supprimer'; } }, 3500); return; }
       b.disabled = true; L.splice(+b.dataset.dep, 1); appel({ mois, set: { dep: L } }).catch(x => alert('Erreur : ' + x.message)); };

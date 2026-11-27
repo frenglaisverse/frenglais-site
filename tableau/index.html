@@ -536,7 +536,7 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 .pf-nav{display:flex;align-items:center;gap:6px}.pf-nav b{font:600 14px var(--f-txt);min-width:120px;text-align:center;text-transform:capitalize}.pf-nav button{width:30px;height:30px;border-radius:50%;border:1px solid var(--trait);background:var(--carte);color:var(--encre);font-size:17px;line-height:1;cursor:pointer}.pf-nav button:disabled{opacity:.3;cursor:default}
 .pf-coin{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font:500 12px var(--f-mono);color:var(--doux);letter-spacing:.02em}.pf-coin b{color:var(--encre);font-weight:700}.pf-coin span:last-child b{color:#4FC79F}
 .pf-src{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;flex-wrap:wrap}.pf-lab{font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--doux)}
-.pf-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--trait)}
+.pf-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--trait)}
 .pf-c{border:1px solid var(--trait);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}.pf-c header{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:24px}
 .pf-v{font:700 28px/1.1 var(--f-txt);letter-spacing:-.025em}.pf-l{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0;font-size:13px}.pf-l b{font-weight:600}.pf-reste b{color:#E8836F}.pf-maj{font:500 10.5px var(--f-mono);color:var(--doux)}
 .pf-in{width:64px;padding:4px 6px;border:1px solid var(--trait);border-radius:8px;font:600 13px var(--f-mono);color:var(--encre);background:var(--carte)}select.pf-in{width:auto}
@@ -827,6 +827,8 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       <article class="pf-c" id="pf-barb"><header><span class="pf-lab">TalkWithBarb</span><label class="pf-paye" title="Payé"><input type="checkbox" id="pf-barb-paye"><i></i></label></header><strong class="pf-v" id="pf-barb-v">–</strong><p class="pf-l"><span id="pf-barb-info" class="doux">–</span></p></article>
       <article class="pf-c" id="pf-imm"><header><span class="pf-lab">Immersion</span><label class="pf-paye" title="Payé"><input type="checkbox" id="pf-imm-paye"><i></i></label></header><strong class="pf-v" id="pf-imm-v">–</strong>
         <p class="pf-l"><span><input type="number" min="0" step="1" id="pf-imm-n" class="pf-in" aria-label="Vidéos du mois"> vidéos × 25 $</span><b id="pf-imm-usd">–</b></p><p class="pf-l"><span class="doux" id="pf-fx">–</span></p></article>
+      <article class="pf-c" id="pf-mast"><header><span class="pf-lab">Masteur</span><small class="pf-maj" id="pf-mast-maj"></small></header><strong class="pf-v" id="pf-mast-v">–</strong>
+        <p class="pf-l"><span><input type="number" min="0" step="0.01" id="pf-mast-e" class="pf-in" style="width:86px" aria-label="Montant Masteur du mois"> €</span><span class="doux" id="pf-mast-info"></span></p></article>
       <article class="pf-c" id="pf-ling"><header><span class="pf-lab">Lingolus</span></header><strong class="pf-v" id="pf-ling-v">–</strong>
         <p class="pf-l"><span><input type="number" min="0" step="0.25" id="pf-ling-h" class="pf-in" aria-label="Heures du mois" placeholder="0"> h × <input type="number" min="0" step="0.5" id="pf-ling-t" class="pf-in" aria-label="Taux horaire brut"> €/h</span></p></article>
     </div>
@@ -1345,11 +1347,16 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       const inN = $('pf-imm-n'); if (document.activeElement !== inN) { inN.value = n; inN.title = M.immN != null ? 'Corrigé à la main (Sheet : ' + nAuto + ') · videz pour revenir au Sheet' : 'Lu dans le Sheet'; }
       $('pf-imm-usd').textContent = (n * 25).toLocaleString('fr-FR') + ' $'; $('pf-imm-v').textContent = eur(iv); $('pf-imm-paye').checked = !!M.immPaye; $('pf-imm').classList.toggle('paye', !!M.immPaye);
       $('pf-fx').textContent = fx ? '1 € = ' + fx.toLocaleString('fr-FR', { maximumFractionDigits: 4 }) + ' $ · BCE' + (mois === auj && D.fx.jour ? ' du ' + new Date(D.fx.jour).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '') : 'taux BCE indisponible';
+      /* Masteur */
+      const MS = D.masteur || {}, mAuto = MS.mois ? MS.mois[mois] || 0 : null, mv = M.mastE ?? mAuto, inM = $('pf-mast-e');
+      if (document.activeElement !== inM) { inM.value = M.mastE ?? ''; inM.placeholder = mAuto != null ? String(Math.round(mAuto * 100) / 100) : '0'; }
+      $('pf-mast-v').textContent = eur(mv); $('pf-mast-maj').textContent = MS.erreur ? '⚠' : MS.auto ? 'Stripe · ' + ilya(MS.t) : '';
+      $('pf-mast-info').textContent = MS.erreur ? MS.erreur : M.mastE != null ? (MS.auto ? 'corrigé à la main' : '') : MS.auto ? 'lu sur Stripe' : 'à saisir';
       /* Lingolus */
       const h = M.lingH || 0, t = M.lingTaux ?? R.tauxLing ?? 35, lv = h * t;
       if (document.activeElement !== $('pf-ling-h')) $('pf-ling-h').value = h || ''; if (document.activeElement !== $('pf-ling-t')) $('pf-ling-t').value = t; $('pf-ling-v').textContent = eur(lv);
       /* totaux */
-      const brut = fren + (cv || 0) + (bv || 0) + (iv || 0) + lv; $('pf-brut').textContent = eur(brut); $('pf-net').textContent = eur(brut * (1 - taux / 100));
+      const brut = fren + (cv || 0) + (bv || 0) + (iv || 0) + (mv || 0) + lv; $('pf-brut').textContent = eur(brut); $('pf-net').textContent = eur(brut * (1 - taux / 100));
       $('pf-net').parentNode.title = 'brut − ' + String(taux).replace('.', ',') + ' % de cotisations';
       if (document.activeElement !== $('pf-taux')) $('pf-taux').value = taux; $('pf-barb-dev').value = R.deviseBarb || 'EUR';
       const ligne = (nom, x) => !x ? `<span class="ko">✗ ${nom} : rien reçu pour l’instant</span>` : x.erreur ? `<span class="ko">⚠ ${nom} : ${esc(x.erreur)}</span>` : `<span>✓ ${nom} · ${ilya(x.recu)}${x.methode ? ' · ' + esc(x.methode) : ''}${x.feuille ? ' · onglet ' + esc(x.feuille) : ''}${x.eleves ? ' · ' + Object.keys(x.eleves).length + ' élèves repérés : ' + Object.keys(x.eleves).map(esc).join(', ') : ''}</span>`;
@@ -1358,6 +1365,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     $('pf-av').onclick = () => { mois = decale(mois, -1); rendre(); }; $('pf-ap').onclick = () => { if (mois < auj) { mois = decale(mois, 1); rendre(); } };
     $('pf-barb-paye').onchange = e => enr({ barbPaye: e.target.checked }); $('pf-imm-paye').onchange = e => enr({ immPaye: e.target.checked });
     $('pf-imm-n').onchange = e => enr({ immN: e.target.value === '' ? null : +e.target.value });
+    $('pf-mast-e').onchange = e => enr({ mastE: e.target.value === '' ? null : +e.target.value });
     $('pf-ling-h').onchange = e => enr({ lingH: e.target.value === '' ? null : +e.target.value });
     $('pf-ling-t').onchange = e => { const v = +e.target.value; appel({ mois, set: { lingTaux: v }, reglages: { tauxLing: v } }).catch(x => alert(x.message)); };
     $('pf-taux').onchange = e => appel({ reglages: { tauxNet: +e.target.value } }).catch(x => alert(x.message));

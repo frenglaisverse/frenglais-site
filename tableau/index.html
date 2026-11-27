@@ -485,6 +485,9 @@ em{font-style:italic}
 .ae-det code{font-size:14px;padding:2px 6px;border-radius:6px;background:color-mix(in srgb,#1C49A5 10%,transparent)}
 .ae-det .ligne{gap:8px;flex-wrap:wrap}
 .ae-sous{margin:16px 0 0}
+.ae-liste>li.ae-sep{border-top:0;height:0;margin:10px 12px;border-bottom:2px solid var(--trait)}
+.ae-eleves{margin-top:10px}
+.pres-tr{margin-top:10px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,#1C49A5 7%,transparent)}.pres-tr-t{margin:0 0 4px}.pres-tr-x{margin:0 0 8px;font-size:15px;line-height:1.55}.pres-tr mark{background:#FFE7A3;color:#5A4205;border-radius:4px;padding:0 3px}
 </style>
 <style id="css-certif"></style>
 <style>
@@ -727,8 +730,6 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   <div class="col-d">
   <section class="carte" id="acces-eleve">
     <div class="titre-ic"><span class="ic" style="--c:#1C49A5"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M19 8v6M16 11h6"/></svg></span><div><h2>Accès élève</h2><p class="doux petit">Pour vos élèves actuels : identifiant et code, sans paiement en ligne.</p></div></div>
-    <div class="ae-eleves"><div class="ae-tete"><b>Vos élèves</b><span class="petit doux" id="ae-compte"></span><button class="btn" id="ae-maj" type="button">Actualiser</button></div><ul class="ae-liste" id="ae-liste"><li class="petit doux">Chargement…</li></ul></div>
-    <p class="ae-sous"><b>Nouvel élève</b></p>
     <div class="dv-grille" style="margin-top:8px">
       <label>Prénom <input id="ae-prenom" maxlength="40" autocomplete="off"></label>
       <label>Nom <input id="ae-nom" maxlength="60" autocomplete="off"></label>
@@ -782,8 +783,9 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   </section>
   <section data-onglet="eleves" class="carte">
     <div class="ligne" style="justify-content:space-between"><h2>Vos élèves</h2><span class="doux petit" id="resume"></span></div>
-    <table class="tab"><thead><tr><th>Élève</th><th class="cache-m">Secteur</th><th>Semaine</th><th>Modules</th><th>Volume tenu</th><th class="cache-m">Niveau</th><th class="cache-m">Rapport reçu</th></tr></thead><tbody id="liste"></tbody></table>
-    <p class="vide" id="liste-vide">Aucun élève pour l'instant. Dès qu'un élève vous envoie son bilan, collez-le ci-dessous.</p>
+    <div class="ae-eleves"><div class="ae-tete"><span class="petit doux" id="ae-compte"></span><button class="btn" id="ae-maj" type="button">Actualiser</button></div><ul class="ae-liste" id="ae-liste"><li class="petit doux">Chargement…</li></ul></div>
+    <div hidden>    <table class="tab"><thead><tr><th>Élève</th><th class="cache-m">Secteur</th><th>Semaine</th><th>Modules</th><th>Volume tenu</th><th class="cache-m">Niveau</th><th class="cache-m">Rapport reçu</th></tr></thead><tbody id="liste"></tbody></table>
+    <p class="vide" id="liste-vide">Aucun élève pour l'instant. Dès qu'un élève vous envoie son bilan, collez-le ci-dessous.</p></div>
     <details class="repli" id="rapport-repli"><summary><b>Recevoir un rapport d'élève</b> · coller le message WhatsApp « FRG1… »</summary>
     <p class="doux petit" style="margin:0">L'élève touche « Préparer mon bilan » dans son espace : vous recevez un message qui contient un code <code>FRG1…</code>. Collez le message entier ici. Le rapport le plus récent remplace le précédent ; vos notes, présences et validations sont gardées.</p>
     <textarea id="code" placeholder="Collez ici le message WhatsApp de l'élève"></textarea>
@@ -1311,8 +1313,10 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       if (!r.ok) { ul.innerHTML = `<li class="petit" style="padding:10px 12px">Liste indisponible${r.erreur ? ' : ' + esc(r.erreur) : ''}. Pensez à coller le dernier worker dans Cloudflare.</li>`; return; }
       const now = r.maintenant || Date.now(), on = r.eleves.filter(e => e.vu && now - e.vu < 300000).length;
       $e('ae-compte').textContent = r.eleves.length + ' élève' + (r.eleves.length > 1 ? 's' : '') + ' · ' + on + ' en ligne';
-      ul.innerHTML = r.eleves.length ? r.eleves.map((e, i) => { const enl = e.vu && now - e.vu < 300000;
-        return `<li><button class="ae-l" type="button" data-i="${i}" aria-expanded="false"><span class="ae-pt${enl ? ' on' : ''}" title="${enl ? 'En ligne' : 'Hors ligne'}"></span><span class="ae-n"><b>${esc((e.prenom + ' ' + e.nom).trim() || e.email)}</b><small>${esc(e.identifiant)} · ${esc(NF[e.formule] || e.formule || '')}${e.valides ? ' · ' + e.valides + ' module' + (e.valides > 1 ? 's' : '') + ' validé' + (e.valides > 1 ? 's' : '') : ''}${e.statut && e.statut !== 'actif' ? ' · ' + esc(e.statut) : ''}</small></span><span class="ae-v">${depuis(e.vu, now)}</span></button><div class="ae-det" hidden></div></li>`; }).join('') : '<li class="petit doux" style="padding:10px 12px">Aucun élève pour l\'instant.</li>';
+      const ordre = r.eleves.map((e, i) => [e, i]), A = ordre.filter(([e]) => e.formule !== 'particulier'), B = ordre.filter(([e]) => e.formule === 'particulier');
+      const ligne = ([e, i]) => { const enl = e.vu && now - e.vu < 300000;
+        return `<li><button class="ae-l" type="button" data-i="${i}" aria-expanded="false"><span class="ae-pt${enl ? ' on' : ''}" title="${enl ? 'En ligne' : 'Hors ligne'}"></span><span class="ae-n"><b>${esc((e.prenom + ' ' + e.nom).trim() || e.email)}</b><small>${esc(e.identifiant)} · ${esc(NF[e.formule] || e.formule || '')}${e.valides ? ' · ' + e.valides + ' module' + (e.valides > 1 ? 's' : '') + ' validé' + (e.valides > 1 ? 's' : '') : ''}${e.statut && e.statut !== 'actif' ? ' · ' + esc(e.statut) : ''}</small></span><span class="ae-v">${depuis(e.vu, now)}</span></button><div class="ae-det" hidden></div></li>`; };
+      ul.innerHTML = r.eleves.length ? A.map(ligne).join('') + (A.length && B.length ? '<li class="ae-sep" aria-hidden="true"></li>' : '') + B.map(ligne).join('') : '<li class="petit doux" style="padding:10px 12px">Aucun élève pour l\'instant. Les élèves qui achètent en ligne apparaissent ici automatiquement.</li>';
       ul.querySelectorAll('.ae-l').forEach(b => b.addEventListener('click', () => { const e = r.eleves[+b.dataset.i], d = b.nextElementSibling, ouvrir = d.hidden;
         ul.querySelectorAll('.ae-det').forEach(x => { x.hidden = true; x.previousElementSibling.setAttribute('aria-expanded', 'false'); }); d.hidden = !ouvrir; b.setAttribute('aria-expanded', ouvrir); if (!ouvrir) return;
         d.innerHTML = `<p style="margin:4px 0">Identifiant <code>${esc(e.identifiant)}</code> · ${esc(e.email)} · ${e.appareils} appareil${e.appareils > 1 ? 's' : ''}</p>
@@ -1610,8 +1614,12 @@ function charger(){post({}).then(function(j){if(!j.ok){box.innerHTML='<p class="
  box.innerHTML=L.map(function(x){var d=new Date(x.t).toLocaleDateString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
   return '<div class="pres-l'+(x.ecoute?' lu':'')+'" data-id="'+esc(x.id)+'"><div><b>'+esc((x.prenom+' '+(x.nom||'')).trim()||x.id)+'</b> <span class="doux petit">'+esc(x.id)+' · '+d+(x.duree?' · '+x.duree+' s':'')+'</span>'+(x.texte?'<p class="petit pres-tx">« '+esc(x.texte)+' »</p>':'')+'</div><div class="pres-a"><button class="btn btn-sec" type="button" data-ecouter>Écouter</button>'+(x.ecoute?'<span class="doux petit">✓ écoutée</span>':'<button class="btn btn-sec" type="button" data-lu>Marquer écoutée</button>')+'</div></div>';}).join('');
 }).catch(function(){box.innerHTML='<p class="doux petit">Serveur injoignable.</p>';});}
+function montrerTr(l,t){var z=l.querySelector('.pres-tr');if(!z){z=document.createElement('div');z.className='pres-tr';l.querySelector('div').appendChild(z);}
+ z.innerHTML='<p class="pres-tr-t"><b>Transcription</b> <span class="doux petit">(? = passage incompris · (?) = pas sûr)</span></p><p class="pres-tr-x" lang="en">'+(t?esc(t).replace(/(^|\s)\?(?=\s|$)/g,'$1<mark>?</mark>').replace(/\(\?\)/g,'<mark>(?)</mark>'):'<span class="doux">Pas de transcription disponible.</span>')+'</p><button class="btn" type="button" data-retr style="padding:4px 10px;font-size:12.5px">Retranscrire</button><button class="btn" type="button" data-copier-tr style="padding:4px 10px;font-size:12.5px;margin-left:6px">Copier</button>';
+ z.querySelector('[data-copier-tr]').addEventListener('click',function(ev){try{navigator.clipboard.writeText(t||'');ev.target.textContent='Copié ✓';}catch(x){}});}
 box.addEventListener('click',function(e){var l=e.target.closest('.pres-l');if(!l)return;var id=l.dataset.id;
- if(e.target.matches('[data-ecouter]')){var b=e.target;b.disabled=true;b.textContent='Chargement…';post({id:id}).then(function(j){if(!j.ok){b.textContent='Erreur';return;}var a=document.createElement('audio');a.controls=true;a.autoplay=true;a.src='data:'+(j.type||'audio/webm')+';base64,'+j.audio;b.replaceWith(a);});}
+ if(e.target.matches('[data-ecouter]')){var b=e.target;b.disabled=true;b.textContent='Chargement et transcription…';post({id:id}).then(function(j){if(!j.ok){b.textContent='Erreur';return;}var a=document.createElement('audio');a.controls=true;a.autoplay=true;a.src='data:'+(j.type||'audio/webm')+';base64,'+j.audio;b.replaceWith(a);montrerTr(l,j.transcription);});}
+ if(e.target.matches('[data-retr]')){var r=e.target;r.disabled=true;r.textContent='Transcription…';post({id:id,transcrire:true}).then(function(j){r.disabled=false;r.textContent='Retranscrire';if(j.ok)montrerTr(l,j.transcription);else r.textContent='Échec : '+(j.erreur||'');});}
  if(e.target.matches('[data-lu]')){post({id:id,ecoute:true}).then(charger);}});
 charger();})();
 </script>

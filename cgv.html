@@ -14,6 +14,8 @@ if(a.matches('.nav-devis'))n='menu-devis';else if(a.matches('.nav-eleve'))n='men
 else if(a.matches('.solo-cta'))n='solo-acces';else if(h.indexOf('#devis')===0)n='devis-lien';else if(h.indexOf('trustpilot')>-1)n='trustpilot';else if(h.indexOf('amazon')>-1)n='livre-amazon';
 else if(h.indexOf('fulbright')>-1)n='carte-fulbright';else if(h.indexOf('wlu.edu')>-1)n='carte-article';else if(h.indexOf('youtube')>-1)n='youtube';else if(h.indexOf('instagram')>-1)n='instagram';else if(h.indexOf('tiktok')>-1)n='tiktok';
 else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,title:n,event:true});},true);</script>
+<link rel="manifest" href="/manifest.webmanifest">
+<script>if("serviceWorker"in navigator)addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){})});</script>
 </head>
 <body>
 <header class="bandeau"><div class="in"><nav class="nav" aria-label="Navigation principale">

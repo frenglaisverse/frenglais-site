@@ -55,6 +55,8 @@ body{margin:0;background:#EEF1F7;color:var(--encre);font:16px/1.5 Geist,-apple-s
 @page{size:A5 portrait;margin:0}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:#fff}.talon::after{display:none}.barre{display:none}.bon{width:148mm;height:210mm;max-width:none;margin:0;border-radius:0;box-shadow:none;aspect-ratio:auto}.haut{-webkit-print-color-adjust:exact;print-color-adjust:exact}.ruban{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
+<link rel="manifest" href="/manifest.webmanifest">
+<script>if("serviceWorker"in navigator)addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){})});</script>
 </head>
 <body>
 <div class="barre" id="barre" hidden><p>Format A5. Choisissez « Enregistrer en PDF » pour le garder ou l'envoyer.</p><button type="button" onclick="print()">Imprimer le bon</button></div>

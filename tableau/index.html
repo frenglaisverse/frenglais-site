@@ -471,6 +471,20 @@ em{font-style:italic}
 .mission-bloc .btn:disabled{opacity:.7}
 @media (max-width:520px){.bandeau .mod{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bandeau .retour-logo img{width:96px;height:auto}.actions-bandeau{flex-shrink:0;gap:6px}.actions-bandeau .retour{padding-inline:9px;font-size:12.5px}}
 
+
+.ae-eleves{margin-top:12px;border:1px solid var(--trait);border-radius:12px;overflow:hidden}
+.ae-tete{display:flex;align-items:center;gap:10px;padding:10px 12px;background:color-mix(in srgb,var(--trait) 40%,transparent)}.ae-tete .btn{margin-left:auto;padding:6px 12px;min-height:0;font-size:13px}
+.ae-liste{list-style:none;margin:0;padding:0;max-height:360px;overflow:auto}
+.ae-liste>li{border-top:1px solid var(--trait)}
+.ae-l{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;background:none;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.ae-l:hover{background:color-mix(in srgb,#1C49A5 6%,transparent)}
+.ae-pt{flex:none;width:10px;height:10px;border-radius:50%;background:#B8BFCC}.ae-pt.on{background:#2E8B6E;box-shadow:0 0 0 3px color-mix(in srgb,#2E8B6E 25%,transparent)}
+.ae-n{flex:1;min-width:0}.ae-n b{display:block;font-size:14.5px}.ae-n small{color:var(--doux);font-size:12.5px}
+.ae-v{font:500 12px var(--f-mono,ui-monospace,monospace);color:var(--doux);white-space:nowrap}
+.ae-det{padding:4px 12px 12px 32px;font-size:13.5px}
+.ae-det code{font-size:14px;padding:2px 6px;border-radius:6px;background:color-mix(in srgb,#1C49A5 10%,transparent)}
+.ae-det .ligne{gap:8px;flex-wrap:wrap}
+.ae-sous{margin:16px 0 0}
 </style>
 <style id="css-certif"></style>
 <style>
@@ -713,7 +727,9 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   <div class="col-d">
   <section class="carte" id="acces-eleve">
     <div class="titre-ic"><span class="ic" style="--c:#1C49A5"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M19 8v6M16 11h6"/></svg></span><div><h2>Accès élève</h2><p class="doux petit">Pour vos élèves actuels : identifiant et code, sans paiement en ligne.</p></div></div>
-    <div class="dv-grille" style="margin-top:12px">
+    <div class="ae-eleves"><div class="ae-tete"><b>Vos élèves</b><span class="petit doux" id="ae-compte"></span><button class="btn" id="ae-maj" type="button">Actualiser</button></div><ul class="ae-liste" id="ae-liste"><li class="petit doux">Chargement…</li></ul></div>
+    <p class="ae-sous"><b>Nouvel élève</b></p>
+    <div class="dv-grille" style="margin-top:8px">
       <label>Prénom <input id="ae-prenom" maxlength="40" autocomplete="off"></label>
       <label>Nom <input id="ae-nom" maxlength="60" autocomplete="off"></label>
       <label style="grid-column:1/-1">E-mail <input id="ae-email" type="email" autocomplete="off"></label>
@@ -1286,6 +1302,30 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       $a('ae-res').innerHTML = `<div class="ae-carte"><b>${esc(x.prenom)}</b> · ${r.mail === 'envoyé' ? 'mail envoyé ✓' : r.mail === 'non envoyé' ? 'à transmettre vous-même' : esc(r.mail)}<br>Identifiant <code>${esc(r.identifiant)}</code> · code <code>${esc(r.code)}</code><br><span class="doux petit">Le code ne s'affiche qu'ici, une seule fois. Plus tard : « Renvoyer les accès » dans Ventes en crée un nouveau.</span><p class="ligne" style="margin-top:8px"><button type="button" class="btn btn-sec" id="ae-copier">Copier le message</button></p></div>`;
       $a('ae-copier').addEventListener('click', async () => { try { await navigator.clipboard.writeText(`Bonjour ${x.prenom},\n\nVoici vos accès Frenglais :\nIdentifiant : ${r.identifiant}\nCode : ${r.code}\n\nÀ entrer sur https://frenglais.co/espace-eleve.html\n\nPaul`); $a('ae-copier').textContent = 'Copié ✓'; } catch (e) {} });
       ['ae-prenom', 'ae-nom', 'ae-email'].forEach(i => $a(i).value = ''); if (typeof majVentes === 'function') majVentes(); }); }
+
+  /* vos élèves : pastille en ligne / hors ligne, et leurs accès en un clic */
+  { const $e = id => document.getElementById(id), ul = $e('ae-liste'), NF = { integral: "L'Intégral", signature: 'Signature', boardroom: 'Boardroom', particulier: 'Cours particuliers' };
+    const appel = b => fetch(API + '/admin/eleve', { method: 'POST', body: JSON.stringify({ cle: FRG.lire('frg-cle-tableau', ''), ...b }) }).then(r => r.json()).catch(() => ({ erreur: 'serveur injoignable' }));
+    const depuis = (t, now) => { if (!t) return 'jamais connecté'; const m = Math.round((now - t) / 60000); return m < 5 ? 'en ligne' : m < 60 ? 'il y a ' + m + ' min' : m < 1440 ? 'il y a ' + Math.round(m / 60) + ' h' : 'il y a ' + Math.round(m / 1440) + ' j'; };
+    async function charger(){ ul.innerHTML = '<li class="petit doux" style="padding:10px 12px">Chargement…</li>'; const r = await appel({ liste: 1 });
+      if (!r.ok) { ul.innerHTML = `<li class="petit" style="padding:10px 12px">Liste indisponible${r.erreur ? ' : ' + esc(r.erreur) : ''}. Pensez à coller le dernier worker dans Cloudflare.</li>`; return; }
+      const now = r.maintenant || Date.now(), on = r.eleves.filter(e => e.vu && now - e.vu < 300000).length;
+      $e('ae-compte').textContent = r.eleves.length + ' élève' + (r.eleves.length > 1 ? 's' : '') + ' · ' + on + ' en ligne';
+      ul.innerHTML = r.eleves.length ? r.eleves.map((e, i) => { const enl = e.vu && now - e.vu < 300000;
+        return `<li><button class="ae-l" type="button" data-i="${i}" aria-expanded="false"><span class="ae-pt${enl ? ' on' : ''}" title="${enl ? 'En ligne' : 'Hors ligne'}"></span><span class="ae-n"><b>${esc((e.prenom + ' ' + e.nom).trim() || e.email)}</b><small>${esc(e.identifiant)} · ${esc(NF[e.formule] || e.formule || '')}${e.valides ? ' · ' + e.valides + ' module' + (e.valides > 1 ? 's' : '') + ' validé' + (e.valides > 1 ? 's' : '') : ''}${e.statut && e.statut !== 'actif' ? ' · ' + esc(e.statut) : ''}</small></span><span class="ae-v">${depuis(e.vu, now)}</span></button><div class="ae-det" hidden></div></li>`; }).join('') : '<li class="petit doux" style="padding:10px 12px">Aucun élève pour l\'instant.</li>';
+      ul.querySelectorAll('.ae-l').forEach(b => b.addEventListener('click', () => { const e = r.eleves[+b.dataset.i], d = b.nextElementSibling, ouvrir = d.hidden;
+        ul.querySelectorAll('.ae-det').forEach(x => { x.hidden = true; x.previousElementSibling.setAttribute('aria-expanded', 'false'); }); d.hidden = !ouvrir; b.setAttribute('aria-expanded', ouvrir); if (!ouvrir) return;
+        d.innerHTML = `<p style="margin:4px 0">Identifiant <code>${esc(e.identifiant)}</code> · ${esc(e.email)} · ${e.appareils} appareil${e.appareils > 1 ? 's' : ''}</p>
+          <p class="petit doux" style="margin:4px 0">Le code n'est jamais gardé en clair : en obtenir un nouveau remplace l'ancien.</p>
+          <p class="ligne"><button class="btn plein" type="button" data-a="voir">Obtenir ses accès</button><button class="btn" type="button" data-a="mail">Nouveau code par mail</button><span class="petit" data-m></span></p><div data-r></div>`;
+        d.querySelectorAll('[data-a]').forEach(x => x.addEventListener('click', async () => { const mail = x.dataset.a === 'mail';
+          if (!confirm('Créer un nouveau code pour ' + (e.prenom || e.identifiant) + ' ? L\'ancien ne marchera plus.')) return;
+          const m = d.querySelector('[data-m]'); m.textContent = 'Un instant…'; const a = await appel({ acces: e.identifiant, envoyer: mail });
+          if (!a.ok) { m.textContent = 'Erreur : ' + (a.erreur || ''); return; } m.textContent = mail ? (a.mail === 'envoyé' ? 'Mail envoyé ✓' : esc(a.mail)) : '';
+          d.querySelector('[data-r]').innerHTML = `<p style="margin:6px 0">Identifiant <code>${esc(a.identifiant)}</code> · code <code>${esc(a.code)}</code></p><p class="ligne"><button class="btn" type="button" data-c>Copier le message</button><a class="btn" href="../espace-eleve.html" target="_blank" rel="noopener">Ouvrir l'espace élève</a></p>`;
+          d.querySelector('[data-c]').addEventListener('click', async ev => { try { await navigator.clipboard.writeText(`Bonjour ${e.prenom || ''},\n\nVoici vos accès Frenglais :\nIdentifiant : ${a.identifiant}\nCode : ${a.code}\n\nÀ entrer sur https://frenglais.co/espace-eleve.html\n\nPaul`); ev.target.textContent = 'Copié ✓'; } catch (x) {} }); })); })); }
+    $e('ae-maj').addEventListener('click', charger); charger(); setInterval(() => { if (!document.hidden) charger(); }, 60000);
+  }
   /* toute réunion s'ouvre sur le compte Frenglais : le sélecteur Google bascule sur contact@frenglais.co (connexion demandée s'il n'est pas encore ajouté) */
   const MEET_COMPTE = 'contact@frenglais.co';
   const lienPro = u => { if (!/^https:\/\/meet\.google\.com\//.test(u || '')) return u; const v = u + (u.includes('?') ? '&' : '?') + 'authuser=' + encodeURIComponent(MEET_COMPTE);

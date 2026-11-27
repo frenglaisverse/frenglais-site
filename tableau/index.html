@@ -829,7 +829,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
         <p class="pf-l"><span><input type="number" min="0" step="1" id="pf-imm-n" class="pf-in" aria-label="Vidéos du mois"> vidéos × 25 $</span><b id="pf-imm-usd">–</b></p><p class="pf-l"><span class="doux" id="pf-fx">–</span></p></article>
       <article class="pf-c" id="pf-mast"><header><span class="pf-lab">Masteur</span><small class="pf-maj" id="pf-mast-maj"></small></header><strong class="pf-v" id="pf-mast-v">–</strong>
         <p class="pf-l"><span><input type="number" min="0" step="0.01" id="pf-mast-e" class="pf-in" style="width:86px" aria-label="Montant Masteur du mois"> €</span><span class="doux" id="pf-mast-info"></span></p></article>
-      <article class="pf-c" id="pf-ling"><header><span class="pf-lab">Lingolus</span></header><strong class="pf-v" id="pf-ling-v">–</strong>
+      <article class="pf-c" id="pf-ling"><header><span class="pf-lab">Lingolis</span></header><strong class="pf-v" id="pf-ling-v">–</strong>
         <p class="pf-l"><span><input type="number" min="0" step="0.25" id="pf-ling-h" class="pf-in" aria-label="Heures du mois" placeholder="0"> h × <input type="number" min="0" step="0.5" id="pf-ling-t" class="pf-in" aria-label="Taux horaire brut"> €/h</span></p></article>
     </div>
     <details class="ventes-detail" id="pf-reglages"><summary class="doux petit">Brancher les Google Sheets · réglages</summary><div>
@@ -1318,7 +1318,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       b.disabled = true; const r = await fetch(API + '/paiement/ventes', { method: 'POST', body: JSON.stringify({ cle, renvoyer: b.dataset.renvoyer }) }).then(r => r.json()).catch(() => ({ erreur: 'réseau' }));
       b.textContent = r.ok ? 'Envoyé ✓' : (r.code ? 'Mail en échec, code : ' + r.code : 'Erreur : ' + r.erreur); })); }
   majVentes();
-  /* onglet Profit : Frenglais (Stripe) + cours particuliers, TalkWithBarb, Immersion (Google Sheets via le script) + Lingolus (saisi à la main) */
+  /* onglet Profit : Frenglais (Stripe) + cours particuliers, TalkWithBarb, Immersion (Google Sheets via le script) + Lingolis (saisi à la main) */
   (() => { const $ = id => document.getElementById(id), cle = () => FRG.lire('frg-cle-tableau', '');
     const auj = new Date().toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }).slice(0, 7); let mois = auj, D = null;
     const eur = v => v == null || isNaN(v) ? '–' : v.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: Math.abs(v % 1) > .004 ? 2 : 0, maximumFractionDigits: 2 });
@@ -1352,7 +1352,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       if (document.activeElement !== inM) { inM.value = M.mastE ?? ''; inM.placeholder = mAuto != null ? String(Math.round(mAuto * 100) / 100) : '0'; }
       $('pf-mast-v').textContent = eur(mv); $('pf-mast-maj').textContent = MS.erreur ? '⚠' : MS.auto ? 'Stripe · ' + ilya(MS.t) : '';
       $('pf-mast-info').textContent = MS.erreur ? MS.erreur : M.mastE != null ? (MS.auto ? 'corrigé à la main' : '') : MS.auto ? 'lu sur Stripe' : 'à saisir';
-      /* Lingolus */
+      /* Lingolis */
       const h = M.lingH || 0, t = M.lingTaux ?? R.tauxLing ?? 35, lv = h * t;
       if (document.activeElement !== $('pf-ling-h')) $('pf-ling-h').value = h || ''; if (document.activeElement !== $('pf-ling-t')) $('pf-ling-t').value = t; $('pf-ling-v').textContent = eur(lv);
       /* totaux */

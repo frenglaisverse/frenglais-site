@@ -23,11 +23,13 @@ function installer() {
   toutEnvoyer(true);
 }
 function toutEnvoyer(force) {
-  envoyer('cours', donneesCours());
-  envoyer('barb', lireBarb());
+  essai('cours', donneesCours);
+  essai('barb', lireBarb);
   const P = PropertiesService.getScriptProperties(), t = +(P.getProperty('immT') || 0);
-  if (force === true || Date.now() - t > 29 * 60000) { P.setProperty('immT', String(Date.now())); envoyer('imm', lireImm()); }
+  if (force === true || Date.now() - t > 29 * 60000) { P.setProperty('immT', String(Date.now())); essai('imm', lireImm); }
 }
+/* une source en panne n'empêche pas les autres, et l'erreur s'affiche dans le tableau de bord */
+function essai(source, f) { let d; try { d = f(); } catch (x) { d = { erreur: String(x && x.message || x).slice(0, 200) }; } envoyer(source, d); }
 function surModifCours(e) {
   try { const c = lireCours(), r = e && e.range;
     if (r && c.feuille === r.getSheet().getName()) { const n = c.ligneNom[r.getRow()];

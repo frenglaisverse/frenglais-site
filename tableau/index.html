@@ -1331,17 +1331,17 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       const M = D.manuel.mois[mois] || {}, R = D.manuel.reglages || {}, taux = R.tauxNet ?? 25.8, fx = (mois === auj ? D.fx && D.fx.taux : D.fxMois[mois]) || (D.fx && D.fx.taux) || null;
       const enEur = usd => fx ? usd / fx : null;
       /* cours particuliers */
-      const C = D.cours || {}, cv = C.owed ? C.owed[mois] : null, du = C.totalOwed, pa = C.totalPaid;
+      const H = D.archive || {}, C = D.cours || {}, cv = C.owed && C.owed[mois] != null ? C.owed[mois] : (H.cours || {})[mois] ?? null, du = C.totalOwed, pa = C.totalPaid;
       $('pf-cours-v').textContent = eur(cv); $('pf-cours-paye').textContent = eur(pa); $('pf-cours-du').textContent = eur(du); $('pf-cours-reste').textContent = du != null && pa != null ? eur(Math.max(0, du - pa)) : '–';
       $('pf-cours-maj').textContent = D.cours ? ilya(D.cours.recu) : 'Sheet non branché';
       const muets = R.muets || [], E = Object.entries(C.eleves || {}).map(([n, t]) => [n, Math.floor((Date.now() - t) / 864e5)]).filter(([, j]) => j >= 4).sort((a, b) => b[1] - a[1]);
       $('pf-absents').innerHTML = mois === auj && E.length ? '<span class="doux">Sans cours depuis :</span>' + E.map(([n, j]) => `<span class="${muets.includes(n) ? 'muet' : ''}">${esc(n)} · ${j} j<button type="button" data-muet="${esc(n)}" title="${muets.includes(n) ? 'Réactiver le rappel Telegram' : 'Couper le rappel Telegram (pause, vacances…)'}">${muets.includes(n) ? '🔕' : '🔔'}</button></span>`).join('') : '';
       /* TalkWithBarb */
-      const B = D.barb || {}, bv0 = B.mois ? B.mois[mois] : null, bUsd = R.deviseBarb === 'USD', bv = bv0 == null ? null : bUsd ? enEur(bv0) : bv0;
+      const B = D.barb || {}, bv0 = B.mois && B.mois[mois] != null ? B.mois[mois] : (H.barb || {})[mois] ?? null, bUsd = R.deviseBarb === 'USD', bv = bv0 == null ? null : bUsd ? enEur(bv0) : bv0;
       $('pf-barb-v').textContent = eur(bv); $('pf-barb-paye').checked = !!M.barbPaye; $('pf-barb').classList.toggle('paye', !!M.barbPaye);
-      $('pf-barb-info').textContent = !D.barb ? 'Sheet non branché' : B.erreur ? B.erreur : bv0 == null ? 'rien ce mois-ci' : (bUsd ? bv0.toLocaleString('fr-FR') + ' $ · ' : '') + 'lu en ' + (B.ou[mois] || B.ou.journal || '?') + ' · ' + ilya(B.recu);
+      $('pf-barb-info').textContent = !D.barb ? 'Sheet non branché' : B.erreur ? B.erreur : bv0 == null ? 'rien ce mois-ci' : (bUsd ? bv0.toLocaleString('fr-FR') + ' $ · ' : '') + ((B.ou || {})[mois] || (B.ou || {}).journal ? 'lu en ' + ((B.ou || {})[mois] || B.ou.journal) : 'archivé') + ' · ' + ilya(B.recu);
       /* Immersion */
-      const I = D.imm || {}, nAuto = I.mois ? I.mois[mois] || 0 : 0, n = M.immN ?? nAuto, iv = enEur(n * 25);
+      const I = D.imm || {}, nAuto = (I.mois && I.mois[mois]) || (H.imm || {})[mois] || 0, n = M.immN ?? nAuto, iv = enEur(n * 25);
       const inN = $('pf-imm-n'); if (document.activeElement !== inN) { inN.value = n; inN.title = M.immN != null ? 'Corrigé à la main (Sheet : ' + nAuto + ') · videz pour revenir au Sheet' : 'Lu dans le Sheet'; }
       $('pf-imm-usd').textContent = (n * 25).toLocaleString('fr-FR') + ' $'; $('pf-imm-v').textContent = eur(iv); $('pf-imm-paye').checked = !!M.immPaye; $('pf-imm').classList.toggle('paye', !!M.immPaye);
       $('pf-fx').textContent = fx ? '1 € = ' + fx.toLocaleString('fr-FR', { maximumFractionDigits: 4 }) + ' $ · BCE' + (mois === auj && D.fx.jour ? ' du ' + new Date(D.fx.jour).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '') : 'taux BCE indisponible';

@@ -534,7 +534,7 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 .ae-carte{margin-top:12px;padding:14px 16px;border-radius:14px;border:1px dashed var(--trait);font-size:14px}.ae-carte code{font:600 16px var(--f-mono)}
 .pf-tete{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.pf-titre{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.pf-titre h2{margin:0}
 .pf-nav{display:flex;align-items:center;gap:6px}.pf-nav b{font:600 14px var(--f-txt);min-width:120px;text-align:center;text-transform:capitalize}.pf-nav button{width:30px;height:30px;border-radius:50%;border:1px solid var(--trait);background:var(--carte);color:var(--encre);font-size:17px;line-height:1;cursor:pointer}.pf-nav button:disabled{opacity:.3;cursor:default}
-.pf-coin{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font:500 12px var(--f-mono);color:var(--doux);letter-spacing:.02em}.pf-coin b{color:var(--encre);font-weight:700}.pf-coin span:last-child b{color:#4FC79F}
+.pf-coin{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font:500 12px var(--f-mono);color:var(--doux);letter-spacing:.02em}.pf-coin b{color:var(--encre);font-weight:700}.pf-coin span:nth-child(2) b{color:#4FC79F}.pf-coin .pf-enc b{color:#E8836F}
 .pf-src{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;flex-wrap:wrap}.pf-lab{font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--doux)}
 .pf-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--trait)}
 .pf-c{border:1px solid var(--trait);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}.pf-c header{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:24px}
@@ -814,7 +814,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   </section>
 
   <section data-onglet="ventes" class="carte" id="ventes">
-    <div class="pf-tete"><div class="pf-titre"><h2>Profit</h2><div class="pf-nav"><button type="button" id="pf-av" aria-label="Mois précédent">‹</button><b id="pf-mois">–</b><button type="button" id="pf-ap" aria-label="Mois suivant">›</button></div></div><div class="pf-coin"><span>brut : <b id="pf-brut">–</b></span><span>net : <b id="pf-net">–</b></span></div></div>
+    <div class="pf-tete"><div class="pf-titre"><h2>Profit</h2><div class="pf-nav"><button type="button" id="pf-av" aria-label="Mois précédent">‹</button><b id="pf-mois">–</b><button type="button" id="pf-ap" aria-label="Mois suivant">›</button></div></div><div class="pf-coin"><span>brut : <b id="pf-brut">–</b></span><span>net : <b id="pf-net">–</b></span><span class="pf-enc">à encaisser : <b id="pf-enc">–</b></span></div></div>
     <div class="pf-src"><span class="pf-lab">Frenglais</span><span class="doux petit" id="ventes-etat"></span></div>
     <div class="vg-tete"><div class="vg-tot"><div class="vg-hero"><small class="doux" id="v-mois-nom"></small><strong id="v-mois-e">–</strong><span class="doux"><span id="v-mois">–</span> · <span id="v-comp"></span></span></div><div class="vg-auj"><small class="doux">Aujourd'hui</small><b id="v-jour-e">–</b><span class="doux" id="v-jour"></span></div></div>
     <div class="vg-choix" role="tablist"><button type="button" data-vg="jours" aria-selected="true">30 jours</button><button type="button" data-vg="mois" aria-selected="false">12 mois</button></div></div>
@@ -824,7 +824,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       <article class="pf-c" id="pf-cours"><header><span class="pf-lab">Cours particuliers</span><small class="pf-maj" id="pf-cours-maj"></small></header><strong class="pf-v" id="pf-cours-v">–</strong>
         <p class="pf-l"><span>Payé à ce jour</span><b id="pf-cours-paye">–</b></p><p class="pf-l"><span>Total dû</span><b id="pf-cours-du">–</b></p><p class="pf-l pf-reste"><span>Reste à encaisser</span><b id="pf-cours-reste">–</b></p>
         <div class="pf-absents" id="pf-absents"></div></article>
-      <article class="pf-c" id="pf-barb"><header><span class="pf-lab">TalkWithBarb</span><label class="pf-paye" title="Payé"><input type="checkbox" id="pf-barb-paye"><i></i></label></header><strong class="pf-v" id="pf-barb-v">–</strong><p class="pf-l"><span id="pf-barb-info" class="doux">–</span></p></article>
+      <article class="pf-c" id="pf-barb"><header><span class="pf-lab">TalkWithBarb</span><label class="pf-paye" title="Payé"><input type="checkbox" id="pf-barb-paye"><i></i></label></header><strong class="pf-v" id="pf-barb-v">–</strong><p class="pf-l"><span>+ <input type="number" min="0" step="0.25" id="pf-barb-h" class="pf-in" placeholder="0" aria-label="Heures ajoutées à la main"> h × <input type="number" min="0" step="0.05" id="pf-barb-t" class="pf-in" style="width:70px" aria-label="Taux horaire brut TalkWithBarb"> <span id="pf-barb-dv">€</span></span></p><p class="pf-l"><span id="pf-barb-info" class="doux">–</span></p></article>
       <article class="pf-c" id="pf-imm"><header><span class="pf-lab">Immersion</span><label class="pf-paye" title="Payé"><input type="checkbox" id="pf-imm-paye"><i></i></label></header><strong class="pf-v" id="pf-imm-v">–</strong>
         <p class="pf-l"><span><input type="number" min="0" step="1" id="pf-imm-n" class="pf-in" aria-label="Vidéos du mois"> vidéos × 25 $</span><b id="pf-imm-usd">–</b></p><p class="pf-l"><span class="doux" id="pf-fx">–</span></p></article>
       <article class="pf-c" id="pf-mast"><header><span class="pf-lab">Masteur</span><small class="pf-maj" id="pf-mast-maj"></small></header><strong class="pf-v" id="pf-mast-v">–</strong>
@@ -1339,9 +1339,10 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       const muets = R.muets || [], E = Object.entries(C.eleves || {}).map(([n, t]) => [n, Math.floor((Date.now() - t) / 864e5)]).filter(([, j]) => j >= 4).sort((a, b) => b[1] - a[1]);
       $('pf-absents').innerHTML = mois === auj && E.length ? '<span class="doux">Sans cours depuis :</span>' + E.map(([n, j]) => `<span class="${muets.includes(n) ? 'muet' : ''}">${esc(n)} · ${j} j<button type="button" data-muet="${esc(n)}" title="${muets.includes(n) ? 'Réactiver le rappel Telegram' : 'Couper le rappel Telegram (pause, vacances…)'}">${muets.includes(n) ? '🔕' : '🔔'}</button></span>`).join('') : '';
       /* TalkWithBarb */
-      const B = D.barb || {}, bv0 = B.mois && B.mois[mois] != null ? B.mois[mois] : (H.barb || {})[mois] ?? null, bUsd = R.deviseBarb === 'USD', bv = bv0 == null ? null : bUsd ? enEur(bv0) : bv0;
+      const B = D.barb || {}, bv0 = B.mois && B.mois[mois] != null ? B.mois[mois] : (H.barb || {})[mois] ?? null, bUsd = R.deviseBarb === 'USD', bH = M.barbH || 0, bT = R.tauxBarb ?? 12.75, bTot = bv0 == null && !bH ? null : (bv0 || 0) + bH * bT, bv = bTot == null ? null : bUsd ? enEur(bTot) : bTot;
+      if (document.activeElement !== $('pf-barb-h')) $('pf-barb-h').value = bH || ''; if (document.activeElement !== $('pf-barb-t')) $('pf-barb-t').value = bT; $('pf-barb-dv').textContent = bUsd ? '$' : '€';
       $('pf-barb-v').textContent = eur(bv); $('pf-barb-paye').checked = !!M.barbPaye; $('pf-barb').classList.toggle('paye', !!M.barbPaye);
-      $('pf-barb-info').textContent = !D.barb ? 'Sheet non branché' : B.erreur ? B.erreur : bv0 == null ? 'rien ce mois-ci' : (bUsd ? bv0.toLocaleString('fr-FR') + ' $ · ' : '') + ((B.ou || {})[mois] || (B.ou || {}).journal ? 'lu en ' + ((B.ou || {})[mois] || B.ou.journal) : 'archivé') + ' · ' + ilya(B.recu);
+      $('pf-barb-info').textContent = (bH ? 'Sheet ' + (bv0 || 0).toLocaleString('fr-FR') + (bUsd ? ' $' : ' €') + ' + ' + (bH * bT).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + (bUsd ? ' $' : ' €') + ' ajoutés · ' : '') + (!D.barb ? 'Sheet non branché' : B.erreur ? B.erreur : bv0 == null ? 'rien ce mois-ci' : (bUsd ? bv0.toLocaleString('fr-FR') + ' $ · ' : '') + ((B.ou || {})[mois] || (B.ou || {}).journal ? 'lu en ' + ((B.ou || {})[mois] || B.ou.journal) : 'archivé') + ' · ' + ilya(B.recu));
       /* Immersion */
       const I = D.imm || {}, nAuto = (I.mois && I.mois[mois]) || (H.imm || {})[mois] || 0, n = M.immN ?? nAuto, iv = enEur(n * 25);
       const inN = $('pf-imm-n'); if (document.activeElement !== inN) { inN.value = n; inN.title = M.immN != null ? 'Corrigé à la main (Sheet : ' + nAuto + ') · videz pour revenir au Sheet' : 'Lu dans le Sheet'; }
@@ -1358,6 +1359,8 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       /* totaux */
       const brut = fren + (cv || 0) + (bv || 0) + (iv || 0) + (mv || 0) + lv; $('pf-brut').textContent = eur(brut); $('pf-net').textContent = eur(brut * (1 - taux / 100));
       $('pf-net').parentNode.title = 'brut − ' + String(taux).replace('.', ',') + ' % de cotisations';
+      { const rc = du != null && pa != null ? Math.max(0, du - pa) : 0, rb = !M.barbPaye && bv ? bv : 0, ri = !M.immPaye && iv ? iv : 0;
+        $('pf-enc').textContent = eur(rc + rb + ri); $('pf-enc').parentNode.title = 'Cours particuliers ' + eur(rc) + ' (tous mois) · TalkWithBarb ' + eur(rb) + ' · Immersion ' + eur(ri) + ' (non cochés ce mois-ci)'; }
       if (document.activeElement !== $('pf-taux')) $('pf-taux').value = taux; $('pf-barb-dev').value = R.deviseBarb || 'EUR';
       const ligne = (nom, x) => !x ? `<span class="ko">✗ ${nom} : rien reçu pour l’instant</span>` : x.erreur ? `<span class="ko">⚠ ${nom} : ${esc(x.erreur)}</span>` : `<span>✓ ${nom} · ${ilya(x.recu)}${x.methode ? ' · ' + esc(x.methode) : ''}${x.feuille ? ' · onglet ' + esc(x.feuille) : ''}${x.eleves ? ' · ' + Object.keys(x.eleves).length + ' élèves repérés : ' + Object.keys(x.eleves).map(esc).join(', ') : ''}</span>`;
       $('pf-etat').innerHTML = ligne('Cours particuliers', D.cours) + ligne('TalkWithBarb', D.barb) + ligne('Immersion', D.imm); }
@@ -1365,6 +1368,8 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     $('pf-av').onclick = () => { mois = decale(mois, -1); rendre(); }; $('pf-ap').onclick = () => { if (mois < auj) { mois = decale(mois, 1); rendre(); } };
     $('pf-barb-paye').onchange = e => enr({ barbPaye: e.target.checked }); $('pf-imm-paye').onchange = e => enr({ immPaye: e.target.checked });
     $('pf-imm-n').onchange = e => enr({ immN: e.target.value === '' ? null : +e.target.value });
+    $('pf-barb-h').onchange = e => enr({ barbH: e.target.value === '' ? null : +e.target.value });
+    $('pf-barb-t').onchange = e => appel({ reglages: { tauxBarb: +e.target.value } }).catch(x => alert(x.message));
     $('pf-mast-e').onchange = e => enr({ mastE: e.target.value === '' ? null : +e.target.value });
     $('pf-ling-h').onchange = e => enr({ lingH: e.target.value === '' ? null : +e.target.value });
     $('pf-ling-t').onchange = e => { const v = +e.target.value; appel({ mois, set: { lingTaux: v }, reglages: { tauxLing: v } }).catch(x => alert(x.message)); };

@@ -321,6 +321,66 @@ details summary{cursor:pointer;font-weight:600}
 .case input{width:22px;height:22px;margin-top:2px;accent-color:var(--bleu)}
 .aide{font-size:14px;color:var(--doux)}
 @media (max-width:520px){.bi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* modernisation : rail en Courbe, S + V + Cplt, icônes des codes, message vocal façon iPhone, levier de vitesses */
+.rail-courbe svg{display:block;width:100%;height:auto;overflow:visible}
+.rail-courbe .c-fond,.rail-courbe .c-fleche{fill:none;stroke:var(--trait);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.rail-courbe .c-plein{fill:none;stroke:#E3191F;stroke-width:7;stroke-linecap:round;stroke-dasharray:100 100;stroke-dashoffset:98;transition:stroke-dashoffset .6s cubic-bezier(.3,.8,.3,1)}
+.rail-courbe circle{fill:#fff;stroke:#1a1a1a;stroke-width:3.5;transition:cx .6s,cy .6s}
+.ico-code{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em;flex:none}
+.ico-code .pl{fill:currentColor;stroke:none}
+.choix .ico-code{margin-right:6px}
+.svc{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:8px;margin:14px 0 6px}
+.svc-b{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px;border-radius:14px;border:1.5px dashed var(--trait);text-align:center}
+.svc-b small{font:600 11px var(--f-mono);letter-spacing:.1em;color:var(--doux)}
+.svc-b b{font-size:19px}.svc-b span{font-size:12px;color:var(--doux)}
+.svc-v{border-style:solid;border-color:var(--bleu);background:var(--verre)}
+.svc-v b .c-s{color:var(--bleu);text-decoration:underline;text-underline-offset:4px}
+.codes-duo{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px}
+.code-pill{display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 10px;border-radius:99px;font-size:14px}
+.code-pill b{font:700 15px var(--f-mono)}
+.code-pill.ed{background:color-mix(in srgb,var(--corail) 16%,transparent);color:var(--corail-txt)}
+.code-pill.s{background:var(--verre);color:var(--bleu)}
+.pastille .ico-code{margin-right:5px}
+.tel{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",var(--f-txt);background:#fff;color:#000;border-radius:24px;box-shadow:0 18px 40px -26px rgba(14,27,61,.55),0 0 0 1px #E2E6F0;overflow:hidden;margin:14px 0}
+.tel-tete{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 12px 10px;background:rgba(246,246,248,.96);border-bottom:1px solid #E5E5EA}
+.tel-av{width:46px;height:46px;border-radius:50%;background:linear-gradient(#A5ABB6,#858B97);color:#fff;display:grid;place-items:center;font:600 19px/1 inherit}
+.tel-tete b{font-size:13px;font-weight:500}.tel-tete small{font-size:11px;color:#8A8A8E}
+.note-v{--nv-fond:#E9E9EB;--nv-barre:#9C9CA1;--nv-lu:#0A84FF;--nv-t:#6C6C70;display:flex;align-items:center;gap:12px;background:var(--nv-fond);border-radius:26px;padding:9px 18px 9px 9px;max-width:360px;margin:14px 14px 4px;font-family:inherit}
+.nv-play{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:#0A84FF;display:grid;place-items:center;cursor:pointer;padding:0}
+.nv-play svg{width:20px;height:20px;fill:#fff}
+.nv-onde{flex:1;display:flex;align-items:center;justify-content:space-between;gap:2px;height:30px;cursor:pointer;outline:none;min-width:90px}
+.nv-onde i{display:block;width:3px;border-radius:2px;background:var(--nv-barre);transition:background .15s}.nv-onde i.lu{background:var(--nv-lu)}
+.nv-t{flex:none;font-size:15px;color:var(--nv-t);font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+.tr-repli{padding-bottom:4px}.tr-barre{display:flex;align-items:center;justify-content:space-between;padding-right:12px}
+.tr-tog{display:inline-flex;align-items:center;gap:4px;background:none;border:0;padding:8px 16px;font:500 12px/1 inherit;letter-spacing:.05em;text-transform:uppercase;color:#8A8A8E;cursor:pointer}
+.tr-tog svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.tr-repli.ouvert .tr-tog svg{transform:rotate(90deg)}.tr-tog:hover{color:#0A84FF}
+.tr-codes{background:none;border:0;font:600 11px var(--f-mono);letter-spacing:.06em;color:#A1A1A6;cursor:pointer;padding:4px 8px;border-radius:6px}
+.tr-codes[aria-pressed="true"]{color:#1C49A5;background:#EEF3FF}
+.tr-corps{border-top:1px solid #E5E5EA;margin:0 14px}
+.tel .trans{padding:12px 4px 16px;font-size:16.5px;line-height:1.9}
+.tel .trans .t-l{margin:0 0 6px;padding-left:10px;border-left:2px solid transparent;transition:border-color .2s}
+.tel .trans .t-l.dit{border-left-color:#0A84FF}
+.k i{display:none;font:700 10px var(--f-mono);font-style:normal;vertical-align:super;margin-left:1px}
+.codes-on .k-s{color:#1C49A5;text-decoration:underline;text-underline-offset:4px}.codes-on .k-ed{color:#D9483F;text-decoration:underline;text-underline-offset:4px}
+.codes-on .k i{display:inline}.codes-on .k-inv{text-decoration-style:dashed}.codes-on .k-inv i{opacity:.6}
+.meca-box{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:14px 16px;border-radius:18px;background:#FBF7EE;color:#0E1B3D;border:1.5px solid #E6DFCF;margin:14px 0}
+.meca-box p{flex:1 1 240px;margin:0;font-size:15.5px}.meca-box .c-s{color:#1C49A5}.meca-box .c-ed{color:#D9483F}
+.meca{width:min(100%,280px);height:auto}
+.m-plaque{fill:#fff;stroke:#1a1a1a;stroke-width:2.5}.m-fente{fill:none;stroke:#1a1a1a;stroke-width:14;stroke-linecap:round;stroke-linejoin:round}.m-fente2{fill:none;stroke:#EDE7DA;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.m-tige{stroke:#1a1a1a;stroke-width:6;stroke-linecap:round}.m-pommeau circle{fill:#1a1a1a}.m-pommeau .m-reflet{fill:#fff;opacity:.35}.m-socle{fill:#1a1a1a}
+.m-verbe{fill:#FBF7EE;font:700 13px var(--f-mono);letter-spacing:.12em;text-anchor:middle}
+.meca .m-s,.meca .m-ed{font:700 13px var(--f-mono);text-anchor:middle}.meca .m-s{fill:#1C49A5}.meca .m-ed{fill:#e3191f}.meca .m-gros{font-size:22px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){}
+  :root:not([data-theme="light"]) .tel{background:#000;color:#fff;box-shadow:0 0 0 1px #2C2C2E}
+  :root:not([data-theme="light"]) .tel-tete{background:rgba(28,28,30,.96);border-color:#2C2C2E}
+  :root:not([data-theme="light"]) .note-v{--nv-fond:#262629;--nv-barre:#6E6E73;--nv-t:#9A9AA0}
+  :root:not([data-theme="light"]) .tr-corps{border-color:#2C2C2E}
+  :root:not([data-theme="light"]) .codes-on .k-s{color:#7FA6FF}
+  :root:not([data-theme="light"]) .rail-courbe circle{fill:var(--carte);stroke:var(--encre)}}
+@media (max-width:420px){.svc-b b{font-size:16px}.svc{gap:6px}}
+@media (prefers-reduced-motion: reduce){.rail-courbe .c-plein,.rail-courbe circle{transition:none}}
 </style>
 
 <div class="bandeau"><div class="in">
@@ -337,7 +397,7 @@ details summary{cursor:pointer;font-weight:600}
 <main>
   <div class="rail" aria-live="polite">
     <div class="meta"><span id="etape-nom">Le rituel</span></div>
-    <div class="barre" role="progressbar" aria-label="Progression du module" aria-valuemin="0" aria-valuemax="100" id="barre-box"><i id="barre"></i></div>
+    <div class="rail-courbe" role="progressbar" aria-label="Progression de l'introduction" aria-valuemin="0" aria-valuemax="100" id="barre-box"><svg viewBox="0 0 600 70" aria-hidden="true"><path class="c-fond" d="M14 58 C 90 58, 118 24, 196 24 S 292 62, 372 52 S 488 18, 586 22"/><path class="c-plein" id="barre" d="M14 58 C 90 58, 118 24, 196 24 S 292 62, 372 52 S 488 18, 586 22" pathLength="100"/><path class="c-fleche" d="M572 12 L590 22 L574 34"/><circle id="barre-pt" cx="14" cy="58" r="8"/></svg></div>
     <div class="pct"><span id="etape-num">0 %</span></div>
   </div>
 
@@ -354,6 +414,67 @@ details summary{cursor:pointer;font-weight:600}
   </div>
 </main>
 
+<script>
+/* ---------- note vocale façon iPhone : lecture, onde qui se remplit, durée, transcription repliable ---------- */
+(function(){
+  let enCours = null;
+  const fmt = s => !isFinite(s) || s < 0 ? '0:00' : Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  const ICO_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>', ICO_PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg>';
+  /* src : fichier audio (ou blob) ; o.secours(fin) : lecture de secours (synthèse) si le fichier manque ; o.petit ; o.lien : élément de transcription à replier */
+  function note(src, o){
+    o = o || {};
+    const n = o.petit ? 22 : 34; let h = 2166136261; for (const c of String(o.graine || src)) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+    const barres = Array.from({ length: n }, (_, i) => { h = Math.imul(h ^ (h >>> 13), 1597334677) >>> 0; const base = 0.25 + (h % 1000) / 1000 * 0.75, env = Math.sin(Math.PI * (i + .5) / n) * .35 + .65; return Math.max(.18, base * env); });
+    const d = document.createElement('div'); d.className = 'note-v' + (o.petit ? ' petit' : ''); d.lang = 'fr';
+    d.innerHTML = `<button type="button" class="nv-play" aria-label="Écouter">${ICO_PLAY}</button><div class="nv-onde" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">${barres.map(v => `<i style="height:${Math.round(v * 100)}%"></i>`).join('')}</div><span class="nv-t">0:00</span>`;
+    const bt = d.querySelector('.nv-play'), onde = d.querySelector('.nv-onde'), t = d.querySelector('.nv-t'), bs = [...onde.children];
+    const a = new Audio(); a.preload = 'metadata'; a.src = src; let duree = NaN, secoursActif = false, lisant = false;
+    const peindre = p => { const k = Math.round(p * n); bs.forEach((b, i) => b.classList.toggle('lu', i < k)); onde.setAttribute('aria-valuenow', Math.round(p * 100)); };
+    const etat = on => { lisant = on; d.classList.toggle('joue', on); bt.innerHTML = on ? ICO_PAUSE : ICO_PLAY; bt.setAttribute('aria-label', on ? 'Pause' : 'Écouter'); };
+    a.addEventListener('loadedmetadata', () => { duree = a.duration; if (isFinite(duree)) t.textContent = fmt(duree); });
+    a.addEventListener('timeupdate', () => { if (isFinite(a.duration)) { peindre(a.currentTime / a.duration); t.textContent = fmt(a.currentTime); d.dispatchEvent(new CustomEvent('nvtemps', { bubbles: true, detail: a.currentTime / a.duration })); } else t.textContent = fmt(a.currentTime); });
+    a.addEventListener('pause', () => d.dispatchEvent(new CustomEvent('nvtemps', { bubbles: true, detail: -1 })));
+    a.addEventListener('ended', () => { etat(false); peindre(0); t.textContent = isFinite(a.duration) ? fmt(a.duration) : fmt(a.currentTime); o.fin && o.fin(true); });
+    let echec = false; a.addEventListener('error', () => { echec = true; if (o.secours) t.textContent = ''; });
+    const arreter = () => { if (secoursActif) { try { speechSynthesis.cancel(); } catch (e) {} secoursActif = false; etat(false); peindre(0); } else { a.pause(); etat(false); } };
+    const jouer = () => {
+      if (enCours && enCours !== arreter) enCours(); enCours = arreter;
+      if (echec && o.secours) { secoursActif = true; etat(true); let p = 0; const it = setInterval(() => { if (!secoursActif) return clearInterval(it); p = (p + .02) % 1; peindre(p); }, 200);
+        o.secours(ok => { clearInterval(it); secoursActif = false; etat(false); peindre(0); o.fin && o.fin(ok); }); return; }
+      a.play().then(() => etat(true)).catch(() => { echec = true; if (o.secours) jouer(); });
+    };
+    bt.addEventListener('click', () => lisant ? arreter() : jouer());
+    const viser = x => { if (!isFinite(a.duration) || echec) return; const r = onde.getBoundingClientRect(); a.currentTime = Math.max(0, Math.min(1, (x - r.left) / r.width)) * a.duration; peindre(a.currentTime / a.duration); if (!lisant) jouer(); };
+    onde.addEventListener('click', e => viser(e.clientX));
+    onde.addEventListener('keydown', e => { if (!isFinite(a.duration)) return; if (e.key === 'ArrowRight') a.currentTime = Math.min(a.duration, a.currentTime + 5); if (e.key === 'ArrowLeft') a.currentTime = Math.max(0, a.currentTime - 5); if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); lisant ? arreter() : jouer(); } });
+    d.audio = a; d.jouer = jouer; d.arreter = arreter;
+    return d;
+  }
+  /* bouton « Transcription » qui déplie un bloc */
+  function repli(corps, ouvert){
+    const w = document.createElement('div'); w.className = 'tr-repli' + (ouvert ? ' ouvert' : '');
+    w.innerHTML = `<button type="button" class="tr-tog" aria-expanded="${ouvert ? 'true' : 'false'}"><span>Transcription</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button><div class="tr-corps"${ouvert ? '' : ' hidden'}></div>`;
+    const c = w.querySelector('.tr-corps'); if (typeof corps === 'string') c.innerHTML = corps; else c.append(corps);
+    return w;
+  }
+  /* remplace chaque <div class="nv-slot" data-src> par une note vocale ; secours(src, fin) optionnel */
+  function monter(racine, secours){
+    (racine || document).querySelectorAll('.nv-slot').forEach(s => { const src = s.dataset.src; const nv = note(src, { petit: s.classList.contains('petit'), graine: s.dataset.graine, secours: secours ? fin => secours(s, fin) : null }); s.replaceWith(nv); });
+    (racine || document).querySelectorAll('audio[controls]').forEach(au => { if (au.closest('.note-v')) return; const nv = note(au.src, { petit: true, graine: 'voix' + Math.random() }); au.replaceWith(nv); });
+  }
+  const repliHTML = (corps, ouvert) => `<div class="tr-repli${ouvert ? ' ouvert' : ''}"><button type="button" class="tr-tog" aria-expanded="${ouvert ? 'true' : 'false'}"><span>Transcription</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button><div class="tr-corps"${ouvert ? '' : ' hidden'}>${corps}</div></div>`;
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('.tr-tog'); if (!b) return; const w = b.closest('.tr-repli'), c = w.querySelector('.tr-corps'), o = c.hidden; c.hidden = !o; w.classList.toggle('ouvert', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); if (o && w.dataset.ouvert !== '1') { w.dataset.ouvert = '1'; w.dispatchEvent(new CustomEvent('ouvert', { bubbles: true })); } });
+  /* la transcription suit l'audio : la phrase entendue s'éclaire (estimation au prorata de la longueur du texte) */
+  document.addEventListener('nvtemps', e => { const tel = e.target.closest('.tel'); if (!tel) return; const L = [...tel.querySelectorAll('.trans .t-l')]; if (!L.length) return;
+    const p = e.detail; if (p < 0) { L.forEach(l => l.classList.remove('dit')); return; }
+    const tot = L.reduce((a, l) => a + l.textContent.length, 0); let c = 0, k = 0; for (; k < L.length; k++) { c += L[k].textContent.length; if (c / tot >= p) break; }
+    L.forEach((l, i) => l.classList.toggle('dit', i === Math.min(k, L.length - 1))); });
+  window.FRGNote = { note, repli, repliHTML, monter };
+  /* toute balise <audio controls> ajoutée plus tard (vos enregistrements) devient une note vocale */
+  if (window.MutationObserver) new MutationObserver(ms => { for (const m of ms) for (const x of m.addedNodes) if (x.nodeType === 1 && (x.matches('audio[controls]') || x.querySelector('audio[controls]'))) { monter(x.parentNode || x); } }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+
+</script>
 <script>
 (function(){
 const ecran=document.getElementById('ecran');
@@ -373,6 +494,10 @@ function dire(t){
   try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang='en-US'; if(voixEn) u.voice=voixEn; u.rate=.92; speechSynthesis.speak(u); return true;}catch(e){return false}
 }
 const icoSon='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const ICO_S='<svg class="ico-code" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="5" class="pl"/><circle cx="16" cy="16" r="11.5"/></svg>';
+const ICO_ED='<svg class="ico-code" viewBox="0 0 32 32" aria-hidden="true"><path d="M26 22a10 10 0 1 0-17-9"/><path d="M4 8l5 6 6-5"/></svg>';
+/* ordre des réponses mélangé, mais toujours le même pour une question donnée */
+function ordre(cle,n){ let h=2166136261; for(const c of String(cle)) h=Math.imul(h^c.charCodeAt(0),16777619); const a=[...Array(n).keys()]; for(let i=n-1;i>0;i--){ h=Math.imul(h^(h>>>13),1597334677)>>>0; const j=h%(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function btnEcoute(t,label){return `<button type="button" class="ecoute" data-dire="${t.replace(/"/g,'&quot;')}">${icoSon}${label||'Écouter'}</button>`}
 
 // ---------- Courbe SVG ----------
@@ -433,7 +558,7 @@ const listeCourbe=`<ul class="liste-courbe">
   <li><strong>Un exemple sous chaque temps</strong>, si possible le vôtre.</li>
 </ul>`;
 const etagesCourbe=`<div class="etages" aria-label="Comment la Courbe s'enrichit">
-  ${[['Semaine 1',[['Module 1','Repères et codes',1],['Module 2','T0, le présent',0]]],['Semaine 2',[['Module 3','T-1, le passé',0],['Module 4','BE + -ING',0]]],['Semaine 3',[['Module 5','HAVE + -EN',0],['Module 6','T-2',0]]]].map(g=>`<div class="semaine" style="--n:${g[1].length}"><span class="semaine-lab">${g[0]}</span><div class="semaine-mods">${g[1].map(e=>`<div class="etage${e[2]?' actif':''}"><span>${e[0]}</span><strong>${e[1]}</strong></div>`).join('')}</div></div>`).join('')}
+  ${[['Semaine 1',[['Module 1','Repères et codes',1],['Module 2','T0, le temps le plus simple',0]]],['Semaine 2',[['Module 3','T-1, toujours simple',0],['Module 4','BE + -ING',0]]],['Semaine 3',[['Module 5','HAVE + -EN',0],['Module 6','T-2, le passé dans le passé',0]]]].map(g=>`<div class="semaine" style="--n:${g[1].length}"><span class="semaine-lab">${g[0]}</span><div class="semaine-mods">${g[1].map(e=>`<div class="etage${e[2]?' actif':''}"><span>${e[0]}</span><strong>${e[1]}</strong></div>`).join('')}</div></div>`).join('')}
 </div>`;
 const etagesIntro=etagesCourbe.replace(' actif','').replace('<div class="etage"><span>Module 1</span>','<div class="etage actif"><span>Module 1</span>');
 
@@ -560,7 +685,7 @@ function qcm(id,question,choix,bonne,explication,ecoute){
   QLAB[id]=question.replace(/<[^>]+>/g,'').slice(0,90)+(ecoute?' « '+ecoute+' »':'');
   return `<div class="q" data-q="${id}">
     <div>${question}</div>${ecoute?`<div>${btnEcoute(ecoute,'Écouter la phrase')}</div>`:''}
-    <div class="choix-liste">${choix.map((c,i)=>`<button type="button" class="choix" data-i="${i}" data-b="${bonne}">${c}</button>`).join('')}</div>
+    <div class="choix-liste">${ordre(id,choix.length).map(i=>`<button type="button" class="choix" data-i="${i}" data-b="${bonne}">${choix[i]}</button>`).join('')}</div>
     <div class="retour" aria-live="polite" data-exp="${explication.replace(/"/g,'&quot;')}"></div></div>`;
 }
 function ecrire(id,question,bonnes,explication,indice){
@@ -681,7 +806,13 @@ const etapes=[
    <div class="eyebrow">Les codes</div>
    <h1>Chaque temps a son code : -ed et -s.</h1>
    ${courbe()}
-   <p>À T-1, le verbe porte le code <b class="c-ed">-ed</b>. À T0, le code <b class="c-s">-s</b>. </p>
+   <div class="svc" aria-label="Une phrase : sujet, verbe, complément">
+     <div class="svc-b"><small>S</small><b class="en">She</b><span>qui ?</span></div>
+     <div class="svc-b svc-v"><small>V</small><b class="en">leave<span class="c-s">s</span></b><span>porte le temps</span></div>
+     <div class="svc-b"><small>Cplt</small><b class="en">at noon</b><span>le reste</span></div>
+   </div>
+   <p>Toute phrase anglaise suit le même moule : <strong>S + V + Cplt</strong>. Le V, c'est le verbe conjugué, parfois un petit groupe de mots : c'est lui, et lui seul, qui porte le code.</p>
+   <div class="codes-duo"><span class="code-pill ed">${ICO_ED}<b>-ed</b> T-1, le passé</span><span class="code-pill s">${ICO_S}<b>-s</b> T0, le présent</span></div>
    <div class="vitre-demo">
      <div class="vd-ligne vd-fixe"><span class="vd-verbe">she leave<span class="vd-s">s<span class="vd-et">-s</span></span></span><span class="vd-legende">3<sup>e</sup> personne : le code se voit, sans vitre.</span></div>
      <div class="vd-zone">
@@ -712,12 +843,25 @@ const etapes=[
     v.addEventListener('pointerup',lacher); v.addEventListener('pointercancel',lacher);
   }},
 
+ {nom:'Écoutez', gate:['i6'], html:()=>`
+   <div class="eyebrow">Écoutez</div>
+   <h1>Le code s'entend aussi.</h1>
+   <p>Un client a laissé ce message à la réception d'un hôtel. Écoutez-le une fois, sans lire : vous comprendrez plus que vous ne le pensez.</p>
+   <div class="tel"><div class="tel-tete"><span class="tel-av">M</span><b>Mr Martin</b><small>Messagerie vocale · hier, 18:42</small></div>
+     <div class="nv-slot" data-src="audio/intro-message.mp3"></div>
+     <div class="tr-repli"><div class="tr-barre"><button type="button" class="tr-tog" aria-expanded="false"><span>Transcription</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button><button type="button" class="tr-codes" aria-pressed="false">codes</button></div><div class="tr-corps" hidden><div class="trans"><p class="t-l">Hi, good evening! My name <span class="k k-s">is<i>-s</i></span> Martin. I <span class="k k-ed">booked<i>-ed</i></span> a room for two nights, from Friday.</p><p class="t-l">I <span class="k k-ed">called<i>-ed</i></span> last week and <span class="k k-ed">asked<i>-ed</i></span> for a sea view.</p><p class="t-l"><span class="k k-s">Is<i>-s</i></span> that still possible? My wife <span class="k k-s">loves<i>-s</i></span> waking up to the sea.</p><p class="t-l">Our train <span class="k k-s">gets<i>-s</i></span> in at nine, so we <span class="k k-s k-inv">need<i>(-s)</i></span> a late check-in.</p><p class="t-l">Thanks so much, and see you on Friday!</p></div></div></div>
+   </div>
+   <p class="aide">Dans les modules, chaque écoute a sa transcription. Touchez « codes » pour voir quel verbe porte quel code.</p>
+   ${qcm('i6','« I booked a room » : quel code porte booked ?',[ICO_ED+' -ed · T-1',ICO_S+' -s · T0'],0,'Booked = book + -ed : la réservation est faite, c\'est T-1. Le code s\'entend : [bukt].')}`,
+  apres:()=>{ if(window.FRGNote) FRGNote.monter(ecran);
+    const b=ecran.querySelector('.tr-codes'); if(b) b.addEventListener('click',()=>{ const on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed',on); ecran.querySelector('.tel').classList.toggle('codes-on',on); const t=ecran.querySelector('.tr-tog'), c=ecran.querySelector('.tr-corps'); if(on&&c.hidden) t.click(); }); }},
  {nom:'La destination', html:()=>`
    <div class="eyebrow">Où l'on va</div>
    <h1>La Courbe complète : votre boîte de vitesses.</h1>
    ${courbeComplete(5)}
+   <div class="meca-box"><svg class="meca" viewBox="0 0 320 156" aria-hidden="true"><rect class="m-plaque" x="70" y="14" width="180" height="78" rx="18"/><path class="m-fente" d="M108 38 v30 h104 v-30"/><path class="m-fente2" d="M108 38 v30 h104 v-30"/><text class="m-s m-gros" x="38" y="48">-s</text><text class="m-s" x="38" y="66">T0</text><text class="m-ed m-gros" x="284" y="48">-ed</text><text class="m-ed" x="284" y="66">T-1</text><line class="m-tige" x1="160" y1="132" x2="108" y2="38"><animate attributeName="x2" values="108;108;108;212;212;212;212;108;108" keyTimes="0;.3;.38;.46;.54;.8;.88;.96;1" dur="5s" repeatCount="indefinite"/><animate attributeName="y2" values="38;38;68;68;38;38;68;68;38" keyTimes="0;.3;.38;.46;.54;.8;.88;.96;1" dur="5s" repeatCount="indefinite"/></line><g class="m-pommeau"><circle r="14"/><circle class="m-reflet" cx="-4" cy="-5" r="4"/><animateTransform attributeName="transform" type="translate" values="108 38;108 38;108 68;212 68;212 38;212 38;212 68;108 68;108 38" keyTimes="0;.3;.38;.46;.54;.8;.88;.96;1" dur="5s" repeatCount="indefinite"/></g><rect class="m-socle" x="104" y="124" width="112" height="28" rx="9"/><text class="m-verbe" x="160" y="143">VERBE</text></svg><p>Le verbe, c'est le moteur. Il n'a que <b>deux vitesses</b> : <b class="c-s">-s</b> pour T0, <b class="c-ed">-ed</b> pour T-1. Pas de point mort : visible ou invisible, une vitesse est toujours enclenchée.</p></div>
    <p>Comme une boîte de vitesses : au début, on cale, on cherche la bonne vitesse, on regarde le levier. Puis un jour, on passe les vitesses sans y penser. La Courbe fonctionne pareil : vous la consultez, puis vous ne la voyez plus, elle travaille pour vous.</p>
-   <p>Voici votre future boîte de vitesses mentale. Tout part des deux mêmes points et des deux mêmes codes ; chaque module ajoute un étage. Au module 7, la Courbe est complète ; les dix-sept suivants la font parler, jusqu'au réflexe.</p>
+   <p>Voici votre future boîte de vitesses mentale. Tout part des deux mêmes points et des deux mêmes codes ; chaque module ajoute un étage. Au module 7, la Courbe est complète ; les vingt-cinq suivants la font parler, jusqu'au réflexe.</p>
    ${etagesIntro}
    <p class="aide">Une fois la Courbe en tête, vous savez construire n'importe quelle phrase sur le papier. L'oral suit, avec la répétition.</p>`},
 
@@ -728,7 +872,7 @@ const etapes=[
      <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span><span class="geste-num">01</span></div><strong>Dessinez</strong><span>Chaque module s'ouvre sur la Courbe, redessinée de mémoire sur une feuille. Deux minutes qui vous en font gagner des heures.</span></div>
      <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></svg></span><span class="geste-num">02</span></div><strong>Comprenez, puis pratiquez</strong><span>Une idée par écran, aussitôt mise à l'épreuve : à l'écrit, à l'oral, dans des phrases de votre métier.</span></div>
      <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="geste-num">03</span></div><strong>Validez</strong><span>Assez de bonnes réponses et l'écran s'ouvre : <span class="en">Well done</span>. Sinon, <span class="en">Try again</span> : on reprend l'écran à zéro, c'est comme ça qu'on retient.</span></div>
-     <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></span><span class="geste-num">04</span></div><strong>Répétez</strong><span>Chaque notion revient, module après module, dans d'autres phrases et d'autres situations. C'est la répétition qui transforme la règle en réflexe.</span></div>
+     <div class="geste"><div class="geste-tete"><span class="geste-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></span><span class="geste-num">04</span></div><strong>Répétez</strong><span>Chaque notion revient, module après module, dans d'autres phrases et d'autres situations. Entre deux modules, l'entraînement en jeux d'arcade et le lamantin IA, qui corrige vos phrases, font tourner la Courbe.</span></div>
    </div>
    <p class="choc">Une expertise universitaire, concentrée : vous déduisez, vous essayez, vous répétez.</p>
    <p class="aide">Un repère visuel, partout : <b class="c-ed">corail</b> pour le -ed, <b class="c-s">bleu</b> pour le -s. Une erreur s'affiche en gris. Le petit chronomètre, en bas à gauche, ne compte que quand la page est ouverte devant vous.</p>
@@ -742,8 +886,8 @@ const etapes=[
      <div class="retenir uni"><span class="aide">À retenir</span>
        <p class="retenir-titre">Deux temps. Deux codes.</p>
        <div class="retenir-duo">
-         <div><span class="pastille ed">-ed</span><strong>T-1</strong><span>Le passé.</span></div>
-         <div><span class="pastille s">-s</span><strong>T0</strong><span>Le présent.</span></div>
+         <div><span class="pastille ed">${ICO_ED}-ed</span><strong>T-1</strong><span>Le passé.</span></div>
+         <div><span class="pastille s">${ICO_S}-s</span><strong>T0</strong><span>Le présent.</span></div>
        </div></div>
      <div class="next petit"><span class="aide en">Next</span><span class="next-titre">Module 1 · Repères et codes</span></div>
    </div>
@@ -795,7 +939,7 @@ function aller(i){
   try{ const av=+(localStorage.getItem('frg-intro-pct')||0), pc=Math.round(etat.step/(etapes.length-1)*100); if(localStorage.getItem('frg-intro')!=='fini'&&pc>av) localStorage.setItem('frg-intro-pct',pc); if(etat.step===etapes.length-1) localStorage.setItem('frg-intro','fini'); }catch(err){}
   const pct=Math.round(etat.step/(etapes.length-1)*100);
   document.getElementById('etape-num').textContent=pct+' %';
-  document.getElementById('barre').style.width=Math.max(pct,2)+'%';
+  { const pl=document.getElementById('barre'), pt=document.getElementById('barre-pt'), g=Math.max(pct,2); pl.style.strokeDashoffset=100-g; try{ const L=pl.getTotalLength(), q=pl.getPointAtLength(L*g/100); pt.setAttribute('cx',q.x); pt.setAttribute('cy',q.y); }catch(err){} }
   document.getElementById('barre-box').setAttribute('aria-valuenow',pct);
   document.getElementById('prec').disabled=etat.step===0;
   document.getElementById('suiv').textContent=etat.step===etapes.length-1?'Terminer':'Suivant';

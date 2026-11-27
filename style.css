@@ -1499,3 +1499,6 @@ footer::after{opacity:.58}
 .hero .credits{display:inline-block;max-width:min(760px,100%);font-size:16.5px;line-height:1.45;font-weight:500;color:#fff;background:rgba(10,19,48,.58);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:10px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.2);text-shadow:none;width:fit-content}
 .hero .credits .insec{color:#FFD25A;font-style:italic}
 @media (max-width:640px){.hero .credits{border-radius:16px;font-size:15.5px;padding:10px 14px}.hero .credits .insec{white-space:normal}}
+/* la méthode et son auteur, sous la Courbe des Temps */
+.auteur-methode{margin:14px 0 0;max-width:640px;font-size:15.5px;line-height:1.55;color:color-mix(in srgb,currentColor 78%,transparent)}
+.auteur-methode em{font-style:italic;color:inherit;font-weight:600}

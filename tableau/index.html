@@ -1340,7 +1340,10 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       $('pf-mois').textContent = new Date(y, mo - 1, 15).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }); $('pf-ap').disabled = mois >= auj;
       const fren = (window.vgDonneesProfit ? window.vgDonneesProfit() : []).filter(v => new Date(v.t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }).slice(0, 7) === mois).reduce((a, v) => a + v.total, 0) / 100;
       if (!D) { $('pf-brut').textContent = eur(fren); $('pf-net').textContent = eur(fren * (1 - .258)); return; }
-      const M = D.manuel.mois[mois] || {}, R = D.manuel.reglages || {}, taux = R.tauxNet ?? 25.8, fx = (mois === auj ? D.fx && D.fx.taux : D.fxMois[mois]) || (D.fx && D.fx.taux) || null;
+      const M = { ...(D.manuel.mois[mois] || {}) }, R = { ...(D.manuel.reglages || {}) };
+      /* saisies pas encore validées : déjà prises en compte à l'écran */
+      sale.forEach(id => { const [t, k] = CHAMPS[id], v = $(id).value === '' ? null : +$(id).value; const O = t === 'reg' ? R : M, kk = t === 'ling' ? 'lingTaux' : k; if (v === null) delete O[kk]; else O[kk] = v; });
+      const taux = R.tauxNet ?? 25.8, fx = (mois === auj ? D.fx && D.fx.taux : D.fxMois[mois]) || (D.fx && D.fx.taux) || null;
       const enEur = usd => fx ? usd / fx : null;
       /* cours particuliers */
       const H = D.archive || {}, C = D.cours || {}, cv = C.owed && C.owed[mois] != null ? C.owed[mois] : (H.cours || {})[mois] ?? null, du = C.totalOwed, pa = C.totalPaid;
@@ -1397,12 +1400,13 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     const CHAMPS = { 'pf-imm-n': ['set', 'immN'], 'pf-barb-h': ['set', 'barbH'], 'pf-mast-e': ['set', 'mastE'], 'pf-kdp-e': ['set', 'kdpE'], 'pf-ling-h': ['set', 'lingH'], 'pf-ling-t': ['ling'], 'pf-barb-t': ['reg', 'tauxBarb'], 'pf-taux': ['reg', 'tauxNet'] };
     const sale = new Set(); function libre(id) { return !sale.has(id); }
     const etatV = () => { const b = $('pf-valide'); b.hidden = !sale.size && !b.classList.contains('ok'); if (sale.size) { b.classList.remove('ok'); $('pf-valide-txt').textContent = sale.size + ' modification' + (sale.size > 1 ? 's' : '') + ' non enregistrée' + (sale.size > 1 ? 's' : ''); $('pf-enr').hidden = false; } };
-    Object.keys(CHAMPS).forEach(id => { const el = $(id); el.addEventListener('input', () => { sale.add(id); el.classList.add('sale'); etatV(); });
+    Object.keys(CHAMPS).forEach(id => { const el = $(id); el.addEventListener('input', () => { sale.add(id); el.classList.add('sale'); etatV(); rendre(); });
       el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); valider(); } }); });
     async function valider() { if (!sale.size) return; const set = {}, reglages = {}, bt = $('pf-enr');
       sale.forEach(id => { const [t, k] = CHAMPS[id], v = $(id).value === '' ? null : +$(id).value;
         if (t === 'set') set[k] = v; else if (t === 'reg') { if (v !== null) reglages[k] = v; } else { set.lingTaux = v; if (v !== null) reglages.tauxLing = v; } });
       bt.disabled = true; try { const ids = [...sale]; sale.clear(); await appel({ mois, set, reglages }); ids.forEach(id => $(id).classList.remove('sale'));
+        { const S = D.manuel.mois[mois] || {}, perdu = Object.keys(set).filter(k => set[k] !== null && S[k] !== set[k]); if (perdu.length) alert('Le serveur n’a pas gardé : ' + perdu.join(', ') + '. Recollez le dernier worker dans Cloudflare.'); }
         $('pf-valide').classList.add('ok'); $('pf-valide-txt').textContent = 'Enregistré ✓'; bt.hidden = true; setTimeout(() => { if (!sale.size) { $('pf-valide').classList.remove('ok'); etatV(); } }, 2500); }
       catch (e) { Object.keys(set).length; alert('Erreur : ' + e.message); } bt.disabled = false; }
     $('pf-enr').onclick = valider;

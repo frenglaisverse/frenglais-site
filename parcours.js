@@ -64,7 +64,7 @@
     rangEntr(n, s, o, flou); tuileEntr(); majCurseur();
   }
   /* ---------- rangée « Entraînement » sous les modules : 5 exercices par module + le lamantin en libre accès ---------- */
-  const EXOS = [['sprint', '⚡', 'Sprint des codes', '60 s chrono, les séries comptent double'], ['dictee', '🎧', 'Dictée trouée', 'Le message vocal, verbe par verbe'], ['chasse', '🔎', 'Chasse aux erreurs', 'Trouvez le mot faux, réparez-le'], ['chantier', '🧱', 'Le chantier', 'Reconstruisez les phrases'], ['cartes', '🃏', 'Cartes mémoire', 'Règles et nuances à retourner']];
+  const EXOS = [['sprint', '🌴', 'Sprint des codes', 'Miami Beach · 60 s chrono, combos x2'], ['dictee', '📻', 'Radio Key West', 'Key West · le message vocal, verbe par verbe'], ['chasse', '🐊', 'Chasse aux alligators', 'Everglades · trouvez le mot faux, réparez-le'], ['chantier', '🚀', 'Assemblez la fusée', 'Cap Canaveral · une phrase, un étage'], ['cartes', '🎆', 'Nuit des cartes', 'Orlando · les règles en cartes']];
   function rangEntr(n, s, o, flou){
     const r = $('#en-piste'), t = $('#en-titre'); if (!r) return;
     const dispo = o && MODULES_EN_LIGNE, S = (lire('frg-entr2', {})[n]) || {}, F = ETAT.formule;

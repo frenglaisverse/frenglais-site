@@ -80,7 +80,7 @@ a.en-c:hover{transform:translateY(-3px);border-color:#1C49A5}
 .tb-power{position:absolute;right:0;top:0;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--trait,#E3E7F0);background:var(--carte,#fff);color:#E3191F;display:grid;place-items:center;cursor:pointer;opacity:.7;transition:opacity .15s,background .15s}
 .tb-power:hover,.tb-power:focus-visible{opacity:1;background:#E3191F;color:#fff;border-color:#E3191F}
 .tb-courbe .c-fleche{fill:none;stroke:var(--trait,#E3E7F0);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
-.tb-lam{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:#0E1B3D;color:#fff;text-decoration:none;flex:1 1 260px}
+.tb-lam{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:#0E1B3D;color:#fff;text-decoration:none;margin:0 0 14px}
 .tb-lam img{image-rendering:pixelated;flex:none}.tb-lam span{display:flex;flex-direction:column;line-height:1.3}.tb-lam b{font-size:15px}.tb-lam small{font-size:13px;opacity:.8}
 .tb-lam em{margin-left:auto;font:500 11.5px var(--f-mono,ui-monospace,monospace);font-style:normal;color:#9DBBFA;text-align:right}
 .tb-lam.off{opacity:.75}
@@ -104,9 +104,30 @@ a.en-c:hover{transform:translateY(-3px);border-color:#1C49A5}
 .en-c:not(.en-lam)>span:not(.en-i){font:15px/1.15 "VT323",monospace;color:#9AA8CC}
 .en-c:not(.en-lam) em{color:#5FD39A;font:15px "VT323",monospace}
 .en-c:not(.en-lam) .en-i .pix{width:24px;height:24px}
+.en-c .en-i{position:relative;display:inline-block;align-self:flex-start}
+.en-sc{position:absolute;left:18px;top:-6px;font:8px/1 "Press Start 2P",monospace;color:#0A1330;background:#FFD25A;padding:3px 4px;white-space:nowrap;box-shadow:0 -2px 0 #B8862A,0 2px 0 #B8862A,-2px 0 0 #B8862A,2px 0 0 #B8862A}
 .en-c:not(.en-lam):hover{transform:translateY(-2px);box-shadow:0 -3px 0 #FFD25A,0 3px 0 #FFD25A,-3px 0 0 #FFD25A,3px 0 0 #FFD25A}
 .en-piste{align-items:flex-start}
 @media (max-width:640px){.en-c:not(.en-lam){flex-basis:132px}}
+
+/* entraînement v3 : des tuiles simples (icône + nom), le score dans l'icône, les règles derrière « + » */
+.en-piste .en-c{position:relative;flex:0 0 118px;padding:12px 8px 10px;gap:0;align-items:center;text-align:center}
+.en-c .en-lien{display:flex;flex-direction:column;align-items:center;gap:8px;color:inherit;text-decoration:none;width:100%}
+.en-c .en-i{position:relative;display:block}
+.en-piste .en-c .en-i,.en-piste .en-c .en-i .pix{width:30px;height:30px}
+.en-c .en-i{margin:0 auto}.en-piste .en-c .en-sc{display:inline-block;height:auto;width:auto;min-height:0;white-space:nowrap;position:absolute;top:auto;left:auto;right:-18px;bottom:-6px;font:8px/1 "Press Start 2P",monospace;color:#0A1330;background:#FFD25A;padding:3px 4px;box-shadow:0 2px 0 #B8862A}
+.en-piste .en-c .en-cad{display:inline-block;height:auto;width:auto;position:absolute;top:auto;left:auto;right:-14px;bottom:-6px;color:#9AA8CC}
+.en-piste .en-c b{font:8px/1.6 "Press Start 2P",monospace;color:#FFD25A}
+.en-plus{position:absolute;right:2px;top:2px;width:22px;height:22px;border:0;background:transparent;color:#9AA8CC;font:12px/1 "Press Start 2P",monospace;cursor:pointer;padding:0;min-height:0;box-shadow:none}
+.en-plus:hover,.en-plus[aria-expanded="true"]{color:#FFD25A}
+.en-regle{margin:8px 0 0;font:15px/1.2 "VT323",monospace;color:#F4EEDC;text-align:left}
+.en-regle small{color:#9AA8CC;font-size:14px}
+.en-piste .en-c.en-off .en-lien{opacity:.6}
+@media (max-width:640px){.en-piste .en-c{flex-basis:104px}}
+/* soit « Votre parcours » (élève connecté), soit « Déjà inscrit ? » */
+body:not(.eleve-in) .tb-progression{display:none}
+body.eleve-in .tb-acces{display:none}
+.tb-progression .tb-lam{margin:0 0 14px}
 </style>
 
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
@@ -129,13 +150,12 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
   <h1>Espace élève</h1>
 <div class="tb-progression" aria-live="polite">
     <canvas class="mousse mousse-pct" data-modele="[[214,5],[244,3],[268,6]]" aria-hidden="true"></canvas>
+    <a class="tb-lam" id="tb-lam" href="lamantin.html"><img src="lamantin-pixel.png" alt="" width="44" height="44"><span><b>Le lamantin IA</b><small>Pratique : il vous corrige.</small></span><em id="tb-lam-q"></em></a>
     <div class="tb-chiffres"><span>Votre parcours</span><b id="pct-global">0 %</b></div>
     <svg class="tb-courbe" viewBox="0 0 600 84" aria-hidden="true"><path class="c-fond" d="M14 58 C 90 58, 118 24, 196 24 S 292 62, 372 52 S 488 18, 586 22"/><path class="c-plein" id="courbe-plein" d="M14 58 C 90 58, 118 24, 196 24 S 292 62, 372 52 S 488 18, 586 22" pathLength="100"/><g class="c-reps"><text x="40" y="80">T-2</text><text x="196" y="80">T-1</text><text x="372" y="80">T0</text><text x="560" y="80">T+1</text></g><path class="c-fleche" d="M572 12 L590 22 L574 34"/><circle id="courbe-pt" cx="14" cy="58" r="8"/></svg>
     <div class="tb-barre" hidden><i id="barre-global"></i></div>
     <div class="tb-bilan" id="tb-bilan">
       <div class="tb-b" id="tb-resumes" hidden></div>
-      <a class="tb-lam" id="tb-lam" href="lamantin.html"><img src="lamantin-pixel.png" alt="" width="44" height="44"><span><b>Le lamantin IA</b><small>Pratique : il vous corrige.</small></span><em id="tb-lam-q"></em></a>
-      <div class="tb-jeux" id="tb-jeux" role="list"></div>
     </div>
   </div>
 </div>
@@ -202,12 +222,8 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
     const ico=(n,t)=>P&&P.pix?P.pix(n,t):'', E=P&&P.etat?P.etat():{formule:null,enLigne:false}, ok=!!(E.formule&&E.enLigne);
     const res=document.getElementById('tb-resumes'); res.hidden=!V.length; res.innerHTML=V.length?`<span class="tb-b-ico" title="Vos résumés PDF">${ico('pdf',22)}</span>`+V.map(n=>`<a class="tb-puce" href="fiche.html?n=${n}" title="Résumé du module ${n}">M${n}</a>`).join(''):'';
     const lam=document.getElementById('tb-lam'), lq=document.getElementById('tb-lam-q'); lam.classList.toggle('off',!ok); lam.href=ok?'lamantin.html?n='+Math.max(1,Math.min(32,V.length+1)):'index.html#formations'; lq.textContent=!E.formule?'Avec la formation':!E.enLigne?'À la mise en ligne':'';
-    const S=lireJ('frg-entr2',{}), best={}; Object.values(S).forEach(m=>Object.entries(m).forEach(([k,o])=>{ best[k]=Math.max(best[k]||0,o.best||0); }));
-    const rf=+lireJ('frg-frenglais-record',0)||0, n=Math.max(1,Math.min(32,V.length+1)), ex=P&&P.EXOS?P.EXOS:[];
-    const J=[...ex.map(([k,i,nom])=>[i,nom,'entrainement.html?n='+n+'&x='+k,best[k]?best[k]+(k==='sprint'?' pts':k==='cartes'?'':' %'):'',ok]),
-      ['courbe','Courbe du jour','courbe/','',true],['vol','Lamantin volant','vol.html','',ok],['quiz','Le quiz','quiz.html','',ok],['accent','Pont des sons','accent.html','',ok],['final','Frenglais','frenglais.html',rf?String(rf):'',ok]];
-    const grille=document.getElementById('tb-jeux'); grille.innerHTML=J.map(([i,nom,h,sc,o],j)=>`<div class="tb-jeu${o?'':' off'}" role="listitem"><button type="button" data-j="${j}" aria-label="${nom}${sc?' · '+sc:''}">${ico(i,30)}<b>${sc||'–'}</b></button><a class="tb-jouer" href="${o?h:'index.html#formations'}" tabindex="-1">${o?'▶ Jouer':'🔒'}<small>${nom}</small></a></div>`).join('');
-    grille.querySelectorAll('.tb-jeu button').forEach(b=>b.addEventListener('click',()=>{ const it=b.parentNode, on=!it.classList.contains('on'); grille.querySelectorAll('.tb-jeu.on').forEach(x=>x.classList.remove('on')); it.classList.toggle('on',on); if(on) it.querySelector('.tb-jouer').focus(); })); };
+  };
+  addEventListener('DOMContentLoaded',()=>{ if(window.FRG_APERCU) document.body.classList.add('eleve-in'); bilan(); });
   bilan(); document.addEventListener('frg-parcours',bilan); window.addEventListener('pageshow',bilan);
   document.getElementById('barre-intro').style.width=pct+'%';
   const act=document.getElementById('action-intro');
@@ -263,10 +279,10 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
     H1.textContent = h>=5&&h<12 ? 'Good morning'+n+'!' : h>=18&&h<23 ? 'Good evening'+n+'!' : h>=23||h<5 ? 'Still up'+n+'?' : jour(n);
     SUR.textContent='Votre espace · '+(NOMF[r.formule]||r.formule||''); document.title=(p?p+' · ':'')+'Espace élève · Frenglais'; };
   const connecte=r=>{ try{ localStorage.setItem('frg-eleve',JSON.stringify({prenom:r.prenom||'',identifiant:r.identifiant||'',formule:r.formule||''})); }catch(e){}   /* le module 1 reprend le prénom */
-    if(window.FRGParcours) FRGParcours.maj(r); saluer(r); f.hidden=true; etat.className='tb-acces-etat'; etat.textContent='';
+    if(window.FRGParcours) FRGParcours.maj(r); saluer(r); f.hidden=true; document.body.classList.add('eleve-in'); etat.className='tb-acces-etat'; etat.textContent='';
     const d=document.getElementById('tb-power'); d.hidden=false; d.onclick=null;
     rdv(); clearInterval(rdvT); rdvT=setInterval(rdv,30000);
-    d.onclick=()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); rdv(); f.hidden=false; f.querySelector('.tb-acces-champs').hidden=false; d.hidden=true; etat.className='tb-acces-etat'; etat.textContent=''; if(window.FRGParcours) FRGParcours.maj(null); saluer(null); }; };
+    d.onclick=()=>{ const s=lireS(); try{ localStorage.removeItem('frg-session'); }catch(e){} if(s) fetch(API+'/eleve/deconnecter',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).catch(()=>{}); rdv(); f.hidden=false; f.querySelector('.tb-acces-champs').hidden=false; d.hidden=true; document.body.classList.remove('eleve-in'); etat.className='tb-acces-etat'; etat.textContent=''; if(window.FRGParcours) FRGParcours.maj(null); saluer(null); }; };
   { const s=lireS(); if(s&&s.jeton) fetch(API+'/eleve/session',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).then(r=>r.json()).then(r=>{ if(r.ok) connecte(r); else { try{ localStorage.removeItem('frg-session'); }catch(e){} etat.className='tb-acces-etat ko'; etat.textContent=r.erreur||''; } }).catch(()=>{}); }
   { const q=new URLSearchParams(location.search).get('code'); if(q) code.value=q.toUpperCase(); }
   code.addEventListener('input',()=>{ let v=code.value.toUpperCase().replace(/[^A-Z0-9]/g,''); if(v.startsWith('FRG')) v=v.slice(3);
@@ -296,7 +312,7 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
     </div></div>
 <nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a><a href="cadeau.html">Bon cadeau</a></nav></div></footer>
 <script>document.addEventListener("click",function(e){var b=e.target.closest("#en-g,#en-d");if(!b)return;var p=document.getElementById("en-piste");p.scrollBy({left:(b.id==="en-d"?1:-1)*p.clientWidth*.8,behavior:"smooth"});});</script>
-<script src="parcours.js?v=10"></script>
+<script src="parcours.js?v=11"></script>
 <script src="mousse.js?v=202611201500"></script>
 </body>
 </html>

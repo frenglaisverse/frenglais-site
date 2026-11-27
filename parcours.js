@@ -88,7 +88,7 @@
     const dispo = o && MODULES_EN_LIGNE, S = (lire('frg-entr2', {})[n]) || {}, F = ETAT.formule;
     if (t) t.textContent = 'Module ' + n + ' · ' + TITRES[n - 1];
     const bloque = flou ? 'Réservé aux élèves' : !F ? 'Avec la formation' : !o ? esc(s.txt) : 'À la mise en ligne';
-    r.innerHTML = `<a class="en-c en-lam ${F ? '' : 'en-off'}" href="${F && MODULES_EN_LIGNE ? 'lamantin.html?n=' + n : 'index.html#formations'}"><img class="en-lam-img" src="lamantin-pixel.png" alt="" width="44" height="44" loading="lazy"><b>Le lamantin IA</b><span>Pratique : il vous corrige.</span><em>${!F ? 'Réservé aux élèves de la formation' : F === 'integral' ? '3 relectures par jour, à vie' : 'Libre accès, à vie'}</em></a>`
+    r.innerHTML = `<a class="en-c en-lam ${F ? '' : 'en-off'}" href="${F && MODULES_EN_LIGNE ? 'lamantin.html?n=' + n : 'index.html#formations'}"><img class="en-lam-img" src="lamantin-pixel.png" alt="" width="44" height="44" loading="lazy"><b>Le lamantin IA</b><span>Pratique : il vous corrige.</span>${!F ? '<em>Réservé aux élèves de la formation</em>' : ''}</a>`
       + EXOS.map(([k, i, nom, d]) => { const x = S[k]; return dispo
         ? `<a class="en-c" href="entrainement.html?n=${n}&x=${k}"><span class="en-i" aria-hidden="true">${pix(i)}</span><b>${nom}</b><span>${d}</span><em>${score(k, x)}</em></a>`
         : `<span class="en-c en-off${flou ? ' pc-flou-t' : ''}" aria-disabled="true"><span class="en-i" aria-hidden="true">${pix(i)}</span><b>${nom}</b><span>${d}</span><em>${CADENAS} ${bloque}</em></span>`; }).join('')
@@ -253,7 +253,7 @@
   }
 
   /* l'espace élève appelle FRGParcours.maj(session) à la connexion et à la déconnexion */
-  window.FRGParcours = { pix, EXOS, valides: () => Array.from({ length: 32 }, (_, i) => i + 1).filter(valide),
+  window.FRGParcours = { pix, EXOS, etat: () => ({ formule: ETAT.formule, enLigne: !!MODULES_EN_LIGNE }), valides: () => Array.from({ length: 32 }, (_, i) => i + 1).filter(valide),
     maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {} }; DEBUT = r && r.debut ? +r.debut : null; choisi = null; dessiner(); document.dispatchEvent(new CustomEvent('frg-parcours', { detail: r })); } };
   dessiner();
 })();

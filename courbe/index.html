@@ -320,7 +320,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
 .cadeau .gift.attend{animation:frisson 3.2s steps(2) infinite}
 .cadeau.pret .gift{animation:sautille .9s steps(3) infinite}
 .cadeau .cpt{font:12px var(--pix);color:var(--jaune);margin:6px 0 2px}
-.cadeau .btn{margin-top:8px}
+.cadeau{padding:14px 10px}.gift-btn{background:none;border:0;padding:0;cursor:pointer;display:block;margin:0 auto}.gift-btn:focus-visible{outline:3px solid var(--jaune);outline-offset:4px}.cadeau.perdu .gift{filter:grayscale(1) brightness(.6)}.cadeau .gift{width:110px;height:110px;margin:0 auto}
 @keyframes frisson{0%,86%,100%{transform:none}88%{transform:rotate(-6deg)}92%{transform:rotate(6deg)}96%{transform:rotate(-3deg)}}
 @keyframes sautille{0%,100%{transform:none}50%{transform:translateY(-6px)}}
 .ouverture{position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;background:rgba(6,12,32,.94);overflow:hidden}
@@ -581,7 +581,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     if (fait) { $('fr').textContent = fr; poserZone(zone); poserCode(zone, code); $('hud-score').textContent = pad(fait.s, 4); if (!fait.bonus) { niveauBonus(fait); return; } fin(fait, true); return; }
     $('hud-score').textContent = '0000'; $('fr').textContent = '';
     $('jeu').innerHTML = `<div class="titre-ecran">
-      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>CHAQUE MOIS : LE N°1 GAGNE -${C.reduction} %.<br>JOUEZ ${C.seuilFidele(C.saison(AUJ))} JOURS : UN CADEAU A OUVRIR.</p>
+      <p class="regle"><b>TRADUISEZ LA PHRASE EN ANGLAIS.</b><br>PLACEZ-LA SUR LA COURBE.<br>PUIS LE MOT MYSTERE.<br>CHAQUE MOIS : LE N°1 GAGNE -${C.reduction} %.<br>${C.saison(AUJ) === 1 ? 'JOUEZ ' + C.seuilFidele(1) + ' JOURS' : C.seuilFidele(C.saison(AUJ)) + ' JOURS D\'AFFILEE'} : UN CADEAU A OUVRIR.</p>
       <form class="pseudo nom-avant" id="f-nom"><label for="i-nom">VOTRE PSEUDO</label><input id="i-nom" maxlength="14" autocomplete="nickname" placeholder="3 A 14 LETTRES" value="${esc(lire('courbe-pseudo', ''))}"${lire('courbe-pseudo', '') ? ' readonly' : ''}></form>
       <p class="note" id="n-nom">${lire('courbe-pseudo', '') ? 'Votre pseudo est définitif : vous gardez le même nom à chaque partie.' : 'Choisissez bien : votre pseudo sera définitif.'}</p>
       <button type="button" class="start px" id="start"><span class="cl">▶</span> APPUYEZ SUR START</button><div id="gagnant-titre" style="width:100%;text-align:left"></div></div>`;
@@ -736,15 +736,17 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
       <div class="verdict">${vc ? '<p class="vc">★ VICE CITY · POINTS ×2 ★</p>' : ''}<h2>${titres[n]}</h2><div class="score">SCORE<b id="score-fin">${deja ? pad(r.s, 4) : '0000'}</b></div></div>
       <div class="boite px explication enigme-fin"><span class="ico-q ${b.ok ? 'ok' : 'ko'}" aria-hidden="true">${b.ok ? '✔' : '✖'}</span><div><p class="reperes">MOT MYSTERE${b.ok ? ' · +' + b.pts : ''}<span class="sr">${b.ok ? ' : trouvé' : ' : non trouvé'}</span></p><p class="juste">${esc(M.a)}</p><p>${esc(M.f)}</p><p class="source">D'après le Courrier des Amériques : <a href="${C.S[M.s][1]}" target="_blank" rel="noopener">${esc(C.S[M.s][0])} ↗</a></p></div></div>
       <div id="gagnant"></div>
-      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.<br>${C.seuilFidele(C.saison(num))} JOURS JOUES : <b>UN CADEAU</b> POUR VOUS.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
+      <div class="boite px" id="bloc-top"><h3>TOP 3</h3><p class="lot">SAISON ${C.saison(num)} · JOUR ${C.jourSaison(num)}/${C.longueur(C.saison(num))}<br>LE N°1 DE LA SAISON GAGNE <b>-${C.reduction} %</b> SUR UNE FORMATION.<br>${C.saison(num) === 1 ? C.seuilFidele(1) + ' JOURS JOUES' : C.seuilFidele(C.saison(num)) + ' JOURS D\'AFFILEE 🔥'} : <b>UN CADEAU</b>.</p><div id="zone-top"><p class="note">Chargement…</p></div></div>
       ${(() => { const i = serieInfo(), sauve = i.jokers.includes(AUJ - 1);
         return `<div class="boite px flamme-fin"><p class="flamme-grande f${niveauFlamme(s)}" aria-hidden="true">🔥</p><h3>SERIE : ${s} JOUR${s > 1 ? 'S' : ''}</h3>
         <p>${sauve ? '🃏 VOTRE JOKER A SAUVÉ VOTRE SÉRIE HIER.' : i.jokerDispo ? '🃏 JOKER DE LA SEMAINE DISPONIBLE : UN JOUR MANQUÉ NE CASSERA PAS VOTRE SÉRIE.' : 'JOKER DÉJÀ UTILISÉ CETTE SEMAINE : NE MANQUEZ PAS DEMAIN.'}</p>
         <p class="note">REVENEZ DEMAIN POUR PASSER À ${s + 1} 🔥</p></div>`; })()}
-      ${(() => { const S = C.saison(num), seuil = C.seuilFidele(S), j = Object.keys(etat).filter(x => C.saison(+x) === S).length, ok = j >= seuil, perdu = !ok && j + Math.max(0, C.finSaison(S) - Math.max(AUJ, num)) < seuil;
-        return `<div class="boite px cadeau${ok ? ' pret' : ''}" id="bloc-cadeau"><h3>${ok ? 'VOTRE CADEAU EST PRET' : 'UN CADEAU VOUS ATTEND'}</h3>${giftSVG('gift' + (ok ? '' : ' attend'))}
-        <p class="cpt">${Math.min(j, seuil)} / ${seuil}</p>
-        ${ok ? `<button type="button" class="btn" id="ouvrir-cadeau">OUVRIR LE CADEAU</button>` : perdu ? `<p class="note">Celui-ci est resté fermé. Un nouveau cadeau vous attend dès le 1er du mois.</p>` : `<p class="note">Il s'ouvre au ${seuil}<sup>e</sup> jour joué de la saison. Encore ${seuil - j}.</p>`}</div>`; })()}
+      ${(() => { const S = C.saison(num), seuil = C.seuilFidele(S), j = Object.keys(etat).filter(x => C.saison(+x) === S).length, cle = 'courbe-cadeau-ok-' + S;
+        /* saison 1 : 15 jours joués ; dès la saison 2 : une série (🔥) de 20 jours d'affilée, joker compris */
+        const fait = S === 1 ? j : serie(), ok = fait >= seuil || !!lire(cle, false); if (ok) ecrire(cle, true);
+        const perdu = !ok && (S === 1 ? j + Math.max(0, C.finSaison(S) - Math.max(AUJ, num)) < seuil : fait + Math.max(0, C.finSaison(S) - Math.max(AUJ, num)) < seuil);
+        const lab = ok ? 'Ouvrir le cadeau' : `Cadeau fermé : ${Math.min(fait, seuil)} sur ${seuil}`;
+        return `<div class="boite px cadeau${ok ? ' pret' : ''}${perdu ? ' perdu' : ''}" id="bloc-cadeau">${ok ? `<button type="button" class="gift-btn" id="ouvrir-cadeau" aria-label="${lab}">${giftSVG('gift')}</button>` : `<span role="img" aria-label="${lab}" title="${Math.min(fait, seuil)} / ${seuil}">${giftSVG('gift attend')}</span>`}</div>`; })()}
       <div class="boite px partage"><h3>PARTAGER</h3><pre id="texte">${esc(texte)}</pre><button type="button" class="btn" id="copier">COPIER</button><p class="note" id="copie"></p></div>
       <div class="prochaine"><p>NOUVELLE PHRASE A MINUIT</p><b id="compte">--:--:--</b><div class="jour24" id="jour24" aria-hidden="true">${'<i></i>'.repeat(24)}</div></div>
       <p class="signature">Un jeu <a href="../">Frenglais</a> · <a href="../courbe/reglement.html">règlement</a></p>
@@ -772,7 +774,7 @@ body.vice .choix button:hover:not(:disabled),body.vice .choix button:focus-visib
     const o = document.createElement('div'); o.className = 'ouverture'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', 'Ouverture du cadeau');
     o.innerHTML = `<div class="cd-scene"><div class="cd-zone"><div class="rayons"></div>${cf}${giftSVG('gros')}
       <div class="cd-lot"><b>-${C.fidele} %</b><span>SUR UNE FORMATION<br>FRENGLAIS</span></div></div>
-      <div class="cd-fin"><p>${C.seuilFidele(S)} jours joués. Bien mérité.</p><p>Écrivez à <a href="mailto:contact@frenglais.co?subject=${encodeURIComponent('Cadeau · Courbe du jour · ' + ps)}">contact@frenglais.co</a> avec votre pseudo : vous recevrez votre code.</p><button type="button" class="btn" id="fermer-cadeau">FERMER</button></div></div>`;
+      <div class="cd-fin"><p>${S === 1 ? C.seuilFidele(S) + ' jours joués' : C.seuilFidele(S) + ' jours d\'affilée'}. Bien mérité.</p><p>Écrivez à <a href="mailto:contact@frenglais.co?subject=${encodeURIComponent('Cadeau · Courbe du jour · ' + ps)}">contact@frenglais.co</a> avec votre pseudo : vous recevrez votre code.</p><button type="button" class="btn" id="fermer-cadeau">FERMER</button></div></div>`;
     document.body.append(o);
     const notes = [523, 659, 784, 1047];
     o.classList.add('secoue'); [0, 500, 1000].forEach((t, k) => bip(220 + k * 60, .08, t / 1000, 'square', .05));

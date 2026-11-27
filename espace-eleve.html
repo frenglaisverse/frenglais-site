@@ -187,7 +187,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 </a>
 <div class="pc-tete"><h2>Les modules</h2><span class="pc-compte" id="pc-compte"></span><span class="pc-fleches"><button type="button" id="pc-g" aria-label="Défiler à gauche">‹</button><button type="button" id="pc-d" aria-label="Défiler à droite">›</button></span></div>
 <div class="tb-modules" role="list">
-  <button class="tb-module tb-video" type="button" id="tuile-video" aria-controls="video" aria-expanded="false"><span class="tb-face"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" fill="currentColor" stroke="none"/></svg><small>Vidéo</small></span><span class="tb-face tb-dos"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="13" height="14" rx="3"/><path d="M15.5 10.2 21 7v10l-5.5-3.2"/><path d="M7.4 9.6v4.8L11.2 12z" fill="currentColor" stroke="none"/></svg><small>Lecture</small></span></button>
+  <a class="tb-module tb-video" href="lecons.html" id="tuile-video"><span class="tb-face"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3.5" width="20" height="13.5" rx="1.5" fill="#2F4A3A" stroke="#8B5E34" stroke-width="1.6"/><path d="M5 13.5c2-3 3.5-3 5-1s3 2 5-1.5" stroke="#F4EEDC" stroke-width="1.2"/><path d="M15 7.5v4l3.2-2z" fill="#F4EEDC" stroke="none"/><path d="M8 17v3.5M16 17v3.5" stroke="#8B5E34" stroke-width="1.6"/></svg><small>Leçons vidéo</small></span></a>
   <a class="tb-module ouvert" href="introduction.html" id="carte-intro">
     <span class="tb-etiq">Offert</span>
     <div class="tb-num">00</div>
@@ -235,6 +235,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 const VIDEO_SRC='video/presentation-1080.mp4';
 (function(){
   const t=document.getElementById('tuile-video'), l=document.getElementById('video'), e=document.getElementById('ecran-video');
+  if(!t||t.tagName==='A'){ if(location.hash==='#video') location.href='lecons.html'; return; }   /* la tuile mène maintenant à la liste des leçons vidéo */
   const ouvrir=(o)=>{ t.classList.toggle('tourne',o); t.setAttribute('aria-expanded',o); l.setAttribute('aria-hidden',!o);
     setTimeout(()=>{ l.classList.toggle('ouvert',o);
       if(o&&VIDEO_SRC&&!e.querySelector('video')){ e.innerHTML='<video controls playsinline preload="metadata" poster="video/presentation.jpg"><source src="video/presentation-720.mp4" type="video/mp4" media="(max-width: 900px)"><source src="'+VIDEO_SRC+'" type="video/mp4"></video>'; }

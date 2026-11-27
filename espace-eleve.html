@@ -32,7 +32,6 @@
 .en-t-txt{flex:1;display:flex;flex-direction:column;gap:3px}.en-t-txt b{font-size:19px}.en-t-sous{font-size:14px;opacity:.85;line-height:1.4}
 .en-t-go{font-size:22px;opacity:.8}.en-tout-fait .en-t-ico{background:#1E7A4F}
 @media (prefers-reduced-motion:reduce){.en-bulle{animation:none}.en-tuile{transition:none}}
-.tb-app{margin:6px 0 0;font-size:14px}.tb-app button{font:inherit;color:#1C49A5;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}.tb-app span{display:block;color:var(--doux,#4A5578);margin-top:4px}
 .en-rang{margin-top:34px}.en-sous{margin:-4px 0 12px;font-size:14px;color:var(--doux,#4A5578)}
 .en-piste{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;scrollbar-width:thin}
 .en-c{flex:0 0 210px;scroll-snap-align:start;display:flex;flex-direction:column;gap:6px;min-height:170px;padding:16px;border-radius:20px;background:var(--carte,#fff);border:1px solid var(--trait,#E2E6F0);color:inherit;text-decoration:none;box-shadow:0 10px 30px -24px rgba(14,27,61,.5);transition:transform .15s,border-color .15s}
@@ -71,8 +70,6 @@ if(a.matches('.nav-devis'))n='menu-devis';else if(a.matches('.nav-eleve'))n='men
 else if(a.matches('.solo-cta'))n='solo-acces';else if(h.indexOf('#devis')===0)n='devis-lien';else if(h.indexOf('trustpilot')>-1)n='trustpilot';else if(h.indexOf('amazon')>-1)n='livre-amazon';
 else if(h.indexOf('fulbright')>-1)n='carte-fulbright';else if(h.indexOf('wlu.edu')>-1)n='carte-article';else if(h.indexOf('youtube')>-1)n='youtube';else if(h.indexOf('instagram')>-1)n='instagram';else if(h.indexOf('tiktok')>-1)n='tiktok';
 else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,title:n,event:true});},true);</script>
-<link rel="manifest" href="/manifest.webmanifest">
-<script>if("serviceWorker"in navigator)addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){})});</script>
 </head>
 <body>
 <header class="bandeau"><div class="in in-mousse"><canvas class="mousse" id="mousse" data-relatif="1" data-pash="0.075" data-modele='[[0.027,8],[0.113,10],[0.233,3],[0.367,2],[0.5,3],[0.15,4],[0.165,6],[0.18,3],[0.29,5],[0.305,7],[0.32,4],[0.42,4],[0.435,6],[0.45,3],[0.56,3],[0.575,5],[0.59,3]]' aria-hidden="true"></canvas><nav class="nav" aria-label="Navigation principale">
@@ -136,12 +133,6 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
     <button type="submit">Accéder</button>
   </div>
   <p class="tb-kdo">🎁 Vous avez reçu un bon cadeau ? <a href="cadeau.html">Activez-le ici</a> : vos identifiants arrivent par e-mail.</p>
-<p class="tb-app" id="tb-app" hidden><button type="button" id="app-btn">📲 Installer Frenglais sur cet appareil</button><span id="app-ios" hidden>Sur iPhone : touchez <b>Partager</b>, puis <b>Sur l'écran d'accueil</b>.</span></p>
-<script>(function(){var b=document.getElementById('tb-app'),btn=document.getElementById('app-btn'),ios=document.getElementById('app-ios'),evt=null;
-if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)return;
-addEventListener('beforeinstallprompt',function(e){e.preventDefault();evt=e;b.hidden=false;});
-if(/iphone|ipad|ipod/i.test(navigator.userAgent)){b.hidden=false;btn.addEventListener('click',function(){ios.hidden=false;});}
-btn.addEventListener('click',function(){if(evt){evt.prompt();evt.userChoice.then(function(){b.hidden=true;});}});})();</script>
   <p class="tb-acces-etat" id="acces-etat" role="status" aria-live="polite"></p>
 </form>
 </main>

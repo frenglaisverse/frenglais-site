@@ -54,6 +54,10 @@ function cleMois(m, y) { const d = new Date(); if (!y) { y = d.getFullYear(); if
 function moisDe(txt) { const t = norm(txt); let m = t.match(/^([a-z]+)(?: (\d{2}|\d{4}))?$/) || t.match(/^(\d{4}) ([a-z]+)$/);
   if (!m) return null; let mo = m[1], y = m[2]; if (/^\d/.test(mo)) { const z = mo; mo = y; y = z; } if (!MOIS[mo]) return null;
   return cleMois(MOIS[mo], y ? (y.length === 2 ? 2000 + +y : +y) : 0); }
+function moisOnglet(nom) { const k = moisDe(nom); if (k) return k; const t = norm(nom); let m;
+  if ((m = t.match(/^(\d{1,2}) (\d{2}|\d{4})$/)) && +m[1] >= 1 && +m[1] <= 12) return cleMois(+m[1], m[2].length === 2 ? 2000 + +m[2] : +m[2]);
+  if ((m = t.match(/^(\d{4}) (\d{1,2})$/)) && +m[2] >= 1 && +m[2] <= 12) return cleMois(+m[2], +m[1]);
+  const w = t.split(' ').find(x => MOIS[x]); if (w) { const y = t.split(' ').find(x => /^(20)?\d{2}$/.test(x)); return cleMois(MOIS[w], y ? (y.length === 2 ? 2000 + +y : +y) : 0); } return null; }
 function voisin(V, r, c) { for (let k = c + 1; k < Math.min(V[r].length, c + 12); k++) { const n = nombre(V[r][k]); if (n !== null) return { v: n, r, c: k }; }
   for (let k = r + 1; k < Math.min(V.length, r + 6); k++) { const n = nombre(V[k][c]); if (n !== null) return { v: n, r: k, c }; } return null; }
 function A1(f, r, c) { let L = ''; c++; while (c > 0) { const m = (c - 1) % 26; L = String.fromCharCode(65 + m) + L; c = Math.floor((c - 1) / 26); } return f + '!' + L + (r + 1); }
@@ -92,6 +96,13 @@ function donneesCours(c) { c = c || lireCours(); const E = JSON.parse(Properties
 function lireBarb() {
   const ss = SpreadsheetApp.openById(BARB_ID), out = { mois: {}, ou: {} };
   if (BARB_CELLULE) { const r = ss.getRange(BARB_CELLULE), k = cleMois(new Date().getMonth() + 1); out.mois[k] = nombre(r.getValue()); out.ou[k] = BARB_CELLULE; out.methode = 'cellule fixée'; return out; }
+  // 0) « Fiche heure Paul » : un onglet par mois (en bas), et dans chaque onglet la cellule « Total » du mois
+  ss.getSheets().forEach(f => { const k = moisOnglet(f.getName()); if (!k) return; const V = f.getDataRange().getValues(), nom = f.getName(); let best = null;
+    V.forEach((L, r) => L.forEach((x, c) => { if (typeof x !== 'string' || !/^total\b/.test(norm(x))) return; const v = voisin(V, r, c); if (!v) return;
+      const score = (/\$|€|amount|montant|pay|du mois|month|due|earn/.test(norm(x) + x) ? 2 : 0) + (norm(x) === 'total' ? 1 : 0);
+      if (!best || score > best.score || (score === best.score && r >= best.r)) best = { ...v, score, lab: String(x).trim() }; }));
+    if (best) { out.mois[k] = best.v; out.ou[k] = A1(nom, best.r, best.c) + ' (« ' + best.lab + ' »)'; } });
+  if (Object.keys(out.mois).length) { out.methode = 'onglet du mois · cellule Total'; return out; }
   for (const f of feuilles(ss, BARB_ONGLET)) { const V = f.getDataRange().getValues(), nom = f.getName();
     // a) une cellule « November », « nov 2026 »… suivie d'un montant
     V.forEach((L, r) => L.forEach((x, c) => { let k = null;

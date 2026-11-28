@@ -1540,3 +1540,6 @@ footer::after{opacity:.58}
   .pol-grand .v-liens svg{width:5cqi!important;height:5cqi!important}
   .pol-grand .v-logo{width:30cqi!important}
 }
+/* formations : les cartes glissent l'une après l'autre en arrivant à l'écran */
+.offres>.offre.rv{translate:48px 0;transition-duration:.9s}
+.offres>.offre.rv.vu{translate:0 0}

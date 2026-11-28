@@ -218,7 +218,7 @@ const WEB3FORMS_KEY = '9c80d821-b9dd-4ced-b68f-da52bf63e6ad';
 
 /* apparition douce au défilement */
 (()=>{if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-const els=[...document.querySelectorAll('.bloc>h2,.bloc .chapo,.coffrets>*,.courbe-totale,#methode li,.avis-titre,.avis-carte,.devis>*,.sem-etape')];
+const els=[...document.querySelectorAll('.bloc>h2,.bloc .chapo,.coffrets>*,.offres>.offre,.courbe-totale,#methode li,.avis-titre,.avis-carte,.devis>*,.sem-etape')];
 els.forEach(e=>{const r=e.getBoundingClientRect();if(r.top<innerHeight*.9)return;const sib=[...e.parentElement.children].filter(x=>els.includes(x));e.style.setProperty('--rv',(Math.max(0,sib.indexOf(e))*90)+'ms');e.classList.add('rv')});
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){const t=x.target;t.classList.add('vu');io.unobserve(t);setTimeout(()=>{t.classList.remove('rv','vu');t.style.removeProperty('--rv')},1000+(parseInt(t.style.getPropertyValue('--rv'))||0))}}),{threshold:.15,rootMargin:'0px 0px -6% 0px'});
 document.querySelectorAll('.rv').forEach(e=>io.observe(e));})();

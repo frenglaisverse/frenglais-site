@@ -88,6 +88,9 @@
   const pix = (nom, t = 28) => `<svg class="pix" viewBox="0 0 10 10" width="${t}" height="${t}" shape-rendering="crispEdges" aria-hidden="true">${(PIX[nom] || PIX.quiz).map((l, j) => [...l].map((c, i) => c !== '.' && PIXC[c] ? `<rect x="${i}" y="${j}" width="1" height="1" fill="${PIXC[c]}"/>` : '').join('')).join('')}</svg>`;
   const EXOS = [['sprint', 'soleil', 'Sprint des codes', 'Miami Beach · 60 s chrono, combos x2'], ['dictee', 'radio', 'Radio Key West', 'Key West · le message vocal, verbe par verbe'], ['chasse', 'gator', 'Chasse aux alligators', 'Everglades · trouvez le mot faux, réparez-le'], ['chantier', 'fusee', 'Assemblez la fusée', 'Cap Canaveral · une phrase, un étage'], ['cartes', 'feu', 'Nuit des cartes', 'Orlando · les règles en cartes']];
   const score = (k, x) => x ? `${pix('trophee', 14)} ${x.best}${k === 'sprint' ? ' pts' : k === 'cartes' ? ' cartes' : ' %'}` : 'Nouveau';
+  /* les jeux se débloquent un par un : le premier au bout de 2 semaines, puis toutes les 2 semaines (Frenglais : après les 32 modules) */
+  const JEUX_ORDRE = { 'vol.html': 1, 'quiz.html': 2, 'accent.html': 3 };
+  const ouvJeu = h => JEUX_ORDRE[h] ? depart() + JEUX_ORDRE[h] * 14 * JOUR : 0;
   function rangEntr(n, s, o, flou){
     const r = $('#en-piste'), t = $('#en-titre'); if (!r) return;
     const dispo = o && MODULES_EN_LIGNE, S = (lire('frg-entr2', {})[n]) || {}, F = ETAT.formule;
@@ -99,7 +102,8 @@
     const acc = lire('frg-accent', {});
     r.innerHTML = EXOS.map(([k, i, nom, d]) => { const x = S[k]; return tuile(k, i, nom, d, `entrainement.html?n=${n}&x=${k}`, x ? x.best + (k === 'sprint' ? '' : k === 'cartes' ? '' : '%') : '', dispo ? '' : bloque); }).join('')
       + [['courbe/', 'courbe', 'Courbe du jour', 'Une phrase en français tirée de l\'actualité, chaque jour. Trouvez la bonne traduction.', true, ''], ['vol.html', 'vol', 'Lamantin volant', 'Faites voler le lamantin à travers la bonne traduction. Une erreur : on recommence.', false, maxi(lire('frg-vol', {}))], ['quiz.html', 'quiz', 'Le quiz', 'Une définition, quatre réponses. Les erreurs reviennent.', false, maxi(lire('frg-quiz-rec', {}))], ['accent.html', 'accent', 'Pont des sons', 'Traversez le pont en prononçant : th, i court, r, h, -ed, w.', false, acc.grand || ''], ['frenglais.html', 'final', 'Frenglais', 'Le niveau final : tapez en français et en anglais, de plus en plus vite. Débloqué après les 32 modules.', false, +lire('frg-frenglais-record', 0) || '']]
-        .map(([h, i, nom, d, libre, sc]) => tuile(i, i, nom, d, h, sc || '', (libre || (F && MODULES_EN_LIGNE)) ? '' : (!F ? 'Avec la formation' : 'À la mise en ligne'))).join('');
+        .map(([h, i, nom, d, libre, sc]) => { const dj = ouvJeu(h), tard = !libre && dj && Date.now() < dj;
+          return tuile(i, i, nom, d, h, sc || '', (libre || (F && MODULES_EN_LIGNE && !tard)) ? '' : (!F ? 'Avec la formation' : tard ? 'Débloqué le ' + new Date(dj).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }) : 'À la mise en ligne')); }).join('');
     r.querySelectorAll('.en-plus').forEach(b => b.addEventListener('click', () => { const p = b.nextElementSibling, ouvrir = p.hidden; r.querySelectorAll('.en-regle').forEach(x => { x.hidden = true; x.previousElementSibling.setAttribute('aria-expanded', 'false'); x.previousElementSibling.textContent = '+'; }); p.hidden = !ouvrir; b.setAttribute('aria-expanded', ouvrir); b.textContent = ouvrir ? '×' : '+'; }));
     const c = $('#en-compte'); if (c) { const tot = Object.values(lire('frg-entr2', {})).reduce((a, m) => a + Object.values(m).reduce((b, e) => b + (e.n || 0), 0), 0); c.textContent = tot ? tot + ' partie' + (tot > 1 ? 's' : '') + ' jouée' + (tot > 1 ? 's' : '') : '5 exercices par module'; }
   }
@@ -261,6 +265,6 @@
 
   /* l'espace élève appelle FRGParcours.maj(session) à la connexion et à la déconnexion */
   window.FRGParcours = { pix, EXOS, etat: () => ({ formule: ETAT.formule, enLigne: !!MODULES_EN_LIGNE }), valides: () => Array.from({ length: 32 }, (_, i) => i + 1).filter(valide),
-    maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {} }; DEBUT = r && r.debut ? +r.debut : null; choisi = null; dessiner(); document.dispatchEvent(new CustomEvent('frg-parcours', { detail: r })); } };
+    maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {} }; DEBUT = r && r.debut ? +r.debut : null; ecrire('frg-depart', depart()); choisi = null; dessiner(); document.dispatchEvent(new CustomEvent('frg-parcours', { detail: r })); } };
   dessiner();
 })();

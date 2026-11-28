@@ -144,6 +144,9 @@ body.eleve-in .tb-acces{display:none}
 .pc-tuile.pc-ok .pc-ico{color:#1E7A4F}.pc-tuile.pc-avance .pc-ico{color:#7B61C9}
 .pc-tuile.pc-bloque .pc-ico{color:#5B6785;filter:blur(2px);opacity:.6}
 .pc-tuile.pc-choisi .pc-ico{background:color-mix(in srgb,currentColor 18%,transparent)}
+/* icône pixel : elle occupe tout le milieu de la tuile */
+.pc-tuile .pc-ico.pc-pix{width:auto;height:auto;flex:1 1 auto;min-height:0;max-height:96px;aspect-ratio:1;align-self:center;padding:0;margin:8px auto;background:none!important;border-radius:0;image-rendering:pixelated}
+.pc-tuile.pc-bloque .pc-ico.pc-pix{filter:grayscale(1) blur(1.5px);opacity:.45}
 </style>
 
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>

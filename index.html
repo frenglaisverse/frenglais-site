@@ -642,10 +642,10 @@ function caler(){var y=sc.getBoundingClientRect().bottom-c.getBoundingClientRect
 <style>/* le grand banian : fond continu du menu jusqu'au bas de la Courbe des Temps */
 .banian{display:none!important}.hero .hero-texte::before{content:none!important}
 body{position:relative}
-.fond-banian{position:absolute;left:0;right:0;top:0;z-index:0;pointer-events:none;overflow:hidden}
-.fond-banian i{position:absolute;inset:0;background:url(banian-arriere.webp?v=14) 50% 100%/cover no-repeat;opacity:.66;filter:saturate(1.25) hue-rotate(-6deg);
+.fond-banian{position:absolute;left:0;right:0;top:0;z-index:0;pointer-events:none;overflow:hidden;background:linear-gradient(180deg,#173E96,#112E73)}
+.fond-banian i{position:absolute;inset:0;background:url(banian-arriere.webp?v=14) 50% 100%/cover no-repeat;opacity:.85;filter:saturate(1.05) contrast(1.06) hue-rotate(-6deg);
   -webkit-mask:linear-gradient(180deg,transparent 0,#000 14%,#000 88%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 14%,#000 88%,transparent 100%)}
-.fond-banian b{position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,73,165,.14),rgba(28,73,165,.4) 45%,rgba(28,73,165,.55))}
+.fond-banian b{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,16,48,.3),rgba(7,16,48,.36) 40%,rgba(7,16,48,.5) 75%,rgba(7,16,48,.62))}
 .bandeau{background:transparent!important;position:relative;z-index:1}body{background:var(--bleu)}.bandeau>*{position:relative;z-index:1}.fond-banian{z-index:0}
 #scene>*:not(.fond-scene){position:relative;z-index:1}.fond-scene{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none}.fond-scene .fond-banian{position:absolute;left:0;right:0}
 </style>

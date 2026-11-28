@@ -1514,15 +1514,29 @@ footer::after{opacity:.58}
   .hero .hero-texte h1,.hero .hero-texte h1 *{text-shadow:0 0 3px rgba(8,20,70,.55),0 0 7px rgba(8,20,70,.45)}
   .hero .ctas .btn-contour{text-shadow:0 0 3px rgba(8,20,70,.6),0 0 6px rgba(8,20,70,.4)}
 }
-/* ordinateur : la carte Paul.M en portrait, pour habiter l'espace à droite du titre */
+/* ordinateur : la carte Paul.M en portrait, dans la page comme en grand, recto et verso */
 @media (min-width:1101px){
   .polaroid{top:14px!important;right:clamp(40px,6vw,110px)!important}
   .polaroid .pol-carte{width:222px!important;aspect-ratio:.66!important}
-  .polaroid .pol-recto{flex-direction:column!important;gap:6.5cqi!important;padding:6.5cqi!important}
-  .polaroid .pol-cadre{width:100%!important;height:auto!important;flex:1 1 auto!important;min-height:0;border-radius:6cqi!important}
-  .polaroid .pol-info{flex:none!important;gap:0}
-  .polaroid .pol-marque{font-size:4.6cqi!important}
-  .polaroid .pol-nom{font-size:12.5cqi!important;margin-top:3cqi!important}
-  .polaroid .pol-role{font-size:4.8cqi!important;margin-top:2.4cqi!important}
-  .polaroid .pol-gravure{margin-top:6cqi!important}
+  .pol-grand{width:min(420px,88vw,calc(86vh * .66))!important;height:auto!important;aspect-ratio:.66;max-height:none!important}
+  :is(.polaroid,.pol-grand) .pol-recto{flex-direction:column!important;gap:6.5cqi!important;padding:6.5cqi!important}
+  :is(.polaroid,.pol-grand) .pol-cadre{width:100%!important;height:auto!important;flex:1 1 auto!important;min-height:0;border-radius:6cqi!important}
+  :is(.polaroid,.pol-grand) .pol-info{flex:none!important;gap:0}
+  :is(.polaroid,.pol-grand) .pol-marque{font-size:4.6cqi!important}
+  :is(.polaroid,.pol-grand) .pol-nom{font-size:12.5cqi!important;margin-top:3cqi!important}
+  :is(.polaroid,.pol-grand) .pol-role{font-size:4.8cqi!important;margin-top:2.4cqi!important;color:#F1D9A7!important}
+  :is(.polaroid,.pol-grand) .pol-gravure{margin-top:6cqi!important}
+  /* verso en portrait : la source turquoise floutée en fond, photo en haut, texte dessous */
+  .pol-grand .pol-verso{background:linear-gradient(180deg,rgba(6,28,52,.25) 0%,rgba(6,28,52,.55) 55%,rgba(6,22,44,.82) 100%),url("verso-source.webp") center/cover no-repeat!important;
+    padding:76cqi 7cqi 6cqi!important;gap:2.2cqi!important}
+  .pol-grand .v-photo{left:7cqi!important;right:auto!important;top:7cqi!important;bottom:auto!important;width:86cqi!important;height:63cqi!important;border-radius:5cqi!important;object-position:50% 25%}
+  .pol-grand .v-eti{display:block!important;font-size:3.2cqi!important}
+  .pol-grand .v-nom{font-size:10cqi!important}
+  .pol-grand .v-liste{font-size:3.9cqi!important;line-height:1.35!important;gap:1.2cqi!important}
+  .pol-grand .v-liste span::before{width:1.6cqi!important;height:1.6cqi!important}
+  .pol-grand .v-cit{display:block!important;font-size:3.6cqi!important;padding-left:3cqi!important}
+  .pol-grand .v-liens{right:7cqi!important;bottom:6cqi!important}
+  .pol-grand .v-liens a{width:11cqi!important;height:11cqi!important}
+  .pol-grand .v-liens svg{width:5cqi!important;height:5cqi!important}
+  .pol-grand .v-logo{width:30cqi!important}
 }

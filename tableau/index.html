@@ -534,7 +534,7 @@ textarea{min-height:84px;resize:vertical;font:13px var(--f-mono)}
 .ae-carte{margin-top:12px;padding:14px 16px;border-radius:14px;border:1px dashed var(--trait);font-size:14px}.ae-carte code{font:600 16px var(--f-mono)}
 .pf-tete{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.pf-titre{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.pf-titre h2{margin:0}
 .pf-nav{display:flex;align-items:center;gap:6px}.pf-nav b{font:600 14px var(--f-txt);min-width:120px;text-align:center;text-transform:capitalize}.pf-nav button{width:30px;height:30px;border-radius:50%;border:1px solid var(--trait);background:var(--carte);color:var(--encre);font-size:17px;line-height:1;cursor:pointer}.pf-nav button:disabled{opacity:.3;cursor:default}
-.pf-coin{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font:500 12px var(--f-mono);color:var(--doux);letter-spacing:.02em}.pf-coin b{color:var(--encre);font-weight:700}.pf-coin span:nth-child(2) b{color:#4FC79F}.pf-coin .pf-enc b{color:#E8836F}
+.pf-coin{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font:500 12px var(--f-mono);color:var(--doux);letter-spacing:.02em}.pf-coin b{color:var(--encre);font-weight:700}.pf-coin span:nth-child(3) b{color:#4FC79F}.pf-coin .pf-enc b{color:#E8836F}.pf-coin .pf-rent{font-size:14px;color:var(--encre)}.pf-coin .pf-rent b{font-size:16px}
 .pf-src{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;flex-wrap:wrap}.pf-lab{font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--doux)}
 .pf-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--trait)}
 .pf-c{border:1px solid var(--trait);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}.pf-c header{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:24px}
@@ -816,7 +816,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
   </section>
 
   <section data-onglet="ventes" class="carte" id="ventes">
-    <div class="pf-tete"><div class="pf-titre"><h2>Profit</h2><div class="pf-nav"><button type="button" id="pf-av" aria-label="Mois précédent">‹</button><b id="pf-mois">–</b><button type="button" id="pf-ap" aria-label="Mois suivant">›</button></div></div><div class="pf-coin"><span>brut : <b id="pf-brut">–</b></span><span>net : <b id="pf-net">–</b></span><span class="pf-enc">à encaisser : <b id="pf-enc">–</b></span></div></div>
+    <div class="pf-tete"><div class="pf-titre"><h2>Profit</h2><div class="pf-nav"><button type="button" id="pf-av" aria-label="Mois précédent">‹</button><b id="pf-mois">–</b><button type="button" id="pf-ap" aria-label="Mois suivant">›</button></div></div><div class="pf-coin"><span class="pf-rent" title="Tout ce qui rentre ce mois-ci, KDP compris">rentrées : <b id="pf-rent">–</b></span><span title="Chiffre d’affaires à déclarer (hors KDP)">brut déclaré : <b id="pf-brut">–</b></span><span>net : <b id="pf-net">–</b></span><span class="pf-enc">à encaisser : <b id="pf-enc">–</b></span></div></div>
     <div class="pf-src"><span class="pf-lab">Frenglais</span><span class="doux petit" id="ventes-etat"></span></div>
     <div class="vg-tete"><div class="vg-tot"><div class="vg-hero"><small class="doux" id="v-mois-nom"></small><strong id="v-mois-e">–</strong><span class="doux"><span id="v-mois">–</span> · <span id="v-comp"></span></span></div><div class="vg-auj"><small class="doux">Aujourd'hui</small><b id="v-jour-e">–</b><span class="doux" id="v-jour"></span></div></div>
     <div class="vg-choix" role="tablist"><button type="button" data-vg="jours" aria-selected="true">30 jours</button><button type="button" data-vg="mois" aria-selected="false">12 mois</button></div></div>
@@ -1340,7 +1340,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
     function rendre() { const [y, mo] = mois.split('-').map(Number);
       $('pf-mois').textContent = new Date(y, mo - 1, 15).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }); $('pf-ap').disabled = mois >= auj;
       const fren = (window.vgDonneesProfit ? window.vgDonneesProfit() : []).filter(v => new Date(v.t).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }).slice(0, 7) === mois).reduce((a, v) => a + v.total, 0) / 100;
-      if (!D) { $('pf-brut').textContent = eur(fren); $('pf-net').textContent = eur(fren * (1 - .258)); return; }
+      if (!D) { $('pf-rent').textContent = eur(fren); $('pf-brut').textContent = eur(fren); $('pf-net').textContent = eur(fren * (1 - .258)); return; }
       const M = { ...(D.manuel.mois[mois] || {}) }, R = { ...(D.manuel.reglages || {}) };
       /* saisies pas encore validées : déjà prises en compte à l'écran */
       sale.forEach(id => { const [t, k] = CHAMPS[id], v = $(id).value === '' ? null : +$(id).value; const O = t === 'reg' ? R : M, kk = t === 'ling' ? 'lingTaux' : k; if (v === null) delete O[kk]; else O[kk] = v; });
@@ -1373,7 +1373,7 @@ body[data-vue="offres"] [data-onglet="pilotage"],body[data-vue="offres"] [data-o
       const h = M.lingH || 0, t = M.lingTaux ?? R.tauxLing ?? 35, lv = h * t;
       if (libre('pf-ling-h')) $('pf-ling-h').value = h || ''; if (libre('pf-ling-t')) $('pf-ling-t').value = t; $('pf-ling-v').textContent = eur(lv);
       /* totaux */
-      const brut = fren + (cv || 0) + (bv || 0) + (iv || 0) + (mv || 0) + lv; $('pf-brut').textContent = eur(brut); $('pf-net').textContent = eur(brut * (1 - taux / 100) + kd);
+      const brut = fren + (cv || 0) + (bv || 0) + (iv || 0) + (mv || 0) + lv; $('pf-brut').textContent = eur(brut); $('pf-rent').textContent = eur(brut + (kd || 0)); $('pf-net').textContent = eur(brut * (1 - taux / 100) + kd);
       $('pf-brut').parentNode.title = 'Hors KDP (royalties, déjà net)';
       /* dépenses */
       const DP = M.dep || [], dt = DP.reduce((a, x) => a + (+x.m || 0), 0); $('pf-dep-v').textContent = eur(dt); $('pf-apd').textContent = eur(brut - dt);

@@ -38,11 +38,11 @@
 .lv-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
 .ep{position:relative;display:flex;flex-direction:column;gap:9px;text-align:left;background:none;border:0;padding:0;color:inherit;font:inherit;cursor:default}
 .ep-v{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:linear-gradient(150deg,#1A2A57,#0E1736 70%);box-shadow:0 0 0 1px var(--trait-n)}
-.ep-v svg.ep-c{position:absolute;left:4%;right:4%;top:40%;width:92%;height:52%;opacity:.97}
+.ep-v svg.ep-c{position:absolute;left:20%;right:20%;top:44%;width:60%;height:34%;opacity:.9}
 .ep-c .f{fill:none;stroke:rgba(255,255,255,.22);stroke-width:6;stroke-linecap:round}
 .ep-c .p{fill:none;stroke:var(--rouge);stroke-width:6;stroke-linecap:round}
 .ep-c circle{fill:#fff}
-.ep-c .tl{font:700 20px var(--f-mono,monospace);fill:rgba(255,255,255,.6);text-anchor:middle}.ep-c .tl.r{fill:var(--rouge)}
+.ep-c .tl{font:500 26px var(--f-mono,monospace);fill:rgba(255,255,255,.6);text-anchor:middle}.ep-c .tl.r{fill:var(--rouge)}
 .ep-c .pt{fill:none;stroke:rgba(255,255,255,.5);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}.ep-c .tk{stroke:rgba(255,255,255,.55);stroke-width:6;stroke-linecap:round}.ep-c .tk.r{stroke:var(--rouge)}
 .ep-flou{filter:blur(6px);-webkit-user-select:none;user-select:none}
 .ep-n{position:absolute;left:12px;top:9px;font:700 26px/1 var(--f-mono,monospace);color:rgba(255,255,255,.92);letter-spacing:-.02em}
@@ -96,14 +96,14 @@
   const PARTIES=[['La Courbe complète','Modules 1 à 7',1,7,''],['Assimilation et ancrage','Modules 8 à 16',8,16,''],['En situation','Modules 17 à 24',17,24,''],['Approfondir','Modules 25 à 32',25,32,'Signature']];
   let vus={}; try{ vus=JSON.parse(localStorage.getItem('frg-lecons-vues')||'{}'); }catch(e){}
   const D='M14 33 L374 33';
-  const CTB=window.FRGcourbe?FRGcourbe({xs:[96,180,264,348],x0:4,x1:396,y:34,k:.3,couleur:'rgba(255,255,255,.32)',couleurRouge:'rgba(255,255,255,.32)'}).svg:'';
-  const CTP=window.FRGcourbe?FRGcourbe({xs:[96,180,264,348],x0:4,x1:396,y:34,k:.3,couleur:'var(--rouge)',couleurRouge:'var(--rouge)'}).svg:'';
-  const CTL=[96,180,264,348].map((x,k)=>`<text x="${x}" y="4" class="tl${k%3?'':' r'}">${['T-2','T-1','T0','T+1'][k]}</text>`).join('');
+  const CTB=window.FRGcourbe?FRGcourbe({xs:[96,180,264,348],x0:16,x1:384,y:38,k:.17,couleur:'rgba(255,255,255,.32)',couleurRouge:'rgba(255,255,255,.32)'}).svg:'';
+  const CTP=window.FRGcourbe?FRGcourbe({xs:[96,180,264,348],x0:16,x1:384,y:38,k:.17,couleur:'var(--rouge)',couleurRouge:'var(--rouge)'}).svg:'';
+  const CTL=[96,180,264,348].map((x,k)=>`<text x="${x}" y="0" class="tl${k%3?'':' r'}">${['T-2','T-1','T0','T+1'][k]}</text>`).join('');
   const CT=n=>{ const w=Math.round(16+370*n/32); return CTB+`<clipPath id="cp${n}"><rect x="0" y="-10" width="${w}" height="70"/></clipPath><g clip-path="url(#cp${n})">${CTP}</g>`+CTL; };
   const ep=n=>{ const src=VIDEOS[n], pct=Math.round(n/32*100), id=String(n).padStart(2,'0'), vu=vus[id];
     return `<button class="ep ${src?'dispo':'bientot'}${vu?' vu':''}" type="button" ${src?`data-src="${src}" data-id="${id}"`:'disabled aria-disabled="true"'}>
       <span class="ep-v"><span class="ep-n">${id}</span><span class="ep-tag${src?'':' ep-verrou'}">${vu?'✓ Vue':src?'▶ Lire':'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sr">Verrouillé</span>'}</span>
-      <svg class="ep-c" viewBox="0 -14 400 76" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${CT(n)}</svg></span>
+      <svg class="ep-c" viewBox="0 -24 400 84" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${CT(n)}</svg></span>
       <b${src?'':' class="ep-flou" aria-hidden="true"'}>${TITRES[n-1]}</b>${src?'':'<span class="sr">Module '+n+', bientôt disponible</span>'}<small>Module ${n}${src?' · 3 min':''}</small></button>`; };
   document.getElementById('parties').innerHTML=PARTIES.map(([t,s,a,b,f])=>`<section class="lv-partie"><header><h3>${t}</h3><span>${s}</span>${f?`<em>${f}</em>`:''}</header><div class="lv-grille">${Array.from({length:b-a+1},(_,k)=>ep(a+k)).join('')}</div></section>`).join('');
   const nd=1+Object.keys(VIDEOS).length; document.getElementById('nb-dispo').textContent=nd; document.querySelector('.lv-meta span:nth-child(2) b').textContent=33-nd;

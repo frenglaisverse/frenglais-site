@@ -123,7 +123,7 @@
   /* ---------- étapes ---------- */
   /* expériences intégrées (Stroop à mi-parcours et en fin de parcours, contexte, lire en blocs, mémoire en paquets, McGurk) */
   const expEtape = (src, sur) => ecran => ecran.append(el(`<div><p class="eyebrow">${sur}</p><iframe src="${src}" title="${sur}" style="width:100%;height:620px;margin-top:6px;border:0;border-radius:18px;background:transparent" loading="lazy"></iframe></div>`));
-  const NOMS_EXP = { contexte: 'Le contexte', blocs: 'Lire en blocs', paquets: 'La mémoire en paquets', mcgurk: 'L’effet McGurk' };
+  const NOMS_EXP = { contexte: 'Le contexte', blocs: 'Lire en blocs', paquets: 'La mémoire en paquets', mcgurk: 'L’effet McGurk', effort: 'L’effort qui fait retenir', effort2: 'L’effort, la suite' };
   const EXP = ou => (D.exp || []).filter(x => x.ou === ou).map(x => ({ nom: 'Expérience · ' + (NOMS_EXP[x.x] || x.x), f: expEtape('experience.html?x=' + x.x + '&embed=1', 'Expérience · ' + (NOMS_EXP[x.x] || x.x)) }));
   const STROOP = D.stroop ? [{ nom: (D.stroop === 'fin' ? 'Fin de parcours' : 'Mi-parcours') + ' · Stroop', f: expEtape('stroop.html?' + (D.stroop === 'fin' ? 'fin' : 'mi') + '=1&embed=1', (D.stroop === 'fin' ? 'Fin de parcours' : 'Mi-parcours') + ' · L’expérience de Stroop') }] : [];
   const ETAPES = [

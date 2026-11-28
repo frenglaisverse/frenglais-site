@@ -211,6 +211,71 @@ p{font-size:17px;line-height:1.55;margin:0 0 12px}.doux{color:var(--doux)}.petit
         '<p>C’est l’<b>effet McGurk</b>, décrit en 1976 : le cerveau mélange ce qu’il voit et ce qu’il entend.</p>' +
         '<p><b>À retenir pour l’anglais :</b> en visio comme en réunion, <b>regardez la bouche</b> de la personne qui parle. Le <i lang="en">th</i> se voit (la langue entre les dents), le <i lang="en">w</i> aussi (les lèvres en rond). Comprendre, c’est aussi regarder.</p>' + fin(); envoyer(); });
   }
+
+  /* ================= 5. L'EFFORT DE MÉMOIRE (et sa suite, au module suivant) ================= */
+  var norm = function(v){ return String(v || '').toLowerCase().replace(/[’']/g, "'").replace(/^(to|a|an|the)\s+/, '').replace(/[^a-z' -]/g, '').trim(); };
+  var MOTS = [['un devis', ['quote', 'estimate', 'quotation']], ['une échéance', ['deadline']], ['reporter (une réunion)', ['postpone', 'put off', 'delay']], ['un reçu', ['receipt']], ['embaucher', ['hire', 'recruit']], ['un fournisseur', ['supplier', 'provider', 'vendor']], ['une augmentation (de salaire)', ['raise', 'pay rise', 'rise']], ['un actionnaire', ['shareholder', 'stockholder']]];
+  var BIG = '<div style="border:2px solid var(--corail);border-radius:16px;padding:16px 18px;margin:14px 0 6px;background:color-mix(in srgb,var(--corail) 8%,transparent)"><p style="font-size:19px;line-height:1.45;margin:0 0 8px"><b>Un mot que vous connaissez vous échappe ? Ne cherchez pas sur Internet.</b></p><p style="margin:0">Le chercher, c’est court-circuiter l’effort de mémoire, et c’est précisément cet effort qui ancre la langue. <b>Un mot oublié un instant est une occasion : le retrouver vous-même le cimente.</b></p></div>';
+  function saisie(titre, fr, bons, cb, opts){ opts = opts || {}; var ind = 0, t0 = performance.now(), fini = false, premiere = bons[0];
+    D.innerHTML = '<p class="sur">' + titre + '</p><p class="doux" style="margin:0 0 4px">Comment dit-on en anglais :</p><h2 style="font-size:30px;margin:0 0 14px">« ' + fr + ' »</h2>' +
+      '<input id="in" autocomplete="off" autocapitalize="off" spellcheck="false" lang="en" placeholder="' + (opts.lettre ? premiere[0] + '…' : 'tapez le mot anglais') + '" style="width:100%;font:600 22px var(--f);padding:12px 14px;border:1.5px solid var(--trait);border-radius:12px;background:var(--carte);color:var(--encre)">' +
+      '<p class="doux petit" id="aide" style="min-height:22px;margin:8px 0 0;font-family:var(--m)"></p><div class="ligne"><button class="btn" id="ok">Valider</button>' + (opts.indices === false ? '' : '<button class="btn" id="ind" style="background:transparent;color:var(--bleu);border:1.5px solid var(--bleu)">Un indice</button><button class="btn" id="abandon" style="background:transparent;color:var(--doux);border:1.5px solid var(--trait)" hidden>Voir la réponse</button>') + '</div><p class="flash" id="fl"></p>';
+    var inp = document.getElementById('in'), aide = document.getElementById('aide'), fl = document.getElementById('fl'); inp.focus();
+    var b = document.getElementById('abandon'); if (b) setTimeout(function(){ if (!fini) b.hidden = false; }, 20000);
+    var fin = function(ok, abandon){ fini = true; var ms = Math.round(performance.now() - t0); inp.disabled = true;
+      fl.className = 'flash ' + (ok ? 'ok' : 'ko'); fl.innerHTML = ok ? (ind ? '✓ Retrouvé, avec ' + ind + ' indice' + (ind > 1 ? 's' : '') + '. <b>Ce mot-là est cimenté.</b>' : '✓ Retrouvé seul.') : '→ <b lang="en">' + premiere + '</b>';
+      setTimeout(function(){ cb({ ok: ok, ind: ind, ms: ms, abandon: !!abandon }); }, ok ? 1100 : 1800); };
+    var valider = function(){ if (fini) return; var v = norm(inp.value); if (!v) return;
+      if (bons.some(function(x){ return norm(x) === v; })) fin(true); else if (opts.unEssai) fin(false); else { fl.className = 'flash ko'; fl.textContent = 'Pas tout à fait. Cherchez encore, ou prenez un indice.'; inp.select(); } };
+    document.getElementById('ok').onclick = valider; key = function(e){ if (e.key === 'Enter') valider(); };
+    var bi = document.getElementById('ind'); if (bi) bi.onclick = function(){ if (fini) return; ind = Math.min(ind + 1, premiere.length); aide.textContent = premiere.slice(0, ind).split('').join(' ') + ' ' + premiere.slice(ind).replace(/[a-z]/g, '_').split('').join(' '); inp.focus(); if (ind >= premiere.length) fin(false, true); };
+    if (b) b.onclick = function(){ if (!fini) fin(false, true); };
+  }
+  if (X === 'effort'){
+    var TIP = shuffle([['un tiroir', ['drawer']], ['une poubelle', ['bin', 'trash can', 'garbage can', 'dustbin', 'trash']], ['un parapluie', ['umbrella']], ['emprunter', ['borrow']], ['un ordinateur portable', ['laptop']], ['la facture (au restaurant)', ['bill', 'check']]]);
+    var bilanTip = [], L8 = shuffle(MOTS), RELU = L8.slice(0, 4), CHERCHE = L8.slice(4), fin8 = {};
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Expérience · 6 min</p><h1>L’effort qui fait retenir</h1>' + BIG + '<p style="margin-top:12px">On va le vérifier sur vous, en deux temps : des mots que vous connaissez déjà, puis des mots nouveaux.</p><button class="btn" id="go">Commencer</button>'; return 'go'; });
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Partie 1 · sur le bout de la langue</p><h2>Des mots que vous connaissez sûrement.</h2><div class="consigne"><span aria-hidden="true">🧠</span><div><b>Cherchez avant tout.</b> Si ça ne vient pas, prenez un indice (une lettre à la fois), jamais la réponse d’emblée.<br><span class="doux">La réponse n’apparaît qu’après 20 secondes d’effort.</span></div></div><button class="btn" id="go">C’est parti</button>'; return 'go'; });
+    TIP.forEach(function(t, i){ DIAPOS.push(function(){ saisie('Mot ' + (i + 1) + ' / ' + TIP.length, t[0], t[1], function(r){ bilanTip.push(r); suivant(); }); }); });
+    DIAPOS.push(function(){ var seul = bilanTip.filter(function(r){ return r.ok && !r.ind; }).length, aide = bilanTip.filter(function(r){ return r.ok && r.ind; }).length, ab = bilanTip.filter(function(r){ return !r.ok; }).length;
+      res.ms.seul = seul; res.ms.indice = aide; res.ms.abandon = ab;
+      D.innerHTML = '<p class="sur">Ce qui vient de se passer</p><h2>' + seul + ' retrouvé' + (seul > 1 ? 's' : '') + ' seul, ' + aide + ' avec un indice, ' + ab + ' manqué' + (ab > 1 ? 's' : '') + '.</h2>' +
+        (aide ? '<p>Les ' + aide + ' mot' + (aide > 1 ? 's' : '') + ' que vous avez <b>dû aller chercher</b> sont ceux qui tiendront le mieux. Chaque recherche renforce le chemin vers le mot.</p>' : '<p>Quand un mot résiste, la tentation est de le chercher tout de suite. C’est l’effort pour le retrouver qui renforce le chemin vers lui.</p>') +
+        '<p>Un indice garde l’effort de votre côté. La réponse toute faite (ou Internet) le fait disparaître.</p><button class="btn" id="go">Partie 2 : des mots nouveaux</button>'; return 'go'; });
+    DIAPOS.push(function(){ var i = 0;
+      D.innerHTML = '<p class="sur">Partie 2 · 8 mots nouveaux</p><h2>Lisez-les une fois, tranquillement.</h2><div id="carte" style="text-align:center;margin:26px 0"></div><p class="compte" id="cpt" style="text-align:center"></p>';
+      var c = document.getElementById('carte'), cp = document.getElementById('cpt');
+      (function montre(){ if (i >= L8.length){ suivant(); return; } c.innerHTML = '<p class="doux" style="font-size:20px;margin:0">' + L8[i][0] + '</p><p style="font:800 44px var(--f);margin:6px 0 0" lang="en">' + L8[i][1][0] + '</p>'; cp.textContent = (i + 1) + ' / 8'; i++; setTimeout(montre, 3500); })(); });
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Partie 2 · entraînement</p><h2>Deux façons d’apprendre, une seule mesure.</h2><p>Quatre de ces mots, vous allez simplement les <b>relire</b>. Les quatre autres, vous allez devoir les <b>retrouver</b> (avec la première lettre).</p><p class="doux">Ensuite, petite pause, puis on teste les huit.</p><button class="btn" id="go">Continuer</button>'; return 'go'; });
+    var ordre = shuffle(RELU.map(function(m){ return ['relu', m]; }).concat(CHERCHE.map(function(m){ return ['cherche', m]; })));
+    ordre.forEach(function(o, i){ DIAPOS.push(function(){
+      if (o[0] === 'relu'){ D.innerHTML = '<p class="sur">Entraînement ' + (i + 1) + ' / 8 · relire</p><div style="text-align:center;margin:30px 0"><p class="doux" style="font-size:20px;margin:0">' + o[1][0] + '</p><p style="font:800 44px var(--f);margin:6px 0 0" lang="en">' + o[1][1][0] + '</p></div><button class="btn" id="go">Suivant</button>'; return 'go'; }
+      saisie('Entraînement ' + (i + 1) + ' / 8 · retrouver', o[1][0], o[1][1], function(){ suivant(); }, { lettre: true });
+    }); });
+    DIAPOS.push(function(){ var t = 20; D.innerHTML = '<p class="sur">Pause</p><h2>Comptez à rebours de 3 en 3, à partir de 100.</h2><p>100, 97, 94… à voix basse. Cela vide la mémoire immédiate.</p><p style="font:800 64px var(--m);text-align:center;margin:20px 0" id="ch">20</p>';
+      var it = setInterval(function(){ t--; var e = document.getElementById('ch'); if (e) e.textContent = t; if (t <= 0){ clearInterval(it); suivant(); } }, 1000); });
+    shuffle(L8).forEach(function(m, i){ DIAPOS.push(function(){ saisie('Test ' + (i + 1) + ' / 8', m[0], m[1], function(r){ fin8[m[1][0]] = r.ok; suivant(); }, { indices: false, unEssai: true }); }); });
+    DIAPOS.push(function(){ var r1 = RELU.filter(function(m){ return fin8[m[1][0]]; }).length, r2 = CHERCHE.filter(function(m){ return fin8[m[1][0]]; }).length;
+      res.ms.relus = r1; res.ms.cherches = r2; res.n = 8; res.ok = r1 + r2;
+      try { localStorage.setItem('frg-effort-mots', JSON.stringify({ t: Date.now(), relu: RELU.map(function(m){ return m[1][0]; }), cherche: CHERCHE.map(function(m){ return m[1][0]; }) })); } catch (e) {}
+      D.innerHTML = '<p class="sur">Bilan</p><h2>' + (r2 > r1 ? 'Les mots cherchés tiennent mieux.' : r2 === r1 ? 'Égalité… pour l’instant.' : 'Pour l’instant, les mots relus résistent.') + '</h2>' +
+        '<div class="barres"><div class="barre"><span>Relus</span><span><i style="width:' + r1 * 25 + '%;background:var(--doux)"></i></span><b>' + r1 + '/4</b></div><div class="barre"><span>Retrouvés</span><span><i style="width:' + r2 * 25 + '%;background:var(--vert)"></i></span><b>' + r2 + '/4</b></div></div>' +
+        '<p>' + (r2 > r1 ? 'Relire donne l’impression de savoir. Retrouver, ça coûte un effort, et c’est cet effort qui fixe le mot.' : 'La vraie différence se voit avec le temps : <b>au prochain module, on reteste ces huit mots</b>. Les mots cherchés devraient mieux résister à l’oubli.') + '</p>' + BIG + fin(); envoyer(); });
+  }
+  if (X === 'effort2'){
+    var M0 = null; try { M0 = JSON.parse(localStorage.getItem('frg-effort-mots') || 'null'); } catch (e) {}
+    if (!M0){ DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Expérience · la suite</p><h2>Pas de première partie enregistrée sur cet appareil.</h2><p>Cette étape reteste les mots appris au module précédent. Continuez le module.</p>' + BIG + fin(); }); }
+    else {
+      var TOUS = MOTS.filter(function(m){ return M0.relu.concat(M0.cherche).indexOf(m[1][0]) > -1; }), R2 = {};
+      DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Expérience · la suite</p><h1>Huit mots, quelques jours plus tard</h1><p>Au module précédent, vous en avez relu quatre et retrouvé quatre. Voyons ce qu’il en reste, sans indice.</p>' + BIG + '<button class="btn" id="go">Commencer</button>'; return 'go'; });
+      shuffle(TOUS).forEach(function(m, i){ DIAPOS.push(function(){ saisie('Rappel ' + (i + 1) + ' / ' + TOUS.length, m[0], m[1], function(r){ R2[m[1][0]] = r.ok; suivant(); }, { indices: false, unEssai: true }); }); });
+      DIAPOS.push(function(){ var r1 = M0.relu.filter(function(w){ return R2[w]; }).length, r2 = M0.cherche.filter(function(w){ return R2[w]; }).length, j = Math.max(1, Math.round((Date.now() - M0.t) / 864e5));
+        res.ms.relus = r1; res.ms.cherches = r2; res.ms.jours = j; res.n = 8; res.ok = r1 + r2;
+        D.innerHTML = '<p class="sur">Bilan</p><h2>' + (r2 > r1 ? 'L’effort a gagné.' : r2 === r1 ? 'Match nul.' : 'Cette fois, la relecture l’emporte.') + '</h2><p class="doux petit">' + j + ' jour' + (j > 1 ? 's' : '') + ' après la première rencontre :</p>' +
+          '<div class="barres"><div class="barre"><span>Relus</span><span><i style="width:' + r1 * 25 + '%;background:var(--doux)"></i></span><b>' + r1 + '/4</b></div><div class="barre"><span>Retrouvés</span><span><i style="width:' + r2 * 25 + '%;background:var(--vert)"></i></span><b>' + r2 + '/4</b></div></div>' +
+          '<p>' + (r2 >= r1 ? 'Les mots que vous avez dû chercher sont restés. Ceux que vous avez seulement relus s’effacent plus vite : c’est l’effort de rappel qui construit la mémoire.' : 'Chez certains, l’écart se creuse plus tard. Gardez la règle : chercher dans sa tête d’abord, toujours.') + '</p>' + BIG + fin(); envoyer(); });
+    }
+  }
   aller();
 })();
 </script>

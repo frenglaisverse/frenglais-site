@@ -1510,10 +1510,9 @@ footer::after{opacity:.58}
   .banian:not(.pret){visibility:hidden;opacity:0!important}
   .banian-arriere{z-index:0;opacity:.95;-webkit-mask:linear-gradient(180deg,transparent 0,transparent calc(var(--m1,40%) - 14%),rgba(0,0,0,.3) var(--m1,40%),#000 var(--m2,60%));mask:linear-gradient(180deg,transparent 0,transparent calc(var(--m1,40%) - 14%),rgba(0,0,0,.3) var(--m1,40%),#000 var(--m2,60%))}
   .banian-avant{z-index:4;opacity:.95;-webkit-mask:linear-gradient(180deg,transparent 0,transparent var(--m1,40%),#000 var(--m2,60%));mask:linear-gradient(180deg,transparent 0,transparent var(--m1,40%),#000 var(--m2,60%))}
-  .hero .hero-texte{position:relative;isolation:isolate}
-  .hero .hero-texte::before{content:""!important;position:absolute;left:-48px;right:-56px;top:-34px;bottom:var(--voile-bas,-120px);z-index:-1;pointer-events:none;
-    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);background:rgba(14,32,104,.2);
-    -webkit-mask:radial-gradient(ellipse 50% 50% at 50% 50%,#000 72%,transparent 100%);mask:radial-gradient(ellipse 50% 50% at 50% 50%,#000 72%,transparent 100%)}
+  /* lisibilité : un halo flou qui épouse les lettres (1 à 2 mm), rien d'autre */
+  .hero .hero-texte h1,.hero .hero-texte h1 *{text-shadow:0 0 3px rgba(8,20,70,.55),0 0 7px rgba(8,20,70,.45)}
+  .hero .ctas .btn-contour{text-shadow:0 0 3px rgba(8,20,70,.6),0 0 6px rgba(8,20,70,.4)}
 }
 /* ordinateur : la carte Paul.M en portrait, pour habiter l'espace à droite du titre */
 @media (min-width:1101px){

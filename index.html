@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=202611281420">
+<link rel="stylesheet" href="style.css?v=202611281440">
 <script>/* téléphone : la barre d'adresse change la hauteur de l'écran à chaque défilement ; les recalculs ne se font que si la largeur change */
 (function(){if(!matchMedia('(hover: none)').matches)return;var a=window.addEventListener;window.addEventListener=function(t,f,o){if(t==='resize'&&typeof f==='function'){var w=innerWidth,g=f;f=function(e){if(innerWidth===w)return;w=innerWidth;return g.call(this,e);};}return a.call(this,t,f,o);};})();</script>
 <script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
@@ -534,10 +534,11 @@ dessiner();addEventListener('resize',dessiner);})();
   var L=r.left-623*s-o.left,T=r.top-409*s-o.top;
   if(innerWidth>1100){                             /* ordinateur : pleine largeur, le sol sur la ligne du hero */
     pol.style.removeProperty('margin-bottom');r=c.getBoundingClientRect();o=op.getBoundingClientRect();h=document.querySelector('.hero').getBoundingClientRect();
-    var W=document.documentElement.clientWidth;s=W/1640;
+    var W=Math.round(h.width);s=W/1640;   /* la largeur de la colonne du site, comme les blocs du dessous */
     var haut=document.querySelector('.bandeau').getBoundingClientRect().top, vise=Math.min(700*s*.9,innerHeight*.9), manque2=haut+vise-h.bottom;   /* le hero grandit pour montrer tout l'arbre */
     if(manque2>0){pol.style.marginBottom=(parseFloat(getComputedStyle(pol).marginBottom)||0)+manque2+'px';h=document.querySelector('.hero').getBoundingClientRect();o=op.getBoundingClientRect();}
-    L=-o.left;T=Math.max(h.bottom-o.top-700*s,haut-o.top-.2*700*s);var k2=34;   /* écran large : on garde la canopée, le pied de l'arbre passe sous la ligne */
+    L=h.left-o.left;T=Math.max(h.bottom-o.top-700*s,haut-o.top-.2*700*s);var k2=34;
+    var ht=document.querySelector('.hero-texte'),ct=document.querySelector('.hero .ctas');if(ht&&ct){ht.style.setProperty('--voile-bas',-(ct.getBoundingClientRect().bottom-ht.getBoundingClientRect().bottom+30)+'px');}   /* écran large : on garde la canopée, le pied de l'arbre passe sous la ligne */
     ims.forEach(function(im){im.style.width=W+'px';im.style.left=L+'px';im.style.top=T+'px';im.style.right='auto';im.style.bottom='auto';im.style.setProperty('--m1',Math.max(0,k2-12)+'%');im.style.setProperty('--m2',k2+'%');});
     return;}
   ims.forEach(function(im){im.style.width=1640*s+'px';im.style.left=L+'px';im.style.top=T+'px';im.style.right='auto';im.style.bottom='auto';
@@ -562,7 +563,7 @@ document.querySelectorAll('.offre').forEach(function(c){var t=c.dataset.offre,ct
       '<p class="o-3x">ou 3 × '+e(Math.round(x3(fd?p.lanc:p.pub)*100)/100)+' sans frais · soit '+e(Math.round((fd?p.lanc:p.pub)/365*100)/100)+' par jour sur un an</p>';
     c.querySelector('.o-note-fd').hidden=!fd;
     cta.textContent='Réserver';
-    var of=c.querySelector('.o-offrir');if(of){if(LIENS[t])of.href='paiement.html?formule='+t+'&cadeau=1';else of.addEventListener('click',function(ev){ev.preventDefault();var nom=t==='signature'?'Signature':'L’Intégral';remplir('p-part',nom,'Je souhaite offrir '+nom+' (carte cadeau).');});}
+    var of=c.querySelector('.o-offrir');if(of){if(LIENS[t])of.href='paiement.html?formule='+t+'&cadeau=1';else of.addEventListener('click',function(ev){ev.preventDefault();var nom=t==='signature'?'Signature':'L’Intégral';var fm=document.getElementById('f-msg');if(fm&&/^(Je souhaite|Je réserve)/.test(fm.value))fm.value='';remplir('p-part',nom,'Je souhaite offrir '+nom+' (carte cadeau).');var dv=document.getElementById('devis');if(dv){dv.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){var n=document.querySelector('#devis input:not([type=hidden]):not([type=radio]):not([type=checkbox])');if(n)n.focus({preventScroll:true});},700);}});}
     cta.addEventListener('click',function(ev){var nom=t==='signature'?'Signature':'L’Intégral';
       if(LIENS[t]){ev.preventDefault();location.href=LIENS[t];return;}
       remplir('p-part',nom,(fd?'Je réserve ma place Fondateur pour ':'Je souhaite rejoindre ')+nom+'.');});

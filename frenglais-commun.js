@@ -247,7 +247,7 @@
         o.secours(ok => { clearInterval(it); secoursActif = false; etat(false); peindre(0); o.fin && o.fin(ok); }); return; }
       a.play().then(() => etat(true)).catch(() => { echec = true; if (o.secours) jouer(); });
     };
-    bt.addEventListener('click', () => lisant ? arreter() : jouer());
+    let joues = 0; bt.addEventListener('click', () => { if (!lisant && window.FRGM) FRGM.son(joues++ ? 'rejoue' : 'play'); lisant ? arreter() : jouer(); });
     const viser = x => { if (!isFinite(a.duration) || echec) return; const r = onde.getBoundingClientRect(); a.currentTime = Math.max(0, Math.min(1, (x - r.left) / r.width)) * a.duration; peindre(a.currentTime / a.duration); if (!lisant) jouer(); };
     onde.addEventListener('click', e => viser(e.clientX));
     onde.addEventListener('keydown', e => { if (!isFinite(a.duration)) return; if (e.key === 'ArrowRight') a.currentTime = Math.min(a.duration, a.currentTime + 5); if (e.key === 'ArrowLeft') a.currentTime = Math.max(0, a.currentTime - 5); if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); lisant ? arreter() : jouer(); } });
@@ -267,7 +267,7 @@
     (racine || document).querySelectorAll('audio[controls]').forEach(au => { if (au.closest('.note-v')) return; const nv = note(au.src, { petit: true, graine: 'voix' + Math.random() }); au.replaceWith(nv); });
   }
   const repliHTML = (corps, ouvert) => `<div class="tr-repli${ouvert ? ' ouvert' : ''}"><button type="button" class="tr-tog" aria-expanded="${ouvert ? 'true' : 'false'}"><span>Transcription</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button><div class="tr-corps"${ouvert ? '' : ' hidden'}>${corps}</div></div>`;
-  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('.tr-tog'); if (!b) return; const w = b.closest('.tr-repli'), c = w.querySelector('.tr-corps'), o = c.hidden; c.hidden = !o; w.classList.toggle('ouvert', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); if (o && w.dataset.ouvert !== '1') { w.dataset.ouvert = '1'; w.dispatchEvent(new CustomEvent('ouvert', { bubbles: true })); } });
+  document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('.tr-tog'); if (!b) return; const w = b.closest('.tr-repli'), c = w.querySelector('.tr-corps'); if (c.hidden && window.FRGM) FRGM.son('trans'); const o = c.hidden; c.hidden = !o; w.classList.toggle('ouvert', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); if (o && w.dataset.ouvert !== '1') { w.dataset.ouvert = '1'; w.dispatchEvent(new CustomEvent('ouvert', { bubbles: true })); } });
   /* la transcription suit l'audio : la phrase entendue s'éclaire (estimation au prorata de la longueur du texte) */
   document.addEventListener('nvtemps', e => { const tel = e.target.closest('.tel'); if (!tel) return; const L = [...tel.querySelectorAll('.trans .t-l')]; if (!L.length) return;
     const p = e.detail; if (p < 0) { L.forEach(l => l.classList.remove('dit')); return; }
@@ -279,4 +279,44 @@
 })();
 
 /* présence : un battement toutes les 2 minutes tant qu'une page élève est ouverte (pastille « en ligne » du tableau de bord) */
-(function(){ const API='https://courbe-classement.paulodubmx84.workers.dev'; const go=()=>{ if(document.hidden) return; let S0=null; try{ S0=JSON.parse(localStorage.getItem('frg-session')||'null'); }catch(e){} if(!S0||!S0.jeton) return; fetch(API+'/eleve/present',{method:'POST',body:JSON.stringify(Object.assign({jeton:S0.jeton},window.FRG_MOD||{}))}).catch(()=>{}); }; setTimeout(go,4000); setInterval(go,120000); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); }); })();
+(function(){ const API='https://courbe-classement.paulodubmx84.workers.dev'; const go=()=>{ if(document.hidden) return; let S0=null; try{ S0=JSON.parse(localStorage.getItem('frg-session')||'null'); }catch(e){} if(!S0||!S0.jeton) return; fetch(API+'/eleve/present',{method:'POST',body:JSON.stringify(Object.assign({jeton:S0.jeton},window.FRG_MOD||{},window.FRG_MOD&&window.FRGM?{mes:FRGM.resume()}:{}))}).catch(()=>{}); }; setTimeout(go,4000); setInterval(go,120000); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); }); })();
+
+/* ---------- mesure fine de l'apprentissage (FRGM) ----------
+   Pour chaque module : temps actif par étape, et pour chaque question le temps de réponse, le nombre d'essais, la réussite du premier coup,
+   la compétence travaillée ; écoutes, réécoutes, transcription ouverte, indices ; écrit libre (phrases, mots, types de fautes) ; fluidité.
+   Gardé sur l'appareil, envoyé au serveur avec le battement de présence et en fin de module, pour le tableau de Paul. */
+window.FRGM = (function(){
+  const COMP = [[/Posez la Courbe|Courbe à trous|Le jeu|connaissez/i,'courbe'],[/déclic|cartes|Nuances|Contrôle|passés|expert/i,'regle'],[/vitre/i,'voir'],
+    [/Comprendre/i,'oral'],[/Repérer/i,'entendre'],[/Répéter|voix haute|cas pratique/i,'parler'],[/Lire/i,'lecture'],[/code|boîte|ordre|Essorez|Réparez/i,'produire'],
+    [/Ma version/i,'ecrire'],[/plus vite/i,'automatisme'],[/Révision|Bienvenue|rappel/i,'memoire']];
+  const comp = nom => { for (const [r, c] of COMP) if (r.test(nom || '')) return c; return 'autre'; };
+  let M = null, cle = null, S = null, et = null, t0 = 0, dern = 0, cache = false;
+  const now = () => Date.now(), CAP = 180000;
+  const lire = () => { try { return JSON.parse(localStorage.getItem(cle) || 'null'); } catch (e) { return null; } };
+  const ecrire = () => { try { localStorage.setItem(cle, JSON.stringify(S)); } catch (e) {} };
+  function fermer(){ if (!S || !et || cache) return; const d = Math.min(now() - t0, 20 * 60000); if (d > 0) { const e = S.et[et] = S.et[et] || [0, 0]; e[0] += Math.round(d / 1000); } t0 = now(); }
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { fermer(); cache = true; ecrire(); } else { cache = false; t0 = dern = now(); } });
+  addEventListener('pagehide', () => { fermer(); ecrire(); });
+  const api = {
+    init(m){ M = m; cle = 'frg-mes-m' + m; S = lire() || { v: 1, et: {}, it: {}, so: [0, 0, 0, 0], ind: 0, ec: { ph: 0, mots: 0, env: 0, f: {} }, fl: [] }; },
+    etape(nom){ if (!S) return; fermer(); et = nom; t0 = dern = now(); const e = S.et[et] = S.et[et] || [0, 0]; e[1]++; ecrire(); },
+    lib(k, txt){ if (!S) return; const it = S.it[k] = S.it[k] || { c: comp(et), e: et, n: 0 }; if (txt && !it.l) it.l = String(txt).replace(/<[^>]+>/g, '').slice(0, 70); },
+    rep(k, ok){ if (!S) return; const t = now(), it = S.it[k] = S.it[k] || { c: comp(et), e: et, n: 0 }; it.n++;
+      if (it.n === 1) { it.ms = Math.min(t - Math.max(t0, dern), CAP); it.ok = ok ? 1 : 0; }
+      if (ok && it.fin == null) it.fin = it.n; dern = t; ecrire(); },
+    son(type){ if (!S) return; const i = { play: 0, rejoue: 1, trans: 2, tts: 3 }[type]; if (i != null) { S.so[i]++; ecrire(); } },
+    indice(){ if (!S) return; S.ind++; ecrire(); },
+    ecrit(o){ if (!S) return; const E = S.ec; E.env++; E.ph += o.ph || 0; E.mots += o.mots || 0; (o.fautes || []).forEach(f => E.f[f] = (E.f[f] || 0) + 1); ecrire(); },
+    fluide(i, utilise, max){ if (!S) return; S.fl[i] = [utilise, max]; ecrire(); },
+    resume(){ if (!S) return null; fermer(); ecrire();
+      const items = Object.entries(S.it), co = {};
+      items.forEach(([k, it]) => { const c = co[it.c] = co[it.c] || [0, 0, [], 0]; c[0]++; c[1] += it.ok || 0; if (it.ms != null) c[2].push(it.ms); c[3] += it.n; });
+      const med = a => { if (!a.length) return null; a = a.slice().sort((x, y) => x - y); return a[Math.floor(a.length / 2)]; };
+      const CO = {}; Object.entries(co).forEach(([c, v]) => CO[c] = [v[0], v[1], med(v[2]), v[3]]);
+      const IT = items.map(([k, it]) => [k, it.ok || 0, it.ms == null ? null : Math.round(it.ms / 100) / 10, it.n, it.c, (it.e || '').replace(/^Temps \d+ · /, ''), it.l || '']).sort((a, b) => a[1] - b[1] || (b[2] || 0) - (a[2] || 0)).slice(0, 60);
+      const ET = {}; Object.entries(S.et).forEach(([n, v]) => ET[n.replace(/^Temps \d+ · /, '')] = v[0]);
+      return { v: 1, dur: Object.values(S.et).reduce((a, v) => a + v[0], 0), et: ET, co: CO, it: IT, so: S.so, ind: S.ind, ec: S.ec, fl: S.fl };
+    }
+  };
+  return api;
+})();

@@ -23,7 +23,8 @@
   // score : seul le premier essai de chaque question compte
   const PARC = window.FRGA ? FRGA.niveau() : 'std', FOND = PARC==='fond', APPR = PARC==='appr';   /* parcours adaptatif */
   const aRevoir=q=>{ if(!FOND) return; E.revoir=E.revoir||[]; if(!E.revoir.some(x=>x[0]===q[0])){ E.revoir.push(q); sauver(); } };
-  const noter=(cle,ok)=>{ E.notes=E.notes||{}; if(!(cle in E.notes)){ E.notes[cle]=ok?1:0; sauver(); } };
+  if (window.FRGM) FRGM.init(1);
+  const noter=(cle,ok)=>{ if (window.FRGM) FRGM.rep(cle,ok); E.notes=E.notes||{}; if(!(cle in E.notes)){ E.notes[cle]=ok?1:0; sauver(); } };
   const AV = '<span class="av" aria-hidden="true"><svg viewBox="0 0 34 34"><rect width="34" height="34" fill="#8E9AA6"/><ellipse cx="17" cy="21" rx="10" ry="7.5" fill="#A9B3BC"/><circle cx="12" cy="13" r="1.8" fill="#1B2430"/><circle cx="22" cy="13" r="1.8" fill="#1B2430"/><circle cx="14" cy="20" r=".9" fill="#5C6670"/><circle cx="20" cy="20" r=".9" fill="#5C6670"/><circle cx="17" cy="23" r=".9" fill="#5C6670"/></svg></span>';
   const OK = (t) => `<div class="retour-msg ok">${t}</div>`, KO = (t) => `<div class="retour-msg ko">${t}</div>`;
 
@@ -71,7 +72,7 @@
   function maj(){ const p=Math.round(pct()); $('#barre').style.width=p+'%'; $('#barre-box').setAttribute('aria-valuenow',p); $('#etape-pct').textContent=p+' %'; $('#etape-nom').textContent=ETAPES[E.step].nom; }
   function aller(n){
     if ('speechSynthesis' in window) speechSynthesis.cancel();
-    E.step = Math.max(0, Math.min(ETAPES.length-1, n)); sauver(); window.FRG_MOD = { m: 1, etape: E.step + 1, total: ETAPES.length };
+    E.step = Math.max(0, Math.min(ETAPES.length-1, n)); sauver(); window.FRG_MOD = { m: 1, etape: E.step + 1, total: ETAPES.length }; if (window.FRGM) FRGM.etape(ETAPES[E.step].nom);
     ecran.innerHTML=''; fait=false; verrou.hidden=true; suiv.disabled=false;
     prec.disabled = E.step===0; suiv.textContent = E.step===ETAPES.length-1 ? 'Retour à l\'espace élève' : 'Suivant';
     ETAPES[E.step].f(ecran); maj(); ecran.focus({preventScroll:true}); window.scrollTo({top:0,behavior:'smooth'});
@@ -204,8 +205,8 @@
   /* QCM adaptatif : indice (Fondations), explication même si juste (Fondations), moins d'aide (Approfondi), ratés mémorisés pour la révision */
   function serieQ(box,cle,Q,msg){ let bons=0;
     Q.forEach(([q,ch,b,ex,aide],n)=>{ const d=el(`<div class="exo"><p class="phrase">${q}</p><div class="choix">${ordre(q,ch.length).map(j=>`<button class="puce" type="button" data-j="${j}">${ch[j]}</button>`).join('')}</div>${FOND&&aide?'<button class="indice-btn" type="button">Un indice</button>':''}<div class="r"></div></div>`).firstChild; box.append(d);
-      const ib=d.querySelector('.indice-btn'); if(ib) ib.addEventListener('click',()=>{ ib.outerHTML=`<p class="indice">💡 ${aide}</p>`; });
-      d.querySelectorAll('.puce').forEach(p=>p.addEventListener('click',()=>{ if(d.dataset.fini) return; const j=+p.dataset.j; noter(cle+n, j===b);
+      const ib=d.querySelector('.indice-btn'); if(ib) ib.addEventListener('click',()=>{ if (window.FRGM) FRGM.indice(); ib.outerHTML=`<p class="indice">💡 ${aide}</p>`; });
+      d.querySelectorAll('.puce').forEach(p=>p.addEventListener('click',()=>{ if(d.dataset.fini) return; const j=+p.dataset.j; if (window.FRGM) FRGM.lib(cle+n, q); noter(cle+n, j===b);
         if (j===b){ p.classList.add('ok'); d.dataset.fini=1; d.querySelector('.r').innerHTML=OK('Exact.'+(FOND&&ex?' '+ex:'')); if(++bons===Q.length) valider(); }
         else { p.classList.add('ko'); d.querySelector('.r').innerHTML=KO(APPR&&!/^(exp|rev)/.test(cle)?'Pas tout à fait. Réessayez.':ex); if(!/^rev/.test(cle)) aRevoir([q,ch,b,ex,aide]); } })); });
     exiger(msg); if (E.faits[E.step]) valider(); }
@@ -446,6 +447,7 @@
     env.addEventListener('click',()=>{ const txt=t.value.trim(); if(!txt) return; E.version=txt; sauver(); msg('moi',esc(txt)); t.value='';
       const ph=C.phrases(txt); let fautes=[];
       ph.forEach(p=>{ const a=C.analyser(p); if(a&&a.type!=='ok'){ essais[p]=(essais[p]||0)+1; fautes.push([p,a]); } });
+      if (window.FRGM) FRGM.ecrit({ ph: ph.length, mots: txt.split(/\s+/).filter(Boolean).length, fautes: fautes.map(f=>f[1].type) });
       setTimeout(()=>{
         if (ph.length<4){ msg('lui',`J'ai ${ph.length} phrase${ph.length>1?'s':''}. I need au moins 4 : qui vous êtes, votre travail, ce que vous aimez, et hier.`); }
         if (!fautes.length){ if (ph.length>=4){ msg('lui','Nice job ! Vos deux temps sont on point, et vos phrases sont dans le bon ordre. Toute la suite se construit là-dessus.'); valider(); relire(txt, msg); presentationOrale(z); } return; }
@@ -512,14 +514,14 @@
       <p class="provisoire" id="note">Si vous l'autorisez, chaque essai est gardé sur cet appareil. Vous réentendrez votre voix au module 12, puis à la fin du parcours : la différence vous surprendra.</p>`));
     const tps=z.querySelector('#tps'), go=z.querySelector('#go'), stop=z.querySelector('#stop'), aud=z.querySelector('#aud');
     let flux=null, rec=null, it=null;
-    const terminer=()=>{ clearInterval(it); stop.hidden=true; if(rec&&rec.state!=='inactive') rec.stop(); z.querySelectorAll('.essais span')[n].classList.add('fait'); n++;
+    let tRest=0; const terminer=()=>{ clearInterval(it); if (window.FRGM) FRGM.fluide(n, durees[n]-Math.max(0,tRest), durees[n]); stop.hidden=true; if(rec&&rec.state!=='inactive') rec.stop(); z.querySelectorAll('.essais span')[n].classList.add('fait'); n++;
       if(n<durees.length){ go.hidden=false; go.textContent=`Essai ${n+1} · ${durees[n]} s`; tps.textContent=durees[n]; } else { go.hidden=true; tps.textContent='✓'; valider(); if(flux) flux.getTracks().forEach(t=>t.stop()); } };
     go.addEventListener('click',async()=>{ go.hidden=true; stop.hidden=false; let t=durees[n]; tps.textContent=t;
       try{ if(!flux && navigator.mediaDevices) flux=await navigator.mediaDevices.getUserMedia({audio:true});
         if(flux && window.MediaRecorder){ const morceaux=[]; rec=new MediaRecorder(flux); rec.ondataavailable=e=>morceaux.push(e.data);
           const num=n+1; rec.onstop=()=>{ const bl=new Blob(morceaux,{type:rec.mimeType}); if(window.Voix) Voix.garder('m1-essai-'+num, bl); const u=URL.createObjectURL(bl); audios.push(u); aud.insertAdjacentHTML('beforeend',`<p class="petit">Essai ${num} : <audio controls src="${u}"></audio></p>`); }; rec.start(); } }
       catch(e){ z.querySelector('#note').textContent='Micro non autorisé : faites l\'exercice à voix haute, sans enregistrement.'; }
-      it=setInterval(()=>{ t--; tps.textContent=t; if(t<=0) terminer(); },1000); });
+      tRest=t; it=setInterval(()=>{ t--; tRest=t; tps.textContent=t; if(t<=0) terminer(); },1000); });
     stop.addEventListener('click',terminer);
     exiger('Faites les trois essais.'); if (E.faits[E.step]) valider();
   }
@@ -646,7 +648,7 @@
   async function enregistrer(score, valide, total, erreurs){
     const box=document.getElementById('envoi'); let S0=null; try{ S0=JSON.parse(localStorage.getItem('frg-session')||'null'); }catch(e){}
     if (!S0||!S0.jeton){ if(box) box.textContent='Progression gardée sur cet appareil.'; return; }
-    try { const r=await fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/resultat',{method:'POST',body:JSON.stringify({ jeton:S0.jeton, module:1, score, valide, minutes:Math.round(total/60), erreurs })});
+    try { const r=await fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/resultat',{method:'POST',body:JSON.stringify({ jeton:S0.jeton, module:1, score, valide, mes: window.FRGM ? FRGM.resume() : null, minutes:Math.round(total/60), erreurs })});
       const j=await r.json().catch(()=>({})); if(box) box.textContent = j.ok ? 'Progression enregistrée.' : 'Progression gardée sur cet appareil.'; }
     catch(e){ if(box) box.textContent='Progression gardée sur cet appareil.'; }
   }

@@ -6,7 +6,7 @@
   const $ = s => document.querySelector(s);
   const ecran = $('#ecran'), suiv = $('#suiv'), prec = $('#prec'), verrou = $('#verrou');
   if (!D) { ecran.innerHTML = '<h1>Module introuvable.</h1><p><a href="espace-eleve.html">Retour aux modules</a></p>'; suiv.hidden = prec.hidden = true; return; }
-  const N = D.n, CLE = 'frg-m' + N, SEUIL = 90;
+  const N = D.n, CLE = 'frg-m' + N, SEUIL = 90; if (window.FRGM) FRGM.init(N);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const el = html => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content; };
   const melange = a => { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
@@ -30,7 +30,7 @@
   const sauver = () => { try { localStorage.setItem(CLE, JSON.stringify(E)); localStorage.setItem(CLE + '-pct', String(Math.round(pct()))); } catch (e) {} };
   const PARC = window.FRGA ? FRGA.niveau() : 'std', FOND = PARC === 'fond', APPR = PARC === 'appr';   /* parcours adaptatif */
   const aRevoir = q => { if (!FOND) return; E.revoir = E.revoir || []; if (!E.revoir.some(x => x[0] === q[0])) { E.revoir.push(q); sauver(); } };
-  const noter = (cle, ok) => { E.notes = E.notes || {}; if (!(cle in E.notes)) { E.notes[cle] = ok ? 1 : 0; sauver(); } };
+  const noter = (cle, ok) => { if (window.FRGM) FRGM.rep(cle, ok); E.notes = E.notes || {}; if (!(cle in E.notes)) { E.notes[cle] = ok ? 1 : 0; sauver(); } };
   const prenom = t => String(t).replace(/\{prenom\}/g, E.prenom || 'Alex');
   { const t = $('#mod-titre'); if (t) t.textContent = `${N > 24 ? 'Atelier d\'oral ' + (N - 24) + '/8' : 'Module ' + N + ' · ' + N + '/24'} · ${ACT || SECTS[S()]}`; document.title = `${N > 24 ? "Atelier " + (N - 24) : "Module " + N} · ${D.titre} · Frenglais`; }
 
@@ -148,7 +148,7 @@
   function maj(){ const p = Math.round(pct()); $('#barre').style.width = p + '%'; $('#barre-box').setAttribute('aria-valuenow', p); $('#etape-pct').textContent = p + ' %'; $('#etape-nom').textContent = ETAPES[E.step].nom; }
   function aller(n){
     if ('speechSynthesis' in window) speechSynthesis.cancel();
-    E.step = Math.max(0, Math.min(ETAPES.length - 1, n)); sauver(); window.FRG_MOD = { m: N, etape: E.step + 1, total: ETAPES.length };
+    E.step = Math.max(0, Math.min(ETAPES.length - 1, n)); sauver(); window.FRG_MOD = { m: N, etape: E.step + 1, total: ETAPES.length }; if (window.FRGM) FRGM.etape(ETAPES[E.step].nom);
     ecran.innerHTML = ''; verrou.hidden = true; suiv.disabled = false;
     prec.disabled = E.step === 0; suiv.textContent = E.step === ETAPES.length - 1 ? 'Retour aux modules' : 'Suivant';
     ETAPES[E.step].f(ecran); maj(); ecran.focus({ preventScroll:true }); window.scrollTo({ top:0, behavior:'smooth' });
@@ -163,9 +163,9 @@
   function qcm(cont, cle, q, ch, b, ex, surJuste, aide, presque){
     const d = el(`<div class="exo"><p class="phrase">${prenom(q)}</p><div class="choix">${ordre(q, ch.length).map(j => `<button class="puce" type="button" data-j="${j}">${prenom(ch[j])}</button>`).join('')}</div>${FOND && aide ? `<button class="indice-btn" type="button">Un indice</button>` : ''}<div class="r"></div></div>`).firstChild;
     cont.append(d);
-    const ib = d.querySelector('.indice-btn'); if (ib) ib.addEventListener('click', () => { ib.outerHTML = `<p class="indice">💡 ${prenom(aide)}</p>`; });
+    const ib = d.querySelector('.indice-btn'); if (ib) ib.addEventListener('click', () => { if (window.FRGM) FRGM.indice(); ib.outerHTML = `<p class="indice">💡 ${prenom(aide)}</p>`; });
     d.querySelectorAll('.puce').forEach(p => p.addEventListener('click', () => {
-      if (d.dataset.fini) return; const j = +p.dataset.j;
+      if (d.dataset.fini) return; const j = +p.dataset.j; if (window.FRGM) FRGM.lib(cle, prenom(q));
       if (presque && presque[j] !== undefined) { noter(cle, true); p.classList.add('presque'); d.dataset.fini = 1; const best = d.querySelector(`.puce[data-j="${b}"]`); if (best) best.classList.add('mieux');
         d.querySelector('.r').innerHTML = `<div class="retour-msg presque"><b>Pas faux.</b> ${prenom(presque[j])}</div>`; surJuste && surJuste(); return; }
       noter(cle, j === b);
@@ -296,7 +296,7 @@
       const it = L[n]; r.innerHTML = '';
       const box = el(`<div class="exo vitre-exo"><span class="compteur">${n + 1} / ${L.length}${n >= V.items.length ? ' · elle revient' : ''}</span>${V.type === 'modaux' ? `<p class="cible">Chance visée : <b>${it.cible}</b></p><div class="barre-modal"><i style="width:0%"></i><span>0 %</span></div>` : ''}<p class="phrase vitre-phrase">${prenom(it.avant || '')} <span class="trou-v">___</span>${/^[.,!?;:]/.test(it.apres || '') ? '' : ' '}${prenom(it.apres || '')}</p><div class="choix">${(V.type === 'modaux' ? V.modaux.map((m, j) => j) : ordre(it.avant + it.apres, it.options.length)).map(j => `<button class="puce" type="button" data-j="${j}">${prenom(V.type === 'modaux' ? V.modaux[j][0] : it.options[j])}</button>`).join('')}</div>${FOND && it.aide ? '<button class="indice-btn" type="button">Un indice</button>' : ''}</div>`).firstChild;
       v.innerHTML = ''; v.append(box);
-      const ib = box.querySelector('.indice-btn'); if (ib) ib.addEventListener('click', () => { ib.outerHTML = `<p class="indice">💡 ${prenom(it.aide)}</p>`; });
+      const ib = box.querySelector('.indice-btn'); if (ib) ib.addEventListener('click', () => { if (window.FRGM) FRGM.indice(); ib.outerHTML = `<p class="indice">💡 ${prenom(it.aide)}</p>`; });
       box.querySelectorAll('.puce').forEach(p => p.addEventListener('click', () => {
         if (box.dataset.fini) return; const j = +p.dataset.j;
         const choix = V.type === 'modaux' ? V.modaux[j][0] : it.options[j];
@@ -464,6 +464,7 @@
     ui.env.addEventListener('click', () => { const txt = ui.t.value.trim(); if (!txt) return; E.version = txt; sauver(); ui.msg('moi', esc(txt)); ui.t.value = '';
       const ph = C ? C.phrases(txt) : txt.split(/[.!?]+/).filter(Boolean); const fautes = [];
       if (C) ph.forEach(p => { const a = C.analyser(p); if (a && a.type !== 'ok') { essais[p] = (essais[p] || 0) + 1; fautes.push([p, a]); } });
+      if (window.FRGM) FRGM.ecrit({ ph: ph.length, mots: txt.split(/\s+/).filter(Boolean).length, fautes: fautes.map(f => f[1].type) });
       ui.ecrit(() => {
         if (ph.length < min) ui.msg('lui', LAM('peu', ph.length, min));
         if (!fautes.length) { if (ph.length >= min) { ui.msg('lui', LAM('ok')); valider(); relireIA(txt, ui.msg, V.consigne); } return; }
@@ -562,7 +563,7 @@
       z.querySelector('#m1voix').innerHTML = `<div class="retour-msg info"><b>Votre voix au module 1.</b> Écoutez-la avant de commencer, puis comparez.<audio controls src="${url}"></audio></div>`; });
     const tps = z.querySelector('#tps'), go = z.querySelector('#go'), stop = z.querySelector('#stop'), aud = z.querySelector('#aud');
     let flux = null, rec = null, it = null;
-    const terminer = () => { clearInterval(it); stop.hidden = true; if (rec && rec.state !== 'inactive') rec.stop(); z.querySelectorAll('.essais span')[n].classList.add('fait'); n++;
+    let tRest = 0; const terminer = () => { clearInterval(it); if (window.FRGM) FRGM.fluide(n, durees[n] - Math.max(0, tRest), durees[n]); stop.hidden = true; if (rec && rec.state !== 'inactive') rec.stop(); z.querySelectorAll('.essais span')[n].classList.add('fait'); n++;
       if (n < durees.length) { go.hidden = false; go.textContent = `Essai ${n + 1} · ${durees[n]} s`; tps.textContent = durees[n]; }
       else { go.hidden = true; tps.textContent = '✓'; valider(); if (flux) flux.getTracks().forEach(t => t.stop()); } };
     go.addEventListener('click', async () => { go.hidden = true; stop.hidden = false; let t = durees[n]; tps.textContent = t;
@@ -570,7 +571,7 @@
         if (flux && window.MediaRecorder) { const morceaux = []; rec = new MediaRecorder(flux); rec.ondataavailable = e => morceaux.push(e.data); const num = n + 1;
           rec.onstop = () => { const url = URL.createObjectURL(new Blob(morceaux, { type: rec.mimeType })); aud.insertAdjacentHTML('beforeend', `<p class="petit">Essai ${num} : <audio controls src="${url}"></audio></p>`); }; rec.start(); } }
       catch (e) { z.querySelector('#note').textContent = 'Micro non autorisé : faites l\'exercice à voix haute, sans enregistrement.'; }
-      it = setInterval(() => { t--; tps.textContent = t; if (t <= 0) terminer(); }, 1000); });
+      tRest = t; it = setInterval(() => { t--; tRest = t; tps.textContent = t; if (t <= 0) terminer(); }, 1000); });
     stop.addEventListener('click', terminer);
     exiger('Faites les trois essais.'); if (E.faits[E.step]) valider();
   }
@@ -583,7 +584,7 @@
     const rates = Object.entries(E.notes || {}).filter(([k, v]) => !v && !/^(exp|rev)/.test(k)).length;
     const aj = window.FRGA && !TESTEUR ? FRGA.ajuster(score, N) : null;
     const msgParc = aj && aj.change ? `<div class="retour-msg info parcours-change">${aj.apres === 'appr' || (aj.avant === 'fond' && aj.apres === 'std') ? 'Vous montez' : 'Vous passez'} au parcours <b>${FRGA.NOMS[aj.apres]}</b> pour le prochain module. ${FRGA.DESC[aj.apres]}</div>` : '';
-    try { const S0 = JSON.parse(localStorage.getItem('frg-session') || 'null'); if (S0 && S0.jeton) fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/resultat', { method: 'POST', body: JSON.stringify({ jeton: S0.jeton, module: N, score, valide, minutes: Math.round(total / 60), erreurs: Object.entries((E.erreurs || []).reduce((o, k) => (o[k] = (o[k] || 0) + 1, o), {})).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, v]) => k + ' ×' + v) }) }).catch(() => {}); } catch (e) {}
+    try { const S0 = JSON.parse(localStorage.getItem('frg-session') || 'null'); if (S0 && S0.jeton) fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/resultat', { method: 'POST', body: JSON.stringify({ jeton: S0.jeton, module: N, score, valide, minutes: Math.round(total / 60), mes: window.FRGM ? FRGM.resume() : null, erreurs: Object.entries((E.erreurs || []).reduce((o, k) => (o[k] = (o[k] || 0) + 1, o), {})).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, v]) => k + ' ×' + v) }) }).catch(() => {}); } catch (e) {}
     const bilan = N % 4 === 0 ? `<div class="retour-msg info">Votre fiche bilan n° ${N / 4} est prête : <a href="bilan.html?bloc=${N / 4}" target="_blank" rel="noopener">voir la fiche</a>.</div>` : '';
     z.append(el(`<p class="eyebrow">Module ${N} · terminé</p><h1>${valide ? `${E.prenom ? esc(E.prenom) + ', module' : 'Module'} validé.` : 'Presque. Encore un tour.'}</h1>
       <div class="carte-fin">

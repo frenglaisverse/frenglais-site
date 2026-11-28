@@ -1515,3 +1515,15 @@ footer::after{opacity:.58}
     -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);background:rgba(14,32,104,.2);
     -webkit-mask:radial-gradient(ellipse 50% 50% at 50% 50%,#000 72%,transparent 100%);mask:radial-gradient(ellipse 50% 50% at 50% 50%,#000 72%,transparent 100%)}
 }
+/* ordinateur : la carte Paul.M en portrait, pour habiter l'espace à droite du titre */
+@media (min-width:1101px){
+  .polaroid{top:14px!important;right:clamp(40px,6vw,110px)!important}
+  .polaroid .pol-carte{width:222px!important;aspect-ratio:.66!important}
+  .polaroid .pol-recto{flex-direction:column!important;gap:6.5cqi!important;padding:6.5cqi!important}
+  .polaroid .pol-cadre{width:100%!important;height:auto!important;flex:1 1 auto!important;min-height:0;border-radius:6cqi!important}
+  .polaroid .pol-info{flex:none!important;gap:0}
+  .polaroid .pol-marque{font-size:4.6cqi!important}
+  .polaroid .pol-nom{font-size:12.5cqi!important;margin-top:3cqi!important}
+  .polaroid .pol-role{font-size:4.8cqi!important;margin-top:2.4cqi!important}
+  .polaroid .pol-gravure{margin-top:6cqi!important}
+}

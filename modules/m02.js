@@ -1,5 +1,5 @@
 window.MOD = {
-  n: 2, arc: 1, titre: 'T0, le temps le plus simple',
+  n: 2, arc: 1, titre: 'T0, le temps le plus simple', exp: [{ x: 'blocs', ou: 'courbe' }],
   objectif: 'À la fin de ce module, vous parlez de votre routine, de votre métier et de vos goûts, et vous posez une question au présent sans hésiter.',
   rappel: [
     ['Une phrase anglaise, c\'est d\'abord…', ['qui, fait quoi, à quoi', 'le verbe, puis le sujet', 'un ordre libre'], 0, 'Module 1 : sujet, verbe, complément. Toujours.'],

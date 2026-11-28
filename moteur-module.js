@@ -121,20 +121,22 @@
   };
 
   /* ---------- étapes ---------- */
-  /* mi-parcours : la revanche de Stroop, juste après la Courbe posée (module 12) */
-  function stroopEtape(ecran){
-    ecran.append(el('<div><p class="eyebrow">Mi-parcours · L’expérience de Stroop</p><iframe src="stroop.html?mi=1&embed=1" title="Expérience de Stroop" style="width:100%;height:600px;margin-top:6px;border:0;border-radius:18px;background:transparent" loading="lazy"></iframe></div>'));
-  }
+  /* expériences intégrées (Stroop à mi-parcours et en fin de parcours, contexte, lire en blocs, mémoire en paquets, McGurk) */
+  const expEtape = (src, sur) => ecran => ecran.append(el(`<div><p class="eyebrow">${sur}</p><iframe src="${src}" title="${sur}" style="width:100%;height:620px;margin-top:6px;border:0;border-radius:18px;background:transparent" loading="lazy"></iframe></div>`));
+  const NOMS_EXP = { contexte: 'Le contexte', blocs: 'Lire en blocs', paquets: 'La mémoire en paquets', mcgurk: 'L’effet McGurk' };
+  const EXP = ou => (D.exp || []).filter(x => x.ou === ou).map(x => ({ nom: 'Expérience · ' + (NOMS_EXP[x.x] || x.x), f: expEtape('experience.html?x=' + x.x + '&embed=1', 'Expérience · ' + (NOMS_EXP[x.x] || x.x)) }));
+  const STROOP = D.stroop ? [{ nom: (D.stroop === 'fin' ? 'Fin de parcours' : 'Mi-parcours') + ' · Stroop', f: expEtape('stroop.html?' + (D.stroop === 'fin' ? 'fin' : 'mi') + '=1&embed=1', (D.stroop === 'fin' ? 'Fin de parcours' : 'Mi-parcours') + ' · L’expérience de Stroop') }] : [];
   const ETAPES = [
     { nom:'Bienvenue', f:bienvenue },
     { nom:'Temps 1 · Posez la Courbe', f:poserCourbe },
-    ...(D.stroop ? [{ nom:'Mi-parcours · Stroop', f:stroopEtape }] : []),
+    ...STROOP, ...EXP('courbe'),
     { nom:'Temps 2 · Le déclic', f:choc },
     { nom:'Temps 2 · Les cartes', f:cartes },
     ...(APPR && D.nuances ? [{ nom:'Temps 2 · Nuances', f:nuances }] : []),
     { nom:'Temps 2 · Contrôle', f:controle },
     { nom:'Temps 3 · La vitre', f:vitre },
     ...(APPR && D.expert ? [{ nom:'Temps 3 · Défi expert', f:expert }] : []),
+    ...EXP('ecoute'),
     { nom:'Temps 4 · Comprendre', f:ecoute1 },
     { nom:'Temps 4 · Repérer', f:ecoute2 },
     ...(D.lecture ? [{ nom:'Temps 4 · Lire', f:lecture }] : []),

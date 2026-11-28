@@ -1,5 +1,5 @@
 window.MOD = {
-  n: 3, arc: 1, titre: 'T-1, toujours simple',
+  n: 3, arc: 1, titre: 'T-1, toujours simple', exp: [{ x: 'paquets', ou: 'courbe' }],
   objectif: 'À la fin de ce module, vous racontez votre week-end ou votre journée de travail d\'hier, et vous repérez le -ed même quand il se cache.',
   rappel: [
     ['<em>She ___ in a bank.</em>', ['work', 'works', 'working'], 1, 'Module 2 : she, donc -s.'],

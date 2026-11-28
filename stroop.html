@@ -73,8 +73,9 @@ p{font-size:17px;line-height:1.55;margin:0 0 12px}.doux{color:var(--doux)}.petit
 <main><section class="diapo" id="d" aria-live="polite"></section></main>
 <script>
 (function(){
-  var Q = new URLSearchParams(location.search), MI = Q.has('mi'), EMB = Q.has('embed');
-  if (EMB){ document.querySelector('header').style.display = 'none'; document.body.style.background = 'transparent'; document.querySelector('main').style.padding = '0'; }
+  var Q = new URLSearchParams(location.search), FIN = Q.has('fin'), MI = Q.has('mi') || FIN, EMB = Q.has('embed');
+  var MID = (function(){ try { return JSON.parse(localStorage.getItem('frg-stroop-mi') || 'null'); } catch (e) { return null; } })();
+  if (EMB){ document.querySelector('header').style.display = 'none'; document.body.style.background = 'transparent'; document.querySelector('main').style.padding = '0'; document.querySelector('main').style.alignItems = 'flex-start'; document.getElementById('d').style.boxShadow = 'none'; }
   var PREM = (function(){ try { return JSON.parse(localStorage.getItem('frg-stroop-1') || 'null'); } catch (e) { return null; } })();
   var D = document.getElementById('d'), RAIL = document.getElementById('rail'), ET = document.getElementById('etape');
   var COUL = [{n:'ROUGE',v:'--rouge',k:'r'},{n:'BLEU',v:'--cbleu',k:'b'},{n:'VERT',v:'--vert',k:'v'},{n:'ORANGE',v:'--orange',k:'o'}];
@@ -125,7 +126,11 @@ p{font-size:17px;line-height:1.55;margin:0 0 12px}.doux{color:var(--doux)}.petit
 
   /* ---------- diapositives ---------- */
   var DIAPOS = [
-    function(){ if (MI){ D.innerHTML = '<p class="sur">Mi-parcours · 6 min</p><h1>La revanche de Stroop</h1>' +
+    function(){ if (FIN){ D.innerHTML = '<p class="sur">Fin de parcours · 6 min</p><h1>Le dernier Stroop</h1>' +
+      '<p>Au premier jour, puis à mi-parcours, l’expérience de Stroop a mesuré combien un mauvais code vous ralentissait.</p>' +
+      '<p>Voici la troisième et dernière mesure. <b>Les couleurs</b>, puis <b>les codes</b>. À la fin, votre courbe d’automatisme, du premier jour à aujourd’hui.</p>' +
+      '<p class="doux petit">Répondez vite, sans chercher la perfection.</p><button class="btn" id="go">Commencer</button>'; return 'go'; }
+      if (MI){ D.innerHTML = '<p class="sur">Mi-parcours · 6 min</p><h1>La revanche de Stroop</h1>' +
       '<p>Au début du parcours, l’expérience de Stroop a mesuré une chose : votre cerveau lit tout seul, et un mauvais code vous ralentit.</p>' +
       '<p>Douze modules plus tard, on la refait. <b>Les couleurs</b> d’abord, puis <b>les codes</b>. À la fin, vous comparez avec vous-même.</p>' +
       (PREM ? '<p class="doux petit">Votre première expérience date du ' + new Date(PREM.t).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }) + '.</p>' : '<p class="doux petit">Répondez vite, sans chercher la perfection. Vos temps sont mesurés au centième.</p>') +
@@ -181,6 +186,16 @@ p{font-size:17px;line-height:1.55;margin:0 0 12px}.doux{color:var(--doux)}.petit
     function(){ manche('k2', essaisCodes(15), renduCode, BTN_K, suivant); },
     function(){ var a1 = stat('k1', ['cong']).ms, b1 = stat('k1', ['inc']).ms, a2 = stat('k2', ['cong']).ms, b2 = stat('k2', ['inc']).ms, i1 = Math.max(0, b1 - a1), i2 = Math.max(0, b2 - a2), mieux = i2 < i1 - 30;
       var P = PREM && PREM.m, avant = P && P.kI != null && P.kC != null ? Math.max(0, P.kI - P.kC) : null, cAvant = P && P.c2 != null ? Math.max(0, P.c2 - P.c1) : null, cMaint = Math.max(0, stat('c2').ms - stat('c1').ms);
+      var Mm = MID && MID.m, milieu = Mm && Mm.kI != null && Mm.kC != null ? Math.max(0, Math.round(((Mm.kI - Mm.kC) + ((Mm.k2I || Mm.kI) - (Mm.k2C || Mm.kC))) / 2)) : null;
+      if (FIN){ var fin = Math.round((i1 + i2) / 2), pts = [['Premier jour', avant], ['Mi-parcours', milieu], ['Aujourd’hui', fin]].filter(function(x){ return x[1] != null; }), ref = avant != null ? avant : milieu, gain = ref ? Math.round((1 - fin / ref) * 100) : null;
+        D.innerHTML = '<p class="sur">Bilan final</p><h2>' + (gain == null ? 'Votre mesure finale.' : gain >= 30 ? 'Les codes sont devenus des réflexes.' : gain > 0 ? 'Le chemin est bien engagé.' : 'L’automatisme se construit encore.') + '</h2>' +
+          '<p class="doux petit" style="margin:0">Ce que vous coûte un mauvais code, en temps de réponse :</p>' +
+          barres(pts.map(function(x, k){ return { l: x[0], v: x[1], c: ['var(--corail)', 'var(--orange)', 'var(--vert)'][pts.length === 3 ? k : k + 1] }; })) +
+          (gain != null ? '<p class="verdict">' + (gain > 0 ? '−' + gain + ' % d’effort depuis le ' + (avant != null ? 'premier jour' : 'mi-parcours') : 'Pas encore de baisse mesurable') + '.</p>' : '') +
+          '<p>' + (gain != null && gain >= 30 ? 'Comme ROUGE écrit en vert, un mauvais code vous « saute aux yeux » : c’est exactement l’automatisme visé par la Courbe des Temps.' : 'L’automatisme continue de se construire après le parcours : gardez la Minute Courbe chaque jour, c’est elle qui fait baisser ce chiffre.') + '</p>' +
+          '<p class="doux petit">Ce résultat rejoint votre bilan de fin de formation, transmis à Paul.</p>' +
+          (EMB ? '<p class="doux">Continuez le module avec le bouton <b>Suivant</b>.</p>' : '<a class="btn" href="espace-eleve.html" style="text-decoration:none">Retour à l’espace élève</a>');
+      } else
       if (MI){ var maint = Math.round((i1 + i2) / 2), prog = avant != null && maint < avant - 30;
         D.innerHTML = '<p class="sur">Bilan de mi-parcours</p><h2>' + (avant == null ? 'Votre point de repère est posé.' : prog ? 'Le combat a fondu.' : 'Le combat résiste encore.') + '</h2>' +
           (avant != null ? barres([{ l: 'Codes · début', v: avant, c: 'var(--corail)' }, { l: 'Codes · aujourd’hui', v: maint, c: 'var(--bleu)' }, { l: 'Couleurs · début', v: cAvant || 0, c: 'var(--rouge)' }, { l: 'Couleurs · aujourd’hui', v: cMaint, c: 'var(--vert)' }]) : barres([{ l: 'Effort, codes', v: maint, c: 'var(--bleu)' }, { l: 'Effort, couleurs', v: cMaint, c: 'var(--rouge)' }])) +
@@ -203,10 +218,10 @@ p{font-size:17px;line-height:1.55;margin:0 0 12px}.doux{color:var(--doux)}.petit
     window.scrollTo(0, 0); }
   function suivant(){ key = null; if (n < DIAPOS.length - 1){ n++; aller(); } }
   /* envoi au tableau de Paul (élève connecté uniquement) */
-  function envoyer(m){ try { var s = JSON.parse(localStorage.getItem('frg-session') || 'null'); var rec = JSON.stringify({ t: Date.now(), m: m }); localStorage.setItem(MI ? 'frg-stroop-mi' : 'frg-stroop', rec); if (!MI && !localStorage.getItem('frg-stroop-1')) localStorage.setItem('frg-stroop-1', rec);
+  function envoyer(m){ try { var s = JSON.parse(localStorage.getItem('frg-session') || 'null'); var rec = JSON.stringify({ t: Date.now(), m: m }); localStorage.setItem(FIN ? 'frg-stroop-fin' : MI ? 'frg-stroop-mi' : 'frg-stroop', rec); if (!MI && !localStorage.getItem('frg-stroop-1')) localStorage.setItem('frg-stroop-1', rec);
     try { parent !== window && parent.postMessage({ frgStroop: 'fini', m: m }, location.origin); } catch (e) {}
     if (!s || !s.jeton) return; var tot = R.c2.length + R.k1.length + R.k2.length, ok = [].concat(R.c2, R.k1, R.k2).filter(function(x){ return x.ok; }).length;
-    fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/test', { method: 'POST', body: JSON.stringify({ jeton: s.jeton, type: MI ? 'stroop-mi' : 'stroop', res: { niveau: 'Stroop', score: Math.round(ok / tot * 100), ms: m, n: tot, jsp: m.cErr + m.kErr } }) }).catch(function(){}); } catch (e) {} }
+    fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/test', { method: 'POST', body: JSON.stringify({ jeton: s.jeton, type: FIN ? 'stroop-fin' : MI ? 'stroop-mi' : 'stroop', res: { niveau: 'Stroop', score: Math.round(ok / tot * 100), ms: m, n: tot, jsp: m.cErr + m.kErr } }) }).catch(function(){}); } catch (e) {} }
   aller();
 })();
 </script>

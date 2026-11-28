@@ -1,5 +1,5 @@
 window.MOD = {
-  n: 4, arc: 1, titre: 'BE + -ING',
+  n: 4, arc: 1, titre: 'BE + -ING', exp: [{ x: 'contexte', ou: 'ecoute' }],
   objectif: 'À la fin de ce module, vous décrivez ce qui se passe en ce moment, et ce qui se passait quand quelque chose est arrivé.',
   rappel: [
     ['<em>Did she ___ the client?</em>', ['called', 'call', 'calls'], 1, 'Module 3 : did porte le code, le verbe redevient nu.'],

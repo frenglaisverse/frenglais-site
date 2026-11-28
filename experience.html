@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Expérience · Frenglais</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<style>
+@font-face{font-family:"Geist";src:url("fonts/geist.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url("fonts/geist-mono-400.woff2") format("woff2");font-weight:400;font-display:swap}
+:root{--bleu:#1C49A5;--corail:#E0625B;--encre:#0E1B3D;--brume:#F5F6FA;--carte:#fff;--trait:#E2E6F0;--doux:#4A5578;--ok:#1E7A4F;--ko:#B2392F;
+  --rouge:#D7263D;--cbleu:#1F5BD8;--vert:#178A45;--orange:#E07A00;--f:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;--m:'Geist Mono',ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root{--bleu:#7EA2F5;--corail:#F28A83;--encre:#E8ECF7;--brume:#0D1326;--carte:#141C33;--trait:#26304D;--doux:#A3AECB;--ok:#5BC48C;--ko:#F5A39D;
+  --rouge:#FF5A6E;--cbleu:#6E9BFF;--vert:#3FCB78;--orange:#FFA53A}}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:var(--f);background:var(--brume);color:var(--encre);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+header{display:flex;align-items:center;gap:14px;padding:14px max(18px,env(safe-area-inset-left));max-width:900px;width:100%;margin:0 auto}
+header a{color:var(--doux);text-decoration:none;font-size:14px}
+.rail{flex:1;height:6px;border-radius:9px;background:var(--trait);overflow:hidden}.rail i{display:block;height:100%;width:0;background:var(--bleu);border-radius:9px;transition:width .5s}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 18px 40px}
+.diapo{width:100%;max-width:720px;background:var(--carte);border:1px solid var(--trait);border-radius:22px;padding:34px 34px 30px;box-shadow:0 18px 50px -30px rgba(14,27,61,.35);animation:entre .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes entre{from{opacity:0;transform:translateY(14px)}}
+.sur{font:600 12px/1 var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--corail);margin:0 0 12px}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.08;letter-spacing:-.02em;margin:0 0 14px}
+h2{font-size:clamp(22px,4vw,28px);line-height:1.15;letter-spacing:-.015em;margin:0 0 12px}
+p{font-size:17px;line-height:1.55;margin:0 0 12px}.doux{color:var(--doux)}.petit{font-size:14px}
+.btn{appearance:none;border:0;border-radius:999px;background:var(--bleu);color:#fff;font:600 16px var(--f);padding:14px 26px;cursor:pointer;margin-top:12px}
+.btn:focus-visible,.rep button:focus-visible{outline:3px solid var(--corail);outline-offset:3px}
+.consigne{display:flex;gap:12px;align-items:flex-start;background:var(--brume);border-radius:14px;padding:14px 16px;margin:14px 0 4px}
+.consigne b{font-size:17px}
+/* zone de jeu */
+.jeu{text-align:center}
+.compte{font:500 13px var(--m);color:var(--doux);margin:0 0 8px}
+.mot{font-size:clamp(46px,11vw,84px);font-weight:800;letter-spacing:.02em;height:1.4em;display:flex;align-items:center;justify-content:center;user-select:none;transition:transform .12s}
+.mot.sujet{gap:.3em}.mot .suj{color:var(--doux);font-weight:500;font-size:.62em}
+.mot.ko{animation:non .3s}@keyframes non{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.rep{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 6px}
+.rep.deux{grid-template-columns:repeat(2,1fr);max-width:420px;margin-left:auto;margin-right:auto}
+.rep button{appearance:none;border:1.5px solid var(--trait);background:var(--carte);color:var(--encre);border-radius:14px;font:650 18px var(--f);padding:16px 8px;cursor:pointer;transition:transform .08s,border-color .15s}
+.rep button:active{transform:scale(.97)}.rep button kbd{display:block;font:400 11px var(--m);color:var(--doux);margin-top:4px}
+.rep.deux button{font:700 26px var(--m)}
+.flash{height:22px;font-weight:600;font-size:14px}.flash.ok{color:var(--ok)}.flash.ko{color:var(--ko)}
+/* résultats */
+.barres{display:grid;gap:12px;margin:18px 0}
+.barre{display:grid;grid-template-columns:150px 1fr 74px;align-items:center;gap:12px;font-size:15px}
+.barre span:nth-child(2){height:14px;border-radius:9px;background:var(--trait);overflow:hidden}
+.barre i{display:block;height:100%;border-radius:9px;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.barre b{font:600 15px var(--m);text-align:right}
+.verdict{font-size:20px;font-weight:650;line-height:1.35;margin:6px 0 12px}
+/* Courbe mini */
+.courbe{margin:16px 0 8px}.courbe svg{width:100%;height:auto;display:block}
+.code-s{color:var(--cbleu);font-weight:700}.code-ed{color:var(--corail);font-weight:700}
+/* transformation -EN → -ed */
+.morph{font:700 clamp(30px,7vw,52px)/1.2 var(--f);text-align:center;margin:26px 0 10px;min-height:1.3em}
+.morph .have{color:var(--doux);font-weight:500}
+.morph .fin{display:inline-block;padding:0 .12em;border-radius:10px;transition:all .5s}
+.morph .fin.en{color:var(--doux);border:2px dashed var(--doux)}
+.morph .fin.ed{color:var(--corail);border:2px solid var(--corail);transform:translateY(-2px)}
+.morph .fin.out{opacity:0;transform:translateY(-14px) scale(.9)}
+.paires{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.paires span{font:500 14px var(--m);background:var(--brume);border-radius:999px;padding:6px 12px}
+.ligne{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+@media (max-width:560px){.diapo{padding:24px 18px 22px;border-radius:18px}.rep{grid-template-columns:repeat(2,1fr)}.barre{grid-template-columns:110px 1fr 64px;font-size:14px}p{font-size:16px}}
+@media (hover:none){.rep button kbd{display:none}}
+.nw{white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><a href="espace-eleve.html">← Espace élève</a><div class="rail" aria-hidden="true"><i id="rail"></i></div><span class="petit doux" id="etape" aria-live="polite"></span></header>
+<main><section class="diapo" id="d" aria-live="polite"></section></main>
+<script>
+(function(){
+  var Q = new URLSearchParams(location.search), X = Q.get('x') || 'contexte', EMB = Q.has('embed');
+  if (EMB){ document.querySelector('header').style.display = 'none'; document.body.style.background = 'transparent'; document.querySelector('main').style.padding = '0'; document.querySelector('main').style.alignItems = 'flex-start'; document.getElementById('d').style.boxShadow = 'none'; }
+  var D = document.getElementById('d'), RAIL = document.getElementById('rail'), ET = document.getElementById('etape');
+  var res = { ok: 0, n: 0, ms: {} }, key = null, n = 0, DIAPOS = [];
+  document.addEventListener('keydown', function(e){ if (key) key(e); });
+  var shuffle = function(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+  var med = function(a){ a = a.slice().sort(function(x, y){ return x - y; }); return a.length ? a[Math.floor(a.length / 2)] : 0; };
+  var sec = function(v){ return (v / 1000).toFixed(1).replace('.', ',') + ' s'; };
+  var fin = function(){ return EMB ? '<p class="doux" style="margin-top:14px">Continuez le module avec le bouton <b>Suivant</b>.</p>' : '<a class="btn" href="espace-eleve.html" style="text-decoration:none;display:inline-block;margin-top:16px">Retour à l’espace élève</a>'; };
+  function aller(){ RAIL.style.width = Math.round(n / (DIAPOS.length - 1) * 100) + '%'; ET.textContent = (n + 1) + ' / ' + DIAPOS.length;
+    D.style.animation = 'none'; void D.offsetWidth; D.style.animation = ''; key = null;
+    var go = DIAPOS[n](); if (go){ var b = document.getElementById(go); b.onclick = suivant; b.focus({ preventScroll: true }); key = function(e){ if (e.key === 'Enter') suivant(); }; }
+    window.scrollTo(0, 0); }
+  function suivant(){ key = null; if (n < DIAPOS.length - 1){ n++; aller(); } }
+  /* une question à choix, chronométrée ; cb(ok, ms) */
+  function qcm(html, opts, bon, cb, expl){
+    D.innerHTML = html + '<div class="rep deux" style="grid-template-columns:1fr;max-width:none" id="rep">' + opts.map(function(o, k){ return '<button type="button" data-k="' + k + '" style="font:600 17px var(--f);text-align:left;padding:14px 16px">' + o + '</button>'; }).join('') + '</div><p class="flash" id="fl"></p><div id="apres"></div>';
+    var t0 = performance.now(), fait = false;
+    document.getElementById('rep').addEventListener('click', function(ev){ var b = ev.target.closest('button'); if (!b || fait) return; fait = true;
+      var k = +b.dataset.k, ok = k === bon, ms = Math.round(performance.now() - t0); res.n++; if (ok) res.ok++;
+      D.querySelectorAll('#rep button').forEach(function(x, i){ x.disabled = true; if (i === bon) x.style.borderColor = 'var(--ok)'; else if (i === k) x.style.borderColor = 'var(--ko)'; });
+      var fl = document.getElementById('fl'); fl.className = 'flash ' + (ok ? 'ok' : 'ko'); fl.textContent = ok ? '✓ Exact' : '✗ La bonne réponse est en vert';
+      document.getElementById('apres').innerHTML = (expl ? '<p style="margin-top:6px">' + expl + '</p>' : '') + '<button class="btn" id="go">Continuer</button>';
+      var g = document.getElementById('go'); g.onclick = function(){ cb(ok, ms); }; g.focus(); key = function(e){ if (e.key === 'Enter') cb(ok, ms); }; });
+  }
+  function envoyer(){ try { localStorage.setItem('frg-exp-' + X, JSON.stringify({ t: Date.now(), r: res }));
+    var s = JSON.parse(localStorage.getItem('frg-session') || 'null'); if (!s || !s.jeton) return;
+    fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/test', { method: 'POST', body: JSON.stringify({ jeton: s.jeton, type: 'exp-' + X, res: { niveau: X, score: res.n ? Math.round(res.ok / res.n * 100) : null, ms: res.ms, n: res.n } }) }).catch(function(){}); } catch (e) {} }
+
+  /* ================= 1. LE CONTEXTE : comprendre sans tout comprendre ================= */
+  if (X === 'contexte'){
+    var M = '<span style="display:inline-block;width:2.6em;height:.9em;border-radius:4px;background:var(--trait);vertical-align:-.05em"></span>';
+    var TX = [
+      { t: 'Good morning everyone. Before we # the #, I’d like to # our new #, Sarah. She # from the London # and will # with us on the # #.', q: 'Que se passe-t-il ?', o: ['On présente une nouvelle collègue', 'La réunion est annulée', 'Sarah quitte l’entreprise'], b: 0 },
+      { t: '# #, flight BA 304 to # is now # at gate #. # have your # and # pass #.', q: 'Que doivent faire les passagers ?', o: ['Récupérer leurs bagages', 'Aller embarquer, papiers en main', 'Attendre : le vol est retardé'], b: 1 },
+      { t: 'Hi #, # # the # #. Could we # the # to Friday? I # a # on #. # #!', q: 'Que demande-t-on au destinataire ?', o: ['D’envoyer un document', 'D’annuler définitivement', 'De déplacer un rendez-vous à vendredi'], b: 2 }
+    ];
+    var vis = TX.map(function(x){ var w = x.t.split(/\s+/), m = w.filter(function(v){ return v.indexOf('#') > -1; }).length; return Math.round((w.length - m) / w.length * 100); });
+    var rapides = [], okT = [];
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Expérience · 4 min</p><h1>Comprendre sans tout comprendre</h1>' +
+      '<p>Beaucoup d’élèves pensent qu’il faut comprendre <b>chaque mot</b> pour suivre une conversation. Et paniquent au premier mot inconnu.</p><p>Testons. Des mots vont disparaître. Dites simplement de quoi il s’agit.</p><button class="btn" id="go">Commencer</button>'; return 'go'; });
+    TX.forEach(function(x, i){ DIAPOS.push(function(){
+      qcm('<p class="sur">Texte ' + (i + 1) + ' sur 3 · ' + vis[i] + ' % des mots visibles</p><p style="font-size:20px;line-height:1.7;margin:10px 0 16px" lang="en">' + x.t.replace(/#/g, M) + '</p><p><b>' + x.q + '</b></p>', x.o, x.b, function(ok, ms){ rapides.push(ms); if (ok) okT.push(vis[i]); res.ms['t' + (i + 1)] = ms; suivant(); });
+    }); });
+    DIAPOS.push(function(){ qcm('<p class="sur">Un mot seul</p><h2>Que veut dire « <span lang="en">book</span> » ?</h2>', ['Un livre', 'Réserver', 'Impossible à dire sans la phrase'], 2, function(){ suivant(); },
+      '« <i lang="en">I’m reading a good book</i> » : un livre. « <i lang="en">Can you book a table for two?</i> » : réserver. <b>Le mot seul ne suffit pas, c’est la phrase qui décide.</b>'); });
+    DIAPOS.push(function(){ var bons = res.ok;
+      D.innerHTML = '<p class="sur">Bilan</p><h2>' + (okT.length ? 'Vous avez compris l’essentiel avec seulement ' + Math.min.apply(null, okT) + ' % des mots.' : 'Le contexte fait plus de travail qu’on ne le croit.') + '</h2>' +
+        '<div class="barres">' + vis.map(function(v, i){ return '<div class="barre"><span>Texte ' + (i + 1) + '</span><span><i style="width:' + v + '%;background:var(--bleu)"></i></span><b>' + v + ' %</b></div>'; }).join('') + '</div>' +
+        '<p>À l’oral, personne n’entend 100 % des mots, pas même les natifs. <b>La situation, le sujet et les quelques mots que vous saisissez font la plus grande partie du travail.</b></p>' +
+        '<p><b>À retenir :</b> un mot inconnu n’est pas un mur. Gardez le fil, attrapez les mots-clés, et laissez le contexte compléter. La Courbe vous donne le reste : <i>quand</i> ça se passe.</p>' + fin();
+      envoyer(); });
+  }
+
+  /* ================= 2. LIRE EN BLOCS ================= */
+  if (X === 'blocs'){
+    var MEL = 'Vtore crevaeu ne lit pas les lerttes une par une : il rceonnaît la fmore etinère de chqaue mot, et cmolpète le rsete tuot suel.';
+    var FL = shuffle([['She works in London.', 's'], ['They work from home.', 'nu'], ['He watches the news.', 's'], ['We finished early.', 'ed'], ['It rains a lot here.', 's'], ['I called my boss.', 'ed'], ['You need a break.', 'nu'], ['She played tennis.', 'ed'], ['The shop opens at nine.', 's'], ['They visited Rome.', 'ed']]);
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Expérience · 4 min</p><h1>Lire en blocs</h1><p>Lisez la phrase ci-dessous à voix basse, puis cliquez.</p>' +
+      '<p style="font-size:22px;line-height:1.6;margin:18px 0;font-weight:600">' + MEL + '</p><button class="btn" id="lu">C’est lu</button>';
+      var t0 = performance.now(); var b = document.getElementById('lu'); b.focus(); b.onclick = function(){ res.ms.melange = Math.round(performance.now() - t0); suivant(); }; });
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Ce qui vient de se passer</p><h2>Vous avez lu sans peine… des mots mal écrits.</h2>' +
+      '<p>Lu en ' + sec(res.ms.melange) + ', alors que presque chaque mot avait ses lettres mélangées. Votre cerveau ne déchiffre pas lettre par lettre : il <b>photographie des blocs</b> et devine le reste.</p>' +
+      '<p>En anglais, c’est exactement ce qu’on veut pour les codes : que <b class="code-s">works</b> se lise comme un seul bloc, <i>work + -s</i>, sans y penser.</p><button class="btn" id="go">Essayer en anglais</button>'; return 'go'; });
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Le flash</p><h2>Une phrase s’affiche une seconde.</h2><div class="consigne"><span aria-hidden="true">⚡</span><div><b>Quel code portait le verbe ?</b><br><span class="doux">-s, -ed, ou aucun code. Pas le temps de lire lettre par lettre : laissez votre œil photographier.</span></div></div><button class="btn" id="go">C’est parti</button>'; return 'go'; });
+    var i = 0, temps = [];
+    function flash(){ var f = FL[i];
+      D.innerHTML = '<div class="jeu"><p class="compte">' + (i + 1) + ' / ' + FL.length + '</p><div class="mot" id="mot" style="font-size:clamp(28px,6vw,46px)" lang="en"></div><div class="rep" style="grid-template-columns:repeat(3,1fr)" id="rep"><button type="button" data-k="s">-s</button><button type="button" data-k="ed">-ed</button><button type="button" data-k="nu">aucun</button></div><p class="flash" id="fl"></p></div>';
+      var mot = document.getElementById('mot'), t0 = 0, pris = false;
+      setTimeout(function(){ mot.textContent = f[0]; t0 = performance.now(); setTimeout(function(){ mot.innerHTML = '<span style="letter-spacing:.3em;color:var(--trait)">••••••</span>'; }, 1000); }, 400);
+      document.getElementById('rep').addEventListener('click', function(ev){ var b = ev.target.closest('button'); if (!b || pris || !t0) return; pris = true;
+        var ok = b.dataset.k === f[1], ms = Math.round(performance.now() - t0); res.n++; if (ok){ res.ok++; temps.push(ms); }
+        var fl = document.getElementById('fl'); fl.className = 'flash ' + (ok ? 'ok' : 'ko'); fl.textContent = ok ? '✓' : '✗ « ' + f[0] + ' »';
+        setTimeout(function(){ if (++i < FL.length) flash(); else { res.ms.flash = med(temps); suivant(); } }, ok ? 300 : 1300); });
+    }
+    DIAPOS.push(function(){ i = 0; temps = []; res.ok = 0; res.n = 0; flash(); });
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Bilan</p><h2>' + res.ok + (res.ok > 1 ? ' codes' : ' code') + ' sur ' + res.n + (res.ok > 1 ? ' vus' : ' vu') + ' en un éclair.</h2>' +
+      '<p>' + (res.ok >= 8 ? 'Votre œil voit déjà le code dans le bloc : c’est le début de l’automatisme.' : 'Le code ne saute pas encore aux yeux : c’est normal au début, et c’est ce que les modules vont entraîner.') + '</p>' +
+      '<p><b>À retenir :</b> on ne lit pas « w-o-r-k-s ». On lit un bloc qui dit à la fois <i>quoi</i> (work) et <i>quand</i> (le code -s, T0).</p>' + fin(); envoyer(); });
+  }
+
+  /* ================= 3. LA MÉMOIRE EN PAQUETS ================= */
+  if (X === 'paquets'){
+    var LET = 'SNCFFBIUSATGV', MELA = shuffle(LET.split('')).join(''), essais = {};
+    function memo(nom, affiche, titre){ return function(){
+      D.innerHTML = '<p class="sur">' + titre + '</p><h2>Mémorisez ces lettres.</h2><p class="doux">Elles disparaissent dans 5 secondes.</p><div class="mot" id="mot" style="font:700 clamp(28px,6vw,46px) var(--m);letter-spacing:.12em;height:auto;margin:22px 0">' + affiche + '</div><div id="zone"></div>';
+      setTimeout(function(){ document.getElementById('mot').innerHTML = '<span class="doux" style="font-size:18px;letter-spacing:0">…</span>';
+        document.getElementById('zone').innerHTML = '<label class="petit doux" for="in">Retapez toutes les lettres dont vous vous souvenez, dans l’ordre :</label><input id="in" autocomplete="off" autocapitalize="characters" spellcheck="false" style="width:100%;font:700 24px var(--m);letter-spacing:.1em;padding:12px 14px;border:1.5px solid var(--trait);border-radius:12px;background:var(--carte);color:var(--encre);margin:8px 0;text-transform:uppercase"><button class="btn" id="ok">Valider</button>';
+        var inp = document.getElementById('in'); inp.focus();
+        var valider = function(){ var v = inp.value.toUpperCase().replace(/[^A-Z]/g, ''), cible = (nom === 'a' ? MELA : LET), k = 0; for (var j = 0; j < cible.length; j++) if (v[j] === cible[j]) k++; essais[nom] = k; res.ms[nom] = k; suivant(); };
+        document.getElementById('ok').onclick = valider; key = function(e){ if (e.key === 'Enter') valider(); }; }, 5000); }; }
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Expérience · 5 min</p><h1>La mémoire en paquets</h1><p>Votre mémoire immédiate est petite : elle ne retient que quelques éléments à la fois. Mais elle a un secret.</p><p>Deux essais de mémoire, de 5 secondes chacun.</p><button class="btn" id="go">Premier essai</button>'; return 'go'; });
+    DIAPOS.push(memo('a', MELA, 'Essai 1'));
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Essai 2</p><h2>Même nombre de lettres. Exactement les mêmes.</h2><p>Seul l’ordre change.</p><button class="btn" id="go">Deuxième essai</button>'; return 'go'; });
+    DIAPOS.push(memo('b', 'SNCF FBI USA TGV', 'Essai 2'));
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Résultat</p><h2>' + essais.a + ' lettres, puis ' + essais.b + ' sur 13.</h2>' +
+      '<div class="barres"><div class="barre"><span>En vrac</span><span><i style="width:' + Math.round(essais.a / 13 * 100) + '%;background:var(--corail)"></i></span><b>' + essais.a + '/13</b></div><div class="barre"><span>En paquets</span><span><i style="width:' + Math.round(essais.b / 13 * 100) + '%;background:var(--vert)"></i></span><b>' + essais.b + '/13</b></div></div>' +
+      '<p>Treize lettres en vrac, c’est trop. Quatre <b>paquets</b> qui ont un sens (SNCF, FBI, USA, TGV), c’est facile. La mémoire ne compte pas les lettres : elle compte les paquets.</p><button class="btn" id="go">Et les verbes irréguliers ?</button>'; return 'go'; });
+    var FAM = [['i → a → u', 'sing · sang · sung'], ['-ought / -aught', 'think · thought'], ['ne change pas', 'cut · cut · cut']];
+    var VB = shuffle([['drink', 0, 'drank · drunk'], ['ring', 0, 'rang · rung'], ['swim', 0, 'swam · swum'], ['bring', 1, 'brought'], ['buy', 1, 'bought'], ['teach', 1, 'taught'], ['put', 2, 'put · put'], ['let', 2, 'let · let'], ['hit', 2, 'hit · hit']]);
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Les irréguliers, en paquets</p><h2>Pas 150 verbes à apprendre : quelques familles.</h2>' +
+      FAM.map(function(f){ return '<div class="consigne"><b style="min-width:9em">' + f[0] + '</b><span lang="en">' + f[1] + '</span></div>'; }).join('') + '<p class="doux" style="margin-top:12px">À vous : rangez chaque verbe dans sa famille.</p><button class="btn" id="go">Ranger</button>'; return 'go'; });
+    var vi = 0, tv = [];
+    function ranger(){ var v = VB[vi];
+      D.innerHTML = '<div class="jeu"><p class="compte">' + (vi + 1) + ' / ' + VB.length + '</p><div class="mot" style="font-size:clamp(40px,9vw,64px)" lang="en">' + v[0] + '</div><div class="rep" style="grid-template-columns:repeat(3,1fr)" id="rep">' + FAM.map(function(f, k){ return '<button type="button" data-k="' + k + '" style="font-size:15px">' + f[0] + '<kbd>' + f[1].split(' · ')[0] + '</kbd></button>'; }).join('') + '</div><p class="flash" id="fl"></p></div>';
+      var t0 = performance.now(), pris = false;
+      document.getElementById('rep').addEventListener('click', function(ev){ var b = ev.target.closest('button'); if (!b || pris) return; pris = true;
+        var ok = +b.dataset.k === v[1]; res.n++; if (ok){ res.ok++; tv.push(Math.round(performance.now() - t0)); }
+        var fl = document.getElementById('fl'); fl.className = 'flash ' + (ok ? 'ok' : 'ko'); fl.innerHTML = (ok ? '✓ ' : '✗ ') + '<span lang="en">' + v[0] + ' · ' + v[2] + '</span>';
+        setTimeout(function(){ if (++vi < VB.length) ranger(); else { res.ms.familles = med(tv); suivant(); } }, ok ? 650 : 1400); });
+    }
+    DIAPOS.push(function(){ vi = 0; tv = []; ranger(); });
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Bilan</p><h2>' + res.ok + (res.ok > 1 ? ' verbes' : ' verbe') + ' sur ' + res.n + (res.ok > 1 ? ' bien rangés.' : ' bien rangé.') + '</h2>' +
+      '<p>Quand vous connaissez la famille, un verbe nouveau ne coûte presque rien : <i lang="en">shrink → shrank → shrunk</i> se devine dès qu’on a <i lang="en">drink</i>.</p>' +
+      '<p><b>À retenir :</b> apprenez par paquets qui ont un sens (une famille, une situation, une phrase entière), jamais en listes de mots isolés.</p>' + fin(); envoyer(); });
+  }
+
+  /* ================= 4. L'EFFET McGURK ================= */
+  if (X === 'mcgurk'){
+    var VID = 'video/mcgurk.mp4';
+    var lecteur = function(cache){ return '<div style="position:relative;border-radius:16px;overflow:hidden;background:#000;margin:12px 0"><video id="v" src="' + VID + '" playsinline preload="auto" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover' + (cache ? ';opacity:0' : '') + '"></video>' + (cache ? '<div style="position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-weight:600">🙈 Yeux fermés : écoutez seulement</div>' : '') + '</div><button class="btn" id="joue">▶ Lire la vidéo</button>'; };
+    var entendu = {};
+    function essai(nom, cache, titre){ return function(){
+      D.innerHTML = '<p class="sur">' + titre + '</p>' + lecteur(cache) + '<div id="q"></div>';
+      var v = document.getElementById('v');
+      v.addEventListener('error', function(){ D.innerHTML = '<p class="sur">Expérience · bientôt</p><h2>La vidéo de cette expérience arrive très bientôt.</h2><p>Continuez le module : vous la retrouverez ici.</p>' + fin(); });
+      document.getElementById('joue').onclick = function(){ v.currentTime = 0; v.play().catch(function(){}); this.textContent = '↻ Revoir';
+        if (!document.getElementById('rep')) document.getElementById('q').innerHTML = '<p style="margin-top:10px"><b>Quelle syllabe entendez-vous ?</b></p><div class="rep" style="grid-template-columns:repeat(3,1fr)" id="rep"><button type="button" data-k="ba">« ba »</button><button type="button" data-k="da">« da »</button><button type="button" data-k="ga">« ga »</button></div>';
+        document.getElementById('rep').onclick = function(ev){ var b = ev.target.closest('button'); if (!b) return; entendu[nom] = b.dataset.k; res.ms[nom] = b.dataset.k === 'ba' ? 0 : 1; suivant(); }; }; }; }
+    DIAPOS.push(function(){ D.innerHTML = '<p class="sur">Expérience · 3 min</p><h1>L’effet McGurk</h1><p>On croit écouter avec les oreilles. Une courte vidéo va vous montrer que ce n’est qu’une partie de l’histoire.</p><p class="doux petit">Mettez le son.</p><button class="btn" id="go">Commencer</button>'; return 'go'; });
+    DIAPOS.push(essai('yeux', false, 'Essai 1 · regardez la bouche'));
+    DIAPOS.push(essai('oreilles', true, 'Essai 2 · le même son, sans l’image'));
+    DIAPOS.push(function(){ var change = entendu.yeux && entendu.oreilles && entendu.yeux !== entendu.oreilles;
+      D.innerHTML = '<p class="sur">Révélation</p><h2>Le son était toujours « ba ».</h2>' +
+        '<p>' + (change ? 'Avec l’image, vous avez entendu « ' + entendu.yeux + ' ». Sans l’image, « ' + entendu.oreilles + ' ». <b>Ce sont vos yeux qui ont changé le son.</b>' : 'La bouche disait « ga » pendant que le son disait « ba ». Chez la plupart des gens, le cerveau fusionne les deux et entend autre chose.') + '</p>' +
+        '<p>C’est l’<b>effet McGurk</b>, décrit en 1976 : le cerveau mélange ce qu’il voit et ce qu’il entend.</p>' +
+        '<p><b>À retenir pour l’anglais :</b> en visio comme en réunion, <b>regardez la bouche</b> de la personne qui parle. Le <i lang="en">th</i> se voit (la langue entre les dents), le <i lang="en">w</i> aussi (les lèvres en rond). Comprendre, c’est aussi regarder.</p>' + fin(); envoyer(); });
+  }
+  aller();
+})();
+</script>
+</body>
+</html>

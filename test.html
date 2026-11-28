@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Test de niveau · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611131700">
+<style>
+.t-q{font-size:clamp(19px,4.4vw,23px);font-weight:500;margin:0}
+.t-texte{font-size:17px;line-height:1.6;padding:14px 16px;border-radius:14px;background:var(--fond);border:1px solid var(--trait);margin:0}
+.t-ecoute{display:flex;align-items:center;gap:12px}
+.t-ecoute .btn{display:inline-flex;align-items:center;gap:8px}
+.choix.col{flex-direction:column}
+.choix.col .puce{width:100%}
+.puce.jsp{border-style:dashed;color:var(--doux)}
+.bandes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:6px 0}
+.bandes div{border:1px solid var(--trait);border-radius:12px;padding:10px 6px;text-align:center}
+.bandes b{display:block;font:600 15px var(--f-mono)}
+.bandes span{font:500 12.5px var(--f-mono);color:var(--doux)}
+.bandes .acq{border-color:var(--ok);background:var(--ok-fond)}
+.niveau-grand{font:700 clamp(54px,14vw,88px)/1 var(--f-txt);letter-spacing:-.04em;margin:4px 0;color:var(--bleu)}
+.comp{display:grid;grid-template-columns:110px 1fr 48px;gap:10px;align-items:center;font-size:14.5px}
+.comp i{display:block;height:8px;border-radius:9px;background:var(--trait);overflow:hidden}
+.comp i b{display:block;height:100%;background:var(--bleu)}
+.avant-apres{display:flex;align-items:center;gap:14px;font:700 34px var(--f-txt)}
+.avant-apres span{color:var(--doux);font-weight:500}
+</style>
+</head>
+<body>
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod" id="mod-titre">Test de niveau</span>
+  <span class="actions-bandeau"><a class="retour" href="espace-eleve.html">Quitter</a></span>
+</div></header>
+<main>
+  <div class="rail" aria-live="polite">
+    <div class="meta"><span id="etape-nom">Avant de commencer</span><span id="etape-pct"></span></div>
+    <div class="barre" role="progressbar" aria-label="Progression du test" aria-valuemin="0" aria-valuemax="100"><i id="barre"></i></div>
+  </div>
+  <section class="ecran" id="ecran" tabindex="-1" aria-live="polite"></section>
+</main>
+<script src="frenglais-commun.js?v=1"></script>
+<script src="test-donnees.js?v=3"></script>
+<script>
+(function(){
+  const type = new URLSearchParams(location.search).get('type') === 'sortie' ? 'sortie' : 'entree';
+  const T = window.TESTS[type], NIV = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+  const COMP = { structure:'Grammaire', lexique:'Vocabulaire', interaction:'Interaction', lecture:'Compréhension écrite', ecoute:'Compréhension orale' };
+  const CONSEIL = { structure:'Les modules 2 à 8 reprennent chaque temps avec la Courbe : c\'est là que vous gagnerez le plus.', lexique:'Le vocabulaire se travaille dans les fiches métier et les micro-entraînements quotidiens.', interaction:'Les mises en situation du Temps 7 et les lives sont faits pour ça : dire la bonne phrase au bon moment.', lecture:'Les écrans « Lire » de chaque module vous entraînent sur de vrais documents professionnels.', ecoute:'Écoutez chaque message vocal deux fois, puis répétez-le phrase par phrase : c\'est l\'écran qui fait le plus progresser à l\'oral.' };
+  const z = document.getElementById('ecran'), nomE = document.getElementById('etape-nom'), pctE = document.getElementById('etape-pct'), barre = document.getElementById('barre');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+  const melange = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  document.getElementById('mod-titre').textContent = type === 'entree' ? 'Test d\'entrée' : 'Test de sortie';
+  /* dans chaque palier : grammaire et vocabulaire d'abord, puis interaction, lecture, écoute */
+  const items = []; NIV.forEach(n => T[n].forEach(it => items.push({ niveau: n, it })));
+  const PAR = n => T[n].length, total = items.length;
+  const rep = []; let i = 0, ecoutes = {};
+  const deja = FRG.lire('frg-test-' + type, null);
+
+  function intro(){
+    nomE.textContent = 'Avant de commencer'; pctE.textContent = '';
+    const entree = FRG.lire('frg-test-entree', null), comps = [...new Set(items.map(x => x.it[3]))].map(c => COMP[c].toLowerCase());
+    z.innerHTML = `<p class="eyebrow">${type === 'entree' ? 'Test d\'entrée' : 'Test de sortie'} · ${total} questions · 20 à 25 minutes</p>
+      <h1>${type === 'entree' ? 'Où en êtes-vous, vraiment ?' : 'Mesurons le chemin parcouru.'}</h1>
+      <p>${type === 'entree'
+        ? `Un diagnostic construit sur le Cadre européen (CECRL), du niveau A1 au C2, avec les niveaux intermédiaires A2+, B1+ et B2+. Les questions commencent très simples et montent progressivement. Elles couvrent ${comps.slice(0, -1).join(', ')} et ${comps.slice(-1)}, et chaque question de grammaire teste un point précis : vous saurez exactement lesquels vous maîtrisez.`
+        : `Même format que le test d'entrée, questions différentes. ${entree ? `Au départ, vous étiez <b>${esc(entree.niveau)}</b>.` : ''} Le résultat figurera sur votre certificat.`}</p>
+      ${type === 'entree' ? '<p>Le résultat règle votre parcours : plus de répétition et d\'aide si vous débutez, des questions plus exigeantes et des nuances si vous êtes avancé. Il ajuste aussi la suite au fil des modules. Il ne fait sauter aucun module.</p>' : ''}
+      <div class="franc"><span>Soyons francs</span><p>Si vous ne savez pas, touchez « Je ne sais pas ». Deviner fausse la mesure, et une mesure fausse ne sert à personne, surtout pas à vous.</p></div>
+      ${deja ? `<p class="doux petit">Vous l'avez déjà passé le ${new Date(deja.date).toLocaleDateString('fr-FR')} : ${esc(deja.niveau)}. Le repasser remplacera ce résultat.</p>` : ''}
+      <div><button class="btn plein" id="go" type="button">Commencer le test</button></div>`;
+    z.querySelector('#go').addEventListener('click', question);
+  }
+
+  function bandes(){ return NIV.map(n => { const r = rep.filter(x => x && x.niveau === n); return { niveau: n, bons: r.filter(x => x.juste).length, total: PAR(n), vus: r.length }; }); }
+  /* arrêt anticipé seulement quand c'est évident : deux paliers terminés de suite avec au plus 2 bonnes réponses */
+  function arretAnticipe(){ let e = 0; for (const b of bandes()) { if (b.vus < b.total) break; if (b.bons / b.total < .4) { if (++e >= 2) return true; } else e = 0; } return false; }
+  /* niveau acquis : au moins 5 sur 8 (62,5 %) au palier, et la moitié aux paliers inférieurs ; niveau « plus » (A2+, B1+, B2+) quand le palier suivant est déjà à moitié réussi */
+  function niveauFin(B){ let k = -1; for (let i = 0; i < B.length; i++) { const basOk = B.slice(0, i).every(x => x.bons / x.total >= .5); if (B[i].bons / B[i].total >= .625 && basOk) k = i; else if (!basOk) break; }
+    if (k < 0) return B[0].bons / B[0].total >= .4 ? 'A1 en cours' : 'Débutant'; const n = NIV[k], s = B[k + 1];
+    return ['A2', 'B1', 'B2'].includes(n) && s && s.bons / s.total >= .5 ? n + '+' : n; }
+
+  function question(){
+    if (i >= items.length || (i > 0 && items[i].niveau !== items[i - 1].niveau && arretAnticipe())) return resultat();
+    const { niveau, it } = items[i], [q, ch, b, comp, extra] = it;
+    nomE.textContent = `Question ${i + 1} / ${total}`; pctE.textContent = niveau; barre.style.width = Math.round(i / total * 100) + '%';
+    const opts = melange(ch.map((c, j) => ({ c, j })));
+    z.innerHTML = `<p class="eyebrow">${COMP[comp]} · niveau ${niveau}</p>
+      ${comp === 'lecture' ? `<p class="t-texte" lang="en">${esc(extra)}</p>` : ''}
+      ${comp === 'ecoute' ? `<div class="t-ecoute"><button class="btn" id="play" type="button">▶ Écouter</button><span class="doux petit" id="nb">Deux écoutes maximum.</span></div>` : ''}
+      <p class="t-q">${q}</p>
+      <div class="choix col">${opts.map(o => `<button class="puce" type="button" data-j="${o.j}" lang="en">${o.c}</button>`).join('')}<button class="puce jsp" type="button" data-j="-1">Je ne sais pas</button></div>`;
+    if (comp === 'ecoute') { const bt = z.querySelector('#play'), nb = z.querySelector('#nb'); ecoutes[i] = 0;
+      bt.addEventListener('click', () => { if (ecoutes[i] >= 2) return; ecoutes[i]++; const a = new Audio(extra); a.play().catch(() => {}); bt.disabled = true; a.onended = a.onerror = () => { bt.disabled = ecoutes[i] >= 2; nb.textContent = ecoutes[i] >= 2 ? 'Plus d\'écoute disponible.' : 'Encore une écoute possible.'; }; }); }
+    z.querySelectorAll('.puce').forEach(p => p.addEventListener('click', () => { const j = +p.dataset.j; rep[i] = { niveau, comp, juste: j === b, choisi: j, k: i }; i++; question(); }));
+    z.focus({ preventScroll:true });
+  }
+
+  function resultat(){
+    barre.style.width = '100%'; nomE.textContent = 'Votre diagnostic'; pctE.textContent = '';
+    const B = bandes(), niveau = niveauFin(B), D = window.TESTS.descripteurs, base = niveau.slice(0, 2);
+    const bons = rep.filter(x => x && x.juste).length, score = Math.round(bons / total * 100);
+    const comps = Object.keys(COMP).filter(c => items.some(x => x.it[3] === c)).map(c => { const n = items.filter(x => x.it[3] === c).length, r = rep.filter(x => x && x.comp === c && x.juste).length; return [c, Math.round(r / n * 100)]; });
+    const tri = comps.slice().sort((a, b) => b[1] - a[1]), fort = tri[0], faible = tri[tri.length - 1];
+    const res = { date: Date.now(), niveau, score, bandes: B.map(b => b.bons), comps: Object.fromEntries(comps), version: 3 };
+    FRG.ecrire('frg-test-' + type, res);
+    const entree = FRG.lire('frg-test-entree', null), toeic = FRG.TOEIC[base], rang = NIV.indexOf(base), suivant = niveau.endsWith('+') ? NIV[rang + 1] : niveau === 'A1 en cours' || niveau === 'Débutant' ? 'A1' : NIV[rang + 1] || null;
+    /* carte grammaticale : chaque point testé, réussi ou non, et le module où on le travaille */
+    const pts = {}; items.forEach((x, k) => { const tg = x.it[6]; if (!tg) return; const [nom, mod] = tg.split('|'); const r = rep[k]; pts[nom] = pts[nom] || { nom, mod, niv: x.niveau, ok: 0, vus: 0 }; if (r) { pts[nom].vus++; if (r.juste) pts[nom].ok++; } });
+    const P = Object.values(pts), acq = P.filter(p => p.vus && p.ok === p.vus), aTrav = P.filter(p => p.vus && p.ok < p.vus);
+    const ratees = items.map((x, k) => ({ x, r: rep[k] })).filter(o => o.r && !o.r.juste);
+    z.innerHTML = `<p class="eyebrow">${type === 'entree' ? 'Votre point de départ' : 'Votre niveau de sortie'}</p>
+      ${type === 'sortie' && entree ? `<div class="avant-apres"><span>${esc(entree.niveau)}</span> → <span style="color:var(--bleu);font-weight:700">${esc(niveau)}</span></div>` : `<p class="niveau-grand">${esc(niveau)}</p>`}
+      <p>Niveau estimé selon le Cadre européen commun de référence (CECRL)${toeic ? `. Repère indicatif : un niveau ${niveau} correspond à partir de ${toeic} points au TOEIC (écoute et lecture).` : '.'}</p>
+      ${D[niveau] || D[base] ? `<div class="franc"><span>Ce que vous savez faire</span><p>${D[niveau] || D[base]}</p></div>` : '<div class="franc"><span>Ce que ça veut dire</span><p>Vous partez de la base, et c\'est exactement pour ça que la formation commence au module 1 : la Courbe des Temps vous donne la structure en premier.</p></div>'}
+      ${suivant && D[suivant] && suivant !== niveau ? `<p><b>Votre prochain palier, ${suivant} :</b> ${D[suivant]}</p>` : ''}
+      <div class="bandes">${B.map(b => `<div class="${NIV.indexOf(b.niveau) <= rang ? 'acq' : ''}"><b>${b.niveau}</b><span>${b.vus ? b.bons + ' / ' + b.total : '—'}</span></div>`).join('')}</div>
+      <h2 style="font-size:19px;margin:18px 0 6px">Votre profil par compétence</h2>
+      <div class="exo">${comps.map(([c, p]) => `<div class="comp"><span>${COMP[c]}</span><i><b style="width:${p}%"></b></i><span>${p} %</span></div>`).join('')}</div>
+      ${fort && faible && fort[0] !== faible[0] ? `<p><b>Point fort :</b> ${COMP[fort[0]].toLowerCase()}. <b>À travailler en priorité :</b> ${COMP[faible[0]].toLowerCase()}. ${CONSEIL[faible[0]]}</p>` : ''}
+      ${P.length ? `<h2 style="font-size:19px;margin:18px 0 6px">Votre carte de grammaire</h2><div class="exo">${aTrav.length ? `<p style="margin:0 0 6px"><b>À travailler en priorité</b></p><ul style="margin:0 0 10px;padding-left:20px">${aTrav.map(p => `<li>${esc(p.nom)} <span class="doux petit">· ${p.niv}${p.mod ? ' · travaillé au module ' + p.mod : ''}</span></li>`).join('')}</ul>` : ''}${acq.length ? `<p style="margin:0 0 6px"><b>Maîtrisé</b></p><ul style="margin:0;padding-left:20px">${acq.map(p => `<li>${esc(p.nom)} <span class="doux petit">· ${p.niv}</span></li>`).join('')}</ul>` : ''}${P.some(p => !p.vus) ? `<p class="doux petit" style="margin:8px 0 0">${P.filter(p => !p.vus).length} point(s) au-delà de votre palier n'ont pas été testés.</p>` : ''}</div>` : ''}
+      ${ratees.length ? `<details class="exo"><summary><b>Revoir mes ${ratees.length} réponse${ratees.length > 1 ? 's' : ''} à corriger</b></summary>${ratees.map(({ x, r }) => `<div style="padding:10px 0;border-top:1px solid var(--trait)"><p class="doux petit" style="margin:0">${x.niveau} · ${COMP[x.it[3]]}</p><p style="margin:4px 0">${x.it[0]}</p><p style="margin:4px 0">${r.choisi < 0 ? 'Vous : <i>je ne sais pas</i>' : `Vous : <s lang="en">${x.it[1][r.choisi]}</s>`} · Réponse : <b lang="en">${x.it[1][x.it[2]]}</b></p>${x.it[5] ? `<p class="doux petit" style="margin:0">${x.it[5]}</p>` : ''}</div>`).join('')}</details>` : ''}
+      <p class="doux petit">Comment c'est calculé : ${total} questions sur six paliers du CECRL, de A1 à C2. Un palier est acquis à partir de 62,5 % de bonnes réponses, avec au moins la moitié aux paliers inférieurs. Le « + » (A2+, B1+, B2+) signale que le palier suivant est déjà à moitié réussi, comme le définit le volume complémentaire du CECRL (2020). Les points de grammaire sont placés à leur niveau d'après l'English Grammar Profile (Cambridge). Ce test mesure la grammaire, le vocabulaire, l'interaction et la compréhension. L'expression orale est évaluée à part par votre tuteur. Il ne remplace pas une certification officielle.</p>
+      ${type === 'entree' ? '<p><b>Et maintenant :</b> le module 1, à votre niveau.</p>' : '<p><b>Et maintenant :</b> votre certificat est disponible depuis la page des modules.</p>'}
+      <div><a class="btn plein" href="espace-eleve.html">Retour aux modules</a></div>`;
+  }
+  intro();
+})();
+</script>
+</body>
+</html>

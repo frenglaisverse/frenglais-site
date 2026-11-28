@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Le lamantin IA · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611131700">
+<style>
+.choix.col{flex-direction:column}.choix.col .puce{width:100%}
+.en-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:12px}
+.en-carte{display:flex;flex-direction:column;gap:6px;text-align:left;border:1.5px solid var(--trait);background:var(--carte);border-radius:18px;padding:16px;cursor:pointer;color:inherit;font:inherit;transition:transform .15s,border-color .15s}
+.en-carte:hover{transform:translateY(-2px);border-color:var(--bleu)}
+.en-carte .en-ico{font-size:26px}.en-carte b{font-size:17px}.en-carte span{font-size:14px;color:var(--doux);line-height:1.45}.en-carte em{font:500 12px var(--f-mono);color:var(--bleu);font-style:normal;margin-top:auto}
+.en-lam{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#0E1B3D;color:#fff;border-radius:18px;padding:16px 18px}
+.en-lam b{display:block;font-size:17px}.en-lam span{font-size:14px;opacity:.85}
+.en-nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.en-sprint-tete{display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}.en-pts{font:600 20px var(--f-mono)}.en-serie{font:600 14px var(--f-mono);color:#E0685F}
+.en-q{font-size:19px}
+.en-lecteur{display:flex;gap:10px;flex-wrap:wrap}
+.en-dictee{font-size:17px;line-height:2.6;padding:6px 0}.en-dictee p{margin:0 0 6px}
+.en-trou{position:relative;display:inline-block}
+.en-trou input{font:inherit;font-size:16px;border:0;border-bottom:2px dashed var(--bleu);background:var(--verre);border-radius:6px 6px 0 0;padding:2px 6px;min-width:4ch;color:var(--encre)}
+.en-trou input.ok{border-bottom:2px solid var(--ok);background:var(--ok-fond);color:var(--ok)}.en-trou input.ko{border-bottom:2px solid var(--ko);background:var(--ko-fond)}
+.en-trou .etq{position:absolute;left:0;top:100%;font:600 11.5px/1.2 var(--f-mono);color:var(--doux);white-space:nowrap}
+.en-chasse{font-size:20px;line-height:2.2}
+.en-mot{font:inherit;border:0;background:none;border-bottom:2px solid transparent;padding:0 2px;cursor:pointer;color:inherit}
+.en-mot:hover{border-bottom-color:var(--trait)}.en-mot.ko{color:var(--ko);border-bottom-color:var(--ko)}.en-mot.ok{color:var(--ok);border-bottom-color:var(--ok)}.en-mot.ko-l{opacity:.4}
+.en-pose{min-height:58px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:1.5px dashed var(--trait);border-radius:14px;padding:10px}
+.bloc.pose{border-color:var(--bleu)}
+.en-flip{display:block;width:100%;min-height:230px;border:1.5px solid var(--trait);border-radius:22px;background:linear-gradient(160deg,var(--carte),var(--verre));padding:26px;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.en-flip small{display:block;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bleu);margin-bottom:10px}
+.en-flip b{display:block;font-size:24px;line-height:1.2;margin-bottom:12px}
+.en-flip .en-verso span{display:block;font-size:17px;line-height:1.55}.en-flip .en-exemple{margin-top:12px;font-size:18px!important}
+.en-flip.retourne{border-color:var(--bleu);animation:flip .35s ease}
+@keyframes flip{0%{transform:rotateY(90deg)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.en-flip.retourne{animation:none}.en-carte{transition:none}}
+.lm-sujets{display:flex;flex-wrap:wrap;gap:8px}.lm-sujets .puce{font-size:14px}
+#lm-texte{width:100%;box-sizing:border-box;min-height:170px;padding:14px 16px;border:1.5px solid var(--trait);border-radius:16px;font:17px/1.6 var(--f-txt);color:var(--encre);background:var(--carte);resize:vertical}
+#lm-texte:focus{outline:2px solid var(--bleu);outline-offset:2px}
+.lm-quota{font:500 13px var(--f-mono);color:var(--doux)}
+.ia-texte{line-height:1.9;margin:0 0 10px;font-size:17px}.ia-faute{background:color-mix(in srgb,#F0766F 22%,transparent);border-bottom:2px solid #F0766F;border-radius:3px;padding:1px 2px}.ia-faute sup{font:700 10px var(--f-mono);color:#C2453C;margin-right:2px}
+.ia-liste{margin:0;padding-left:20px}.ia-liste li{margin:8px 0}.ia-liste s{color:var(--doux)}
+.lm-hist{font-size:14px}.lm-hist li{margin:4px 0}
+.lm-tete{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
+.lm-tete h1{margin:0;max-width:620px;text-wrap:balance}
+.lm-tete .lamantin{position:relative;flex:none;width:200px;height:140px;pointer-events:none;transform:scale(1.5);transform-origin:center bottom;margin:44px 0 6px}
+.lm-tete .lamantin canvas{display:block;width:200px;height:140px}
+@media (max-width:640px){.lm-tete .lamantin{transform:scale(1.15);margin:16px 0 4px}}
+.bulle-drapeau{position:absolute;left:30px;top:16px;width:38px;height:27px;padding:5px 6px;box-sizing:border-box;border-radius:9px;background:#fff;box-shadow:0 4px 12px -4px rgba(5,14,42,.45);animation:bulle-vole 1.6s cubic-bezier(.2,.8,.3,1) forwards;pointer-events:none}
+.bulle-drapeau::after{content:"";position:absolute;left:9px;bottom:-3px;width:8px;height:8px;background:#fff;transform:rotate(45deg);border-radius:1.5px}
+.bulle-drapeau svg{display:block;width:100%;height:100%;border-radius:2px}
+@keyframes bulle-vole{0%{opacity:0;transform:translateY(8px) scale(.7)}18%{opacity:1;transform:translateY(0) scale(1)}75%{opacity:1;transform:translateY(-8px)}100%{opacity:0;transform:translateY(-18px)}}
+@media (prefers-reduced-motion:reduce){.bulle-drapeau{animation:none}}
+</style>
+</head>
+<body>
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod" id="mod-titre">Le lamantin IA · il vous corrige</span>
+  <span class="actions-bandeau"><a class="retour" href="espace-eleve.html">Quitter</a></span>
+</div></header>
+<main>
+  <div class="rail" aria-live="polite">
+    <div class="meta"><span id="etape-nom">Entraînement</span><span id="etape-pct"></span></div>
+    <div class="barre" role="progressbar" aria-label="Progression" aria-valuemin="0" aria-valuemax="100"><i id="barre"></i></div>
+  </div>
+  <section class="ecran" id="ecran" tabindex="-1" aria-live="polite"><p>Chargement…</p></section>
+</main>
+<script src="lamantin-atelier.js?v=2"></script>
+<script>addEventListener("load",function(){var go=function(){import("./lamantin3d.js?v=202611201500").catch(function(){var h=document.getElementById("lamantin");if(h)h.remove();})};"requestIdleCallback"in window?requestIdleCallback(go,{timeout:1500}):setTimeout(go,300);});</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Résumé du module · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611131700">
+<style>
+body{background:var(--fond)}
+.outils{max-width:820px;margin:0 auto;padding:18px 16px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.feuille{max-width:794px;margin:16px auto 60px;background:#fff;color:#0E1B3D;border-radius:10px;box-shadow:0 18px 50px rgba(14,27,61,.12);padding:44px 48px;display:grid;grid-template-columns:1.25fr 1fr;gap:22px 28px;font-size:14px;line-height:1.5}
+.feuille .haut{grid-column:1/-1;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0E1B3D;padding-bottom:14px}
+.feuille .haut img{width:120px;height:auto}
+.feuille .num{font:500 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#1C49A5;margin:0}
+.feuille h1{font:600 30px/1.05 var(--f-txt);letter-spacing:-.02em;margin:6px 0 0;max-width:460px}
+.feuille .obj{grid-column:1/-1;margin:-6px 0 0;color:#4A5578;font-size:14.5px}
+.feuille h2{font:600 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#4A5578;margin:0 0 8px}
+.feuille .bl{break-inside:avoid}
+.feuille .retenir-f{grid-column:1/-1;background:#F2F5FC;border-left:4px solid #1C49A5;border-radius:4px;padding:14px 18px;font-size:16px}
+.feuille .retenir-f b{color:#1C49A5}
+.feuille .courbe-f{grid-column:1/-1}
+.feuille .courbe-f svg{width:100%;height:auto;display:block}
+.feuille ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:9px}
+.feuille ol li .tc{display:block;font-weight:600}
+.feuille ol li em{color:#4A5578}
+.feuille .piege{border:1.5px dashed #F0766F;border-radius:8px;padding:12px 14px}
+.feuille .piege h2{color:#A8322A}
+.feuille .mission{background:#0E1B3D;color:#fff;border-radius:8px;padding:14px 16px}
+.feuille .mission h2{color:#9DBBFA}
+.feuille .lignes{display:flex;flex-direction:column;gap:22px;margin-top:10px}
+.feuille .lignes i{display:block;border-bottom:1px solid #C9CFDD}
+.feuille .pied{grid-column:1/-1;display:flex;justify-content:space-between;font:500 11.5px var(--f-mono);color:#4A5578;border-top:1px solid #E2E6F0;padding-top:10px}
+.feuille .c-ed{color:#C2453C;font-weight:600}.feuille .c-s{color:#1C49A5;font-weight:600}
+@media (max-width:640px){.feuille{grid-template-columns:1fr;padding:26px 20px}}
+@media print{@page{size:A4;margin:12mm}body{background:#fff}.outils,.bandeau{display:none!important}.feuille{box-shadow:none;margin:0;max-width:none;padding:0;border-radius:0}}
+</style>
+</head>
+<body>
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img id="logo" src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod">Résumé du module</span>
+  <span class="actions-bandeau"><a class="retour" href="espace-eleve.html">Quitter</a></span>
+</div></header>
+<div class="outils"><button class="btn plein" type="button" onclick="window.print()">Télécharger en PDF</button><span class="doux petit">Choisissez « Enregistrer au format PDF » dans la fenêtre qui s'ouvre. Une page A4, à imprimer et garder à côté de vous.</span></div>
+<article class="feuille" id="f"></article>
+<script src="courbe-main.js?v=1"></script>
+<script src="frenglais-commun.js?v=1"></script>
+<script>
+(function(){ var n=parseInt(new URLSearchParams(location.search).get('n'),10); if(!(n>=1&&n<=32)) n=1; window.__N=n;
+  if (n===1 || window.MOD) return; document.write('<script src="modules/m'+(n<10?'0':'')+n+'.js?v=1"><\/script>'); })();
+</script>
+<script>
+(function(){
+  const n = window.__N, logo = document.getElementById('logo').src;
+  const M1 = { n: 1, arc: 1, titre: 'Repères et codes', objectif: 'Tout l\'anglais tient sur une ligne : deux temps, deux codes, et une phrase qui se construit toujours dans le même ordre.',
+    retenir: 'Deux temps, deux codes. <b>T0 → -s</b> (he works). <b>T-1 → -ed</b> (she worked), même invisible : went = go + -ed, bought = buy + -ed. Et toujours : qui, fait quoi, à quoi. Soyez logique : on reste au même temps tant que le repère ne change pas.',
+    cartes: [['Qui, fait quoi, à quoi', '', '<em>The client needs a new offer.</em>'], ['T0 : le code -s', '', '<em>She works in Nice.</em>'], ['T-1 : le code -ed', '', '<em>We sent the report.</em>'], ['Le code peut être invisible', '', '<em>went = go + -ed · bought = buy + -ed</em>'], ['Soyez logique', '', '<em>Yesterday I helped a family and they thanked me.</em>']],
+    catch: ['Le piège', 'Yesterday + have : deux repères qui se contredisent.', '<em>Yesterday I have seen him → Yesterday I saw him.</em>'] };
+  const D = n === 1 ? M1 : window.MOD;
+  if (!D) { document.getElementById('f').innerHTML = '<p>Fiche introuvable.</p>'; return; }
+  const ARCS = ['Les fondations', 'Toute la ligne', 'La boîte à outils', 'L\'anglais de votre métier', 'Parler avec aisance'];
+  const strip = s => String(s || '').replace(/<(?!\/?(?:em|b|s)\b)[^>]+>/g, '').replace(/\{prenom\}/g, FRG.prenom() || 'I');
+  const [mt, mc] = FRG.MISSIONS[n] || ['', ''];
+  const avecIng = n >= 4, avecHave = n >= 5;
+  document.title = `Frenglais · Résumé module ${n} · ${D.titre}`;
+  document.getElementById('f').innerHTML = `
+    <div class="haut"><div><p class="num">Résumé · ${n > 24 ? 'Atelier ' + (n - 24) + ' / 8' : 'Module ' + n + ' / 24'} · ${ARCS[(D.arc || 1) - 1]}</p><h1>${D.titre}</h1></div><img src="${logo}" alt="Frenglais"></div>
+    <p class="obj">${strip(D.objectif)}</p>
+    <div class="courbe-f bl"><svg viewBox="0 0 700 130" aria-label="La Courbe des Temps">
+      ${FRGcourbe({xs:[100,260,430,600],x0:14,x1:688,y:64,k:.2,couleur:'#0E1B3D'}).svg}
+      <g font-family="Geist Mono,monospace" font-size="15" fill="#0E1B3D" text-anchor="middle"><text x="100" y="40">T-2</text><text x="260" y="40">T-1</text><text x="430" y="40">T0</text><text x="600" y="40">T+1</text></g>
+      <g font-family="Geist,system-ui" font-weight="700" font-size="15" text-anchor="middle">
+        <rect x="236" y="92" width="48" height="26" rx="6" fill="#F0766F"/><text x="260" y="110" fill="#fff">-ed</text>
+        <rect x="410" y="92" width="40" height="26" rx="6" fill="#1C49A5"/><text x="430" y="110" fill="#fff">-s</text>
+        ${avecHave ? '<text x="100" y="110" fill="#9C8248" font-size="13">HAD + -EN</text><path d="M300 52 q65 -30 120 0" fill="none" stroke="#9C8248" stroke-width="2.5"/><text x="360" y="22" fill="#9C8248" font-size="12">HAVE + -EN</text>' : ''}
+        ${avecIng ? '<text x="520" y="124" fill="#0B8D8A" font-size="13">BE + -ING : en cours</text>' : ''}
+        ${n >= 7 ? '<text x="600" y="98" fill="#4A5578" font-size="13">will · going to</text>' : ''}
+      </g></svg></div>
+    <div class="retenir-f bl">${D.retenir}</div>
+    <div class="bl"><h2>L'essentiel</h2><ol>${(D.cartes || []).slice(0, 6).map(([t, , x]) => `<li><span class="tc">${strip(t)}</span>${strip(x)}</li>`).join('')}</ol></div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      ${D.catch ? `<div class="piege bl"><h2>Le piège</h2><p style="margin:0">${strip(D.catch[1])}</p><p style="margin:6px 0 0">${strip(D.catch[2])}</p></div>` : ''}
+      <div class="mission bl"><h2>Votre mission · ${mt}</h2><p style="margin:0">${mc}</p></div>
+      <div class="bl"><h2>Vos trois phrases</h2><p class="doux" style="margin:0;font-size:13px;color:#4A5578">Trois phrases de votre métier, avec le code entre parenthèses.</p><div class="lignes"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    </div>
+    <div class="pied"><span>frenglais.co · Courbe des Temps</span><span>Be logical. Now, spit it.</span></div>`;
+})();
+</script>
+</body>
+</html>

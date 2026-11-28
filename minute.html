@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Minute Courbe · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611131700">
+<style>
+.serie{display:flex;gap:6px;flex-wrap:wrap}
+.serie i{width:28px;height:28px;border-radius:8px;border:1px solid var(--trait);display:grid;place-items:center;font:600 11px var(--f-mono);color:var(--doux);font-style:normal}
+.serie i.f{background:var(--bleu);border-color:var(--bleu);color:#fff}
+.serie i.auj{outline:2px solid var(--corail);outline-offset:2px}
+.flamme{font:700 44px/1 var(--f-txt);letter-spacing:-.03em}
+.m-q{font-size:clamp(19px,4.4vw,23px);font-weight:500;margin:0}
+.revient{display:inline-block;font:600 11.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--corail-txt);border:1px solid currentColor;border-radius:99px;padding:3px 10px}
+</style>
+</head>
+<body>
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod">Minute Courbe</span>
+  <span class="actions-bandeau"><a class="retour" href="espace-eleve.html">Quitter</a></span>
+</div></header>
+<main>
+  <div class="rail"><div class="meta"><span id="etape-nom">Aujourd'hui</span><span id="etape-pct"></span></div><div class="barre"><i id="barre"></i></div></div>
+  <section class="ecran" id="ecran" tabindex="-1" aria-live="polite"></section>
+</main>
+<script src="frenglais-commun.js?v=1"></script>
+<script src="minute-donnees.js?v=1"></script>
+<script>
+(function(){
+  const z = document.getElementById('ecran'), nomE = document.getElementById('etape-nom'), pctE = document.getElementById('etape-pct'), barre = document.getElementById('barre');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+  const melange = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const JOUR = 864e5, auj = FRG.jourCle(), INTERV = [1, 3, 7, 16, 35];
+  const etat = FRG.lire('frg-minute', { jours:{}, boites:{} }); etat.jours = etat.jours || {}; etat.boites = etat.boites || {};
+  const sauver = () => FRG.ecrire('frg-minute', etat);
+  const prenom = FRG.prenom();
+  const norme = t => t.trim().toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, ' ').replace(/[.!?]+$/, '').replace(/\bdo not\b/g, "don't").replace(/\bdoes not\b/g, "doesn't").replace(/\bdid not\b/g, "didn't").replace(/\bi am\b/g, "i'm");
+
+  /* modules ouverts au rappel : ceux que l'élève a terminés */
+  const faits = []; for (let n = 1; n <= 32; n++) { const e = FRG.lire('frg-m' + n, null); if (e && e.fini) faits.push(n); }
+
+  function serie(){ let s = 0, t = Date.now(); if (!etat.jours[FRG.jourCle(t)]) t -= JOUR; while (etat.jours[FRG.jourCle(t)]) { s++; t -= JOUR; } return s; }
+  function semaine(){ return Array.from({ length: 7 }, (_, k) => { const t = Date.now() - (6 - k) * JOUR, c = FRG.jourCle(t); return `<i class="${etat.jours[c] ? 'f' : ''} ${c === auj ? 'auj' : ''}">${'LMMJVSD'[(new Date(t).getDay() + 6) % 7]}</i>`; }).join(''); }
+
+  function tirer(){
+    const tous = []; faits.forEach(n => (window.MINUTE[n] || []).forEach((it, i) => tous.push({ cle: n + ':' + i, n, it })));
+    const dus = tous.filter(x => etat.boites[x.cle] && etat.boites[x.cle].due <= Date.now()).sort((a, b) => etat.boites[a.cle].due - etat.boites[b.cle].due);
+    const neufs = melange(tous.filter(x => !etat.boites[x.cle])).sort((a, b) => b.n - a.n);
+    const choix = [], types = new Set();
+    for (const x of [...dus, ...neufs]) { if (choix.length >= 3) break; const ty = x.it.t === 'trou' ? 'traduire' : x.it.t; if (choix.length < 2 && types.has(ty) && [...dus, ...neufs].some(y => !choix.includes(y) && !types.has(y.it.t === 'trou' ? 'traduire' : y.it.t))) continue; choix.push(x); types.add(ty); }
+    while (choix.length < 3 && tous.length > choix.length) { const r = tous[Math.floor(Math.random() * tous.length)]; if (!choix.includes(r)) choix.push(r); }
+    return choix;
+  }
+
+  function accueil(){
+    nomE.textContent = 'Aujourd\'hui'; pctE.textContent = ''; barre.style.width = '0%';
+    const fait = !!etat.jours[auj], s = serie(), vol = FRG.volume(), sv = vol.semaines[vol.semaines.length - 1];
+    if (!faits.length) { z.innerHTML = `<p class="eyebrow">Minute Courbe</p><h1>D'abord le module 1.</h1><p>La Minute Courbe fait revenir ce que vous avez déjà vu. Terminez le module 1, puis revenez ici chaque jour.</p><div><a class="btn plein" href="espace-eleve.html">Retour aux modules</a></div>`; return; }
+    z.innerHTML = `<p class="eyebrow">Minute Courbe · trois phrases par jour</p>
+      <h1>${fait ? 'C\'est fait pour aujourd\'hui.' : (prenom ? esc(prenom) + ', trois phrases.' : 'Trois phrases. Une minute.')}</h1>
+      <p>${fait ? 'Revenez demain : ce que vous avez raté reviendra, ce que vous savez s\'espacera.' : 'Entre deux modules, l\'anglais s\'efface si on ne le touche pas. Une minute par jour suffit à le garder chaud. Ce que vous ratez revient demain ; ce que vous réussissez revient plus tard.'}</p>
+      <div><p class="flamme">${s} jour${s > 1 ? 's' : ''}</p><p class="doux petit">de suite</p></div>
+      <div class="serie">${semaine()}</div>
+      <p class="doux petit">Cette semaine : ${sv.minutes} / ${vol.cible.minutes} jours attendus. Ce volume compte dans vos résultats.</p>
+      <div><button class="btn plein" id="go" type="button">${fait ? 'Trois de plus (bonus)' : 'Commencer'}</button></div>`;
+    z.querySelector('#go').addEventListener('click', () => session(fait));
+  }
+
+  function session(bonus){
+    const Q = tirer(); let k = 0, bons = 0;
+    const suivant = () => { k++; if (k < Q.length) un(); else fin(); };
+    function un(){
+      const { cle, n, it } = Q[k], dejaVu = !!etat.boites[cle];
+      nomE.textContent = `Phrase ${k + 1} / ${Q.length}`; pctE.textContent = 'Module ' + n; barre.style.width = Math.round(k / Q.length * 100) + '%';
+      const tete = dejaVu ? '<span class="revient">Elle revient</span>' : '';
+      const noter = juste => { const b = etat.boites[cle] || { b: 0 }; b.b = juste ? Math.min(5, b.b + 1) : 1; b.due = Date.now() + (juste ? INTERV[b.b - 1] : 1) * JOUR - 3600e3; etat.boites[cle] = b; sauver(); if (juste) bons++; };
+      const apres = (juste, sol) => { const r = z.querySelector('#r'); r.innerHTML = juste ? `<div class="retour-msg ok">Exact.${it.code ? ` <span class="code-par">(${esc(it.code)})</span>` : ''}</div>` : `<div class="retour-msg ko">Non. ${sol ? `<b>${sol}</b>. ` : ''}${it.ex || ''} Elle reviendra demain.</div>`;
+        const bt = document.createElement('button'); bt.className = 'btn plein'; bt.type = 'button'; bt.textContent = k < Q.length - 1 ? 'Suivante' : 'Terminer'; bt.addEventListener('click', suivant); r.append(bt); bt.focus(); };
+      if (it.t === 'qcm' || it.t === 'placer') {
+        const opts = it.t === 'placer' ? ['T-2', 'T-1', 'T0', 'T+1'].map(x => ({ c: x, juste: x === it.zone })) : melange(it.ch.map((c, j) => ({ c, juste: j === it.b })));
+        z.innerHTML = `${tete}<p class="eyebrow">${it.t === 'placer' ? 'Où vit cette phrase sur la Courbe ?' : 'Choisissez'}</p><p class="m-q" ${it.t === 'placer' ? 'lang="en"' : ''}>${it.t === 'placer' ? esc(it.ph) : it.q}</p>
+          <div class="choix ${it.t === 'placer' ? 'zones' : ''}">${opts.map((o, j) => `<button class="puce" type="button" data-j="${j}">${o.c}</button>`).join('')}</div><div id="r"></div>`;
+        z.querySelectorAll('.puce').forEach(p => p.addEventListener('click', () => { if (z.dataset.lock === cle) return; z.dataset.lock = cle; const o = opts[+p.dataset.j]; noter(o.juste); p.classList.add(o.juste ? 'ok' : 'ko');
+          if (!o.juste) z.querySelectorAll('.puce').forEach((q, j) => { if (opts[j].juste) q.classList.add('ok'); }); apres(o.juste, o.juste ? '' : opts.find(x => x.juste).c); }));
+      } else {
+        const tr = it.t === 'traduire';
+        z.innerHTML = `${tete}<p class="eyebrow">${tr ? 'Traduisez' : 'Complétez'}</p>${tr ? `<p class="m-q">« ${esc(it.fr)} »</p>` : `<p class="m-q" lang="en">${it.avant} <span class="doux">___</span> ${it.apres}</p>`}
+          <input class="saisie" id="in" autocomplete="off" autocapitalize="off" spellcheck="false" lang="en" placeholder="${tr ? 'In English…' : 'Le mot manquant'}"><button class="btn plein" id="vf" type="button">Vérifier</button><div id="r"></div>`;
+        const i = z.querySelector('#in'), vf = z.querySelector('#vf');
+        const go = () => { if (!i.value.trim() || i.disabled) return; const juste = it.bon.map(norme).includes(norme(i.value)); i.disabled = true; vf.hidden = true; i.classList.add(juste ? 'ok' : 'ko'); noter(juste); apres(juste, juste ? '' : esc(it.bon[0])); };
+        vf.addEventListener('click', go); i.addEventListener('keydown', e => { if (e.key === 'Enter') go(); }); i.focus({ preventScroll:true });
+      }
+    }
+    function fin(){
+      if (!bonus) { etat.jours[auj] = (etat.jours[auj] || 0) + 1; sauver(); }
+      barre.style.width = '100%'; nomE.textContent = 'Terminé'; pctE.textContent = '';
+      const s = serie();
+      z.innerHTML = `<p class="eyebrow">Minute Courbe</p><h1>${bons} sur ${Q.length}.</h1>
+        <p>${bons === Q.length ? 'Rien à reprendre aujourd\'hui. Ces phrases reviendront dans quelques jours, pour vérifier qu\'elles tiennent.' : 'Ce que vous avez raté revient demain. C\'est exactement comme ça qu\'on le fixe.'}</p>
+        <div><p class="flamme">${s} jour${s > 1 ? 's' : ''}</p><p class="doux petit">de suite</p></div><div class="serie">${semaine()}</div>
+        <div><a class="btn plein" href="espace-eleve.html">Retour aux modules</a></div>`;
+    }
+    un();
+  }
+  accueil();
+})();
+</script>
+</body>
+</html>

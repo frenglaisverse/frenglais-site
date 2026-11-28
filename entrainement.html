@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Entraînement · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611271800">
+<link rel="stylesheet" href="pixel.css?v=2">
+<link rel="stylesheet" href="arcade.css?v=1">
+<style>
+.choix.col{flex-direction:column}.choix.col .puce{width:100%}
+.en-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:12px}
+.en-carte{display:flex;flex-direction:column;gap:6px;text-align:left;border:1.5px solid var(--trait);background:var(--carte);border-radius:18px;padding:16px;cursor:pointer;color:inherit;font:inherit;transition:transform .15s,border-color .15s}
+.en-carte:hover{transform:translateY(-2px);border-color:var(--bleu)}
+.en-carte .en-ico{font-size:26px}.en-carte b{font-size:17px}.en-carte span{font-size:14px;color:var(--doux);line-height:1.45}.en-carte em{font:500 12px var(--f-mono);color:var(--bleu);font-style:normal;margin-top:auto}
+.en-jeu{text-decoration:none;background:#0A1330;color:#F4EEDC;border-color:#2A3F73;border-radius:0;box-shadow:0 -3px 0 #2A3F73,0 3px 0 #2A3F73,-3px 0 0 #2A3F73,3px 0 0 #2A3F73}.en-jeu b{font:10px/1.6 "Press Start 2P",monospace;color:#FFD25A}.en-jeu span:not(.en-ico){color:#9AA8CC!important}
+@font-face{font-family:"Press Start 2P";src:url("fonts/press-start-2p.woff2") format("woff2");font-display:swap}
+.en-lam{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#0E1B3D;color:#fff;border-radius:18px;padding:16px 18px}
+.en-lam b{display:block;font-size:17px}.en-lam span{font-size:14px;opacity:.85}
+.en-nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.en-sprint-tete{display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}.en-pts{font:600 20px var(--f-mono)}.en-serie{font:600 14px var(--f-mono);color:#E0685F}
+.en-q{font-size:19px}
+.en-mode{align-self:flex-start;font:600 12px var(--f-mono);color:#1E7A4F;background:color-mix(in srgb,#1E7A4F 12%,transparent);border-radius:99px;padding:4px 10px}
+.en-saisie{display:flex;gap:10px;flex-wrap:wrap}.en-saisie input{flex:1 1 220px;font:17px var(--f-txt);padding:12px 14px;border:1.5px solid var(--trait);border-radius:14px;background:var(--carte);color:var(--encre)}
+.en-saisie input.ok{border-color:var(--ok);background:var(--ok-fond)}.en-saisie input.ko{border-color:var(--ko);background:var(--ko-fond)}
+.en-melange{display:flex;flex-wrap:wrap;gap:8px}.en-melange span{padding:6px 12px;border:1.5px dashed var(--trait);border-radius:10px}
+.en-micro{font-size:17px}
+.en-rappel{align-self:flex-start;font:600 12px var(--f-mono);letter-spacing:.04em;color:#7B61C9;background:color-mix(in srgb,#7B61C9 12%,transparent);border-radius:99px;padding:4px 10px}
+.en-lecteur{display:flex;gap:10px;flex-wrap:wrap}
+.en-dictee{font-size:17px;line-height:2.6;padding:6px 0}.en-dictee p{margin:0 0 6px}
+.en-trou{position:relative;display:inline-block}
+.en-trou input{font:inherit;font-size:16px;border:0;border-bottom:2px dashed var(--bleu);background:var(--verre);border-radius:6px 6px 0 0;padding:2px 6px;min-width:4ch;color:var(--encre)}
+.en-trou input.ok{border-bottom:2px solid var(--ok);background:var(--ok-fond);color:var(--ok)}.en-trou input.ko{border-bottom:2px solid var(--ko);background:var(--ko-fond)}
+.en-trou .etq{position:absolute;left:0;top:100%;font:600 11.5px/1.2 var(--f-mono);color:var(--doux);white-space:nowrap}
+.en-chasse{font-size:20px;line-height:2.2}
+.en-mot{font:inherit;border:0;background:none;border-bottom:2px solid transparent;padding:0 2px;cursor:pointer;color:inherit}
+.en-mot:hover{border-bottom-color:var(--trait)}.en-mot.ko{color:var(--ko);border-bottom-color:var(--ko)}.en-mot.ok{color:var(--ok);border-bottom-color:var(--ok)}.en-mot.ko-l{opacity:.4}
+.en-pose{min-height:58px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:1.5px dashed var(--trait);border-radius:14px;padding:10px}
+.bloc.pose{border-color:var(--bleu)}
+.en-flip{display:block;width:100%;min-height:230px;border:1.5px solid var(--trait);border-radius:22px;background:linear-gradient(160deg,var(--carte),var(--verre));padding:26px;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.en-flip small{display:block;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bleu);margin-bottom:10px}
+.en-flip b{display:block;font-size:24px;line-height:1.2;margin-bottom:12px}
+.en-flip .en-verso span{display:block;font-size:17px;line-height:1.55}.en-flip .en-exemple{margin-top:12px;font-size:18px!important}
+.en-flip.retourne{border-color:var(--bleu);animation:flip .35s ease}
+@keyframes flip{0%{transform:rotateY(90deg)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.en-flip.retourne{animation:none}.en-carte{transition:none}}
+</style>
+</head>
+<body class="pixel arcade">
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod" id="mod-titre">Entraînement</span>
+  <span class="actions-bandeau"><a class="retour" href="espace-eleve.html">Quitter</a></span>
+</div></header>
+<main>
+  <div class="rail" aria-live="polite">
+    <div class="meta"><span id="etape-nom">Entraînement</span><span id="etape-pct"></span></div>
+    <div class="barre" role="progressbar" aria-label="Progression" aria-valuemin="0" aria-valuemax="100"><i id="barre"></i></div>
+  </div>
+  <div class="a-scene" id="arcade-scene" hidden></div>
+  <section class="ecran" id="ecran" tabindex="-1" aria-live="polite"><p>Chargement…</p></section>
+</main>
+<script src="arcade.js?v=1"></script>
+<script src="generateur.js?v=2"></script>
+<script src="entrainement.js?v=6"></script>
+</body>
+</html>

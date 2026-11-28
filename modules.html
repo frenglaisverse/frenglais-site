@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Les 24 modules · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611131700">
+<style>
+.hub{max-width:1080px;margin:0 auto;padding:28px 16px 80px}
+.hub h1{font-size:clamp(30px,5vw,46px);letter-spacing:-.02em;margin:6px 0 6px}
+.hub .lead{color:var(--doux);max-width:640px;margin:0 0 10px}
+.apercu-note{display:inline-block;width:fit-content;max-width:100%;font-size:13px;padding:6px 12px;border-radius:99px;background:var(--verre);border:1px solid var(--verre-bord);color:var(--bleu);margin-bottom:18px}
+.apercu-barre[hidden]{display:none!important}
+.apercu-barre{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:10px 14px;border-radius:16px;background:var(--verre);border:1px dashed var(--verre-bord);font-size:13.5px;margin:4px 0 10px}
+.apercu-tag{font:600 11px var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--bleu)}
+.seg{display:inline-flex;border:1px solid var(--trait);border-radius:99px;overflow:hidden;background:var(--carte)}
+.seg button{font:inherit;border:0;background:none;padding:6px 12px;cursor:pointer;color:var(--doux)}
+.seg button.on{background:var(--encre);color:var(--carte)}
+.sel select{font:inherit;margin-left:4px;padding:4px 6px;border-radius:8px;border:1px solid var(--trait);background:var(--carte);color:var(--encre)}
+.lien{font:inherit;border:0;background:none;color:var(--bleu);text-decoration:underline;cursor:pointer;padding:0}
+.rythme-info{font-size:14px;color:var(--doux);margin:0 0 18px}
+.rythme-info b{color:var(--encre)}
+.mousse-tuile{position:absolute;top:0;left:0;width:100%;height:64px;pointer-events:none;z-index:1;opacity:.85}
+.tuile.ferme{opacity:.55;cursor:not-allowed;background:var(--fond,transparent);border-style:dashed}
+.tuile.ferme:hover{transform:none;box-shadow:none}
+.tuile .cadenas{position:absolute;top:14px;right:14px;width:16px;height:16px;color:var(--doux)}
+.resume{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:8px 0 26px;font-size:14px;color:var(--doux)}
+.resume b{color:var(--encre);font-size:22px;font-weight:600;margin-right:4px}
+.resume .jauge{flex:1;min-width:160px;height:8px;border-radius:9px;background:var(--trait);overflow:hidden}
+.resume .jauge i{display:block;height:100%;background:var(--ok);transition:width .6s}
+.arc{margin:30px 0 12px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.arc h2{font-size:19px;margin:0}
+.arc span{font:12px var(--f-mono);color:var(--doux);text-transform:uppercase;letter-spacing:.06em}
+.arc a{font-size:13px;margin-left:auto;color:var(--bleu)}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.tuile{position:relative;display:flex;flex-direction:column;gap:6px;min-height:128px;padding:16px;border-radius:18px;background:var(--carte);border:1px solid var(--trait);color:var(--encre);text-decoration:none;transition:transform .18s,box-shadow .18s,border-color .18s}
+.tuile:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(14,27,61,.10);border-color:var(--verre-bord)}
+.tuile .num{font:600 13px var(--f-mono);color:var(--doux)}
+.tuile strong{font-size:16px;line-height:1.25;font-weight:600}
+.tuile .sous{font-size:13px;color:var(--doux);line-height:1.3}
+.tuile .etat{margin-top:auto;font-size:12.5px;display:flex;align-items:center;gap:6px;color:var(--doux)}
+.tuile .etat i{width:8px;height:8px;border-radius:50%;background:var(--trait);display:inline-block}
+.tuile.ok{border-color:var(--ok);background:var(--ok-fond)}
+.tuile.ok .etat{color:var(--ok);font-weight:600}.tuile.ok .etat i{background:var(--ok)}
+.tuile.encours .etat{color:var(--bleu)}.tuile.encours .etat i{background:var(--bleu)}
+.tuile.rate .etat{color:var(--ko)}.tuile.rate .etat i{background:var(--ko)}
+.tuile.premier{grid-column:span 2;background:linear-gradient(135deg,var(--nuit),var(--bleu));color:#fff;border:0}
+.tuile.premier .num,.tuile.premier .sous,.tuile.premier .etat{color:rgba(255,255,255,.8)}
+.tuile.premier.ok .etat{color:#9BE7BE}.tuile.premier .etat i{background:rgba(255,255,255,.5)}.tuile.premier.ok .etat i{background:#9BE7BE}
+@media (max-width:460px){.tuile.premier{grid-column:span 1}.grille{grid-template-columns:1fr 1fr}.tuile{min-height:118px;padding:13px}}
+.parcours{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:6px 0 4px}
+.pc{border:1px solid var(--trait);border-radius:18px;background:var(--carte);padding:16px;display:flex;flex-direction:column;gap:8px}
+.pc .t{font:500 12px var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--doux)}
+.pc .v{font:600 24px/1.15 var(--f-txt);letter-spacing:-.02em}
+.pc .v small{font-size:14px;font-weight:500;color:var(--doux)}
+.pc p{margin:0;font-size:14px;color:var(--doux)}
+.pc .btn{align-self:flex-start;text-decoration:none;display:inline-flex;align-items:center;padding:9px 16px;min-height:0;font-size:14.5px}
+.pc.cle{border-color:var(--bleu);background:var(--verre)}
+.pc.alerte{border-color:var(--corail)}
+.vol{display:flex;flex-direction:column;gap:5px;font-size:13.5px}
+.vol div{display:grid;grid-template-columns:96px 1fr 44px;gap:8px;align-items:center}
+.vol i{display:block;height:6px;border-radius:9px;background:var(--trait);overflow:hidden}.vol i b{display:block;height:100%;background:var(--bleu)}
+.serie7{display:flex;gap:4px}.serie7 i{width:18px;height:18px;border-radius:5px;border:1px solid var(--trait)}.serie7 i.f{background:var(--bleu);border-color:var(--bleu)}
+.fiches{display:flex;flex-wrap:wrap;gap:6px}.fiches a{font:500 12.5px var(--f-mono);padding:4px 9px;border-radius:8px;border:1px solid var(--trait);color:var(--encre);text-decoration:none}
+.tuile .mi{font-size:12px;color:var(--doux)}.tuile.ok .mi.f{color:var(--ok)}
+.pied{margin-top:40px;font-size:13px;color:var(--doux)}
+.pied button{font:inherit;color:var(--ko);background:none;border:0;text-decoration:underline;cursor:pointer;padding:0}
+.demo-bandeau{display:block;padding:12px 16px;border-radius:14px;background:rgba(240,118,111,.12);border:1px solid rgba(240,118,111,.35)}.demo-bandeau a{color:inherit;font-weight:600}
+</style>
+</head>
+<body>
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="modules.html" aria-label="Les modules"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod">Courbe des Temps · 24 modules + 8 ateliers</span>
+  <span class="actions-bandeau"></span>
+</div></header>
+<main class="hub">
+  <p class="eyebrow">Votre parcours</p>
+  <h1>Les 24 modules.</h1>
+  <p class="lead">Un module validé, c'est au moins 90 % de bonnes réponses du premier coup. Sinon, on le refait.</p>
+  <div class="apercu-barre">
+    <span class="apercu-tag">Aperçu</span>
+    <div class="seg" id="vue"><button type="button" data-v="eleve">Vue élève</button><button type="button" data-v="tout">Tout ouvert</button></div>
+    <label class="sel">Rythme <select id="rythme"><option value="1">1 / semaine</option><option value="2">2 / semaine</option><option value="3">3 / semaine</option></select></label>
+    <button type="button" class="lien" id="semaine">Simuler une semaine de plus</button>
+  </div>
+  <p class="rythme-info" id="info"></p>
+  <div class="parcours" id="parcours"></div>
+  <p class="rythme-info" id="msg-rapport" style="margin:0"></p>
+  <div class="resume"><span><b id="nb">0</b>sur 24 validés</span><div class="jauge"><i id="jg" style="width:0%"></i></div></div>
+  <div id="arcs"></div>
+  <p class="pied">La progression est gardée sur cet appareil. <button type="button" id="raz">Tout effacer</button></p>
+</main>
+<script src="mousse.js?v=202611131900"></script>
+<script src="frenglais-commun.js?v=3"></script>
+<script>
+(function(){
+  const T=['Repères et codes',"T0, le temps le plus simple","T-1, toujours simple","BE + -ING","HAVE + -EN","T-2, le passé dans le passé","T+1, l'éléphant dans la pièce","Les modaux","Empiler les briques","Poser des questions","Spit it : dites-le","Toute la Courbe","Les quatre couteaux suisses","Les verbes à particule","Le verbe choisit sa préposition","Ne plus bloquer","Se présenter pour de vrai","Écrire un e-mail","Téléphone et visio","Chiffres, dates, heures, prix","Comparer et décrire","Relier ses idées","Si…","L'anglais réel","Le passif","Les habitudes passées","Les regrets","Rapporter des paroles","Convaincre","Prendre la parole","Continuer seul","Le grand oral"];
+  const ARCS=[[1,6,'Les fondations'],[7,12,'Toute la ligne'],[13,16,'La boîte à outils'],[17,24,"L'anglais de votre métier"],[25,32,"Ateliers d'oral · Signature"]];
+  const lire=n=>{ try{ return JSON.parse(localStorage.getItem('frg-m'+n)||'null'); }catch(e){ return null; } };
+  const pctDe=n=>{ try{ return +(localStorage.getItem('frg-m'+n+'-pct')||0); }catch(e){ return 0; } };
+  const get=(k,v)=>{ try{ const x=localStorage.getItem(k); return x===null?v:x; }catch(e){ return v; } };
+  const set=(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} };
+  const JOUR=864e5;
+  /* Ouverture propre à chaque élève : son horloge démarre le jour où il commence,
+     son rythme vient de sa formule, et un module n'ouvre que si le précédent est validé. */
+  window.rendre=function(){
+  if(get('frg-debut',null)===null) set('frg-debut',String(Date.now()));
+  /* la barre d'aperçu n'existe que sur l'appareil de Paul (celui où sa clé du tableau de bord est enregistrée) */
+  const PAUL=!!get('frg-cle-tableau','').replace(/"/g,''); { const bar=document.querySelector('.apercu-barre'); if(bar&&!PAUL) bar.hidden=true; }
+  const debut=+get('frg-debut',Date.now()), decal=PAUL?+get('frg-decal-apercu',0):0;
+  const rythme=+get('frg-rythme',2), vue=PAUL?get('frg-vue-apercu','eleve'):'eleve';
+  const semaines=Math.floor((Date.now()+decal*7*JOUR-debut)/(7*JOUR));
+  const plafond=Math.min(24,rythme*(semaines+1));
+  const SIGN=PAUL||vue==='tout'||get('frg-formule','')==='signature';   /* ateliers d'oral : formule Signature (et Équipe) */
+  const AT=n=>n>24, porteAt=n=>3*(n-24);   /* l'atelier k s'ouvre quand le module 3k est validé */
+  const valide=n=>{ const d=lire(n); return !!(d&&d.fini&&(d.valide||(d.valide===undefined&&d.score>=90))); };
+  const dateOuv=n=>{ const sem=Math.ceil(n/rythme)-1; return new Date(debut+sem*7*JOUR).toLocaleDateString('fr-FR',{day:'numeric',month:'long'}); };
+  const entree=FRG.lire('frg-test-entree',null), sortie=FRG.lire('frg-test-sortie',null);
+  const DEMO=FRG.demo(), DEMOFIN=FRG.demoExpiree();
+  const ouvert=n=>DEMO?DEMO.modules.includes(n):DEMOFIN?false:vue==='tout'||(AT(n)?(SIGN&&valide(porteAt(n))):(n<=plafond&&(n===1?!!entree:valide(n-1))));
+  let nb=0;
+  const CAD='<svg class="cadenas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  /* un peu de mousse espagnole sur la première tuile de chaque arc */
+  const MO=n=>[1,7,13,17,25].includes(n)?'<canvas class="mousse mousse-tuile" data-modele="[[205,5],[232,7],[256,4],[278,6]]" aria-hidden="true"></canvas>':'';
+  const tuile=n=>{
+    const d=lire(n), href=n===1?'module-1.html':'module.html?n='+n;
+    let cls='', etat='À faire';
+    if(!ouvert(n)){ if(valide(n)) nb++; const raison=(DEMO||DEMOFIN)?'Inclus dans la formation complète':AT(n)?(SIGN?'S\'ouvre après le module '+porteAt(n):'Inclus dans Signature'):n===1&&!entree?'Passez d\'abord le test d\'entrée':n>plafond?'S\'ouvre le '+dateOuv(n):'Validez d\'abord le module '+(n-1);
+      return `<span class="tuile ferme${n===1?' premier':''}" aria-disabled="true">${MO(n)}${CAD}<span class="num">${AT(n)?'A'+(n-24):String(n).padStart(2,'0')}</span><strong>${T[n-1]}</strong><span class="etat"><i></i>${raison}</span></span>`; }
+    if(d&&d.fini){ if(d.valide||(d.valide===undefined&&d.score>=90)){ cls='ok'; etat='Validé'+(d.score!=null?' · '+d.score+' %':''); nb++; } else { cls='rate'; etat=(d.score!=null?d.score+' %':'Terminé')+' · à refaire'; } }
+    else if(d&&(d.max||d.step)){ cls='encours'; etat='En cours · '+Math.round(pctDe(n))+' %'; }
+    return `<a class="tuile ${cls}${n===1?' premier':''}" href="${href}">${MO(n)}<span class="num">${AT(n)?'A'+(n-24):String(n).padStart(2,'0')}</span><strong>${T[n-1]}</strong>${n===1?'<span class="sous">Tout l\'anglais tient sur une ligne</span>':''}<span class="etat"><i></i>${etat}</span>${cls==='ok'?`<span class="mi ${missions[n]?'f':''}">${missions[n]?'Mission envoyée ✓':'Mission à envoyer'}</span>`:''}</a>`;
+  };
+  const missions=FRG.missions();
+  document.getElementById('arcs').innerHTML=ARCS.map(([a,b,nom],k)=>{
+    const ids=[]; for(let n=a;n<=b;n++) ids.push(n);
+    return `<div class="arc"><span>${a>24?'Signature · 8 ateliers où vous parlez':'Arc '+(k+1)+' · modules '+a+' à '+b}</span><h2>${nom}</h2></div><div class="grille">${ids.map(tuile).join('')}</div>`;
+  }).join('');
+  if(window.FRGmousse) document.querySelectorAll('#arcs canvas.mousse').forEach(FRGmousse);
+  const info=document.getElementById('info');
+  if(DEMO||DEMOFIN){ const bar=document.querySelector('.apercu-barre'); if(bar) bar.hidden=true;
+    const fin=DEMO?new Date(DEMO.expire).toLocaleDateString('fr-FR',{day:'numeric',month:'long'}):'';
+    info.innerHTML=DEMO?`<span class="demo-bandeau"><b>Démo offerte à ${DEMO.nom.replace(/[<>&]/g,'')}</b> · ${DEMO.modules.length} module${DEMO.modules.length>1?'s':''} ouvert${DEMO.modules.length>1?'s':''} jusqu'au ${fin}. <a href="index.html#devis">Ouvrir tout le parcours →</a></span>`:'<span class="demo-bandeau"><b>Votre accès démo est terminé.</b> <a href="index.html#devis">Demander un devis →</a></span>';
+    if(DEMO&&!window.__demoVerif){ window.__demoVerif=1; FRG.demoVerifier(DEMO.code).then(r=>{ if(!r.ok){ FRG.ecrire('frg-demo',Object.assign(DEMO,{expire:0})); location.reload(); } }).catch(()=>{}); }
+  } else
+  info.innerHTML=vue==='tout'?'Tous les modules sont ouverts pour relecture.':`Semaine <b>${semaines+1}</b> de votre parcours · <b>${plafond}</b> module${plafond>1?'s':''} disponible${plafond>1?'s':''} à votre rythme (${rythme} par semaine). Le suivant s'ouvre quand le précédent est validé.`;
+  document.querySelectorAll('#vue button').forEach(b=>{ b.classList.toggle('on',b.dataset.v===vue); b.onclick=()=>{ set('frg-vue-apercu',b.dataset.v); location.reload(); }; });
+  const rs=document.getElementById('rythme'); rs.value=String(rythme); rs.onchange=()=>{ set('frg-rythme',rs.value); location.reload(); };
+  document.getElementById('semaine').onclick=()=>{ set('frg-decal-apercu',String(decal+1)); location.reload(); };
+  nb=0; for(let n=1;n<=24;n++) if(valide(n)) nb++;   /* le parcours compte 24 modules ; les ateliers sont en plus */
+  document.getElementById('nb').textContent=nb; document.getElementById('jg').style.width=(nb/24*100)+'%';
+  /* le parcours autour des modules : test, minute, volume, rapport, fin */
+  const vol=FRG.volume(), sv=vol.semaines[vol.semaines.length-1], mi=FRG.lire('frg-minute',{})||{}, jours=mi.jours||{};
+  let serie=0; { let t=Date.now(); if(!jours[FRG.jourCle(t)]) t-=JOUR; while(jours[FRG.jourCle(t)]){ serie++; t-=JOUR; } }
+  const sept=Array.from({length:7},(_,k)=>`<i class="${jours[FRG.jourCle(Date.now()-(6-k)*JOUR)]?'f':''}"></i>`).join('');
+  const ligne=(lab,x,c)=>`<div><span>${lab}</span><i><b style="width:${Math.min(100,Math.round(x/c*100))}%"></b></i><span>${x}/${c}</span></div>`;
+  const fin=nb>=24||vue==='tout', vals=[]; for(let n=1;n<=32;n++) if(valide(n)) vals.push(n);
+  document.getElementById('parcours').innerHTML=`
+    <div class="pc ${entree?'':'cle'}"><span class="t">Test d'entrée</span>${entree?`<span class="v">${entree.niveau} <small>au départ</small></span><p>Passé le ${new Date(entree.date).toLocaleDateString('fr-FR')}. Il ne fait sauter aucun module : il mesure.</p>`:`<span class="v">15 minutes</span><p>Votre point de départ, pour prouver votre progrès à la fin. Il ouvre le module 1.</p><a class="btn plein" href="test.html?type=entree">Passer le test</a>`}</div>
+    <div class="pc ${jours[FRG.jourCle()]?'':'cle'}"><span class="t">Minute Courbe · chaque jour</span><span class="v">${serie} jour${serie>1?'s':''} <small>de suite</small></span><div class="serie7">${sept}</div><a class="btn ${jours[FRG.jourCle()]?'':'plein'}" href="minute.html">${jours[FRG.jourCle()]?'Fait aujourd\'hui ✓':'Trois phrases, maintenant'}</a></div>
+    <div class="pc ${vol.tenu===false?'alerte':''}"><span class="t">Votre volume · semaine ${sv.semaine}</span>
+      <div class="vol">${ligne('Modules',sv.modules,vol.cible.modules)}${ligne('Minute Courbe',sv.minutes,vol.cible.minutes)}${ligne('Missions',sv.missions,vol.cible.missions)}</div>
+      <p>${vol.moyenne==null?`Votre objectif de niveau suppose de tenir au moins ${vol.seuil} % de ce volume, chaque semaine.`:`Volume tenu depuis le début : <b>${vol.moyenne} %</b>. ${vol.tenu?'Vous êtes sur la trajectoire de votre objectif.':`Sous ${vol.seuil} %, l'objectif de niveau est compromis : rattrapez cette semaine.`}`}</p></div>
+    <div class="pc"><span class="t">Suivi avec Paul</span><span class="v">Votre bilan</span><p>Un clic prépare un message avec vos modules et vos scores. Envoyez-le à Paul avant chaque rendez-vous : il saura exactement où vous en êtes.</p><button class="btn plein" id="rapport" type="button">Préparer mon bilan</button></div>
+    ${vals.length?`<div class="pc"><span class="t">Vos fiches mémo</span><div class="fiches">${vals.map(n=>`<a href="fiche.html?n=${n}">M${n}</a>`).join('')}</div><p>Une page A4 par module validé, à imprimer.</p></div>`:''}
+    <div class="pc ${fin&&!sortie?'cle':''}"><span class="t">Fin de parcours</span>${sortie?`<span class="v">${entree?entree.niveau+' → ':''}${sortie.niveau}</span><p>Test de sortie passé. Votre certificat vous attend.</p><a class="btn plein" href="certificat.html">Mon certificat</a>`:fin?`<span class="v">Test de sortie</span><p>Même format que le test d'entrée. Il fixe le niveau inscrit sur votre certificat.</p><a class="btn plein" href="test.html?type=sortie">Passer le test de sortie</a>`:`<span class="v">${nb} / 24</span><p>Le test de sortie et le certificat s'ouvrent après le module 24.</p><a class="btn" href="certificat.html">Voir le certificat</a>`}</div>`;
+  document.getElementById('rapport').onclick=()=>FRG.envoyerRapport(document.getElementById('msg-rapport'));
+  };
+  rendre();
+  const raz=document.getElementById('raz'); let arme=false;
+  raz.addEventListener('click',()=>{ if(!arme){ arme=true; raz.textContent='Toucher encore pour confirmer'; setTimeout(()=>{arme=false; raz.textContent='Tout effacer';},3000); return; }
+    try{ for(let n=1;n<=32;n++){ localStorage.removeItem('frg-m'+n); localStorage.removeItem('frg-m'+n+'-pct'); } ['frg-debut','frg-decal-apercu','frg-test-entree','frg-test-sortie','frg-minute','frg-missions','frg-irr','frg-nom'].forEach(k=>localStorage.removeItem(k)); }catch(e){} location.reload(); });
+})();
+</script>
+</body>
+</html>

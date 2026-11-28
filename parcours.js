@@ -10,7 +10,8 @@
   let DEBUT = null;   /* première connexion de l'élève (serveur), sinon aujourd'hui */
   const depart = () => minuit(Math.max(LANCEMENT, DEBUT || Date.now()));
   const sortie = n => depart() + (n <= 4 ? 0 : Math.ceil((n - 4) / 2) * 7 * JOUR);
-  const MODULES_EN_LIGNE = !!AP;   /* passe à true quand les pages des modules sont publiées */
+  const MODULES_EN_LIGNE = true;   /* pages des modules publiées */
+  const PUBLIES = AP ? 32 : 4;      /* modules validés par Paul et en ligne ; les suivants affichent « Bientôt » */
   const $ = s => document.querySelector(s), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const lire = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
   const ecrire = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
@@ -23,6 +24,7 @@
     if (!ETAT.formule) return { k: 'visiteur', txt: 'Avec la formation' };
     if (n > maxModule()) return { k: 'sig', txt: 'Avec Signature' };
     if (valide(n)) return { k: 'ok', txt: 'Validé' };
+    if (n > PUBLIES) return { k: 'date', txt: 'Bientôt' };
     if (Date.now() < sortie(n)) return { k: 'date', txt: 'Sortie le ' + new Date(sortie(n)).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) };
     if (n > 1 && !valide(n - 1)) return { k: 'avant', txt: 'Validez le module ' + (n - 1) };
     return { k: 'ouvert', txt: lire('frg-m' + n + '-pct', 0) > 0 ? 'Reprendre' : 'À faire' };

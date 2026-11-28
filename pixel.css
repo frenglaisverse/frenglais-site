@@ -1,0 +1,49 @@
+/* Habillage « pixel » des jeux, dans l'esprit de la Courbe du jour */
+@font-face{font-family:"Press Start 2P";src:url("fonts/press-start-2p.woff2") format("woff2");font-display:swap}
+@font-face{font-family:"VT323";src:url("fonts/vt323.woff2") format("woff2");font-display:swap}
+body.pixel{--pix:"Press Start 2P",ui-monospace,monospace;--vt:"VT323",ui-monospace,monospace;--nuit:#0E1B3D;--ecr:#0A1330;--creme:#F4EEDC;--px-doux:#9AA8CC;--px-bleu:#4D7BE0;--px-corail:#F0766F;--px-jaune:#FFD25A;--px-vert:#5FD39A;--cadre:#2A3F73;
+  background:var(--ecr);color:var(--creme);font-family:var(--vt);font-size:22px;line-height:1.25;image-rendering:pixelated}
+body.pixel .bandeau{background:var(--nuit);border-bottom:4px solid var(--cadre)}
+body.pixel .bandeau .mod{font:10px var(--pix);color:var(--px-jaune);letter-spacing:0}
+body.pixel .bandeau .retour{font:9px var(--pix);color:var(--creme);border:0;box-shadow:0 -3px 0 var(--cadre),0 3px 0 var(--cadre),-3px 0 0 var(--cadre),3px 0 0 var(--cadre);border-radius:0;background:transparent}
+body.pixel main{max-width:760px}
+body.pixel .rail .meta{font:9px var(--pix);color:var(--px-doux)}
+body.pixel .rail .barre{background:var(--cadre);border-radius:0;height:8px}body.pixel .rail .barre i{background:var(--px-jaune);border-radius:0}
+body.pixel .ecran{background:transparent;color:var(--creme);gap:16px}
+body.pixel h1{font:18px/1.5 var(--pix);color:var(--creme);letter-spacing:0;margin:0}
+body.pixel .eyebrow{font:9px var(--pix);color:var(--px-bleu);letter-spacing:0;text-transform:none}
+body.pixel p{font-family:var(--vt);font-size:22px;margin:0}
+body.pixel .doux,body.pixel .petit{color:var(--px-doux);font-size:19px}
+body.pixel b{color:var(--px-jaune);font-weight:400}
+body.pixel em{font-style:normal;color:var(--px-vert)}
+/* boutons pixel : bord en escalier, sans arrondi */
+body.pixel .btn,body.pixel .puce,body.pixel .en-carte,body.pixel .qz-op{border:0;border-radius:0;background:var(--nuit);color:var(--creme);font:10px/1.6 var(--pix);padding:14px 16px;cursor:pointer;
+  box-shadow:0 -4px 0 0 var(--cadre),0 4px 0 0 var(--cadre),-4px 0 0 0 var(--cadre),4px 0 0 0 var(--cadre);transition:transform .08s}
+body.pixel .btn:hover,body.pixel .puce:hover,body.pixel .en-carte:hover,body.pixel .qz-op:hover:not(:disabled){transform:translateY(-2px)}
+body.pixel .btn:active,body.pixel .puce:active{transform:translateY(2px)}
+body.pixel .btn.plein,body.pixel .puce.ok,body.pixel .en-carte.qz-on{background:var(--px-jaune);color:var(--nuit);box-shadow:0 -4px 0 0 var(--px-jaune),0 4px 0 0 #B8901F,-4px 0 0 0 var(--px-jaune),4px 0 0 0 var(--px-jaune)}
+body.pixel .en-carte{display:flex;flex-direction:column;gap:8px;text-align:left;min-height:0}
+body.pixel .en-carte b{font:10px/1.6 var(--pix);color:inherit}body.pixel .en-carte span{font:20px var(--vt);color:var(--px-doux)}body.pixel .en-carte.qz-on span{color:var(--nuit)}
+body.pixel .en-carte em{font:8px var(--pix);color:var(--px-vert)}
+body.pixel .choix{gap:14px}
+body.pixel .en-nav{gap:16px;margin-top:6px}
+body.pixel .retour-msg{border-radius:0;font:21px var(--vt);padding:10px 14px;border:0;background:var(--nuit);color:var(--creme);box-shadow:inset 4px 0 0 var(--px-bleu)}
+body.pixel .retour-msg.ok{box-shadow:inset 4px 0 0 var(--px-vert);color:var(--px-vert)}body.pixel .retour-msg.ko{box-shadow:inset 4px 0 0 var(--px-corail);color:#FFB3AE}
+body.pixel .exo{background:var(--nuit);border:0;border-radius:0;box-shadow:0 -4px 0 0 var(--cadre),0 4px 0 0 var(--cadre),-4px 0 0 0 var(--cadre),4px 0 0 0 var(--cadre)}
+body.pixel .en-rappel{font:8px var(--pix);background:var(--cadre);color:var(--px-jaune);border-radius:0;padding:6px 8px}
+body.pixel kbd{border-radius:0!important;background:var(--cadre)!important;color:var(--px-jaune)!important;font:8px var(--pix)!important}
+body.pixel .qz-op{font:21px/1.2 var(--vt);min-height:64px;padding:12px 14px}
+body.pixel .qz-op.ok{background:#1E5E44;box-shadow:0 -4px 0 0 var(--px-vert),0 4px 0 0 var(--px-vert),-4px 0 0 0 var(--px-vert),4px 0 0 0 var(--px-vert)}
+body.pixel .qz-op.ko{background:#5E1E2A;box-shadow:0 -4px 0 0 var(--px-corail),0 4px 0 0 var(--px-corail),-4px 0 0 0 var(--px-corail),4px 0 0 0 var(--px-corail)}
+body.pixel .qz-q{font:26px/1.3 var(--vt);color:var(--creme)}body.pixel .qz-q b{color:var(--px-jaune)}
+body.pixel .qz-temps{border-radius:0;background:var(--cadre)}
+body.pixel .qz-lbl{font:8px var(--pix);color:var(--px-doux)}
+body.pixel label{font:20px var(--vt)}
+body.pixel :focus-visible{outline:3px solid var(--px-jaune);outline-offset:4px}
+@media (prefers-reduced-motion:reduce){body.pixel .btn,body.pixel .puce,body.pixel .en-carte,body.pixel .qz-op{transition:none}}
+body.pixel .ecran{border:0;border-radius:0;box-shadow:0 -4px 0 0 var(--cadre),0 4px 0 0 var(--cadre),-4px 0 0 0 var(--cadre),4px 0 0 0 var(--cadre);background:var(--nuit)}
+body.pixel .vol-cadre .ecran{box-shadow:none;background:rgba(10,19,48,.86)}
+body.pixel .dire,.dire{display:inline-grid;place-items:center;min-width:34px;height:34px;margin-left:6px;font-size:18px;cursor:pointer;vertical-align:middle;background:var(--cadre,#2A3F73);border-radius:0;flex:none;user-select:none}
+body.pixel .dire:hover,.dire:hover{background:var(--px-bleu,#4D7BE0)}.dire.dit{background:var(--px-vert,#5FD39A)}
+body.pixel .qz-op{justify-content:flex-start}body.pixel .qz-op .qz-t{flex:1}
+.vl-son{display:flex;gap:10px;align-items:center;font:20px var(--vt)}

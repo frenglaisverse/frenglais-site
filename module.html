@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<script>/* accès réservé aux élèves connectés (et à l'appareil de Paul) */
+(function(){ var L=localStorage, s=null, p=false; try{ s=JSON.parse(L.getItem('frg-session')||'null'); p=!!JSON.parse(L.getItem('frg-cle-tableau')||'""'); }catch(e){}
+  if(p) return; if(!s||!s.jeton){ location.replace('espace-eleve.html#acces'); return; }
+  fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/session',{method:'POST',body:JSON.stringify({jeton:s.jeton})}).then(function(r){return r.json()}).then(function(r){ if(r&&r.ok===false){ try{L.removeItem('frg-session')}catch(e){} location.replace('espace-eleve.html#acces'); } }).catch(function(){}); })();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Module · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="module.css?v=202611271800">
+
+</head>
+<body>
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod" id="mod-titre">Module</span>
+  <span class="actions-bandeau"><button type="button" class="retour zero" id="zero" title="Effacer la progression et recommencer le module">Recommencer</button><a class="retour" href="espace-eleve.html">Quitter</a></span>
+</div></header>
+<main>
+  <div class="rail" aria-live="polite">
+    <div class="meta"><span id="etape-nom">Bienvenue</span><span id="etape-pct">0 %</span></div>
+    <div class="barre" role="progressbar" aria-label="Progression du module" aria-valuemin="0" aria-valuemax="100" id="barre-box"><i id="barre"></i></div>
+  </div>
+  <section class="ecran" id="ecran" tabindex="-1" aria-live="polite"></section>
+  <p class="verrou" id="verrou" hidden></p>
+  <div class="nav">
+    <button class="btn" id="prec" type="button">Précédent</button>
+    <button class="btn plein" id="suiv" type="button">Suivant</button>
+  </div>
+</main>
+<span class="chrono-mini" id="chrono-mini" role="timer" aria-label="Temps passé sur le module"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M10 2.5h4"/></svg><span id="chrono-txt">0:00</span></span>
+<script src="courbe-main.js?v=1"></script>
+<script src="frenglais-commun.js?v=3"></script>
+<script src="adaptatif.js?v=1"></script>
+<script>FRG.demoGarde(+new URLSearchParams(location.search).get('n')||0)</script>
+<script src="lamantin-correcteur.js?v=202611091840"></script>
+<script src="voix.js?v=1"></script>
+<script>
+/* charge le contenu du module demandé (?n=2 … 32), puis le moteur */
+(function(){ var n=parseInt(new URLSearchParams(location.search).get('n'),10); if(!(n>=2&&n<=32)) n=2;
+  var s=document.createElement('script'); s.src='modules/m'+(n<10?'0':'')+n+'.js?v=2';
+  s.onload=s.onerror=function(){ var m=document.createElement('script'); m.src='moteur-module.js?v=4'; document.body.appendChild(m); };
+  document.body.appendChild(s); })();
+</script>
+</body>
+</html>

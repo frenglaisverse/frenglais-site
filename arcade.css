@@ -1,0 +1,56 @@
+/* Entraînement · habillage arcade, dans l'univers de la Courbe du jour (pixel, nuit, Floride) */
+body.arcade{background:#0A1330;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:6px 6px}
+body.arcade::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);z-index:50}
+body.arcade main{max-width:760px}
+/* la scène */
+.a-scene{position:relative;margin:4px 0 14px;background:#000;box-shadow:0 -4px 0 #2A3F73,0 4px 0 #2A3F73,-4px 0 0 #2A3F73,4px 0 0 #2A3F73,0 0 0 8px #0A1330,0 0 24px 8px rgba(77,123,224,.25)}
+.a-scene canvas{display:block;width:100%;height:auto;aspect-ratio:160/64;image-rendering:pixelated;image-rendering:crisp-edges}
+.a-hud,.a-bas{position:absolute;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;font:9px/1 "Press Start 2P",monospace;color:#fff;text-shadow:2px 2px 0 #000;pointer-events:none}
+.a-hud{top:0}.a-bas{bottom:0}
+.a-hud .h-pts{color:#FFD25A;font-size:11px}
+.a-bas .h-combo{color:#FF8A65;animation:a-clig .5s steps(2) infinite}
+.a-bas .a-son{pointer-events:auto;background:rgba(10,19,48,.7);border:0;font-size:13px;line-height:1;padding:3px 5px;cursor:pointer}
+@keyframes a-clig{50%{opacity:.35}}
+/* la carte de Floride */
+.a-carte{display:grid;grid-template-columns:minmax(120px,190px) 1fr;align-items:center;gap:14px;background:#0E1B3D;padding:12px;box-shadow:0 -3px 0 #2A3F73,0 3px 0 #2A3F73,-3px 0 0 #2A3F73,3px 0 0 #2A3F73}
+.a-carte svg{width:100%;height:auto;image-rendering:pixelated}
+.a-carte .a-titre{font:11px/1.8 "Press Start 2P",monospace;color:#FFD25A;margin:0}
+.a-carte .a-pt rect:first-child{animation:a-pt 1.2s steps(2) infinite}
+.a-carte .a-lam{animation:a-nage 6s steps(12) infinite alternate}
+@keyframes a-pt{50%{opacity:.55}}
+@keyframes a-nage{to{transform:translate(18px,4px)}}
+/* cartes des mondes */
+body.arcade .en-carte .en-ico{display:block;width:40px;height:40px}
+body.arcade .en-carte .a-ico{width:40px;height:40px;display:block}
+body.arcade .en-carte .a-lieu{font:8px/1.4 "Press Start 2P",monospace;color:#5FD39A;letter-spacing:0}
+body.arcade .en-carte:hover .a-ico{animation:a-saut .4s steps(2) infinite}
+@keyframes a-saut{50%{transform:translateY(-3px)}}
+/* éléments des exercices, version pixel */
+body.arcade .en-sprint-tete .compte{font:22px "Press Start 2P",monospace;color:#FFD25A}
+body.arcade .en-pts{font:14px "Press Start 2P",monospace}.en-serie{font:10px "Press Start 2P",monospace}
+body.arcade .en-q,body.arcade .phrase{font-family:"VT323",monospace;font-size:28px;line-height:1.2;color:#F4EEDC}
+body.arcade .en-saisie input,body.arcade .en-trou input{font-family:"VT323",monospace;font-size:24px;background:#0A1330;color:#F4EEDC;border:0;border-radius:0;box-shadow:0 -3px 0 #2A3F73,0 3px 0 #2A3F73,-3px 0 0 #2A3F73,3px 0 0 #2A3F73}
+body.arcade .en-trou input{font-size:20px;box-shadow:0 3px 0 #4D7BE0;padding:0 4px}
+body.arcade .en-saisie input.ok,body.arcade .en-trou input.ok{color:#5FD39A;box-shadow:0 3px 0 #5FD39A}
+body.arcade .en-saisie input.ko,body.arcade .en-trou input.ko{color:#F0766F;box-shadow:0 3px 0 #F0766F}
+body.arcade .en-dictee{font-size:24px;color:#F4EEDC}
+body.arcade .en-trou .etq{font:8px "Press Start 2P",monospace;color:#9AA8CC}
+body.arcade .en-chasse{font-size:30px}
+body.arcade .en-mot{color:#F4EEDC;font-family:"VT323",monospace}
+body.arcade .en-mot.ko{color:#F0766F;border-bottom-color:#F0766F}.en-mot.ok{color:#5FD39A}
+body.arcade .en-pose{border:0;border-radius:0;background:#0E1B3D;box-shadow:0 -3px 0 #2A3F73,0 3px 0 #2A3F73,-3px 0 0 #2A3F73,3px 0 0 #2A3F73}
+body.arcade .bloc{font:22px "VT323",monospace;background:#F4EEDC;color:#0A1330;border:0;border-radius:0;box-shadow:0 4px 0 #9AA8CC;padding:6px 10px}
+body.arcade .bloc.pose{background:#FFD25A;box-shadow:0 4px 0 #B8862A}
+body.arcade .en-melange span{border:2px dashed #4D7BE0;border-radius:0;color:#F4EEDC}
+body.arcade .en-flip{background:#0E1B3D;border:0;border-radius:0;color:#F4EEDC;box-shadow:0 -4px 0 #FFD25A,0 4px 0 #FFD25A,-4px 0 0 #FFD25A,4px 0 0 #FFD25A}
+body.arcade .en-flip small{font:8px "Press Start 2P",monospace;color:#FFD25A}
+body.arcade .en-flip b{font:24px/1.25 "VT323",monospace;color:#fff}
+body.arcade .en-flip .en-verso span{font-size:22px}
+body.arcade .en-mode,body.arcade .en-rappel{font:8px/1.6 "Press Start 2P",monospace;border-radius:0}
+body.arcade .en-lam{background:#0E1B3D;border-radius:0;box-shadow:0 -3px 0 #2A3F73,0 3px 0 #2A3F73,-3px 0 0 #2A3F73,3px 0 0 #2A3F73}
+body.arcade .en-lam b{font:10px/1.6 "Press Start 2P",monospace;color:#FFD25A}
+body.arcade .compte{font-family:"Press Start 2P",monospace}
+body.arcade .indice{color:#FFD25A}
+@media (max-width:520px){.a-carte{grid-template-columns:1fr}.a-carte svg{max-width:220px;margin:0 auto}}
+@media (prefers-reduced-motion:reduce){.a-carte *,.a-bas .h-combo{animation:none!important}}
+body.arcade #blocs,body.arcade .en-pose{align-items:flex-start}body.arcade .bloc{height:auto;min-height:0;line-height:1.1}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Certificat · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611131700">
+<style id="css-certif"></style>
+<style>
+.cadre-c{max-width:960px;margin:0 auto;padding:24px 16px 60px;display:flex;flex-direction:column;gap:18px}
+.barre-c{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.barre-c input{font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--trait);background:var(--carte);color:var(--encre);min-width:240px}
+</style>
+</head>
+<body>
+<header class="bandeau non-imprime"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img id="logo" src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod">Votre certificat</span>
+  <span class="actions-bandeau"><a class="retour" href="espace-eleve.html">Quitter</a></span>
+</div></header>
+<div class="cadre-c">
+  <div class="non-imprime" id="tete"></div>
+  <div id="certif"></div>
+</div>
+<script src="frenglais-commun.js?v=1"></script>
+<script>
+(function(){
+  document.getElementById('css-certif').textContent = FRG.CSS_CERTIF;
+  const logo = document.getElementById('logo').src, tete = document.getElementById('tete'), box = document.getElementById('certif');
+  function rendre(){
+    const d = FRG.collecter(), c = FRG.donneesCertificat(d), manque = FRG.manquesCertificat(c), pret = !manque.length;
+    tete.innerHTML = `<p class="eyebrow">Certificat de fin de parcours</p>
+      <h1>${pret ? 'Il est à vous.' : 'Pas encore.'}</h1>
+      <p>${pret ? 'Vérifiez votre nom, puis imprimez-le ou enregistrez-le en PDF. Votre tuteur y ajoutera votre niveau oral après l\'évaluation finale en visio.' : `Le certificat se mérite : il reste à ${manque.join(' et à ')}. Voici à quoi il ressemblera.`}</p>
+      <div class="barre-c"><input id="nom" placeholder="Nom de famille, tel qu'il doit apparaître" value="${(d.nom || '').replace(/"/g, '&quot;')}" aria-label="Nom de famille">
+      ${pret ? '<button class="btn plein" id="imp" type="button">Imprimer ou enregistrer en PDF</button>' : ''}</div>`;
+    box.innerHTML = FRG.certificatHTML(c, logo, !pret);
+    const nom = tete.querySelector('#nom'); nom.addEventListener('change', () => { FRG.ecrire('frg-nom', nom.value.trim()); rendre(); });
+    const imp = tete.querySelector('#imp'); if (imp) imp.addEventListener('click', () => window.print());
+  }
+  rendre();
+})();
+</script>
+</body>
+</html>

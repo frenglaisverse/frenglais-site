@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fiche de bilan · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<style>
+/* Fiche de bilan imprimable (A4), tous les 4 modules : une page, lisible en 30 secondes. */
+@font-face{font-family:"Geist";src:url("fonts/geist.woff2") format("woff2");font-weight:100 900}
+@font-face{font-family:"Geist Mono";src:url("fonts/geist-mono-400.woff2") format("woff2");font-weight:400}
+:root{--bleu:#1C49A5;--nuit:#10245C;--corail:#F0766F;--encre:#0E1B3D;--doux:#5A6484;--trait:#E2E6F0;--fond:#EEF1F7}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--fond);color:var(--encre);font:13px/1.45 "Geist",system-ui,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.barre-outils{position:sticky;top:0;display:flex;gap:10px;justify-content:center;align-items:center;padding:12px;background:var(--nuit);color:#fff;font-size:14px;z-index:2;flex-wrap:wrap}
+.barre-outils button{font:600 14px "Geist",sans-serif;border:0;border-radius:99px;padding:10px 18px;background:#F0766F;color:#fff;cursor:pointer}
+.feuille{width:210mm;min-height:297mm;margin:16px auto;background:#fff;padding:14mm 15mm 12mm;box-shadow:0 10px 40px -20px rgba(16,36,92,.4);display:flex;flex-direction:column;gap:5mm}
+@media (max-width:820px){.feuille{width:auto;min-height:0;margin:10px;padding:18px}}
+.tete{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:2px solid var(--nuit);padding-bottom:4mm}
+.tete img{height:40px}
+.tete h1{margin:0 0 2px;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.tete .meta{font:11px "Geist Mono",monospace;color:var(--doux);text-align:right;line-height:1.6}
+.ident{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.ident div{background:var(--fond);border-radius:8px;padding:3mm}
+.ident small{display:block;font:10px "Geist Mono",monospace;color:var(--doux);text-transform:uppercase;letter-spacing:.05em}
+.ident b{font-size:14px}
+h2{margin:0 0 2mm;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--bleu)}
+.mods{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.mod{border:1px solid var(--trait);border-radius:10px;padding:3mm;display:flex;flex-direction:column;gap:1.5mm}
+.mod.vide{opacity:.45}
+.mod .n{font:10px "Geist Mono",monospace;color:var(--doux)}
+.mod .titre{font-weight:600;font-size:12px;line-height:1.3;min-height:2.6em}
+.mod .score{font-size:26px;font-weight:600;letter-spacing:-.02em;color:var(--nuit)}
+.jauge{height:6px;border-radius:9px;background:var(--trait);overflow:hidden}.jauge i{display:block;height:100%;background:var(--bleu)}
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+.puces{display:flex;flex-wrap:wrap;gap:2mm}
+.puces span{padding:1mm 3mm;border-radius:99px;background:#FBE9E7;color:#8E2A23;font-weight:500}
+.puces.ok span{background:#E7F4EC;color:#1E7A4F}
+.mots{font-size:12px;line-height:1.7}
+.mots s{color:var(--doux)}
+.mots b{color:#1E7A4F;font-weight:500}
+.cadre{border:1px solid var(--trait);border-radius:10px;padding:3mm 4mm}
+.version{font-style:italic;font-size:12px;border-left:3px solid var(--bleu);padding-left:3mm;margin:0 0 2mm}
+.reco{background:linear-gradient(135deg,rgba(28,73,165,.08),rgba(240,118,111,.10));border-radius:10px;padding:4mm}
+.reco ol{margin:1mm 0 0;padding-left:5mm}
+.reco li{margin:1mm 0}
+.notes{flex:1;min-height:30mm;border:1px dashed var(--trait);border-radius:10px;padding:3mm;color:var(--doux)}
+.pied{display:flex;justify-content:space-between;font:10px "Geist Mono",monospace;color:var(--doux)}
+@page{size:A4;margin:0}
+@media print{body{background:#fff}.barre-outils{display:none}.feuille{margin:0;box-shadow:none;width:210mm;min-height:297mm}}
+</style>
+</head>
+<body>
+<div class="barre-outils"><span>Fiche de bilan · une page A4</span><button type="button" onclick="window.print()">Imprimer ou enregistrer en PDF</button></div>
+<main class="feuille" id="feuille"></main>
+<script>
+/* Lit les résultats des modules gardés sur cet appareil (frg-m1, frg-m2…) et compose la fiche du bloc demandé : ?bloc=1 = modules 1 à 4. */
+(function(){
+  const TITRES=['Repères et codes','T0, le temps le plus simple','T-1, toujours simple','BE + -ING','HAVE + -EN','T-2, le passé dans le passé','T+1, l\'éléphant dans la pièce','Les modaux','Empiler les briques','Poser des questions','Spit it : dites-le','Toute la Courbe','Les quatre couteaux suisses','Les verbes à particule','Le verbe choisit sa préposition','Ne plus bloquer','Se présenter pour de vrai','Écrire un e-mail','Téléphone et visio','Chiffres, dates, heures, prix','Comparer et décrire','Relier ses idées','Si…','L\'anglais réel','Le passif','Les habitudes passées','Les regrets','Rapporter des paroles','Convaincre','Prendre la parole','Continuer seul','Le grand oral'];
+  const NOMS={s:'le -s oublié à T0',ed:'le -ed oublié à T-1',invisible:'les irréguliers régularisés',coherence:'la cohérence des temps',ordre:'l\'ordre des mots',calque:'les calques du français',courbe:'la Courbe de mémoire',verbes:'repérer les verbes',code:'le code des verbes'};
+  const CONSEILS={s:'Reprendre T0 à la troisième personne : he / she / it + -s, à l\'oral.',ed:'Faire raconter la veille : chaque verbe à T-1 doit porter son -ed.',invisible:'Lire un court texte et repérer les irréguliers : went, bought, left.',coherence:'Faire raconter une histoire d\'un seul temps, sans changer en route.',ordre:'Construire des phrases en trois blocs : qui, fait quoi, à quoi.',calque:'Revoir les calques : I am 30, I agree, I have worked here for…',courbe:'Faire redessiner la Courbe de mémoire au début du point.',verbes:'Essorer un texte ensemble : ne garder que les verbes.',code:'Placer dix verbes sur la Courbe, à voix haute, avec leur code.'};
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const bloc=Math.max(1,+(new URLSearchParams(location.search).get('bloc')||1)); const debut=(bloc-1)*4+1;
+  const lire=n=>{ try{ return JSON.parse(localStorage.getItem('frg-m'+n)||'null'); }catch(e){ return null; } };
+  const mods=[0,1,2,3].map(i=>({n:debut+i, d:lire(debut+i)}));
+  let P={}; try{ P=JSON.parse(localStorage.getItem('frg-profil')||'{}'); }catch(e){}
+  const premier=mods.find(m=>m.d)?.d||{};
+  const ident=P.ident||premier.ident||'—', prenom=P.prenom||premier.prenom||'—';
+  const act=P.activite||new URLSearchParams(location.search).get('activite')||({pro:'Professionnels',hotel:'Hôtels',luxe:'Luxe',tour:'Tourisme',immo:'Immobilier'}[premier.sect]||'—');
+  const sc=d=>{ const N=Object.values(d.notes||{}); return N.length?Math.round(N.reduce((a,b)=>a+b,0)/N.length*100):null; };
+  const tps=d=>Object.values(d.temps||{}).reduce((a,b)=>a+b,0);
+  const faits=mods.filter(m=>m.d&&m.d.fini);
+  const scores=faits.map(m=>sc(m.d)).filter(v=>v!==null); const moy=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null;
+  const total=Math.round(faits.reduce((a,m)=>a+tps(m.d),0)/60);
+  const err={}; faits.forEach(m=>(m.d.erreurs||[]).forEach(t=>err[t]=(err[t]||0)+1));
+  const top=Object.entries(err).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const forts=['ordre','s','ed','coherence','courbe'].filter(t=>!err[t]).slice(0,3);
+  const mots=faits.flatMap(m=>(m.d.nuage||[]).map(x=>typeof x==='string'?{brut:x,corr:x}:x));
+  const corriges=mots.filter(x=>x.corr!==x.brut||x.struct);
+  const versions=faits.map(m=>[m.n,m.d.version]).filter(v=>v[1]);
+  const date=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('feuille').innerHTML=`
+    <header class="tete"><div><img src="logo-nav.webp" alt="Frenglais"><h1>Fiche de bilan · modules ${debut} à ${debut+3}</h1></div>
+      <div class="meta">${date}<br>Bloc ${bloc} sur 8<br>Courbe des Temps</div></header>
+    <section class="ident"><div><small>Élève</small><b>${esc(prenom)}</b></div><div><small>Identifiant</small><b>${esc(ident)}</b></div><div><small>Activité</small><b>${esc(act)}</b></div><div><small>Réussi du premier coup</small><b>${moy===null?'—':moy+' %'}</b> <span style="color:var(--doux)">· ${total} min</span></div></section>
+    <section><h2>Les quatre modules</h2><div class="mods">${mods.map(m=>{ const s=m.d&&m.d.fini?sc(m.d):null; return `<div class="mod${m.d&&m.d.fini?'':' vide'}"><span class="n">MODULE ${m.n}</span><span class="titre">${esc(TITRES[m.n-1]||'')}</span><span class="score">${s===null?'—':s+' %'}</span><div class="jauge"><i style="width:${s||0}%"></i></div><span class="n">${m.d&&m.d.fini?Math.round(tps(m.d)/60)+' min':'pas encore fait'}</span></div>`; }).join('')}</div></section>
+    <section class="deux">
+      <div><h2>Ce qui revient</h2>${top.length?`<div class="puces">${top.map(([t,n])=>`<span>${esc(NOMS[t]||t)} · ${n}</span>`).join('')}</div>`:'<p>Aucune erreur récurrente.</p>'}</div>
+      <div><h2>Ce qui est acquis</h2>${forts.length?`<div class="puces ok">${forts.map(t=>`<span>${esc(NOMS[t])}</span>`).join('')}</div>`:'<p>—</p>'}</div>
+    </section>
+    <section class="reco"><h2>Pour le prochain point (20 à 30 min)</h2><ol>${(top.length?top.map(([t])=>CONSEILS[t]):['Conversation libre sur le métier, à T0 et T-1.']).map(c=>`<li>${esc(c)}</li>`).join('')}<li>Finir par 2 minutes de « Spit it » : l'élève se présente, sans s'arrêter.</li></ol></section>
+    <section class="deux">
+      <div class="cadre"><h2>Ses mots (module 1)</h2><p class="mots">${mots.length} mots ou expressions${corriges.length?`, dont ${corriges.length} corrigé${corriges.length>1?'s':''} : ${corriges.slice(0,12).map(x=>`<s>${esc(x.brut)}</s> <b>${esc(x.struct||x.corr)}</b>`).join(' · ')}`:'.'}</p></div>
+      <div class="cadre"><h2>Ses phrases</h2>${versions.length?versions.slice(-2).map(([n,v])=>`<p class="version">M${n} · ${esc(v.slice(0,220))}${v.length>220?'…':''}</p>`).join(''):'<p>—</p>'}</div>
+    </section>
+    <section><h2>Mes notes</h2><div class="notes"></div></section>
+    <footer class="pied"><span>frenglais.co · contact@frenglais.co</span><span>Be logical. Now, spit it.</span></footer>`;
+})();
+</script>
+</body>
+</html>

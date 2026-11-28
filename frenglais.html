@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Frenglais · le niveau final</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611271800">
+<link rel="stylesheet" href="pixel.css?v=2">
+<link rel="stylesheet" href="arcade.css?v=2">
+<style>
+.fg-tete{display:flex;justify-content:space-between;align-items:center;gap:10px;font:10px "Press Start 2P",monospace;color:#F4EEDC}
+.fg-tete b{color:#FFD25A;font-size:16px;font-weight:400}.fg-vit{color:#5FD39A}
+.fg-terrain{position:relative;height:min(58vh,520px);overflow:hidden;background:linear-gradient(#140F33,#2A1B5C 55%,#FF6F91 100%);box-shadow:0 -4px 0 #2A3F73,0 4px 0 #2A3F73,-4px 0 0 #2A3F73,4px 0 0 #2A3F73}
+.fg-terrain::before{content:"";position:absolute;left:0;right:0;top:0;height:30px;background:repeating-linear-gradient(90deg,#E3191F 0 12px,#0A1330 12px 24px);opacity:.85;z-index:2}
+.fg-terrain::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46px;background:repeating-linear-gradient(90deg,#1E88C9 0 8px,#2A9BDB 8px 16px);opacity:.6}
+.fg-palm{position:absolute;bottom:40px;width:6px;height:90px;background:#3A2412}.fg-palm::before{content:"";position:absolute;top:-10px;left:-22px;width:50px;height:14px;background:#2E8B57;box-shadow:0 8px 0 -3px #3DAE6B}
+.fg-tuile{position:absolute;left:8%;right:8%;padding:12px 14px;background:#F4EEDC;color:#0A1330;font:24px/1.15 "VT323",monospace;box-shadow:0 5px 0 #9AA8CC;display:flex;gap:12px;align-items:center;z-index:1;will-change:transform}
+.fg-tuile i{flex:none;font:10px "Press Start 2P",monospace;font-style:normal;padding:6px 7px;color:#fff;background:#1C49A5}
+.fg-tuile.fr i{background:#E3191F}
+.fg-tuile.active{background:#FFD25A;box-shadow:0 5px 0 #B8862A,0 0 0 4px #fff}
+.fg-tuile.boum{animation:fg-boum .25s steps(3) forwards}
+@keyframes fg-boum{to{transform:scale(1.15);opacity:0}}
+.fg-saisie{display:flex;gap:10px;align-items:center}
+.fg-saisie input{flex:1;min-width:0;width:100%;box-sizing:border-box;font:26px "VT323",monospace;padding:10px 14px;background:#0A1330;color:#F4EEDC;border:0;border-radius:0;box-shadow:0 -3px 0 #4D7BE0,0 3px 0 #4D7BE0,-3px 0 0 #4D7BE0,3px 0 0 #4D7BE0;outline:none}
+.fg-saisie input.ko{box-shadow:0 -3px 0 #F0766F,0 3px 0 #F0766F,-3px 0 0 #F0766F,3px 0 0 #F0766F;color:#F0766F}
+body.pixel .fg-aide{font:9px/1.8 "Press Start 2P",monospace;color:#9AA8CC;margin:0}
+.fg-aide b{color:#fff;font-weight:400}.fg-aide .c-en{color:#9DBBFA}.fg-aide .c-fr{color:#F0766F}
+.fg-ecran{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;background:rgba(10,19,48,.88);padding:20px}
+.fg-ecran h1{font:20px/1.4 "Press Start 2P",monospace;color:#FFD25A;margin:0}
+.fg-ecran p{margin:0;font:22px "VT323",monospace;color:#F4EEDC;max-width:440px}
+.fg-ecran .fg-gros{font:34px "Press Start 2P",monospace;color:#fff}
+.fg-cadenas{width:64px;height:64px;image-rendering:pixelated}
+</style>
+</head>
+<body class="pixel arcade">
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod">FRENGLAIS · NIVEAU FINAL</span>
+  <span class="actions-bandeau"><a class="retour" href="entrainement.html?n=32">Quitter</a></span>
+</div></header>
+<main>
+  <section class="ecran" id="ecran" tabindex="-1">
+    <div class="fg-tete"><span>SCORE <b id="sc">0</b></span><span class="fg-vit" id="vit">VITESSE 1</span><span>RECORD <b id="rec">0</b></span></div>
+    <div class="fg-terrain" id="terrain" aria-live="polite"><span class="fg-palm" style="left:6%"></span><span class="fg-palm" style="right:9%;height:70px"></span><div class="fg-ecran" id="ec"></div></div>
+    <form class="fg-saisie" id="f" autocomplete="off"><input id="in" type="text" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Tapez ici…" aria-label="Votre réponse" disabled></form>
+    <p class="fg-aide">Tuile <b class="c-en">EN</b> : tapez en français · tuile <b class="c-fr">FR</b> : tapez en anglais · une faute de frappe et tout retombe à zéro.</p>
+  </section>
+</main>
+<script src="vocab.js"></script>
+<script src="frenglais-phrases.js?v=1"></script>
+<script src="frenglais-jeu.js?v=1"></script>
+</body>
+</html>

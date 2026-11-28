@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Le lamantin volant · Frenglais</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="stylesheet" href="module.css?v=202611131700">
+<style>
+.choix.col{flex-direction:column}.choix.col .puce{width:100%}
+.en-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:12px}
+.en-carte{display:flex;flex-direction:column;gap:6px;text-align:left;border:1.5px solid var(--trait);background:var(--carte);border-radius:18px;padding:16px;cursor:pointer;color:inherit;font:inherit;transition:transform .15s,border-color .15s}
+.en-carte:hover{transform:translateY(-2px);border-color:var(--bleu)}
+.en-carte .en-ico{font-size:26px}.en-carte b{font-size:17px}.en-carte span{font-size:14px;color:var(--doux);line-height:1.45}.en-carte em{font:500 12px var(--f-mono);color:var(--bleu);font-style:normal;margin-top:auto}
+.en-lam{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#0E1B3D;color:#fff;border-radius:18px;padding:16px 18px}
+.en-lam b{display:block;font-size:17px}.en-lam span{font-size:14px;opacity:.85}
+.en-nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.en-sprint-tete{display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}.en-pts{font:600 20px var(--f-mono)}.en-serie{font:600 14px var(--f-mono);color:#E0685F}
+.en-q{font-size:19px}
+.en-rappel{align-self:flex-start;font:600 12px var(--f-mono);letter-spacing:.04em;color:#7B61C9;background:color-mix(in srgb,#7B61C9 12%,transparent);border-radius:99px;padding:4px 10px}
+.en-lecteur{display:flex;gap:10px;flex-wrap:wrap}
+.en-dictee{font-size:17px;line-height:2.6;padding:6px 0}.en-dictee p{margin:0 0 6px}
+.en-trou{position:relative;display:inline-block}
+.en-trou input{font:inherit;font-size:16px;border:0;border-bottom:2px dashed var(--bleu);background:var(--verre);border-radius:6px 6px 0 0;padding:2px 6px;min-width:4ch;color:var(--encre)}
+.en-trou input.ok{border-bottom:2px solid var(--ok);background:var(--ok-fond);color:var(--ok)}.en-trou input.ko{border-bottom:2px solid var(--ko);background:var(--ko-fond)}
+.en-trou .etq{position:absolute;left:0;top:100%;font:600 11.5px/1.2 var(--f-mono);color:var(--doux);white-space:nowrap}
+.en-chasse{font-size:20px;line-height:2.2}
+.en-mot{font:inherit;border:0;background:none;border-bottom:2px solid transparent;padding:0 2px;cursor:pointer;color:inherit}
+.en-mot:hover{border-bottom-color:var(--trait)}.en-mot.ko{color:var(--ko);border-bottom-color:var(--ko)}.en-mot.ok{color:var(--ok);border-bottom-color:var(--ok)}.en-mot.ko-l{opacity:.4}
+.en-pose{min-height:58px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:1.5px dashed var(--trait);border-radius:14px;padding:10px}
+.bloc.pose{border-color:var(--bleu)}
+.en-flip{display:block;width:100%;min-height:230px;border:1.5px solid var(--trait);border-radius:22px;background:linear-gradient(160deg,var(--carte),var(--verre));padding:26px;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.en-flip small{display:block;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--bleu);margin-bottom:10px}
+.en-flip b{display:block;font-size:24px;line-height:1.2;margin-bottom:12px}
+.en-flip .en-verso span{display:block;font-size:17px;line-height:1.55}.en-flip .en-exemple{margin-top:12px;font-size:18px!important}
+.en-flip.retourne{border-color:var(--bleu);animation:flip .35s ease}
+@keyframes flip{0%{transform:rotateY(90deg)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.en-flip.retourne{animation:none}.en-carte{transition:none}}
+
+main.vol-main{max-width:820px;margin:0 auto;padding:14px 16px 40px}
+.vol-cadre{position:relative;box-shadow:0 -4px 0 0 #2A3F73,0 4px 0 0 #2A3F73,-4px 0 0 0 #2A3F73,4px 0 0 0 #2A3F73}
+#jeu{display:block;width:100%;height:min(70vh,560px);touch-action:manipulation;cursor:pointer;outline:none;image-rendering:pixelated}
+.vol-cadre .ecran{position:absolute;inset:0;margin:0;max-width:none;background:rgba(10,19,48,.86);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:16px;padding:26px;overflow:auto}
+.vol-cadre .ecran[hidden]{display:none!important}
+.vl-listes{display:flex;flex-wrap:wrap;gap:14px}.vl-listes .puce{display:flex;flex-direction:column;align-items:flex-start;gap:6px}.vl-listes small{font:18px var(--vt);opacity:.8}
+</style>
+<link rel="stylesheet" href="pixel.css?v=1">
+</head>
+<body class="pixel">
+<header class="bandeau"><div class="in">
+  <a class="retour-logo" href="espace-eleve.html" aria-label="Retour aux modules"><img src="logo-nav.webp" alt="Frenglais" width="126" height="45"></a>
+  <span class="mod">Le lamantin volant</span>
+  <span class="actions-bandeau"><a class="retour" href="entrainement.html">Quitter</a></span>
+</div></header>
+<main class="vol-main"><div class="vol-cadre"><canvas id="jeu" tabindex="0" aria-label="Zone de jeu : touchez pour faire remonter le lamantin"></canvas><section class="ecran" id="ecran" aria-live="polite"></section></div></main>
+<script src="prononcer.js?v=1"></script>
+<script src="vocab.js?v=2"></script>
+<script src="vol.js?v=2"></script>
+</body>
+</html>

@@ -1528,8 +1528,8 @@ footer::after{opacity:.58}
   :is(.polaroid,.pol-grand) .pol-gravure{margin-top:6cqi!important}
   /* verso en portrait : la source turquoise floutée en fond, photo en haut, texte dessous */
   .pol-grand .pol-verso{background:linear-gradient(180deg,rgba(6,28,52,.25) 0%,rgba(6,28,52,.55) 55%,rgba(6,22,44,.82) 100%),url("verso-source.webp") center/cover no-repeat!important;
-    padding:76cqi 7cqi 6cqi!important;gap:2.2cqi!important}
-  .pol-grand .v-photo{left:7cqi!important;right:auto!important;top:7cqi!important;bottom:auto!important;width:86cqi!important;height:63cqi!important;border-radius:5cqi!important;object-position:50% 25%}
+    padding:78cqi 7cqi 6cqi!important;gap:2.2cqi!important}
+  .pol-grand .v-photo{left:24cqi!important;right:auto!important;top:7cqi!important;bottom:auto!important;width:52cqi!important;height:65cqi!important;border-radius:5cqi!important;object-position:50% 20%;image-rendering:-webkit-optimize-contrast}
   .pol-grand .v-eti{display:block!important;font-size:3.2cqi!important}
   .pol-grand .v-nom{font-size:10cqi!important}
   .pol-grand .v-liste{font-size:3.9cqi!important;line-height:1.35!important;gap:1.2cqi!important}

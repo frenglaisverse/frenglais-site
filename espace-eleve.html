@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <meta name="description" content="L'espace en ligne des élèves Frenglais : modules, progression et suivi.">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=202611281540">
+<link rel="stylesheet" href="style.css?v=202611281545">
 <style>
 .pc-tete{display:flex;align-items:center;gap:12px;margin:34px 0 12px}.pc-tete h2{margin:0;font-size:22px;letter-spacing:-.01em}.pc-compte{color:var(--doux,#4A5578);font-size:14px}
 .pc-fleches{margin-left:auto;display:flex;gap:6px}.pc-fleches button{width:38px;height:38px;border-radius:50%;border:1px solid var(--trait,#E2E6F0);background:var(--carte,#fff);color:inherit;font-size:20px;cursor:pointer}
@@ -247,7 +247,10 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
 const VIDEO_SRC='video/presentation-1080.mp4';
 (function(){
   const t=document.getElementById('tuile-video'), l=document.getElementById('video'), e=document.getElementById('ecran-video');
-  if(!t||t.tagName==='A'){ if(location.hash==='#video') location.href='lecons.html'; return; }   /* la tuile mène maintenant à la liste des leçons vidéo */
+  if(!t||t.tagName==='A'){   /* arrivée depuis l'accueil (#video) : la vidéo de présentation se déplie sous l'encart de connexion */
+    if(location.hash==='#video'){ l.setAttribute('aria-hidden','false'); setTimeout(()=>{ l.classList.add('ouvert'); e.innerHTML='<video controls playsinline preload="metadata" poster="video/presentation.jpg"><source src="video/presentation-720.mp4" type="video/mp4" media="(max-width: 900px)"><source src="'+VIDEO_SRC+'" type="video/mp4"></video>'; l.scrollIntoView({behavior:'smooth',block:'center'}); },300);
+      document.getElementById('fermer-video').addEventListener('click',()=>{ const v=e.querySelector('video'); if(v) v.pause(); l.classList.remove('ouvert'); l.setAttribute('aria-hidden','true'); history.replaceState(null,'',location.pathname); }); }
+    return; }
   const ouvrir=(o)=>{ t.classList.toggle('tourne',o); t.setAttribute('aria-expanded',o); l.setAttribute('aria-hidden',!o);
     setTimeout(()=>{ l.classList.toggle('ouvert',o);
       if(o&&VIDEO_SRC&&!e.querySelector('video')){ e.innerHTML='<video controls playsinline preload="metadata" poster="video/presentation.jpg"><source src="video/presentation-720.mp4" type="video/mp4" media="(max-width: 900px)"><source src="'+VIDEO_SRC+'" type="video/mp4"></video>'; }

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>L’expérience de Stroop · Frenglais</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script data-goatcounter="https://paulow.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<style>
+@font-face{font-family:"Geist";src:url("fonts/geist.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url("fonts/geist-mono-400.woff2") format("woff2");font-weight:400;font-display:swap}
+:root{--bleu:#1C49A5;--corail:#E0625B;--encre:#0E1B3D;--brume:#F5F6FA;--carte:#fff;--trait:#E2E6F0;--doux:#4A5578;--ok:#1E7A4F;--ko:#B2392F;
+  --rouge:#D7263D;--cbleu:#1F5BD8;--vert:#178A45;--orange:#E07A00;--f:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;--m:'Geist Mono',ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root{--bleu:#7EA2F5;--corail:#F28A83;--encre:#E8ECF7;--brume:#0D1326;--carte:#141C33;--trait:#26304D;--doux:#A3AECB;--ok:#5BC48C;--ko:#F5A39D;
+  --rouge:#FF5A6E;--cbleu:#6E9BFF;--vert:#3FCB78;--orange:#FFA53A}}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:var(--f);background:var(--brume);color:var(--encre);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+header{display:flex;align-items:center;gap:14px;padding:14px max(18px,env(safe-area-inset-left));max-width:900px;width:100%;margin:0 auto}
+header a{color:var(--doux);text-decoration:none;font-size:14px}
+.rail{flex:1;height:6px;border-radius:9px;background:var(--trait);overflow:hidden}.rail i{display:block;height:100%;width:0;background:var(--bleu);border-radius:9px;transition:width .5s}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 18px 40px}
+.diapo{width:100%;max-width:720px;background:var(--carte);border:1px solid var(--trait);border-radius:22px;padding:34px 34px 30px;box-shadow:0 18px 50px -30px rgba(14,27,61,.35);animation:entre .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes entre{from{opacity:0;transform:translateY(14px)}}
+.sur{font:600 12px/1 var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--corail);margin:0 0 12px}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.08;letter-spacing:-.02em;margin:0 0 14px}
+h2{font-size:clamp(22px,4vw,28px);line-height:1.15;letter-spacing:-.015em;margin:0 0 12px}
+p{font-size:17px;line-height:1.55;margin:0 0 12px}.doux{color:var(--doux)}.petit{font-size:14px}
+.btn{appearance:none;border:0;border-radius:999px;background:var(--bleu);color:#fff;font:600 16px var(--f);padding:14px 26px;cursor:pointer;margin-top:12px}
+.btn:focus-visible,.rep button:focus-visible{outline:3px solid var(--corail);outline-offset:3px}
+.consigne{display:flex;gap:12px;align-items:flex-start;background:var(--brume);border-radius:14px;padding:14px 16px;margin:14px 0 4px}
+.consigne b{font-size:17px}
+/* zone de jeu */
+.jeu{text-align:center}
+.compte{font:500 13px var(--m);color:var(--doux);margin:0 0 8px}
+.mot{font-size:clamp(46px,11vw,84px);font-weight:800;letter-spacing:.02em;height:1.4em;display:flex;align-items:center;justify-content:center;user-select:none;transition:transform .12s}
+.mot.sujet{gap:.3em}.mot .suj{color:var(--doux);font-weight:500;font-size:.62em}
+.mot.ko{animation:non .3s}@keyframes non{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.rep{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 6px}
+.rep.deux{grid-template-columns:repeat(2,1fr);max-width:420px;margin-left:auto;margin-right:auto}
+.rep button{appearance:none;border:1.5px solid var(--trait);background:var(--carte);color:var(--encre);border-radius:14px;font:650 18px var(--f);padding:16px 8px;cursor:pointer;transition:transform .08s,border-color .15s}
+.rep button:active{transform:scale(.97)}.rep button kbd{display:block;font:400 11px var(--m);color:var(--doux);margin-top:4px}
+.rep.deux button{font:700 26px var(--m)}
+.flash{height:22px;font-weight:600;font-size:14px}.flash.ok{color:var(--ok)}.flash.ko{color:var(--ko)}
+/* résultats */
+.barres{display:grid;gap:12px;margin:18px 0}
+.barre{display:grid;grid-template-columns:150px 1fr 74px;align-items:center;gap:12px;font-size:15px}
+.barre span:nth-child(2){height:14px;border-radius:9px;background:var(--trait);overflow:hidden}
+.barre i{display:block;height:100%;border-radius:9px;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.barre b{font:600 15px var(--m);text-align:right}
+.verdict{font-size:20px;font-weight:650;line-height:1.35;margin:6px 0 12px}
+/* Courbe mini */
+.courbe{margin:16px 0 8px}.courbe svg{width:100%;height:auto;display:block}
+.code-s{color:var(--cbleu);font-weight:700}.code-ed{color:var(--corail);font-weight:700}
+/* transformation -EN → -ed */
+.morph{font:700 clamp(30px,7vw,52px)/1.2 var(--f);text-align:center;margin:26px 0 10px;min-height:1.3em}
+.morph .have{color:var(--doux);font-weight:500}
+.morph .fin{display:inline-block;padding:0 .12em;border-radius:10px;transition:all .5s}
+.morph .fin.en{color:var(--doux);border:2px dashed var(--doux)}
+.morph .fin.ed{color:var(--corail);border:2px solid var(--corail);transform:translateY(-2px)}
+.morph .fin.out{opacity:0;transform:translateY(-14px) scale(.9)}
+.paires{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.paires span{font:500 14px var(--m);background:var(--brume);border-radius:999px;padding:6px 12px}
+.ligne{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+@media (max-width:560px){.diapo{padding:24px 18px 22px;border-radius:18px}.rep{grid-template-columns:repeat(2,1fr)}.barre{grid-template-columns:110px 1fr 64px;font-size:14px}p{font-size:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><a href="espace-eleve.html">← Espace élève</a><div class="rail" aria-hidden="true"><i id="rail"></i></div><span class="petit doux" id="etape" aria-live="polite"></span></header>
+<main><section class="diapo" id="d" aria-live="polite"></section></main>
+<script>
+(function(){
+  var D = document.getElementById('d'), RAIL = document.getElementById('rail'), ET = document.getElementById('etape');
+  var COUL = [{n:'ROUGE',v:'--rouge',k:'r'},{n:'BLEU',v:'--cbleu',k:'b'},{n:'VERT',v:'--vert',k:'v'},{n:'ORANGE',v:'--orange',k:'o'}];
+  var VERBES = ['work','play','walk','call','cook','watch','clean','visit','help','start','open','finish','listen','travel','ask','need'];
+  var R = {};   /* résultats : par manche, la liste des essais {c: condition, ms, ok} */
+  var shuffle = function(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+  var med = function(a){ a = a.slice().sort(function(x, y){ return x - y; }); return a.length ? a[Math.floor(a.length / 2)] : 0; };
+  var ms = function(v){ return (v / 1000).toFixed(2).replace('.', ',') + ' s'; };
+  var key = null; document.addEventListener('keydown', function(e){ if (key) key(e); });
+
+  /* ---------- une manche chronométrée ---------- */
+  function manche(nom, essais, rendu, boutons, fin){
+    var i = 0, t0 = 0, res = R[nom] = [], verrou = false;
+    D.innerHTML = '<div class="jeu"><p class="compte" id="cpt"></p><div class="mot" id="mot"></div><div class="rep' + (boutons.length === 2 ? ' deux' : '') + '" id="rep">' +
+      boutons.map(function(b, k){ return '<button type="button" data-k="' + k + '">' + b.label + (b.kbd ? '<kbd>touche ' + b.kbd.toUpperCase() + '</kbd>' : '') + '</button>'; }).join('') + '</div><p class="flash" id="fl"></p></div>';
+    var mot = document.getElementById('mot'), fl = document.getElementById('fl'), cpt = document.getElementById('cpt');
+    function montre(){ var e = essais[i]; cpt.textContent = (i + 1) + ' / ' + essais.length; mot.innerHTML = ''; mot.className = 'mot';
+      setTimeout(function(){ rendu(mot, e); t0 = performance.now(); verrou = false; }, 260); }
+    function repond(k){ if (verrou || !t0) return; verrou = true; var e = essais[i], d = Math.round(performance.now() - t0), ok = k === e.bon;
+      res.push({ c: e.c, ms: d, ok: ok }); t0 = 0;
+      fl.className = 'flash ' + (ok ? 'ok' : 'ko'); fl.textContent = ok ? '✓' : '✗ ' + boutons[e.bon].nom;
+      if (!ok) mot.classList.add('ko');
+      setTimeout(function(){ fl.textContent = ''; if (++i < essais.length) montre(); else { key = null; fin(); } }, ok ? 220 : 700); }
+    document.getElementById('rep').addEventListener('click', function(ev){ var b = ev.target.closest('button'); if (b) repond(+b.dataset.k); });
+    key = function(ev){ var k = boutons.findIndex(function(b){ return b.kbd && b.kbd === ev.key.toLowerCase(); }); if (k > -1) repond(k); };
+    montre();
+  }
+  var stat = function(nom, c){ var a = (R[nom] || []).filter(function(x){ return !c || c.indexOf(x.c) > -1; }); var bons = a.filter(function(x){ return x.ok; }); return { ms: med((bons.length ? bons : a).map(function(x){ return x.ms; })), err: a.filter(function(x){ return !x.ok; }).length, n: a.length }; };
+  function barres(l){ var mx = Math.max.apply(null, l.map(function(x){ return x.v; })) || 1;
+    var h = '<div class="barres">' + l.map(function(x){ return '<div class="barre"><span>' + x.l + '</span><span><i data-w="' + Math.round(x.v / mx * 100) + '" style="background:' + x.c + '"></i></span><b>' + ms(x.v) + '</b></div>'; }).join('') + '</div>';
+    setTimeout(function(){ D.querySelectorAll('.barre i').forEach(function(i){ i.style.width = i.dataset.w + '%'; }); }, 60); return h; }
+
+  /* ---------- essais ---------- */
+  function essaisCouleurs(congru, n){ var out = []; for (var i = 0; i < n; i++){ var w = i % 4, c = congru ? w : (w + 1 + Math.floor(Math.random() * 3)) % 4; out.push({ w: w, c: congru ? 'cong' : 'inc', ink: c, bon: c }); } return shuffle(out); }
+  var renduCouleur = function(mot, e){ mot.textContent = COUL[e.w].n; mot.style.color = 'var(' + COUL[e.ink].v + ')'; };
+  var BTN_C = COUL.map(function(c){ return { label: c.n.charAt(0) + c.n.slice(1).toLowerCase(), nom: c.n.toLowerCase(), kbd: c.k }; });
+  /* codes : l'encre donne le temps (bleu = T0 → -s ; corail = T-1 → -ed). Le mot, lui, peut mentir. */
+  function essaisCodes(n){ var v = shuffle(VERBES), out = [];
+    for (var i = 0; i < n; i++){ var t = i % 2, typ = ['cong', 'inc', 'neu'][i % 3], forme;   /* t: 0 = T0 (-s), 1 = T-1 (-ed) */
+      if (typ === 'neu') forme = 'nu'; else if (typ === 'cong') forme = t ? 'ed' : 's'; else forme = t ? 's' : 'ed';
+      out.push({ v: v[i % v.length], t: t, f: forme, c: typ, bon: t }); }
+    return shuffle(out); }
+  function forme(v, f){ if (f === 'nu') return v;
+    if (f === 's') return /(sh|ch|x|s|o)$/.test(v) ? v + 'es' : v + 's';
+    return /e$/.test(v) ? v + 'd' : (v === 'travel' ? 'travelled' : v + 'ed'); }
+  var renduCode = function(mot, e){ mot.className = 'mot sujet'; mot.innerHTML = '<span class="suj">He</span><span>' + forme(e.v, e.f) + '</span>'; mot.lastChild.style.color = e.t ? 'var(--corail)' : 'var(--cbleu)'; };
+  var BTN_K = [{ label: '-s', nom: '-s', kbd: 's' }, { label: '-ed', nom: '-ed', kbd: 'e' }];
+
+  /* ---------- diapositives ---------- */
+  var DIAPOS = [
+    function(){ D.innerHTML = '<p class="sur">Module expérimental · 6 min</p><h1>L’expérience de Stroop</h1>' +
+      '<p>En 1935, le psychologue américain <b>John Ridley Stroop</b> a montré une chose étonnante : votre cerveau lit les mots <b>tout seul</b>, même quand vous lui demandez de ne pas le faire.</p>' +
+      '<p>On refait son expérience. Puis on l’applique à l’anglais, avec les codes de la Courbe.</p><p class="doux petit">Répondez vite, sans chercher la perfection. Vos temps de réponse sont mesurés au centième.</p>' +
+      '<button class="btn" id="go">Commencer</button>'; return 'go'; },
+    function(){ D.innerHTML = '<p class="sur">Manche 1 · échauffement</p><h2>Quelle est la couleur de l’encre ?</h2>' +
+      '<div class="consigne"><span aria-hidden="true">🎨</span><div><b>Cliquez la couleur dans laquelle le mot est écrit.</b><br><span class="doux">Pas le mot : la couleur. Au clavier : R, B, V, O.</span></div></div><button class="btn" id="go">C’est parti</button>'; return 'go'; },
+    function(){ manche('c1', essaisCouleurs(true, 8), renduCouleur, BTN_C, suivant); },
+    function(){ D.innerHTML = '<p class="sur">Manche 2</p><h2>Même consigne. Même chose ?</h2>' +
+      '<div class="consigne"><span aria-hidden="true">🎨</span><div><b>Toujours la couleur de l’encre.</b><br><span class="doux">Ne lisez pas le mot… si vous y arrivez.</span></div></div><button class="btn" id="go">C’est parti</button>'; return 'go'; },
+    function(){ manche('c2', essaisCouleurs(false, 12), renduCouleur, BTN_C, suivant); },
+    function(){ var a = stat('c1'), b = stat('c2'), d = b.ms - a.ms;
+      D.innerHTML = '<p class="sur">Résultat</p><h2>Votre cerveau a lu malgré vous.</h2>' +
+        barres([{ l: 'Mot = couleur', v: a.ms, c: 'var(--vert)' }, { l: 'Mot ≠ couleur', v: b.ms, c: 'var(--rouge)' }]) +
+        '<p class="verdict">' + (d > 40 ? '+' + ms(d) + ' par réponse' : 'Presque pas de différence : bravo, c’est rare') + (b.err ? ', et ' + b.err + ' erreur' + (b.err > 1 ? 's' : '') : '') + '.</p>' +
+        '<p>C’est l’<b>effet Stroop</b>. Lire est devenu <b>automatique</b> : vous ne pouvez pas l’éteindre. Quand le mot dit autre chose que la couleur, les deux se battent, et vous ralentissez.</p>' +
+        '<button class="btn" id="go">Et l’anglais ?</button>'; return 'go'; },
+    function(){ D.innerHTML = '<p class="sur">Le lien avec Frenglais</p><h2>Le but : des codes aussi automatiques que la lecture.</h2>' +
+        '<p>Aujourd’hui, vous devez <b>réfléchir</b> pour mettre le <span class="code-s">-s</span> ou le <span class="code-ed">-ed</span>. Après la méthode, vous les mettrez comme vous lisez : sans y penser.</p>' +
+        '<div class="courbe" aria-hidden="true"><svg viewBox="0 0 600 120"><line x1="30" y1="60" x2="570" y2="60" stroke="currentColor" stroke-width="3" opacity=".75"/><path d="M560 52 572 60 560 68" fill="none" stroke="currentColor" stroke-width="3"/>' +
+        '<circle cx="230" cy="60" r="9" fill="var(--corail)"/><text x="230" y="36" text-anchor="middle" font-family="Geist Mono" font-size="17" fill="var(--corail)">T-1</text><text x="230" y="98" text-anchor="middle" font-family="Geist" font-weight="700" font-size="22" fill="var(--corail)">-ed</text>' +
+        '<circle cx="390" cy="60" r="9" fill="var(--cbleu)"/><text x="390" y="36" text-anchor="middle" font-family="Geist Mono" font-size="17" fill="var(--cbleu)">T0</text><text x="390" y="98" text-anchor="middle" font-family="Geist" font-weight="700" font-size="22" fill="var(--cbleu)">-s</text></svg></div>' +
+        '<div class="consigne"><span aria-hidden="true">🧭</span><div><b>Nouvelle règle : l’encre donne le moment.</b><br><span class="code-s">Encre bleue</span> = T0, il faut <span class="code-s">-s</span>. <span class="code-ed">Encre corail</span> = T-1, il faut <span class="code-ed">-ed</span>.<br><span class="doux">Le mot, lui, peut mentir. Au clavier : S ou E.</span></div></div>' +
+        '<button class="btn" id="go">Manche 3</button>'; return 'go'; },
+    function(){ manche('k1', essaisCodes(15), renduCode, BTN_K, suivant); },
+    function(){ var a = stat('k1', ['cong']), n = stat('k1', ['neu']), b = stat('k1', ['inc']), d = b.ms - a.ms;
+      D.innerHTML = '<p class="sur">Résultat</p><h2>Le même combat, en anglais.</h2>' +
+        barres([{ l: 'Bon code écrit', v: a.ms, c: 'var(--vert)' }, { l: 'Sans code', v: n.ms, c: 'var(--doux)' }, { l: 'Mauvais code écrit', v: b.ms, c: 'var(--rouge)' }]) +
+        '<p class="verdict">' + (d > 40 ? 'Le mauvais code vous coûte ' + ms(d) + ' par réponse.' : 'Le mauvais code ne vous ralentit presque pas : votre Courbe est déjà solide.') + '</p>' +
+        '<p>Quand une forme ne correspond pas au moment, il faut un <b>effort</b> pour la corriger. Les modules entraînent exactement cela, jusqu’à ce que l’effort disparaisse.</p><button class="btn" id="go">Un dernier code</button>'; return 'go'; },
+    /* démonstration -EN → -ed */
+    function(){ var L = ['work', 'play', 'watch'], i = 0;
+      D.innerHTML = '<p class="sur">Démonstration</p><h2>Le -EN des verbes réguliers se déguise en <span class="code-ed">-ed</span>.</h2>' +
+        '<p>Avec HAVE, la Courbe demande le code <b>-EN</b>. Pour les verbes réguliers, ce -EN s’écrit <span class="code-ed">-ed</span>.</p>' +
+        '<div class="morph" id="mo"></div><div class="ligne" style="justify-content:center"><button class="btn" id="tr">Transformer</button></div>' +
+        '<div class="paires" id="pa"></div><p class="doux petit" id="ex" style="text-align:center"></p>';
+      var mo = document.getElementById('mo'), tr = document.getElementById('tr'), pa = document.getElementById('pa'), ex = document.getElementById('ex');
+      function pose(){ mo.innerHTML = '<span class="have">I have </span>' + L[i] + '<span class="fin en" id="fin">EN</span>'; tr.textContent = 'Transformer'; }
+      pose(); tr.focus();
+      tr.addEventListener('click', function(){
+        var f = document.getElementById('fin');
+        if (f && f.classList.contains('en')){ f.classList.add('out'); setTimeout(function(){ f.className = 'fin ed'; f.textContent = 'ed'; f.style.opacity = 1; }, 380);
+          pa.insertAdjacentHTML('beforeend', '<span>' + L[i] + ' + EN → ' + L[i] + 'ed</span>');
+          if (i === L.length - 1){ ex.innerHTML = 'Même forme qu’au T-1 (<i>I worked</i>), mais pas le même code. C’est pour ça que les deux se confondent.'; tr.textContent = 'Continuer'; }
+          else tr.textContent = 'Verbe suivant'; return; }
+        if (i < L.length - 1){ i++; pose(); } else suivant(); });
+      key = null; },
+    function(){ D.innerHTML = '<p class="sur">Manche 4 · revanche</p><h2>Les codes, une seconde fois.</h2>' +
+        '<div class="consigne"><span aria-hidden="true">🧭</span><div><b>Même règle :</b> <span class="code-s">bleu = -s</span>, <span class="code-ed">corail = -ed</span>.<br><span class="doux">Votre cerveau s’est-il déjà habitué ?</span></div></div><button class="btn" id="go">C’est parti</button>'; return 'go'; },
+    function(){ manche('k2', essaisCodes(12), renduCode, BTN_K, suivant); },
+    function(){ var a1 = stat('k1', ['cong']).ms, b1 = stat('k1', ['inc']).ms, a2 = stat('k2', ['cong']).ms, b2 = stat('k2', ['inc']).ms, i1 = Math.max(0, b1 - a1), i2 = Math.max(0, b2 - a2), mieux = i2 < i1 - 30;
+      D.innerHTML = '<p class="sur">Bilan</p><h2>' + (mieux ? 'Déjà moins de combat.' : 'Le combat continue : c’est normal.') + '</h2>' +
+        barres([{ l: 'Effort, manche 3', v: i1, c: 'var(--corail)' }, { l: 'Effort, manche 4', v: i2, c: 'var(--bleu)' }]) +
+        '<p>' + (mieux ? 'En quelques minutes, le mauvais code vous ralentit déjà moins. Stroop l’avait vu aussi : l’entraînement réduit l’interférence.' : 'Quelques minutes ne suffisent pas encore. Stroop l’avait vu aussi : c’est l’entraînement, jour après jour, qui réduit l’interférence.') + '</p>' +
+        '<p><b>À retenir :</b> un code devient automatique en le répétant au bon endroit de la Courbe. C’est exactement ce que font les modules et la Minute Courbe.</p>' +
+        '<div class="ligne"><a class="btn" href="espace-eleve.html" style="text-decoration:none">Retour à l’espace élève</a><button class="btn" id="re" style="background:transparent;color:var(--bleu);border:1.5px solid var(--bleu)">Refaire l’expérience</button></div>';
+      document.getElementById('re').onclick = function(){ R = {}; n = 0; aller(); };
+      envoyer({ c1: stat('c1').ms, c2: stat('c2').ms, cErr: stat('c2').err, kC: a1, kI: b1, kN: stat('k1', ['neu']).ms, k2C: a2, k2I: b2, kErr: stat('k1').err + stat('k2').err }); }
+  ];
+  var n = 0;
+  function aller(){ RAIL.style.width = Math.round(n / (DIAPOS.length - 1) * 100) + '%'; ET.textContent = (n + 1) + ' / ' + DIAPOS.length;
+    D.style.animation = 'none'; void D.offsetWidth; D.style.animation = '';
+    var go = DIAPOS[n](); if (go){ var b = document.getElementById(go); b.onclick = suivant; b.focus({ preventScroll: true }); key = function(e){ if (e.key === 'Enter') suivant(); }; }
+    window.scrollTo(0, 0); }
+  function suivant(){ key = null; if (n < DIAPOS.length - 1){ n++; aller(); } }
+  /* envoi au tableau de Paul (élève connecté uniquement) */
+  function envoyer(m){ try { var s = JSON.parse(localStorage.getItem('frg-session') || 'null'); localStorage.setItem('frg-stroop', JSON.stringify({ t: Date.now(), m: m }));
+    if (!s || !s.jeton) return; var tot = R.c2.length + R.k1.length + R.k2.length, ok = [].concat(R.c2, R.k1, R.k2).filter(function(x){ return x.ok; }).length;
+    fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/test', { method: 'POST', body: JSON.stringify({ jeton: s.jeton, type: 'stroop', res: { niveau: 'Stroop', score: Math.round(ok / tot * 100), ms: m, n: tot, jsp: m.cErr + m.kErr } }) }).catch(function(){}); } catch (e) {} }
+  aller();
+})();
+</script>
+</body>
+</html>

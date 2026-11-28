@@ -42,7 +42,7 @@
 /* charge le contenu du module demandé (?n=2 … 32), puis le moteur */
 (function(){ var n=parseInt(new URLSearchParams(location.search).get('n'),10); if(!(n>=2&&n<=32)) n=2;
   var s=document.createElement('script'); s.src='modules/m'+(n<10?'0':'')+n+'.js?v=2';
-  s.onload=s.onerror=function(){ var m=document.createElement('script'); m.src='moteur-module.js?v=6'; document.body.appendChild(m); };
+  s.onload=s.onerror=function(){ var m=document.createElement('script'); m.src='moteur-module.js?v=7'; document.body.appendChild(m); };
   document.body.appendChild(s); })();
 </script>
 </body>

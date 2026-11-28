@@ -121,9 +121,14 @@
   };
 
   /* ---------- étapes ---------- */
+  /* mi-parcours : la revanche de Stroop, juste après la Courbe posée (module 12) */
+  function stroopEtape(ecran){
+    ecran.append(el('<div><p class="eyebrow">Mi-parcours · L’expérience de Stroop</p><iframe src="stroop.html?mi=1&embed=1" title="Expérience de Stroop" style="width:100%;height:600px;margin-top:6px;border:0;border-radius:18px;background:transparent" loading="lazy"></iframe></div>'));
+  }
   const ETAPES = [
     { nom:'Bienvenue', f:bienvenue },
     { nom:'Temps 1 · Posez la Courbe', f:poserCourbe },
+    ...(D.stroop ? [{ nom:'Mi-parcours · Stroop', f:stroopEtape }] : []),
     { nom:'Temps 2 · Le déclic', f:choc },
     { nom:'Temps 2 · Les cartes', f:cartes },
     ...(APPR && D.nuances ? [{ nom:'Temps 2 · Nuances', f:nuances }] : []),

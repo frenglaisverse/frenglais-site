@@ -6,6 +6,7 @@
   /* calendrier propre à chaque élève : à partir de sa première connexion (jamais avant le lancement), les 4 premiers modules la semaine 1, puis deux par semaine */
   const AP = window.FRG_APERCU || null;
   const LANCEMENT = AP ? Date.now() - 864e5 * 21 : Date.parse('2026-12-01T00:00:00+01:00');
+  const dfr = (t, o) => new Date(t).toLocaleDateString('fr-FR', o).replace(/(^|\s)1(?= )/, '$11er');   /* « 1er décembre » */
   const JOUR = 864e5, minuit = t => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
   let DEBUT = null;   /* première connexion de l'élève (serveur), sinon aujourd'hui */
   const depart = () => minuit(Math.max(LANCEMENT, DEBUT || Date.now()));
@@ -25,7 +26,7 @@
     if (n > maxModule()) return { k: 'sig', txt: 'Avec Signature' };
     if (valide(n)) return { k: 'ok', txt: 'Validé' };
     if (n > PUBLIES) return { k: 'date', txt: 'Bientôt' };
-    if (Date.now() < sortie(n) && !ETAT.testeur) return { k: 'date', txt: 'Sortie le ' + new Date(sortie(n)).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) };
+    if (Date.now() < sortie(n) && !ETAT.testeur) return { k: 'date', txt: 'Ouvre le ' + dfr(sortie(n), { day: 'numeric', month: 'short' }) };
     if (n > 1 && !valide(n - 1)) return { k: 'avant', txt: 'Validez le module ' + (n - 1) };
     return { k: 'ouvert', txt: lire('frg-m' + n + '-pct', 0) > 0 ? 'Reprendre' : 'À faire' };
   }
@@ -52,8 +53,8 @@
     const t = piste.querySelector(`.pc-tuile[data-n="${n}"]`); if (t) requestAnimationFrame(() => piste.scrollTo({ left: t.offsetLeft - (piste.clientWidth - t.offsetWidth) / 2, behavior: defiler ? 'smooth' : 'auto' }));
     const s = statut(n), o = ouvert(n), d = $('#pc-detail'), flou = s.k === 'visiteur' && n > 4; if (!d) return;
     const fait = lire('frg-entr', {})[n] || {};
-    d.innerHTML = `<div class="pc-d-tete"><div><p class="pc-d-num">${n > 24 ? 'Module avancé · Signature' : 'Module ' + n + ' / 24'}</p><h3${flou ? ' class="pc-flou-t" aria-hidden="true"' : ''}>${esc(TITRES[n - 1])}</h3><p class="pc-d-etat pc-e-${s.k}">${flou ? 'Réservé aux élèves de la formation' : (s.k === 'ok' ? '✓ ' : '') + esc(s.txt)}</p></div>
-      <div class="pc-d-actions">${flou ? '<a class="btn btn-bleu" href="index.html#formations">Voir les formules</a>' : o && MODULES_EN_LIGNE ? `<a class="btn btn-bleu" href="${lien(n)}">${s.k === 'ok' ? 'Revoir le module' : s.txt === 'Reprendre' ? 'Reprendre' : 'Commencer'}</a>` : `<span class="pc-d-verrou">${CADENAS} ${o ? 'Ouverture à la mise en ligne' : esc(s.txt)}</span>`}
+    d.innerHTML = `<div class="pc-d-tete"><div><p class="pc-d-num">${n > 24 ? 'Module avancé · Signature' : 'Module ' + n + ' / 24'}</p><h3${flou ? ' class="pc-flou-t" aria-hidden="true"' : ''}>${esc(TITRES[n - 1])}</h3><p class="pc-d-etat pc-e-${s.k}">${flou ? 'Réservé aux élèves de la formation' : s.k === 'date' && s.txt.startsWith('Ouvre') ? 'Ouvre le ' + dfr(sortie(n), { weekday: 'long', day: 'numeric', month: 'long' }) : (s.k === 'ok' ? '✓ ' : '') + esc(s.txt)}</p></div>
+      <div class="pc-d-actions">${flou ? '<a class="btn btn-bleu" href="index.html#formations">Voir les formules</a>' : o && MODULES_EN_LIGNE ? `<a class="btn btn-bleu" href="${lien(n)}">${s.k === 'ok' ? 'Revoir le module' : s.txt === 'Reprendre' ? 'Reprendre' : 'Commencer'}</a>` : s.k === 'date' && n === 1 ? '<a class="btn btn-bleu" href="introduction.html">En attendant : l’Introduction (10 min)</a>' : `<span class="pc-d-verrou">${CADENAS} ${o ? 'Ouverture à la mise en ligne' : s.k === 'date' ? 'Verrouillé' : esc(s.txt)}</span>`}
       <button type="button" class="pc-plus" aria-expanded="false" aria-controls="pc-entr" ${o ? '' : 'disabled'} hidden title="${o ? 'Micro-entraînements' : 'Disponible quand le module est ouvert'}">+ <span>S'entraîner</span></button></div></div>
       <div class="pc-entr" id="pc-entr" hidden>
         <p class="pc-entr-sous">Facultatif, 2 à 3 minutes chacun. Les questions changent à chaque fois, et la difficulté monte : vocabulaire, nuances, pièges.</p>
@@ -103,7 +104,7 @@
     r.innerHTML = EXOS.map(([k, i, nom, d]) => { const x = S[k]; return tuile(k, i, nom, d, `entrainement.html?n=${n}&x=${k}`, x ? x.best + (k === 'sprint' ? '' : k === 'cartes' ? '' : '%') : '', dispo ? '' : bloque); }).join('')
       + [['courbe/', 'courbe', 'Courbe du jour', 'Une phrase en français tirée de l\'actualité, chaque jour. Trouvez la bonne traduction.', true, ''], ['vol.html', 'vol', 'Lamantin volant', 'Faites voler le lamantin à travers la bonne traduction. Une erreur : on recommence.', false, maxi(lire('frg-vol', {}))], ['quiz.html', 'quiz', 'Le quiz', 'Une définition, quatre réponses. Les erreurs reviennent.', false, maxi(lire('frg-quiz-rec', {}))], ['accent.html', 'accent', 'Pont des sons', 'Traversez le pont en prononçant : th, i court, r, h, -ed, w.', false, acc.grand || ''], ['frenglais.html', 'final', 'Frenglais', 'Le niveau final : tapez en français et en anglais, de plus en plus vite. Débloqué après les 32 modules.', false, +lire('frg-frenglais-record', 0) || '']]
         .map(([h, i, nom, d, libre, sc]) => { const dj = ouvJeu(h), tard = !libre && dj && Date.now() < dj;
-          return tuile(i, i, nom, d, h, sc || '', (libre || (F && MODULES_EN_LIGNE && !tard)) ? '' : (!F ? 'Avec la formation' : tard ? 'Débloqué le ' + new Date(dj).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }) : 'À la mise en ligne')); }).join('');
+          return tuile(i, i, nom, d, h, sc || '', (libre || (F && MODULES_EN_LIGNE && !tard)) ? '' : (!F ? 'Avec la formation' : tard ? 'Débloqué le ' + dfr(dj, { day: 'numeric', month: 'long' }) : 'À la mise en ligne')); }).join('');
     r.querySelectorAll('.en-plus').forEach(b => b.addEventListener('click', () => { const p = b.nextElementSibling, ouvrir = p.hidden; r.querySelectorAll('.en-regle').forEach(x => { x.hidden = true; x.previousElementSibling.setAttribute('aria-expanded', 'false'); x.previousElementSibling.textContent = '+'; }); p.hidden = !ouvrir; b.setAttribute('aria-expanded', ouvrir); b.textContent = ouvrir ? '×' : '+'; }));
     const c = $('#en-compte'); if (c) { const tot = Object.values(lire('frg-entr2', {})).reduce((a, m) => a + Object.values(m).reduce((b, e) => b + (e.n || 0), 0), 0); c.textContent = tot ? tot + ' partie' + (tot > 1 ? 's' : '') + ' jouée' + (tot > 1 ? 's' : '') : '5 exercices par module'; }
   }
@@ -117,10 +118,10 @@
     let prochain = null; for (let n = 1; n <= maxModule(); n++) if (statut(n).k === 'date') { prochain = n; break; }
     t.hidden = false; t.href = 'entrainement.html?n=' + cible;
     t.querySelector('.en-bulle').textContent = total > 99 ? '99+' : total; t.querySelector('.en-bulle').hidden = !total;
-    t.classList.toggle('en-tout-fait', !total);
+    t.classList.toggle('en-tout-fait', !total && ouverts.length > 0);
     t.querySelector('.en-t-sous').textContent = total
-      ? total + ' exercice' + (total > 1 ? 's' : '') + ' à faire' + (prochain ? ' en attendant le module ' + prochain + ' (' + new Date(sortie(prochain)).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) + ')' : '') + '. On commence par le module ' + cible + '.'
-      : 'Tout est fait. Battez vos records, ou écrivez au lamantin.';
+      ? total + ' exercice' + (total > 1 ? 's' : '') + ' à faire' + (prochain ? ' en attendant le module ' + prochain + ' (' + dfr(sortie(prochain), { weekday: 'long', day: 'numeric', month: 'long' }) + ')' : '') + '. On commence par le module ' + cible + '.'
+      : ouverts.length ? 'Tout est fait. Battez vos records, ou écrivez au lamantin.' : 'Les exercices s’ouvrent avec vos modules. En attendant, le lamantin corrige déjà vos phrases.';
     t.setAttribute('aria-label', 'Entraînement : ' + t.querySelector('.en-t-sous').textContent);
   }
   /* curseur sous les tuiles */

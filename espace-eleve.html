@@ -166,7 +166,7 @@ else if(a.matches('.pol-carte'))n='carte-ouverte';if(n)g.count({path:'clic-'+n,t
   <h1>Espace élève</h1>
 <div class="tb-progression" aria-live="polite">
     <canvas class="mousse mousse-pct" data-modele="[[214,5],[244,3],[268,6]]" aria-hidden="true"></canvas>
-    <a class="tb-lam" id="tb-lam" href="lamantin.html"><img src="lamantin-pixel.png" alt="" width="44" height="44"><span><b>Le lamantin IA</b><small>Pratique : il vous corrige.</small></span><em id="tb-lam-q"></em></a>
+    <a class="tb-lam" id="tb-lam" href="lamantin.html"><img src="lamantin-pixel.png" alt="" width="44" height="44"><span><b>Le lamantin IA</b><small>Écrivez-lui en anglais : il corrige et explique.</small></span><em id="tb-lam-q"></em></a>
     <div class="tb-chiffres"><span>Votre parcours</span><b id="pct-global">0 %</b></div>
     <svg class="tb-courbe" viewBox="0 0 600 70" aria-hidden="true"><path class="c-fond" d="M14 58 C 90 58, 118 24, 196 24 S 292 62, 372 52 S 488 18, 586 22"/><path class="c-plein" id="courbe-plein" d="M14 58 C 90 58, 118 24, 196 24 S 292 62, 372 52 S 488 18, 586 22" pathLength="100"/><path class="c-fleche" d="M572 12 L590 22 L574 34"/><circle id="courbe-pt" cx="14" cy="58" r="8"/></svg>
     <div class="tb-barre" hidden><i id="barre-global"></i></div>
@@ -324,7 +324,7 @@ const NOMS_FLORIDE = ['Manatee','Mangrove','Sunshine','BlueSprings','Everglades'
     </div></div>
 <nav aria-label="Liens légaux"><a href="mentions-legales.html">Mentions légales</a><a href="cgv.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="espace-eleve.html">Espace élève</a><a href="index.html#devis">Contact</a><a href="cadeau.html">Bon cadeau</a></nav></div></footer>
 <script>document.addEventListener("click",function(e){var b=e.target.closest("#en-g,#en-d");if(!b)return;var p=document.getElementById("en-piste");p.scrollBy({left:(b.id==="en-d"?1:-1)*p.clientWidth*.8,behavior:"smooth"});});</script>
-<script src="parcours.js?v=16"></script>
+<script src="parcours.js?v=17"></script>
 <script src="mousse.js?v=202611201500"></script>
 <script>
 /* présence : un battement toutes les 2 minutes tant qu'une page élève est ouverte (pastille « en ligne » du tableau de bord) */

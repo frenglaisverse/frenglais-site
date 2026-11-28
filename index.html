@@ -639,5 +639,16 @@ function caler(){var y=sc.getBoundingClientRect().bottom-c.getBoundingClientRect
 })();
 </script>
 <script>(function(){if(Date.now()<Date.parse('2026-12-01T00:00:00+01:00'))document.querySelectorAll('.o-ouv').forEach(function(e){e.textContent=' (ouverture le 1er décembre)'});})();</script>
+<style>/* le grand banian : fond continu du menu jusqu'au bas de la Courbe des Temps */
+.banian{display:none!important}.hero .hero-texte::before{content:none!important}
+body{position:relative}
+.fond-banian{position:absolute;left:0;right:0;top:0;z-index:0;pointer-events:none;overflow:hidden}
+.fond-banian i{position:absolute;inset:0;background:url(banian-arriere.webp?v=14) 50% 100%/cover no-repeat;opacity:.55;filter:saturate(.85);
+  -webkit-mask:linear-gradient(180deg,transparent 0,#000 14%,#000 88%,transparent 100%);mask:linear-gradient(180deg,transparent 0,#000 14%,#000 88%,transparent 100%)}
+.fond-banian b{position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,73,165,.25),rgba(28,73,165,.45) 45%,rgba(28,73,165,.55))}
+.bandeau,#scene{background:transparent!important}body{background:var(--bleu)}.bandeau>*:not(.fond-banian),#scene>*{position:relative;z-index:1}.bandeau,#scene{position:relative;z-index:1}.fond-banian{z-index:0}
+</style>
+<script>(function(){var f=document.createElement('div');f.className='fond-banian';f.innerHTML='<i></i><b></b>';document.body.prepend(f);
+function m(){var sc=document.getElementById('scene');if(!sc)return;f.style.height=(sc.getBoundingClientRect().bottom+scrollY)+'px';}addEventListener('load',m);addEventListener('resize',m);m();setTimeout(m,1500);})();</script>
 </body>
 </html>

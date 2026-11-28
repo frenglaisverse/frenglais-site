@@ -56,7 +56,7 @@
   /* dans chaque palier : grammaire et vocabulaire d'abord, puis interaction, lecture, écoute */
   const items = []; NIV.forEach(n => T[n].forEach(it => items.push({ niveau: n, it })));
   const PAR = n => T[n].length, total = items.length;
-  const rep = []; let i = 0, ecoutes = {};
+  const rep = []; let i = 0, ecoutes = {}, tQ = 0; const t0 = Date.now();
   const deja = FRG.lire('frg-test-' + type, null);
 
   function intro(){
@@ -94,8 +94,8 @@
       <div class="choix col">${opts.map(o => `<button class="puce" type="button" data-j="${o.j}" lang="en">${o.c}</button>`).join('')}<button class="puce jsp" type="button" data-j="-1">Je ne sais pas</button></div>`;
     if (comp === 'ecoute') { const bt = z.querySelector('#play'), nb = z.querySelector('#nb'); ecoutes[i] = 0;
       bt.addEventListener('click', () => { if (ecoutes[i] >= 2) return; ecoutes[i]++; const a = new Audio(extra); a.play().catch(() => {}); bt.disabled = true; a.onended = a.onerror = () => { bt.disabled = ecoutes[i] >= 2; nb.textContent = ecoutes[i] >= 2 ? 'Plus d\'écoute disponible.' : 'Encore une écoute possible.'; }; }); }
-    z.querySelectorAll('.puce').forEach(p => p.addEventListener('click', () => { const j = +p.dataset.j; rep[i] = { niveau, comp, juste: j === b, choisi: j, k: i }; i++; question(); }));
-    z.focus({ preventScroll:true });
+    z.querySelectorAll('.puce').forEach(p => p.addEventListener('click', () => { const j = +p.dataset.j; rep[i] = { niveau, comp, juste: j === b, choisi: j, k: i, ms: Math.min(Date.now() - tQ, 180000) }; i++; question(); }));
+    tQ = Date.now(); z.focus({ preventScroll:true });
   }
 
   function resultat(){
@@ -110,6 +110,10 @@
     /* carte grammaticale : chaque point testé, réussi ou non, et le module où on le travaille */
     const pts = {}; items.forEach((x, k) => { const tg = x.it[6]; if (!tg) return; const [nom, mod] = tg.split('|'); const r = rep[k]; pts[nom] = pts[nom] || { nom, mod, niv: x.niveau, ok: 0, vus: 0 }; if (r) { pts[nom].vus++; if (r.juste) pts[nom].ok++; } });
     const P = Object.values(pts), acq = P.filter(p => p.vus && p.ok === p.vus), aTrav = P.filter(p => p.vus && p.ok < p.vus);
+    /* envoi au tableau de Paul : niveau, compétences, temps de réponse, « je ne sais pas », points de grammaire à travailler */
+    try { const S0 = FRG.lire('frg-session', null); if (S0 && S0.jeton) { const R = rep.filter(Boolean), med = a => { a = a.filter(v => v != null).sort((x, y) => x - y); return a.length ? a[Math.floor(a.length / 2)] : null; };
+      const ms = {}; Object.keys(COMP).forEach(c => { const m = med(R.filter(x => x.comp === c).map(x => x.ms)); if (m != null) ms[c] = m; });
+      fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/test', { method: 'POST', body: JSON.stringify({ jeton: S0.jeton, type, res: { niveau, score, comps: res.comps, ms, jsp: R.filter(x => x.choisi === -1).length, n: R.length, duree: Math.round((Date.now() - t0) / 1000), aTrav: aTrav.slice(0, 20).map(p => p.nom + (p.mod ? '|' + p.mod : '')), acq: acq.length } }) }).catch(() => {}); } } catch (e) {}
     const ratees = items.map((x, k) => ({ x, r: rep[k] })).filter(o => o.r && !o.r.juste);
     z.innerHTML = `<p class="eyebrow">${type === 'entree' ? 'Votre point de départ' : 'Votre niveau de sortie'}</p>
       ${type === 'sortie' && entree ? `<div class="avant-apres"><span>${esc(entree.niveau)}</span> → <span style="color:var(--bleu);font-weight:700">${esc(niveau)}</span></div>` : `<p class="niveau-grand">${esc(niveau)}</p>`}

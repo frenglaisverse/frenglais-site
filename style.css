@@ -1547,3 +1547,6 @@ footer::after{opacity:.58}
 .bandeau .nav img{height:66px}
 @media (max-width:640px){.bandeau .nav img{height:43px}}
 @media (max-width:360px){.bandeau .nav img{height:36px}}
+/* titre des formations : « Frenglais » écrit avec le logo */
+.t-form{display:flex;align-items:center;flex-wrap:wrap;gap:.1em .32em}
+.t-form-logo{height:1.5em;width:auto;display:inline-block;transform:translateY(.06em)}

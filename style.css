@@ -1502,3 +1502,12 @@ footer::after{opacity:.58}
 /* la méthode et son auteur, sous la Courbe des Temps */
 .auteur-methode{margin:14px 0 0;max-width:640px;font-size:15.5px;line-height:1.55;color:color-mix(in srgb,currentColor 78%,transparent)}
 .auteur-methode em{font-style:italic;color:inherit;font-weight:600}
+
+/* ordinateur : le banian en pleine largeur, comme sur tablette, légèrement flouté pour garder le texte lisible */
+@media (min-width:1101px){
+  .bandeau{overflow:hidden}
+  .banian{position:absolute;max-width:none;right:auto;bottom:auto;opacity:1;filter:saturate(.9) blur(1.4px);transition:opacity .6s ease}
+  .banian:not(.pret){visibility:hidden;opacity:0!important}
+  .banian-arriere{z-index:0;opacity:.9;-webkit-mask:linear-gradient(180deg,transparent 0,transparent calc(var(--m1,40%) - 14%),rgba(0,0,0,.22) var(--m1,40%),#000 var(--m2,60%));mask:linear-gradient(180deg,transparent 0,transparent calc(var(--m1,40%) - 14%),rgba(0,0,0,.22) var(--m1,40%),#000 var(--m2,60%))}
+  .banian-avant{z-index:4;opacity:.92;-webkit-mask:linear-gradient(180deg,transparent 0,transparent var(--m1,40%),#000 var(--m2,60%));mask:linear-gradient(180deg,transparent 0,transparent var(--m1,40%),#000 var(--m2,60%))}
+}

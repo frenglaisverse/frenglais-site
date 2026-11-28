@@ -1550,3 +1550,8 @@ footer::after{opacity:.58}
 /* titre des formations : « Frenglais » écrit avec le logo */
 .t-form{display:flex;align-items:center;flex-wrap:wrap;gap:.1em .32em}
 .t-form-logo{height:1.5em;width:auto;display:inline-block;transform:translateY(.06em)}
+/* fluidité : sur le banian, le verre dépoli de la Courbe (flou recalculé à chaque image) est remplacé par un verre teinté, identique à l'œil et beaucoup plus léger */
+#scene .demo,#scene .demo *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+#scene .demo{background:linear-gradient(160deg,rgba(40,78,170,.62),rgba(18,40,110,.7))!important}
+.offre{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.polaroid .pol-recto{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:linear-gradient(135deg,rgba(70,110,200,.62) 0%,rgba(30,62,150,.58) 55%,rgba(20,44,120,.62) 100%)!important}

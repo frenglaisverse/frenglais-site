@@ -222,6 +222,17 @@
 /* ---------- note vocale façon iPhone : lecture, onde qui se remplit, durée, transcription repliable ---------- */
 (function(){
   let enCours = null;
+  /* une seule piste par fichier, rattachée à la page : la lecture continue quand on change d'écran (et ne se coupe plus sur mobile) ;
+     une petite pastille permet de la mettre en pause depuis n'importe quel écran */
+  const PISTES = {}, piste = src => { if (PISTES[src]) return PISTES[src]; const a = new Audio(); a.preload = 'metadata'; a.src = src; a.style.display = 'none'; (document.body || document.documentElement).append(a); return PISTES[src] = a; };
+  let pastille = null;
+  const majPastille = () => { const a = Object.values(PISTES).find(x => !x.paused && !x.ended); const visible = a && !document.querySelector('.note-v.joue'); 
+    if (!visible){ if (pastille) pastille.hidden = true; return; }
+    if (!pastille){ pastille = document.createElement('button'); pastille.type = 'button'; pastille.className = 'nv-pastille'; pastille.style.cssText = 'position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:8px;padding:9px 16px 9px 12px;border-radius:99px;border:0;background:#1C49A5;color:#fff;font:600 13px Geist,system-ui,sans-serif;box-shadow:0 10px 30px -10px rgba(10,25,80,.6);cursor:pointer';
+      pastille.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg><span>Audio en cours · pause</span>';
+      pastille.addEventListener('click', () => { Object.values(PISTES).forEach(x => x.pause()); majPastille(); }); document.body.append(pastille); }
+    pastille.hidden = false; };
+  setInterval(majPastille, 500);
   const fmt = s => !isFinite(s) || s < 0 ? '0:00' : Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
   const ICO_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>', ICO_PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg>';
   /* src : fichier audio (ou blob) ; o.secours(fin) : lecture de secours (synthèse) si le fichier manque ; o.petit ; o.lien : élément de transcription à replier */
@@ -232,7 +243,7 @@
     const d = document.createElement('div'); d.className = 'note-v' + (o.petit ? ' petit' : ''); d.lang = 'fr';
     d.innerHTML = `<button type="button" class="nv-play" aria-label="Écouter">${ICO_PLAY}</button><div class="nv-onde" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">${barres.map(v => `<i style="height:${Math.round(v * 100)}%"></i>`).join('')}</div><span class="nv-t">0:00</span>`;
     const bt = d.querySelector('.nv-play'), onde = d.querySelector('.nv-onde'), t = d.querySelector('.nv-t'), bs = [...onde.children];
-    const a = new Audio(); a.preload = 'metadata'; a.src = src; let duree = NaN, secoursActif = false, lisant = false;
+    const a = piste(src); let duree = NaN, secoursActif = false, lisant = false;
     const peindre = p => { const k = Math.round(p * n); bs.forEach((b, i) => b.classList.toggle('lu', i < k)); onde.setAttribute('aria-valuenow', Math.round(p * 100)); };
     const etat = on => { lisant = on; d.classList.toggle('joue', on); bt.innerHTML = on ? ICO_PAUSE : ICO_PLAY; bt.setAttribute('aria-label', on ? 'Pause' : 'Écouter'); };
     a.addEventListener('loadedmetadata', () => { duree = a.duration; if (isFinite(duree)) t.textContent = fmt(duree); });
@@ -252,6 +263,9 @@
     onde.addEventListener('click', e => viser(e.clientX));
     onde.addEventListener('keydown', e => { if (!isFinite(a.duration)) return; if (e.key === 'ArrowRight') a.currentTime = Math.min(a.duration, a.currentTime + 5); if (e.key === 'ArrowLeft') a.currentTime = Math.max(0, a.currentTime - 5); if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); lisant ? arreter() : jouer(); } });
     d.audio = a; d.jouer = jouer; d.arreter = arreter;
+    if (isFinite(a.duration)){ duree = a.duration; t.textContent = fmt(a.paused ? a.duration : a.currentTime); }
+    if (!a.paused && !a.ended){ etat(true); enCours = arreter; }
+    a.addEventListener('pause', () => { if (lisant) etat(false); }); a.addEventListener('play', () => { if (!lisant && !secoursActif) etat(true); });
     return d;
   }
   /* bouton « Transcription » qui déplie un bloc */

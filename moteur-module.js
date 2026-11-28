@@ -148,7 +148,7 @@
   function maj(){ const p = Math.round(pct()); $('#barre').style.width = p + '%'; $('#barre-box').setAttribute('aria-valuenow', p); $('#etape-pct').textContent = p + ' %'; $('#etape-nom').textContent = ETAPES[E.step].nom; }
   function aller(n){
     if ('speechSynthesis' in window) speechSynthesis.cancel();
-    E.step = Math.max(0, Math.min(ETAPES.length - 1, n)); sauver();
+    E.step = Math.max(0, Math.min(ETAPES.length - 1, n)); sauver(); window.FRG_MOD = { m: N, etape: E.step + 1, total: ETAPES.length };
     ecran.innerHTML = ''; verrou.hidden = true; suiv.disabled = false;
     prec.disabled = E.step === 0; suiv.textContent = E.step === ETAPES.length - 1 ? 'Retour aux modules' : 'Suivant';
     ETAPES[E.step].f(ecran); maj(); ecran.focus({ preventScroll:true }); window.scrollTo({ top:0, behavior:'smooth' });
@@ -583,7 +583,7 @@
     const rates = Object.entries(E.notes || {}).filter(([k, v]) => !v && !/^(exp|rev)/.test(k)).length;
     const aj = window.FRGA && !TESTEUR ? FRGA.ajuster(score, N) : null;
     const msgParc = aj && aj.change ? `<div class="retour-msg info parcours-change">${aj.apres === 'appr' || (aj.avant === 'fond' && aj.apres === 'std') ? 'Vous montez' : 'Vous passez'} au parcours <b>${FRGA.NOMS[aj.apres]}</b> pour le prochain module. ${FRGA.DESC[aj.apres]}</div>` : '';
-    try { const S0 = JSON.parse(localStorage.getItem('frg-session') || 'null'); if (S0 && S0.jeton) fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/resultat', { method: 'POST', body: JSON.stringify({ jeton: S0.jeton, module: N, score, valide, minutes: Math.round(total / 60) }) }).catch(() => {}); } catch (e) {}
+    try { const S0 = JSON.parse(localStorage.getItem('frg-session') || 'null'); if (S0 && S0.jeton) fetch('https://courbe-classement.paulodubmx84.workers.dev/eleve/resultat', { method: 'POST', body: JSON.stringify({ jeton: S0.jeton, module: N, score, valide, minutes: Math.round(total / 60), erreurs: Object.entries((E.erreurs || []).reduce((o, k) => (o[k] = (o[k] || 0) + 1, o), {})).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, v]) => k + ' ×' + v) }) }).catch(() => {}); } catch (e) {}
     const bilan = N % 4 === 0 ? `<div class="retour-msg info">Votre fiche bilan n° ${N / 4} est prête : <a href="bilan.html?bloc=${N / 4}" target="_blank" rel="noopener">voir la fiche</a>.</div>` : '';
     z.append(el(`<p class="eyebrow">Module ${N} · terminé</p><h1>${valide ? `${E.prenom ? esc(E.prenom) + ', module' : 'Module'} validé.` : 'Presque. Encore un tour.'}</h1>
       <div class="carte-fin">

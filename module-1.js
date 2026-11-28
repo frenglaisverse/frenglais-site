@@ -71,7 +71,7 @@
   function maj(){ const p=Math.round(pct()); $('#barre').style.width=p+'%'; $('#barre-box').setAttribute('aria-valuenow',p); $('#etape-pct').textContent=p+' %'; $('#etape-nom').textContent=ETAPES[E.step].nom; }
   function aller(n){
     if ('speechSynthesis' in window) speechSynthesis.cancel();
-    E.step = Math.max(0, Math.min(ETAPES.length-1, n)); sauver();
+    E.step = Math.max(0, Math.min(ETAPES.length-1, n)); sauver(); window.FRG_MOD = { m: 1, etape: E.step + 1, total: ETAPES.length };
     ecran.innerHTML=''; fait=false; verrou.hidden=true; suiv.disabled=false;
     prec.disabled = E.step===0; suiv.textContent = E.step===ETAPES.length-1 ? 'Retour à l\'espace élève' : 'Suivant';
     ETAPES[E.step].f(ecran); maj(); ecran.focus({preventScroll:true}); window.scrollTo({top:0,behavior:'smooth'});

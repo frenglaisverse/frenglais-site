@@ -25,7 +25,7 @@
     if (n > maxModule()) return { k: 'sig', txt: 'Avec Signature' };
     if (valide(n)) return { k: 'ok', txt: 'Validé' };
     if (n > PUBLIES) return { k: 'date', txt: 'Bientôt' };
-    if (Date.now() < sortie(n)) return { k: 'date', txt: 'Sortie le ' + new Date(sortie(n)).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) };
+    if (Date.now() < sortie(n) && !ETAT.testeur) return { k: 'date', txt: 'Sortie le ' + new Date(sortie(n)).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) };
     if (n > 1 && !valide(n - 1)) return { k: 'avant', txt: 'Validez le module ' + (n - 1) };
     return { k: 'ouvert', txt: lire('frg-m' + n + '-pct', 0) > 0 ? 'Reprendre' : 'À faire' };
   }
@@ -265,6 +265,6 @@
 
   /* l'espace élève appelle FRGParcours.maj(session) à la connexion et à la déconnexion */
   window.FRGParcours = { pix, EXOS, etat: () => ({ formule: ETAT.formule, enLigne: !!MODULES_EN_LIGNE }), valides: () => Array.from({ length: 32 }, (_, i) => i + 1).filter(valide),
-    maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {} }; DEBUT = r && r.debut ? +r.debut : null; ecrire('frg-depart', depart()); choisi = null; dessiner(); document.dispatchEvent(new CustomEvent('frg-parcours', { detail: r })); } };
+    maj: r => { ETAT = { formule: r ? r.formule : (AP ? AP.formule : null), prog: (r && r.prog) || {}, testeur: !!(r && r.testeur) }; DEBUT = r && r.debut ? +r.debut : null; ecrire('frg-depart', depart()); choisi = null; dessiner(); document.dispatchEvent(new CustomEvent('frg-parcours', { detail: r })); } };
   dessiner();
 })();

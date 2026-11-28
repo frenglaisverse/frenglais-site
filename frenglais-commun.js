@@ -279,4 +279,4 @@
 })();
 
 /* présence : un battement toutes les 2 minutes tant qu'une page élève est ouverte (pastille « en ligne » du tableau de bord) */
-(function(){ const API='https://courbe-classement.paulodubmx84.workers.dev'; const go=()=>{ if(document.hidden) return; let S0=null; try{ S0=JSON.parse(localStorage.getItem('frg-session')||'null'); }catch(e){} if(!S0||!S0.jeton) return; fetch(API+'/eleve/present',{method:'POST',body:JSON.stringify({jeton:S0.jeton})}).catch(()=>{}); }; setTimeout(go,4000); setInterval(go,120000); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); }); })();
+(function(){ const API='https://courbe-classement.paulodubmx84.workers.dev'; const go=()=>{ if(document.hidden) return; let S0=null; try{ S0=JSON.parse(localStorage.getItem('frg-session')||'null'); }catch(e){} if(!S0||!S0.jeton) return; fetch(API+'/eleve/present',{method:'POST',body:JSON.stringify(Object.assign({jeton:S0.jeton},window.FRG_MOD||{}))}).catch(()=>{}); }; setTimeout(go,4000); setInterval(go,120000); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) go(); }); })();
